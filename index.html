@@ -594,13 +594,19 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
     </div>
   </div>
   <div class="mode-grp" id="optHalf" hidden>
-    <span class="flabel" id="stripLbl">L5 strip</span>
+    <span class="flabel" id="hkLbl">L4</span>
+    <div class="seg" role="group" aria-labelledby="hkLbl">
+      <button type="button" id="hk1" aria-pressed="true">1× Sun</button>
+      <button type="button" id="hkMatch" aria-pressed="false" title="L4 and the lit part of L5 look equally bright; together still Earth's average">As bright as L5</button>
+    </div>
+    <span class="flabel" id="stripLbl">L5 shape</span>
     <div class="seg" role="group" aria-labelledby="stripLbl">
       <button type="button" id="stDisc" aria-pressed="true" title="The middle third of the disc L5 sees, running east–west through its centre: on the ground a band tilted with the seasons">Centred on the disc</button>
       <button type="button" id="stEq" aria-pressed="false" title="Always the same latitudes around the equator">Fixed on the equator</button>
+      <button type="button" id="stSeason" aria-pressed="false" title="Lights the winter side: the northern half of the disc at the northern winter solstice, both outer quarters at the equinoxes, the southern half at the northern summer solstice">Seasonal halves</button>
     </div>
     <span class="flabel" id="fracLbl">Blocked</span>
-    <div class="seg" role="group" aria-labelledby="fracLbl">
+    <div class="seg" role="group" aria-labelledby="fracLbl" id="fracSeg">
       <button type="button" id="sfThird" aria-pressed="true">⅓ of the disc</button>
       <button type="button" id="sfHalf" aria-pressed="false">½ of the disc</button>
     </div>
@@ -1037,7 +1043,7 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
         <li>Daylight runs from the moment the Sun's centre rises above a flat horizon to the moment it sets. Refraction in the thin atmosphere and local terrain are ignored.</li>
         <li>Insolation is measured at the top of the atmosphere on level ground: 1361 W/m² at 1 AU, scaled by distance squared (713 W/m² at perihelion, 490 W/m² at aphelion). Dust can remove a large share of this before it reaches the surface.</li>
         <li>The circular orbit (shown as a reference or on its own, per chart) keeps the same tilt and the same starting solstice, fixes the distance at 1.5237 AU and advances L<sub>s</sub> at a constant rate, so all four seasons last 167.1 sols.</li>
-        <li>Two and three suns: mirror arrays at the Sun–Mars L4 and L5 points. They sit at Mars's distance from the Sun, so seen from Mars they shine from the orbital plane 60° west (L4) or east (L5) of the Sun, and their light is a fixed multiple of sunlight at Mars's current distance. Daylight counts any sun above the horizon; the peak is the brightest moment of the sol. 1.33× (or two 0.67× arrays) brings the average flux to about Earth's. 2.5 suns: L4 at 1× plus an L5 array of 0.31× that blocks the middle third (by area) of the disc it sees, a strip through the centre parallel to Mars's projected equator, and puts that light on the outer two thirds at 1.5× intensity, so the average flux equals Earth's exactly; a spot inside the strip gets no L5 light at that moment. Seen from the ground the strip is a band around a great circle through the point under L5, tilted with the seasons; it matches lines of latitude only when L5 is over the equator, and its hard edge makes latitudes near ±15° switch quickly then. The strip can block a third or half of the disc (half-widths 15.4° and 23.8°), with a hard edge or a 5° soft edge where the light fades out linearly toward the centre; the soft edge removes those quick switches. For comparison, the strip can instead be fixed on the latitudes around the equator, with the light left over spread on the rest of the disc.</li>
+        <li>Two and three suns: mirror arrays at the Sun–Mars L4 and L5 points. They sit at Mars's distance from the Sun, so seen from Mars they shine from the orbital plane 60° west (L4) or east (L5) of the Sun, and their light is a fixed multiple of sunlight at Mars's current distance. Daylight counts any sun above the horizon; the peak is the brightest moment of the sol. 1.33× (or two 0.67× arrays) brings the average flux to about Earth's. 2.5 suns: L4 at 1× plus an L5 array of 0.31× that blocks the middle third (by area) of the disc it sees, a strip through the centre parallel to Mars's projected equator, and puts that light on the outer two thirds at 1.5× intensity, so the average flux equals Earth's exactly; a spot inside the strip gets no L5 light at that moment. Seen from the ground the strip is a band around a great circle through the point under L5, tilted with the seasons; it matches lines of latitude only when L5 is over the equator, and its hard edge makes latitudes near ±15° switch quickly then. The strip can block a third or half of the disc (half-widths 15.4° and 23.8°), with a hard edge or a 5° soft edge where the light fades out linearly toward the centre; the soft edge removes those quick switches. Seasonal halves lights half the disc chosen by season (f = (1 + sin Ls)/2): a northern cap holding (1 − f)/2 of the disc and a southern cap holding f/2, so the northern half at the northern winter solstice, equal outer quarters at the equinoxes and the southern half at the northern summer solstice. L4 can be 1× Sun or as bright as the lit part of L5, with the two strengths set so the average flux stays Earth's. For comparison, the strip can instead be fixed on the latitudes around the equator, with the light left over spread on the rest of the disc.</li>
         <li>Earth comparison lines are typical Earth values for the same measure: daily mean 100 and 500 W/m² for mid-latitude winter and summer, 250 and 450 for the tropics; noon peak 350 and 1300 for mid-latitude winter and summer, 700 for tropical winter and 1000 at the equator.</li>
         <li>Seasonal ratio divides each sol’s insolation by the dimmest value of the year at the same latitude, for the chosen measure. Earth references: about 5× (daily mean) and 4× (noon peak) at mid-latitudes, about 2× in the tropics.</li>
         <li>Map: elevation from the Mars Global Surveyor MOLA gridded topography (MEGDR, 4 pixels per degree, about 15 km at the equator; Smith et al. 2003, NASA PDS Geosciences Node), stored to the nearest 5 m relative to the MOLA areoid. The water level is the share of the surface area that lies below sea level, so 30% fills the northern lowlands and the deep basins. With "Fill craters and closed basins" on, every closed depression also holds a lake with a flat surface, set by the basin fill slider as a fraction of the way from the basin's floor to its spill point (100% is full to the brim, as rain would leave it if nothing evaporated); lakes come on top of the ocean share. Earth-equivalent km multiply Mars heights by g<sub>Mars</sub>/g<sub>Earth</sub> = 0.38: with the same air, pressure falls that much more slowly with height on Mars, so Olympus Mons (about 22 km above a 30% sea) thins the air like an 8.6 km climb on Earth. The insolation layer uses the same flat-ground, top-of-atmosphere model as the charts, so it varies with latitude only; slopes and the atmosphere are not included.</li>
@@ -1102,7 +1108,8 @@ function flux(r) { return MARS.S1 / (r * r); }
 let SRC = [{ dl: 0, k: 1, name: 'Sun' }], MODE_KEY = 'natural';
 // 2.5 suns: L4 as strong as the Sun, plus an L5 array adding what is still missing for Earth's average flux (S1 at 1 AU). The L5
 // array holds back a strip of its beam and spreads that light over the rest of the disc it lights (see makeStrip).
-const K_HALF = MARS.a * MARS.a * Math.sqrt(1 - MARS.e * MARS.e) - 2;      // 0.311: mean flux = S1 ⇔ 1 + 1 + k = 1 AU² / ⟨1/r²⟩
+const K_TOT = MARS.a * MARS.a * Math.sqrt(1 - MARS.e * MARS.e);          // 2.311: Sun + mirrors giving Earth's mean flux, 1 AU² / ⟨1/r²⟩
+const K_HALF = K_TOT - 2;                                                 // 0.311: what L5 adds when L4 is 1× Sun
 const COS_OBL = Math.cos(MARS.obl * D2R);
 function srcGeom(ls, dl) {
   const L = (ls + dl) * D2R;
@@ -1129,56 +1136,80 @@ function unionArcs(ivs) {     // union of daylight intervals on the 24-h solar c
   if (m.length > 1 && m[0][0] <= 1e-9 && m[m.length - 1][1] >= 24 - 1e-9) { const last = m.pop(); m[0] = [last[0], m[0][1] + 24]; }
   return { total, segs: m };
 }
-// The strip: the middle share `frac` of the disc the array lights, by area, i.e. |y| < y0 on the unit disc, where y runs across the
-// disc along Mars's spin axis as seen from L5. y is the sine of the angular distance β from the strip's central plane, which on the
-// ground is a great circle through the point under L5, tilted with L5's declination and crossing the equator where L5 rises and
-// sets. With a soft edge the light fades linearly over `edge` inward from the strip edge. Energy is conserved: the light held back
-// is spread over the rest of the disc (gain = 1 / share that gets through). For comparison the strip can instead be fixed on the
-// latitudes |φ| < asin(y0) (kind 'eq'); then the share held back depends on L5's declination and is tabulated.
+// How the L5 array shapes its beam. Positions on the disc it lights are given by y, running across the disc along Mars's spin
+// axis as seen from L5 (north positive); y is the sine of the angular distance β from the disc's east–west centre line, which on
+// the ground is a great circle through the point under L5, tilted with L5's declination and crossing the equator where L5 rises
+// and sets. Energy is conserved: light held back is spread over the parts that are lit (gain = 1 / share that gets through).
+//  'disc'   — blocks the middle share `frac` of the disc by area (|y| < y0), hard or with a soft edge fading over `edge` inward.
+//  'eq'     — for comparison, blocks the latitudes |φ| < asin(y0) instead.
+//  'season' — lights half the disc, chosen by season with f = (1 + sin Ls) / 2: a northern cap y ≥ yN holding (1 − f)/2 of the
+//             disc and a southern cap y ≤ −yS holding f/2. At the northern winter solstice (f = 0) that is the northern half; the
+//             southern cap then grows from the south pole as the northern one shrinks from the equator, the two are equal
+//             quarters at the equinoxes, and at the northern summer solstice (f = 1) only the southern half is lit.
 const stripY0 = frac => { let y = 0.3; for (let i = 0; i < 40; i++) { const f = 2 * (y * Math.sqrt(1 - y * y) + Math.asin(y)) - Math.PI * frac; y -= f / (4 * Math.sqrt(1 - y * y)); } return y; };
+const capArea = c => (Math.acos(c) - c * Math.sqrt(1 - c * c)) / Math.PI;      // share of the unit disc with y ≥ c
+const CAP_TAB = (() => { const t = new Float64Array(2001); for (let i = 0; i <= 2000; i++) { const a = i / 4000; let lo = -1, hi = 1; for (let k = 0; k < 60; k++) { const m = (lo + hi) / 2; if (capArea(m) > a) lo = m; else hi = m; } t[i] = (lo + hi) / 2; } return t; })();
+const capC = a => { const u = clamp(a, 0, 0.5) * 4000, i = Math.min(1999, Math.floor(u)); return lerp(CAP_TAB[i], CAP_TAB[i + 1], u - i); };
+const seasonF = ls => (1 + Math.sin(ls * D2R)) / 2;
 const STRIPS = new Map();
 function getStrip(kind, frac, edgeDeg) {
   const key = kind + '|' + frac + '|' + edgeDeg;
   if (STRIPS.has(key)) return STRIPS.get(key);
-  const y0 = stripY0(frac), b0 = Math.asin(y0), edge = edgeDeg * D2R;
-  const T = edge > 0 ? (beta => clamp((beta - (b0 - edge)) / edge, 0, 1)) : (beta => beta >= b0 ? 1 : 0);
-  const st = { kind, frac, edge, edgeDeg, y0, b0, yIn: Math.sin(Math.max(0, b0 - edge)), T };
-  if (kind === 'disc') {
-    let num = 0, den = 0; const n = 4000;
-    for (let i = 0; i < n; i++) { const y = (i + 0.5) / n, w = Math.sqrt(1 - y * y); num += w * T(Math.asin(y)); den += w; }
-    st.gain = den / num;
+  const edge = edgeDeg * D2R, wsum = (Tfn) => { let num = 0, den = 0; const n = 2000; for (let i = 0; i < n; i++) { const y = -1 + (i + 0.5) / n * 2, w = Math.sqrt(1 - y * y); num += w * Tfn(y); den += w; } return num / den; };
+  let st;
+  if (kind === 'season') {
+    const bounds = ls => { const f = seasonF(ls); return [capC((1 - f) / 2), capC(f / 2)]; };
+    const Tyf = (yN, yS) => !edge ? (y => (y >= yN || y <= -yS ? 1 : 0)) : (() => {
+      const bN = Math.asin(yN), bS = -Math.asin(yS);
+      return y => { const be = Math.asin(clamp(y, -1, 1)); return clamp(Math.max((be - (bN - edge)) / edge, ((bS + edge) - be) / edge), 0, 1); };
+    })();
+    const tau = new Float64Array(101);
+    for (let j = 0; j <= 100; j++) { const f = j / 100; tau[j] = wsum(Tyf(capC((1 - f) / 2), capC(f / 2))); }
+    let tm = 0; for (let j = 0; j <= 100; j++) tm += tau[j];
+    st = { kind, frac: 0.5, edge, edgeDeg, meanShare: tm / 101,
+      tfun: ls => { const [yN, yS] = bounds(ls); return Tyf(yN, yS); },
+      dark: ls => { const [yN, yS] = bounds(ls); return !edge ? [-yS, yN] : [Math.sin(Math.max(-Math.PI / 2, -Math.asin(yS) + edge)), Math.sin(Math.min(Math.PI / 2, Math.asin(yN) - edge))]; },
+      gainAt: (d, ls) => { const u = seasonF(ls) * 100, j = Math.min(99, Math.floor(u)); return 1 / lerp(tau[j], tau[j + 1], u - j); } };
   } else {
-    const tab = new Float64Array(53), n = 200;
-    for (let j = 0; j < 53; j++) {
-      const dd = j * 0.5 * D2R, sd = Math.sin(dd), cd = Math.cos(dd); let tot = 0, pass = 0;
-      for (let i = 0; i < n; i++) for (let k = 0; k < n; k++) {
-        const x = (i + 0.5) / n * 2 - 1, y = (k + 0.5) / n * 2 - 1, q = x * x + y * y;
-        if (q >= 1) continue;
-        tot++; pass += T(Math.asin(Math.min(1, Math.abs(y * cd + Math.sqrt(1 - q) * sd))));
+    const y0 = stripY0(frac), b0 = Math.asin(y0);
+    const T = edge > 0 ? (beta => clamp((beta - (b0 - edge)) / edge, 0, 1)) : (beta => beta >= b0 ? 1 : 0);
+    st = { kind, frac, edge, edgeDeg, y0, b0, T };
+    if (kind === 'disc') {
+      const share = wsum(y => T(Math.asin(Math.abs(y)))), Ty = y => T(Math.asin(Math.min(1, Math.abs(y)))), yIn = Math.sin(Math.max(0, b0 - edge));
+      Object.assign(st, { meanShare: share, tfun: () => Ty, dark: () => [-yIn, yIn], gainAt: () => 1 / share });
+    } else {
+      const tab = new Float64Array(53), n = 200;
+      for (let j = 0; j < 53; j++) {
+        const dd = j * 0.5 * D2R, sd = Math.sin(dd), cd = Math.cos(dd); let tot = 0, pass = 0;
+        for (let i = 0; i < n; i++) for (let k = 0; k < n; k++) {
+          const x = (i + 0.5) / n * 2 - 1, y = (k + 0.5) / n * 2 - 1, q = x * x + y * y;
+          if (q >= 1) continue;
+          tot++; pass += T(Math.asin(Math.min(1, Math.abs(y * cd + Math.sqrt(1 - q) * sd))));
+        }
+        tab[j] = pass / tot;
       }
-      tab[j] = tot / pass;
+      let tm = 0; for (let j = 0; j < 53; j++) tm += tab[j];
+      Object.assign(st, { meanShare: tm / 53, gainAt: d => { const u = Math.min(52, Math.abs(d) * R2D / 0.5), j = Math.min(51, Math.floor(u)); return 1 / lerp(tab[j], tab[j + 1], u - j); } });
     }
-    st.gainOf = d => { const u = Math.min(52, Math.abs(d) * R2D / 0.5), j = Math.min(51, Math.floor(u)); return lerp(tab[j], tab[j + 1], u - j); };
-    st.gain = tab[0];
   }
   STRIPS.set(key, st);
   return st;
 }
-const srcGain = (src, d) => !src.strip ? 1 : src.strip.kind === 'eq' ? src.strip.gainOf(d) : src.strip.gain;
+const srcGain = (src, d, ls) => src.strip ? src.strip.gainAt(d, ls) : 1;
 // share of the source's light (0…1) reaching a point with latitude sine sp, the source at declination d and sinEl above the horizon
-function srcTrans(src, sp, d, sinEl) {
+function srcTrans(src, sp, d, sinEl, ls) {
   const st = src.strip; if (!st) return 1;
   if (st.kind === 'eq') return st.T(Math.abs(Math.asin(sp)));
-  return st.T(Math.asin(Math.min(1, Math.abs((sp - Math.sin(d) * sinEl) / Math.cos(d)))));
+  return st.tfun(ls)((sp - Math.sin(d) * sinEl) / Math.cos(d));
 }
-// Hour angles (from the source's meridian) when a point is outside the band |y| < band, with the integral of the elevation sine
+// Hour angles (from the source's meridian) when a point is outside the band lo < y < hi, with the integral of the elevation sine
 // over them: exact, used for hard edges and for the lit arcs.
-function bandArcs(sp, sd, cd, a, b, H0, band) {
+function bandArcs(sp, sd, cd, a, b, H0, lo, hi) {
   const I = h => 2 * (a * h + b * Math.sin(h)), plain = { I: I(H0), arcs: H0 > 0 ? [[0, H0]] : [] };
-  if (band <= 0) return plain;
-  if (Math.abs(sd) < 1e-9) return Math.abs(sp) < band * cd ? { I: 0, arcs: [] } : plain;
+  if (!(hi > lo)) return plain;
+  if (Math.abs(sd) < 1e-9) { const y = sp / cd; return y > lo && y < hi ? { I: 0, arcs: [] } : plain; }
   const hOf = q => b < 1e-12 ? (a >= q ? Math.PI : 0) : Math.acos(clamp((q - a) / b, -1, 1));   // |H| below which sin e ≥ q
-  const m1 = (sp - band * cd) / sd, m2 = (sp + band * cd) / sd, hA = hOf(Math.max(m1, m2)), hB = hOf(Math.max(0, Math.min(m1, m2)));
+  const m1 = (sp - hi * cd) / sd, m2 = (sp - lo * cd) / sd, hA = hOf(Math.max(m1, m2)), hB = hOf(Math.max(0, Math.min(m1, m2)));
   if (!(hB > hA)) return plain;
   const arcs = [];
   if (hA > 0) arcs.push([0, hA]);
@@ -1187,16 +1218,16 @@ function bandArcs(sp, sd, cd, a, b, H0, band) {
 }
 // One source over one sol at a latitude: the integral of its elevation sine over the sol, weighted by the share that gets through
 // (×S/2π gives the daily mean), and the arcs when any of its light arrives, as [centre, half-width] in radians from its meridian.
-function srcDay(sp, cp, d, H0, src) {
+function srcDay(sp, cp, d, H0, src, ls) {
   const sd = Math.sin(d), cd = Math.cos(d), a = sp * sd, b = cp * cd, st = src.strip;
-  if (!st) return bandArcs(sp, sd, cd, a, b, H0, 0);
-  if (st.kind === 'eq') { const T = st.T(Math.abs(Math.asin(sp))), pl = bandArcs(sp, sd, cd, a, b, H0, 0); return T > 0 ? { I: T * pl.I, arcs: pl.arcs } : { I: 0, arcs: [] }; }
-  const lit = bandArcs(sp, sd, cd, a, b, H0, st.yIn);
+  if (!st) return bandArcs(sp, sd, cd, a, b, H0, 0, 0);
+  if (st.kind === 'eq') { const T = st.T(Math.abs(Math.asin(sp))), pl = bandArcs(sp, sd, cd, a, b, H0, 0, 0); return T > 0 ? { I: T * pl.I, arcs: pl.arcs } : { I: 0, arcs: [] }; }
+  const [lo, hi] = st.dark(ls), lit = bandArcs(sp, sd, cd, a, b, H0, lo, hi);
   if (!st.edge) return lit;
-  let sum = 0; const n = 96, dh = H0 / n;
+  const tf = st.tfun(ls); let sum = 0; const n = 96, dh = H0 / n;
   for (let i = 0; i < n; i++) {
     const mu = a + b * Math.cos((i + 0.5) * dh);
-    if (mu > 0) sum += mu * st.T(Math.asin(Math.min(1, Math.abs((sp - sd * mu) / cd))));
+    if (mu > 0) sum += mu * tf((sp - sd * mu) / cd);
   }
   return { I: 2 * sum * dh, arcs: lit.arcs };
 }
@@ -1215,11 +1246,13 @@ function dayMetrics(lat, st, noPeak) {
   let mean = 0; const ivs = [], parts = [];
   for (const src of SRC) {
     const g = src.dl ? srcGeom(st.ls, src.dl) : { d, ra: sunRa };
-    const H0 = src.dl ? sunsetH(phi, g.d) : H, kk = src.k * srcGain(src, g.d), day = srcDay(sp, cp, g.d, H0, src);
+    const H0 = src.dl ? sunsetH(phi, g.d) : H, kk = src.k * srcGain(src, g.d, st.ls), day = srcDay(sp, cp, g.d, H0, src, st.ls);
     const q = kk * S / (2 * Math.PI) * day.I;
     if (q > 0) mean += q;
     const off = mod(g.ra - sunRa + Math.PI, 2 * Math.PI) - Math.PI;
-    parts.push({ k: kk, a: sp * Math.sin(g.d), b: cp * Math.cos(g.d), off, src: src.strip ? src : null, d: g.d });
+    const sdg = Math.sin(g.d), cdg = Math.cos(g.d), stp = src.strip;
+    const tr = !stp ? null : stp.kind === 'eq' ? (() => { const T = stp.T(Math.abs(phi)); return () => T; })() : (() => { const tf = stp.tfun(st.ls); return h => tf((sp - sdg * h) / cdg); })();
+    parts.push({ k: kk, a: sp * sdg, b: cp * cdg, off, tr });
     for (const [c0, w0] of day.arcs) ivs.push({ c: 12 + (off + c0) * 12 / Math.PI, w: w0 * 12 / Math.PI });
   }
   const un = unionArcs(ivs);
@@ -1228,7 +1261,7 @@ function dayMetrics(lat, st, noPeak) {
     const NS = 72, fs = PEAK_BUF; let bj = 0;
     for (let j = 0; j < NS; j++) {
       const hh = (j / NS) * 2 * Math.PI - Math.PI; let f = 0;
-      for (const pt of parts) { const h = pt.a + pt.b * Math.cos(hh - pt.off); if (h > 0) f += pt.k * h * (pt.src ? srcTrans(pt.src, sp, pt.d, h) : 1); }
+      for (const pt of parts) { const h = pt.a + pt.b * Math.cos(hh - pt.off); if (h > 0) f += pt.k * h * (pt.tr ? pt.tr(h) : 1); }
       fs[j] = f; if (f > peak) { peak = f; bj = j; }
     }
     const fm = fs[(bj + NS - 1) % NS], fp = fs[(bj + 1) % NS], den = fm - 2 * peak + fp;
@@ -1302,7 +1335,7 @@ const PRESETS = { north: [0, 15, 30, 45, 60, 85], south: [0, -15, -30, -45, -60,
 const STORE = 'mars-daylight-v1';
 const state = {
   t: T_TODAY, tod: 14, obsLat: 45, view: 'orbit', units: 'mars', metric: 'mean', orbit: { dur: 'real', ins: 'real', rat: 'real' },
-  lats: PRESETS.north.map((lat, i) => ({ lat, slot: i })), flip: false, dynDur: false, dynIns: false, dynRat: false, earthRef: true, layout: 'full', lineMode: 'chosen', specA: -90, specB: 90, specStep: 5, specOp: 70, show: { view: true, dur: true, ins: true, rat: true, map: true }, waterPct: 30, fillLakes: true, basinFill: 100, hUnit: 'km', mapLayer: 'elev', palette: 'terrain', hillshade: true, insWhen: 'date', insMetric: 'mean', mapOrbit: 'real', insShow: 'wm', tUnit: 'C', heat: 'mixed', lapse: 6.5, insOp: 65, insDyn: false, mapGrid: true, gridLat: 15, gridLon: 30, mapSites: true, ratioMetric: 'mean', mode: 'natural', halfStrip: 'disc', halfFrac: 'third', halfEdge: 'hard', twoPos: 'L4', twoK: 'x133', threeK: 'x067', camOff: 0, playYear: false, playSol: false
+  lats: PRESETS.north.map((lat, i) => ({ lat, slot: i })), flip: false, dynDur: false, dynIns: false, dynRat: false, earthRef: true, layout: 'full', lineMode: 'chosen', specA: -90, specB: 90, specStep: 5, specOp: 70, show: { view: true, dur: true, ins: true, rat: true, map: true }, waterPct: 30, fillLakes: true, basinFill: 100, hUnit: 'km', mapLayer: 'elev', palette: 'terrain', hillshade: true, insWhen: 'date', insMetric: 'mean', mapOrbit: 'real', insShow: 'wm', tUnit: 'C', heat: 'mixed', lapse: 6.5, insOp: 65, insDyn: false, mapGrid: true, gridLat: 15, gridLon: 30, mapSites: true, ratioMetric: 'mean', mode: 'natural', halfStrip: 'disc', halfFrac: 'third', halfEdge: 'hard', halfK: 'one', twoPos: 'L4', twoK: 'x133', threeK: 'x067', camOff: 0, playYear: false, playSol: false
 };
 try {
   const sv = JSON.parse(localStorage.getItem(STORE) || 'null');
@@ -1344,7 +1377,8 @@ try {
     if (num(sv.gridLon, 1, 30)) state.gridLon = Math.round(sv.gridLon);
     if (sv.ratioMetric === 'mean' || sv.ratioMetric === 'noon') state.ratioMetric = sv.ratioMetric;
     if (['natural', 'two', 'half', 'three'].includes(sv.mode)) state.mode = sv.mode;
-    if (sv.halfStrip === 'disc' || sv.halfStrip === 'eq') state.halfStrip = sv.halfStrip;
+    if (['disc', 'eq', 'season'].includes(sv.halfStrip)) state.halfStrip = sv.halfStrip;
+    if (sv.halfK === 'one' || sv.halfK === 'match') state.halfK = sv.halfK;
     if (sv.halfFrac === 'third' || sv.halfFrac === 'half') state.halfFrac = sv.halfFrac;
     if (sv.halfEdge === 'hard' || sv.halfEdge === 'soft') state.halfEdge = sv.halfEdge;
     if (sv.twoPos === 'L4' || sv.twoPos === 'L5') state.twoPos = sv.twoPos;
@@ -1363,18 +1397,20 @@ function applyMode() {
   if (state.mode === 'two') SRC = [{ dl: 0, k: 1, name: 'Sun' }, { dl: state.twoPos === 'L4' ? -60 : 60, k: KVAL[state.twoK], name: state.twoPos }];
   else if (state.mode === 'half') {
     const st = getStrip(state.halfStrip, state.halfFrac === 'half' ? 0.5 : 1 / 3, state.halfEdge === 'soft' ? 5 : 0);
-    SRC = [{ dl: 0, k: 1, name: 'Sun' }, { dl: -60, k: 1, name: 'L4' }, { dl: 60, k: K_HALF, strip: st, name: 'L5',
-      label: st.kind === 'eq' ? 'outside ±' + (st.b0 * R2D).toFixed(1) + '° latitude' : (st.gain * K_HALF).toFixed(2) + '× Sun on ' + (st.frac === 0.5 ? '½' : '⅔') + ' of the disc' }];
+    const k4 = state.halfK === 'match' ? (K_TOT - 1) / (1 + st.meanShare) : 1, k5 = K_TOT - 1 - k4, lit5 = k5 / st.meanShare;
+    SRC = [{ dl: 0, k: 1, name: 'Sun' }, { dl: -60, k: k4, name: 'L4', label: k4.toFixed(2) + '× Sun' }, { dl: 60, k: k5, strip: st, name: 'L5', lit: lit5,
+      label: st.kind === 'eq' ? 'outside ±' + (st.b0 * R2D).toFixed(1) + '° latitude' : st.kind === 'season' ? lit5.toFixed(2) + '× Sun on half, by season' : lit5.toFixed(2) + '× Sun on ' + (st.frac === 0.5 ? '½' : '⅔') + ' of the disc' }];
   }
+
   else if (state.mode === 'three') SRC = [{ dl: 0, k: 1, name: 'Sun' }, { dl: -60, k: KVAL[state.threeK], name: 'L4' }, { dl: 60, k: KVAL[state.threeK], name: 'L5' }];
   else SRC = [{ dl: 0, k: 1, name: 'Sun' }];
-  MODE_KEY = state.mode === 'two' ? 'two|' + state.twoPos + '|' + state.twoK : state.mode === 'three' ? 'three|' + state.threeK : state.mode === 'half' ? 'half|' + state.halfStrip + '|' + state.halfFrac + '|' + state.halfEdge : 'natural';
+  MODE_KEY = state.mode === 'two' ? 'two|' + state.twoPos + '|' + state.twoK : state.mode === 'three' ? 'three|' + state.threeK : state.mode === 'half' ? 'half|' + state.halfStrip + '|' + state.halfFrac + '|' + state.halfEdge + '|' + state.halfK : 'natural';
 }
 applyMode();
 const MULTI = () => SRC.length > 1;
 const kLabel = k => (Math.abs(k - 4 / 3) < 1e-9 ? '1.33' : Math.abs(k - 2 / 3) < 1e-9 ? '0.67' : String(k)) + '× Sun';
 function save() {
-  try { localStorage.setItem(STORE, JSON.stringify({ units: state.units, metric: state.metric, orbit: state.orbit, flip: state.flip, dynDur: state.dynDur, dynIns: state.dynIns, dynRat: state.dynRat, earthRef: state.earthRef, layout: state.layout, lineMode: state.lineMode, specA: state.specA, specB: state.specB, specStep: state.specStep, specOp: state.specOp, show: state.show, ratioMetric: state.ratioMetric, waterPct: state.waterPct, fillLakes: state.fillLakes, basinFill: state.basinFill, hUnit: state.hUnit, mapLayer: state.mapLayer, palette: state.palette, hillshade: state.hillshade, insWhen: state.insWhen, insMetric: state.insMetric, mapOrbit: state.mapOrbit, insShow: state.insShow, tUnit: state.tUnit, heat: state.heat, lapse: state.lapse, insOp: state.insOp, insDyn: state.insDyn, mapGrid: state.mapGrid, gridLat: state.gridLat, gridLon: state.gridLon, mapSites: state.mapSites, mode: state.mode, halfStrip: state.halfStrip, halfFrac: state.halfFrac, halfEdge: state.halfEdge, twoPos: state.twoPos, twoK: state.twoK, threeK: state.threeK, lats: state.lats })); } catch (e) {}
+  try { localStorage.setItem(STORE, JSON.stringify({ units: state.units, metric: state.metric, orbit: state.orbit, flip: state.flip, dynDur: state.dynDur, dynIns: state.dynIns, dynRat: state.dynRat, earthRef: state.earthRef, layout: state.layout, lineMode: state.lineMode, specA: state.specA, specB: state.specB, specStep: state.specStep, specOp: state.specOp, show: state.show, ratioMetric: state.ratioMetric, waterPct: state.waterPct, fillLakes: state.fillLakes, basinFill: state.basinFill, hUnit: state.hUnit, mapLayer: state.mapLayer, palette: state.palette, hillshade: state.hillshade, insWhen: state.insWhen, insMetric: state.insMetric, mapOrbit: state.mapOrbit, insShow: state.insShow, tUnit: state.tUnit, heat: state.heat, lapse: state.lapse, insOp: state.insOp, insDyn: state.insDyn, mapGrid: state.mapGrid, gridLat: state.gridLat, gridLon: state.gridLon, mapSites: state.mapSites, mode: state.mode, halfStrip: state.halfStrip, halfFrac: state.halfFrac, halfEdge: state.halfEdge, halfK: state.halfK, twoPos: state.twoPos, twoK: state.twoK, threeK: state.threeK, lats: state.lats })); } catch (e) {}
 }
 
 /* ================= formatting ================= */
@@ -2146,7 +2182,7 @@ function drawGround() {
   const proj = (E, Nn, U, k) => { const s = k || 1, x = E * rx + Nn * ry, dd = E * fx + Nn * fy; return [gcx + R * s * x, gcy - R * s * (U * cb + dd * sb), dd]; };
   const extra = SRC.filter(x => x.dl).map(x => {
     const g = srcGeom(st.ls, x.dl), v = sunENU(phi, g.d, Hh - raOffset(st.ls, x.dl));
-    return { src: x, d: g.d, v, el: Math.asin(clamp(v[2], -1, 1)) * R2D, tr: srcTrans(x, Math.sin(phi), g.d, v[2]) };
+    return { src: x, d: g.d, v, el: Math.asin(clamp(v[2], -1, 1)) * R2D, tr: srcTrans(x, Math.sin(phi), g.d, v[2], st.ls) };
   });
   const elSky = Math.max(el, ...extra.map(x => x.el));
   const day = smooth(-5, 12, elSky), halo = smooth(-9, -1, el) * (1 - smooth(4, 16, el));
@@ -2245,7 +2281,7 @@ function drawGround() {
   // mirror suns
   for (const x of extra) {
     if (x.el <= -1) continue;
-    const p = proj(x.v[0], x.v[1], x.v[2]), rr = clamp(6.4 * MARS.a / st.r, 4, 9) * Math.sqrt(x.src.k * srcGain(x.src, x.d) * Math.max(0.15, x.tr)) * 0.9;
+    const p = proj(x.v[0], x.v[1], x.v[2]), rr = clamp(6.4 * MARS.a / st.r, 4, 9) * Math.sqrt(x.src.k * srcGain(x.src, x.d, st.ls) * Math.max(0.15, x.tr)) * 0.9;
     if (x.tr <= 0) {    // this spot is in the strip the L5 beam leaves out
       ctx.strokeStyle = 'rgba(220,235,255,0.6)'; ctx.lineWidth = 1.2; ctx.setLineDash([2, 2]);
       ctx.beginPath(); ctx.arc(p[0], p[1], rr, 0, 2 * Math.PI); ctx.stroke(); ctx.setLineDash([]);
@@ -2314,7 +2350,7 @@ function updateReadouts() {
     for (const src of SRC) {
       const dd = src.dl ? srcGeom(st.ls, src.dl).d : m.d;
       const v = sunENU(phiO, dd, hS - raOffset(st.ls, src.dl));
-      if (v[2] > 0) tot += src.k * srcGain(src, dd) * srcTrans(src, Math.sin(phiO), dd, v[2]) * m.S * v[2];
+      if (v[2] > 0) tot += src.k * srcGain(src, dd, st.ls) * srcTrans(src, Math.sin(phiO), dd, v[2], st.ls) * m.S * v[2];
       if (!src.dl) el = Math.asin(clamp(v[2], -1, 1)) * R2D;
     }
     setText('st8K', multi ? 'Light now' : 'Sun now');
@@ -2569,7 +2605,9 @@ function updateModeBar() {
   pr('twoK1', state.twoK === 'x1'); pr('twoK133', state.twoK === 'x133');
   pr('threeK05', state.threeK === 'x05'); pr('threeK067', state.threeK === 'x067');
   $('optTwo').hidden = state.mode !== 'two'; $('optThree').hidden = state.mode !== 'three'; $('optHalf').hidden = state.mode !== 'half';
-  pr('stDisc', state.halfStrip === 'disc'); pr('stEq', state.halfStrip === 'eq');
+  pr('stDisc', state.halfStrip === 'disc'); pr('stEq', state.halfStrip === 'eq'); pr('stSeason', state.halfStrip === 'season');
+  pr('hk1', state.halfK === 'one'); pr('hkMatch', state.halfK === 'match');
+  $('fracLbl').hidden = $('fracSeg').hidden = state.halfStrip === 'season';
   pr('sfThird', state.halfFrac === 'third'); pr('sfHalf', state.halfFrac === 'half'); pr('seHard', state.halfEdge === 'hard'); pr('seSoft', state.halfEdge === 'soft');
   const F = SRC.reduce((a, b) => a + b.k, 0), mean = MEAN_FLUX * F;
   const sum = $('modeSum'); sum.replaceChildren();
@@ -2580,10 +2618,11 @@ function updateModeBar() {
     ? 'Mirror array at L4, 60° ahead of Mars in its orbit: seen from Mars it sits 60° west of the Sun and rises first. '
     : 'Mirror array at L5, 60° behind Mars in its orbit: seen from Mars it sits 60° east of the Sun and sets last. ';
   else if (state.mode === 'half') {
-    const st = SRC[2].strip, part = st.frac === 0.5 ? 'half' : 'third', soft = st.edge > 0 ? ', fading out over the 5° inside its edge' : '';
-    lead = 'L4 array as strong as the Sun (morning sun 60° west); L5 array (evening sun 60° east) adds the rest of Earth’s average, ' + K_HALF.toFixed(2) + '× Sun, but holds back the middle ' + part + ' of its beam and spreads that light over the rest: ' + (st.kind === 'eq'
-      ? 'here the latitudes within ' + (st.b0 * R2D).toFixed(1) + '° of the equator' + soft + '. '
-      : 'an east–west strip ' + (2 * st.b0 * R2D).toFixed(0) + '° wide through the centre of the disc it sees' + soft + '. On the ground it is a band tilted with the seasons, lined up with the equator only when L5 is over it (Ls 120° and 300°); the rest of the disc gets ' + (st.gain * K_HALF).toFixed(2) + '× Sun. ');
+    const L4 = SRC[1], L5 = SRC[2], st = L5.strip, soft = st.edge > 0 ? ', fading over 5° at the edges' : '';
+    lead = (state.halfK === 'match' ? 'L4 array at ' + L4.k.toFixed(2) + '× Sun, as bright as the lit part of L5' : 'L4 array as strong as the Sun') + ' (morning sun 60° west); L5 array (evening sun 60° east) supplies the rest of Earth’s average, ' + L5.k.toFixed(2) + '× Sun, ' + (
+      st.kind === 'season' ? 'but lights only half the disc it sees, picked by season: the northern half at the northern winter solstice, then adding area from the south pole while giving up the northern part nearest the equator, the northern and southern quarters at the equinoxes and the southern half at the northern summer solstice (' + L5.lit.toFixed(2) + '× Sun where lit' + soft + '). '
+      : st.kind === 'eq' ? 'but holds back the latitudes within ' + (st.b0 * R2D).toFixed(1) + '° of the equator' + soft + ' and spreads that light over the rest of the disc. '
+      : 'but holds back the middle ' + (st.frac === 0.5 ? 'half' : 'third') + ' of its beam, an east–west strip ' + (2 * st.b0 * R2D).toFixed(0) + '° wide through the centre of the disc it sees' + soft + ', and spreads it over the rest (' + L5.lit.toFixed(2) + '× Sun there). On the ground the strip is a band tilted with the seasons, lined up with the equator only when L5 is over it (Ls 120° and 300°). ');
   }
   else lead = 'Mirror arrays at L4 and L5: a morning sun 60° west and an evening sun 60° east of the real one. ';
   sum.append(lead, 'Average flux at Mars ', b(Math.round(mean) + ' W/m²'), ', ' + Math.round(100 * mean / MARS.S1) + '% of Earth’s 1361 W/m².');
@@ -2599,6 +2638,9 @@ $('mdThree').addEventListener('click', () => setMode({ mode: 'three' }));
 $('mdHalf').addEventListener('click', () => setMode({ mode: 'half' }));
 $('stDisc').addEventListener('click', () => setMode({ halfStrip: 'disc' }));
 $('stEq').addEventListener('click', () => setMode({ halfStrip: 'eq' }));
+$('stSeason').addEventListener('click', () => setMode({ halfStrip: 'season' }));
+$('hk1').addEventListener('click', () => setMode({ halfK: 'one' }));
+$('hkMatch').addEventListener('click', () => setMode({ halfK: 'match' }));
 $('sfThird').addEventListener('click', () => setMode({ halfFrac: 'third' }));
 $('sfHalf').addEventListener('click', () => setMode({ halfFrac: 'half' }));
 $('seHard').addEventListener('click', () => setMode({ halfEdge: 'hard' }));
@@ -3004,7 +3046,7 @@ function insFixedMax() {           // the yearly maximum anywhere on the planet 
   let v = 0;
   if (state.insMetric === 'noon') {
     let x = 0, y = 0;
-    for (const src of SRC) { const kk = src.k * (src.strip ? src.strip.gain : 1); x += kk * Math.cos(src.dl * D2R); y += kk * Math.sin(src.dl * D2R); }
+    for (const src of SRC) { const kk = src.k * (src.strip ? 1 / src.strip.meanShare : 1); x += kk * Math.cos(src.dl * D2R); y += kk * Math.sin(src.dl * D2R); }
     v = flux(circ ? MARS.a : MARS.a * (1 - MARS.e)) * Math.hypot(x, y);
   } else {
     const src = circ ? IDE : ORB;
