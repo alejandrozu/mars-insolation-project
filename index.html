@@ -594,14 +594,14 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
       <button type="button" id="twoK133" aria-pressed="true">1.33× Sun</button>
     </div>
     <span class="flabel" id="ciLbl" title="Shapes the mirror light like a concave lens: dimmer near the middle of the disc it lights, brighter toward its north and south edges, same average">Counterirradiance</span>
-    <input type="range" id="twoCI" min="0" max="1" step="0.05" value="0" aria-labelledby="ciLbl">
-    <output id="twoCIOut" class="ci-out">k = 0</output>
+    <input type="range" id="twoCI" min="0" max="1" step="0.05" value="0.5" aria-labelledby="ciLbl">
+    <output id="twoCIOut" class="ci-out">k = 0.50</output>
     <span class="flabel" id="phLbl" title="Moves the dimmest line of the mirror light north (+) or south (−) of the middle of the disc it sees; past the brightest point the light stays at its maximum">Phase</span>
-    <input type="range" id="twoPh" min="-45" max="45" step="2.5" value="0" aria-labelledby="phLbl">
-    <output id="twoPhOut" class="ci-out">0°</output>
+    <input type="range" id="twoPh" min="-45" max="45" step="2.5" value="30" aria-labelledby="phLbl">
+    <output id="twoPhOut" class="ci-out">±30°</output>
     <div class="seg" role="group" aria-label="Phase fixed or following the seasons">
-      <button type="button" id="phFixed" aria-pressed="true">Fixed</button>
-      <button type="button" id="phSeason" aria-pressed="false" title="The dimmest line swings with the seasons, p × sin Ls: into the summer hemisphere, north in northern summer and south in southern summer">Follows seasons</button>
+      <button type="button" id="phFixed" aria-pressed="false">Fixed</button>
+      <button type="button" id="phSeason" aria-pressed="true" title="The dimmest line swings with the seasons, p × sin Ls: into the summer hemisphere, north in northern summer and south in southern summer">Follows seasons</button>
     </div>
   </div>
   <div class="mode-grp" id="optThree" hidden>
@@ -1035,7 +1035,7 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
         <li>Earth comparison lines are typical Earth values for the same measure: daily mean 100 and 500 W/m² for mid-latitude winter and summer, 250 and 450 for the tropics; noon peak 350 and 1300 for mid-latitude winter and summer, 700 for tropical winter and 1000 at the equator.</li>
         <li>Seasonal ratio divides each sol’s insolation by the dimmest value of the year at the same latitude, for the chosen measure. Earth references: about 5× (daily mean) and 4× (noon peak) at mid-latitudes, about 2× in the tropics.</li>
         <li>Map: elevation from the Mars Global Surveyor MOLA gridded topography (MEGDR, 4 pixels per degree, about 15 km at the equator; Smith et al. 2003, NASA PDS Geosciences Node), stored to the nearest 5 m relative to the MOLA areoid. The water level is the share of the surface area that lies below sea level, so 30% fills the northern lowlands and the deep basins. With "Fill craters and closed basins" on, every closed depression also holds a lake with a flat surface, set by the basin fill slider as a fraction of the way from the basin's floor to its spill point (100% is full to the brim, as rain would leave it if nothing evaporated); lakes come on top of the ocean share. Earth-equivalent km multiply Mars heights by g<sub>Mars</sub>/g<sub>Earth</sub> = 0.38: with the same air, pressure falls that much more slowly with height on Mars, so Olympus Mons (about 22 km above a 30% sea) thins the air like an 8.6 km climb on Earth. The insolation layer uses the same flat-ground, top-of-atmosphere model as the charts, so it varies with latitude only; slopes and the atmosphere are not included.</li>
-        <li>Insolation-based temperature: what an Earth-like planet would reach with this sunlight, from a seasonal energy-balance model calibrated on Earth (Budyko–Sellers type, after North &amp; Coakley 1979). Each 2° latitude band has a land and a sea box that absorb sunlight with Earth's albedo pattern, radiate 203.3 + 2.09·T W/m² (Earth's satellite fit, T in °C), store heat (land and air 1.0×10⁷ J/m²/K, a 24 m ocean mixed layer 1.0×10⁸), swap heat with each other (2.0 W/m²/K) and pass it poleward by diffusion (0.649 W/m²/K). The heat capacities and exchange were fitted to Earth's seasons: on Earth's orbit the model gives a 15 °C global mean, 29 °C at the equator and −7 / 23 °C (January / July) on land at 45°N in the mixed setting. Continental, mixed and maritime set land to 85%, 50% or 15% of each band. The map shows the land temperature, cooled with height above sea level at the lapse rate (default 6.5 K per Earth-equivalent km, 2.5 K per Mars km). It ignores Mars's own oceans and lakes as drawn, mountains blocking winds, deserts, clouds that change with climate, and ice that grows when it is cold, so read it as how warm the sunlight makes places, not a forecast. Mars's year is 1.9 Earth years long, so its seasons have more time to heat and cool than Earth's.</li>
+        <li>Insolation-based temperature: what an Earth-like planet would reach with this sunlight, from a seasonal energy-balance model calibrated on Earth (Budyko–Sellers type, after North &amp; Coakley 1979). Each 2° latitude band has a land and a sea box that absorb sunlight with Earth's cloud albedo but no snow or sea ice (top-of-atmosphere albedo 0.24–0.27 in the tropics, rising only to about 0.44 toward the poles, like the ice-free Southern Ocean, where Earth reaches 0.65), radiate 203.3 + 2.09·T W/m² (Earth's satellite fit, T in °C), store heat (land and air 1.0×10⁷ J/m²/K, a 24 m ocean mixed layer 1.0×10⁸), swap heat with each other (2.0 W/m²/K) and pass it poleward by diffusion (0.649 W/m²/K). The heat capacities and exchange were fitted to Earth's seasons (with Earth's real albedo, ice included): on Earth's orbit the model gives a 15 °C global mean, 29 °C at the equator and −7 / 23 °C (January / July) on land at 45°N in the mixed setting. Continental, mixed and maritime set land to 85%, 50% or 15% of each band. The map shows the land temperature, cooled with height above sea level at the lapse rate (default 6.5 K per Earth-equivalent km, 2.5 K per Mars km). It ignores Mars's own oceans and lakes as drawn, mountains blocking winds, deserts, clouds that change with climate, and ice that grows when it is cold, so read it as how warm the sunlight makes places, not a forecast. Mars's year is 1.9 Earth years long, so its seasons have more time to heat and cool than Earth's.</li>
         <li>Clock times are local true solar time (LTST): 12:00 is when the Sun crosses the meridian. Today's position uses the Allison &amp; McEwen (2000) formula for L<sub>s</sub>.</li>
       </ul>
     </section>
@@ -1262,7 +1262,7 @@ const PRESETS = { north: [0, 15, 30, 45, 60, 85], south: [0, -15, -30, -45, -60,
 const STORE = 'mars-daylight-v1';
 const state = {
   t: T_TODAY, tod: 14, obsLat: 45, view: 'orbit', units: 'mars', metric: 'mean', orbit: { dur: 'real', ins: 'real', rat: 'real' },
-  lats: PRESETS.north.map((lat, i) => ({ lat, slot: i })), flip: false, dynDur: false, dynIns: false, dynRat: false, earthRef: true, layout: 'full', lineMode: 'chosen', specA: -90, specB: 90, specStep: 5, specOp: 70, show: { view: true, dur: true, ins: true, rat: true, map: true }, waterPct: 30, fillLakes: true, basinFill: 100, hUnit: 'km', mapLayer: 'elev', palette: 'terrain', hillshade: true, insWhen: 'date', insMetric: 'mean', mapOrbit: 'real', insShow: 'wm', tUnit: 'C', heat: 'cont', lapse: 6.5, insOp: 65, insDyn: false, mapGrid: true, gridLat: 15, gridLon: 30, mapSites: true, ratioMetric: 'mean', mode: 'natural', twoCI: 0, twoPh: 0, twoPhMode: 'fixed', twoPos: 'L4', twoK: 'x133', threeK: 'x067', camOff: 0, playYear: false, playSol: false
+  lats: PRESETS.north.map((lat, i) => ({ lat, slot: i })), flip: false, dynDur: false, dynIns: false, dynRat: false, earthRef: true, layout: 'full', lineMode: 'chosen', specA: -90, specB: 90, specStep: 5, specOp: 70, show: { view: true, dur: true, ins: true, rat: true, map: true }, waterPct: 30, fillLakes: true, basinFill: 100, hUnit: 'km', mapLayer: 'elev', palette: 'terrain', hillshade: true, insWhen: 'date', insMetric: 'mean', mapOrbit: 'real', insShow: 'wm', tUnit: 'C', heat: 'cont', lapse: 6.5, insOp: 65, insDyn: false, mapGrid: true, gridLat: 15, gridLon: 30, mapSites: true, ratioMetric: 'mean', mode: 'natural', twoCI: 0.5, twoPh: 30, twoPhMode: 'season', twoPos: 'L4', twoK: 'x133', threeK: 'x067', camOff: 0, playYear: false, playSol: false
 };
 try {
   const sv = JSON.parse(localStorage.getItem(STORE) || 'null');
@@ -1304,9 +1304,11 @@ try {
     if (num(sv.gridLon, 1, 30)) state.gridLon = Math.round(sv.gridLon);
     if (sv.ratioMetric === 'mean' || sv.ratioMetric === 'noon') state.ratioMetric = sv.ratioMetric;
     if (['natural', 'two', 'three'].includes(sv.mode)) state.mode = sv.mode;
-    if (num(sv.twoCI, 0, 1)) state.twoCI = Math.round(sv.twoCI * 20) / 20;
-    if (num(sv.twoPh, -45, 45)) state.twoPh = Math.round(sv.twoPh * 2) / 2;
-    if (sv.twoPhMode === 'fixed' || sv.twoPhMode === 'season') state.twoPhMode = sv.twoPhMode;
+    if (sv.v >= 3) {      // saves from before the k = 0.5, ±30° default keep the new default shaping
+      if (num(sv.twoCI, 0, 1)) state.twoCI = Math.round(sv.twoCI * 20) / 20;
+      if (num(sv.twoPh, -45, 45)) state.twoPh = Math.round(sv.twoPh * 2) / 2;
+      if (sv.twoPhMode === 'fixed' || sv.twoPhMode === 'season') state.twoPhMode = sv.twoPhMode;
+    }
     if (sv.twoPos === 'L4' || sv.twoPos === 'L5') state.twoPos = sv.twoPos;
     if (sv.twoK === 'x1' || sv.twoK === 'x133') state.twoK = sv.twoK;
     if (sv.threeK === 'x05' || sv.threeK === 'x067') state.threeK = sv.threeK;
@@ -1326,11 +1328,11 @@ function applyMode() {
   else SRC = [{ dl: 0, k: 1, name: 'Sun' }];
   MODE_KEY = state.mode === 'two' ? 'two|' + state.twoPos + '|' + state.twoK + '|' + (state.twoCI || 0).toFixed(2) + '|' + (state.twoCI ? state.twoPh + state.twoPhMode : '') : state.mode === 'three' ? 'three|' + state.threeK : 'natural';
 }
+const kLabel = k => (Math.abs(k - 4 / 3) < 1e-9 ? '1.33' : Math.abs(k - 2 / 3) < 1e-9 ? '0.67' : String(k)) + '× Sun';
 applyMode();
 const MULTI = () => SRC.length > 1;
-const kLabel = k => (Math.abs(k - 4 / 3) < 1e-9 ? '1.33' : Math.abs(k - 2 / 3) < 1e-9 ? '0.67' : String(k)) + '× Sun';
 function save() {
-  try { localStorage.setItem(STORE, JSON.stringify({ v: 2, units: state.units, metric: state.metric, orbit: state.orbit, flip: state.flip, dynDur: state.dynDur, dynIns: state.dynIns, dynRat: state.dynRat, earthRef: state.earthRef, layout: state.layout, lineMode: state.lineMode, specA: state.specA, specB: state.specB, specStep: state.specStep, specOp: state.specOp, show: state.show, ratioMetric: state.ratioMetric, waterPct: state.waterPct, fillLakes: state.fillLakes, basinFill: state.basinFill, hUnit: state.hUnit, mapLayer: state.mapLayer, palette: state.palette, hillshade: state.hillshade, insWhen: state.insWhen, insMetric: state.insMetric, mapOrbit: state.mapOrbit, insShow: state.insShow, tUnit: state.tUnit, heat: state.heat, lapse: state.lapse, insOp: state.insOp, insDyn: state.insDyn, mapGrid: state.mapGrid, gridLat: state.gridLat, gridLon: state.gridLon, mapSites: state.mapSites, mode: state.mode, twoCI: state.twoCI, twoPh: state.twoPh, twoPhMode: state.twoPhMode, twoPos: state.twoPos, twoK: state.twoK, threeK: state.threeK, lats: state.lats })); } catch (e) {}
+  try { localStorage.setItem(STORE, JSON.stringify({ v: 3, units: state.units, metric: state.metric, orbit: state.orbit, flip: state.flip, dynDur: state.dynDur, dynIns: state.dynIns, dynRat: state.dynRat, earthRef: state.earthRef, layout: state.layout, lineMode: state.lineMode, specA: state.specA, specB: state.specB, specStep: state.specStep, specOp: state.specOp, show: state.show, ratioMetric: state.ratioMetric, waterPct: state.waterPct, fillLakes: state.fillLakes, basinFill: state.basinFill, hUnit: state.hUnit, mapLayer: state.mapLayer, palette: state.palette, hillshade: state.hillshade, insWhen: state.insWhen, insMetric: state.insMetric, mapOrbit: state.mapOrbit, insShow: state.insShow, tUnit: state.tUnit, heat: state.heat, lapse: state.lapse, insOp: state.insOp, insDyn: state.insDyn, mapGrid: state.mapGrid, gridLat: state.gridLat, gridLon: state.gridLon, mapSites: state.mapSites, mode: state.mode, twoCI: state.twoCI, twoPh: state.twoPh, twoPhMode: state.twoPhMode, twoPos: state.twoPos, twoK: state.twoK, threeK: state.threeK, lats: state.lats })); } catch (e) {}
 }
 
 /* ================= formatting ================= */
@@ -2986,10 +2988,10 @@ function insFixedMax() {           // the yearly maximum anywhere on the planet 
 // Insolation-based temperature: an Earth-calibrated seasonal energy-balance model (Budyko–Sellers type, after North &
 // Coakley 1979). Every 2° latitude band has a land box and a sea box, each obeying
 //   C dT/dt = S (1 − α) − (A + B T) + transport + land–sea exchange
-// with Earth's outgoing longwave fit A + B T (A = 203.3 W/m², B = 2.09 W/m²/K, T in °C), Earth's zonal-mean albedo,
+// with Earth's outgoing longwave fit A + B T (A = 203.3 W/m², B = 2.09 W/m²/K, T in °C), a cloud albedo without ice (below),
 // poleward transport as diffusion in sin(latitude) (D = 0.649 W/m²/K), heat capacities of 1.0e7 J/m²/K (land and the air
 // over it) and 1.0e8 J/m²/K (a 24 m ocean mixed layer), and a land–sea exchange of 2.0 W/m²/K. The heat capacities and
-// exchange were fitted to Earth's seasonal cycle; on Earth's own orbit the model gives a 15 °C global mean, 29 °C at the
+// exchange were fitted to Earth's seasonal cycle with Earth's real albedo; on Earth's orbit the model then gives a 15 °C global mean, 29 °C at the
 // equator and −7 °C (January) / 23 °C (July) on land at 45°N in the mixed setting. The map shows the land box at sea level,
 // cooled with height at the lapse rate. Linear in T, so the yearly average is the steady state of the yearly-mean sunlight.
 const EBM_NB = 90, EBM_A = 203.3, EBM_B = 2.09, EBM_D = 0.649, EBM_CL = 1.0e7, EBM_CO = 1.0e8, EBM_NU = 2.0;
@@ -2998,7 +3000,9 @@ const HEAT_EARTH = { cont: [-11.6, 26.8], mixed: [-7.3, 22.6], mari: [-0.7, 16.3
 const EBM_LAT = new Float64Array(EBM_NB), EBM_ALB = new Float64Array(EBM_NB), EBM_LO = new Float64Array(EBM_NB), EBM_UP = new Float64Array(EBM_NB);
 (() => {
   const xe = new Float64Array(EBM_NB + 1), xc = new Float64Array(EBM_NB), dx = new Float64Array(EBM_NB);
-  const AL = [0.26, 0.25, 0.24, 0.27, 0.33, 0.41, 0.49, 0.56, 0.62, 0.65];        // top-of-atmosphere albedo every 10° from the equator
+  // top-of-atmosphere albedo every 10° from the equator: Earth's clouds without snow or sea ice. Earth's zonal values up to 30°,
+  // then the poleward rise stops near 0.44, the albedo of the cloudy but ice-free Southern Ocean (Earth itself reaches 0.65 over ice)
+  const AL = [0.26, 0.25, 0.24, 0.27, 0.32, 0.38, 0.42, 0.44, 0.44, 0.44];
   for (let i = 0; i <= EBM_NB; i++) xe[i] = Math.sin((-90 + 180 * i / EBM_NB) * D2R);
   for (let i = 0; i < EBM_NB; i++) {
     EBM_LAT[i] = -90 + (i + 0.5) * 180 / EBM_NB; dx[i] = xe[i + 1] - xe[i]; xc[i] = (xe[i] + xe[i + 1]) / 2;
