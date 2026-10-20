@@ -842,7 +842,18 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
       <div class="side-h"><h2>Mars map</h2><p class="sub" id="mapSub">Equirectangular projection of MOLA laser-altimeter topography at 4 pixels per degree. Drag to pan, scroll or pinch to zoom, click to set the observer latitude.</p></div>
       <div class="mgrp">
         <div class="spec-row"><span class="flabel">Water level</span><output id="waterOut"></output></div>
-        <input type="range" id="water" min="0" max="100" step="1" value="30" aria-label="Share of the surface covered by water, percent">
+        <input type="range" id="water" min="0" max="100" step="1" value="30" aria-label="Share of the surface below sea level, percent">
+        <label class="switch sm" title="Fill every crater and closed basin with water, as rain would"><input type="checkbox" id="fillLakes" checked><span class="track"></span>Fill craters and closed basins with water</label>
+        <div id="basinRow">
+          <div class="spec-row"><span class="flabel">Basin fill</span><output id="basinOut"></output></div>
+          <input type="range" id="basinFill" min="0" max="100" step="5" value="100" aria-label="How full each crater and basin is, from its floor (0%) to its brim (100%)">
+        </div>
+        <div class="fgrp"><span class="flabel">Heights</span>
+          <div class="seg small" role="group" aria-label="Height units">
+            <button type="button" id="huKm" aria-pressed="true">km</button>
+            <button type="button" id="huEarth" aria-pressed="false" title="Mars kilometres × 0.38: the climb that gives the same drop in air pressure on Earth">Earth-equivalent km</button>
+          </div>
+        </div>
       </div>
       <div class="mgrp">
         <div class="fgrp"><span class="flabel">Map</span>
@@ -854,6 +865,7 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
         <div class="fgrp"><span class="flabel">Colours</span>
           <div class="seg small" role="group" aria-label="Elevation colours">
             <button type="button" id="palTerrain" aria-pressed="true">Terrain</button>
+            <button type="button" id="palRainbow" aria-pressed="false">Rainbow</button>
             <button type="button" id="palMars" aria-pressed="false">Mars</button>
           </div>
           <label class="switch sm"><input type="checkbox" id="hillshade" checked><span class="track"></span>Hillshade</label>
@@ -948,7 +960,7 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
         <li>Two and three suns: mirror arrays at the Sun–Mars L4 and L5 points. They sit at Mars's distance from the Sun, so seen from Mars they shine from the orbital plane 60° west (L4) or east (L5) of the Sun, and their light is a fixed multiple of sunlight at Mars's current distance. Daylight counts any sun above the horizon; the peak is the brightest moment of the sol. 1.33× (or two 0.67× arrays) brings the average flux to about Earth's.</li>
         <li>Earth comparison lines are typical Earth values for the same measure: daily mean 100 and 500 W/m² for mid-latitude winter and summer, 250 and 450 for the tropics; noon peak 350 and 1300 for mid-latitude winter and summer, 700 for tropical winter and 1000 at the equator.</li>
         <li>Seasonal ratio divides each sol’s insolation by the dimmest value of the year at the same latitude, for the chosen measure. Earth references: about 5× (daily mean) and 4× (noon peak) at mid-latitudes, about 2× in the tropics.</li>
-        <li>Map: elevation from the Mars Global Surveyor MOLA gridded topography (MEGDR, 4 pixels per degree, about 15 km at the equator; Smith et al. 2003, NASA PDS Geosciences Node), stored to the nearest 5 m relative to the MOLA areoid. The water level is the share of the surface area that lies below sea level, so 30% fills the northern lowlands and the deep basins. The insolation layer uses the same flat-ground, top-of-atmosphere model as the charts, so it varies with latitude only; slopes and the atmosphere are not included.</li>
+        <li>Map: elevation from the Mars Global Surveyor MOLA gridded topography (MEGDR, 4 pixels per degree, about 15 km at the equator; Smith et al. 2003, NASA PDS Geosciences Node), stored to the nearest 5 m relative to the MOLA areoid. The water level is the share of the surface area that lies below sea level, so 30% fills the northern lowlands and the deep basins. With "Fill craters and closed basins" on, every closed depression also holds a lake with a flat surface, set by the basin fill slider as a fraction of the way from the basin's floor to its spill point (100% is full to the brim, as rain would leave it if nothing evaporated); lakes come on top of the ocean share. Earth-equivalent km multiply Mars heights by g<sub>Mars</sub>/g<sub>Earth</sub> = 0.38: with the same air, pressure falls that much more slowly with height on Mars, so Olympus Mons (about 22 km above a 30% sea) thins the air like an 8.6 km climb on Earth. The insolation layer uses the same flat-ground, top-of-atmosphere model as the charts, so it varies with latitude only; slopes and the atmosphere are not included.</li>
         <li>Clock times are local true solar time (LTST): 12:00 is when the Sun crosses the meridian. Today's position uses the Allison &amp; McEwen (2000) formula for L<sub>s</sub>.</li>
       </ul>
     </section>
@@ -1135,7 +1147,7 @@ const PRESETS = { north: [0, 15, 30, 45, 60, 85], south: [0, -15, -30, -45, -60,
 const STORE = 'mars-daylight-v1';
 const state = {
   t: T_TODAY, tod: 14, obsLat: 45, view: 'orbit', units: 'mars', metric: 'mean', orbit: { dur: 'real', ins: 'real', rat: 'real' },
-  lats: PRESETS.north.map((lat, i) => ({ lat, slot: i })), flip: false, dynDur: false, dynIns: false, dynRat: false, earthRef: true, layout: 'full', lineMode: 'chosen', specA: -90, specB: 90, specStep: 5, specOp: 70, show: { view: true, dur: true, ins: true, rat: true, map: true }, waterPct: 30, mapLayer: 'elev', palette: 'terrain', hillshade: true, insWhen: 'date', insMetric: 'mean', mapOrbit: 'real', insOp: 65, insDyn: false, mapGrid: true, gridLat: 15, gridLon: 30, mapSites: true, ratioMetric: 'mean', mode: 'natural', twoPos: 'L4', twoK: 'x133', threeK: 'x067', camOff: 0, playYear: false, playSol: false
+  lats: PRESETS.north.map((lat, i) => ({ lat, slot: i })), flip: false, dynDur: false, dynIns: false, dynRat: false, earthRef: true, layout: 'full', lineMode: 'chosen', specA: -90, specB: 90, specStep: 5, specOp: 70, show: { view: true, dur: true, ins: true, rat: true, map: true }, waterPct: 30, fillLakes: true, basinFill: 100, hUnit: 'km', mapLayer: 'elev', palette: 'terrain', hillshade: true, insWhen: 'date', insMetric: 'mean', mapOrbit: 'real', insOp: 65, insDyn: false, mapGrid: true, gridLat: 15, gridLon: 30, mapSites: true, ratioMetric: 'mean', mode: 'natural', twoPos: 'L4', twoK: 'x133', threeK: 'x067', camOff: 0, playYear: false, playSol: false
 };
 try {
   const sv = JSON.parse(localStorage.getItem(STORE) || 'null');
@@ -1160,13 +1172,15 @@ try {
     if (sv.show && typeof sv.show === 'object' && ['view', 'dur', 'ins', 'rat', 'map'].some(k => sv.show[k] !== false))
       state.show = { view: sv.show.view !== false, dur: sv.show.dur !== false, ins: sv.show.ins !== false, rat: sv.show.rat !== false, map: sv.show.map !== false };
     if (num(sv.waterPct, 0, 100)) state.waterPct = Math.round(sv.waterPct);
+    if (num(sv.basinFill, 0, 100)) state.basinFill = Math.round(sv.basinFill);
     if (sv.mapLayer === 'elev' || sv.mapLayer === 'ins') state.mapLayer = sv.mapLayer;
-    if (sv.palette === 'terrain' || sv.palette === 'mars') state.palette = sv.palette;
+    if (['terrain', 'rainbow', 'mars'].includes(sv.palette)) state.palette = sv.palette;
+    if (sv.hUnit === 'km' || sv.hUnit === 'earth') state.hUnit = sv.hUnit;
     if (sv.insWhen === 'date' || sv.insWhen === 'year') state.insWhen = sv.insWhen;
     if (sv.insMetric === 'mean' || sv.insMetric === 'noon') state.insMetric = sv.insMetric;
     if (sv.mapOrbit === 'real' || sv.mapOrbit === 'circ') state.mapOrbit = sv.mapOrbit;
     if (num(sv.insOp, 0, 100)) state.insOp = sv.insOp;
-    for (const k of ['hillshade', 'insDyn', 'mapGrid', 'mapSites']) if (typeof sv[k] === 'boolean') state[k] = sv[k];
+    for (const k of ['hillshade', 'insDyn', 'mapGrid', 'mapSites', 'fillLakes']) if (typeof sv[k] === 'boolean') state[k] = sv[k];
     if (num(sv.gridLat, 1, 30)) state.gridLat = Math.round(sv.gridLat);
     if (num(sv.gridLon, 1, 30)) state.gridLon = Math.round(sv.gridLon);
     if (sv.ratioMetric === 'mean' || sv.ratioMetric === 'noon') state.ratioMetric = sv.ratioMetric;
@@ -1193,7 +1207,7 @@ applyMode();
 const MULTI = () => SRC.length > 1;
 const kLabel = k => (Math.abs(k - 4 / 3) < 1e-9 ? '1.33' : Math.abs(k - 2 / 3) < 1e-9 ? '0.67' : String(k)) + '× Sun';
 function save() {
-  try { localStorage.setItem(STORE, JSON.stringify({ units: state.units, metric: state.metric, orbit: state.orbit, flip: state.flip, dynDur: state.dynDur, dynIns: state.dynIns, dynRat: state.dynRat, earthRef: state.earthRef, layout: state.layout, lineMode: state.lineMode, specA: state.specA, specB: state.specB, specStep: state.specStep, specOp: state.specOp, show: state.show, ratioMetric: state.ratioMetric, waterPct: state.waterPct, mapLayer: state.mapLayer, palette: state.palette, hillshade: state.hillshade, insWhen: state.insWhen, insMetric: state.insMetric, mapOrbit: state.mapOrbit, insOp: state.insOp, insDyn: state.insDyn, mapGrid: state.mapGrid, gridLat: state.gridLat, gridLon: state.gridLon, mapSites: state.mapSites, mode: state.mode, twoPos: state.twoPos, twoK: state.twoK, threeK: state.threeK, lats: state.lats })); } catch (e) {}
+  try { localStorage.setItem(STORE, JSON.stringify({ units: state.units, metric: state.metric, orbit: state.orbit, flip: state.flip, dynDur: state.dynDur, dynIns: state.dynIns, dynRat: state.dynRat, earthRef: state.earthRef, layout: state.layout, lineMode: state.lineMode, specA: state.specA, specB: state.specB, specStep: state.specStep, specOp: state.specOp, show: state.show, ratioMetric: state.ratioMetric, waterPct: state.waterPct, fillLakes: state.fillLakes, basinFill: state.basinFill, hUnit: state.hUnit, mapLayer: state.mapLayer, palette: state.palette, hillshade: state.hillshade, insWhen: state.insWhen, insMetric: state.insMetric, mapOrbit: state.mapOrbit, insOp: state.insOp, insDyn: state.insDyn, mapGrid: state.mapGrid, gridLat: state.gridLat, gridLon: state.gridLon, mapSites: state.mapSites, mode: state.mode, twoPos: state.twoPos, twoK: state.twoK, threeK: state.threeK, lats: state.lats })); } catch (e) {}
 }
 
 /* ================= formatting ================= */
@@ -2436,6 +2450,10 @@ const MAP_W = 1440, MAP_H = 720, MAP_PPD = 4, MAP_Q = 5, MARS_R = 3389500;
 const mapBox = $('mapBox'), mapCvs = $('mapCvs'), mctx = mapCvs.getContext('2d');
 const mapComp = document.createElement('canvas'); mapComp.width = MAP_W; mapComp.height = MAP_H;
 const mcomp = mapComp.getContext('2d');
+const landMask = document.createElement('canvas'); landMask.width = MAP_W; landMask.height = MAP_H;   // opaque on land, for clipping contours
+const maskCtx = landMask.getContext('2d');
+const contourCvs = document.createElement('canvas');
+let maskImg = null;
 let ELEV = null, SHADE = null, HCUM = null, mapImg = null, mapReady = false, mapStats = {}, mapParams = null, mapBuildId = 0;
 // When zoomed in, the visible area is re-sampled at screen resolution (bilinear elevation) once the view settles,
 // so coastlines and relief stay smooth instead of showing the 15 km data pixels.
@@ -2469,8 +2487,18 @@ function renderDetail() {
       const c0 = cols0[x], c1 = cols1[x], fc = fcs[x], o = (y * w + x) * 4;
       const e0 = ELEV[b0 + c0] + (ELEV[b0 + c1] - ELEV[b0 + c0]) * fc, e1 = ELEV[b1 + c0] + (ELEV[b1 + c1] - ELEV[b1 + c0]) * fc;
       const hh = e0 + (e1 - e0) * fr;
-      if (hh <= P.sea) {
-        const kk = Math.min(P.WMAX, ((P.sea - hh) / 10) | 0) * 3;
+      let depth = hh <= P.sea ? P.sea - hh : -1;
+      if (depth < 0 && P.FL) {        // a lake has a flat surface, so the shoreline is where the ground rises above it
+        const FL = P.FL, f = P.bf, q0 = b0 + c0, q1 = b0 + c1, q2 = b1 + c0, q3 = b1 + c1;
+        let lv = -1e9, w;
+        if (FL[q0] > ELEV[q0] && (w = lakeLevel(q0, f)) > lv) lv = w;
+        if (FL[q1] > ELEV[q1] && (w = lakeLevel(q1, f)) > lv) lv = w;
+        if (FL[q2] > ELEV[q2] && (w = lakeLevel(q2, f)) > lv) lv = w;
+        if (FL[q3] > ELEV[q3] && (w = lakeLevel(q3, f)) > lv) lv = w;
+        if (hh < lv) depth = lv - hh;
+      }
+      if (depth >= 0) {
+        const kk = Math.min(P.WMAX, (depth / 10) | 0) * 3;
         d[o] = P.wl[kk]; d[o + 1] = P.wl[kk + 1]; d[o + 2] = P.wl[kk + 2];
       } else {
         const kk = Math.min(P.LMAX, ((hh - P.sea) / 10) | 0) * 3;
@@ -2515,16 +2543,37 @@ function makeLUT(stops, maxV, step) {     // stops: [[value, '#rrggbb'], …] as
   }
   return lut;
 }
+// Heights above sea level, in metres. Stops are dense over 0–6 km, where most of the land sits.
 const PAL = {
-  terrain: [[0, '#5f9150'], [300, '#86a85a'], [1000, '#bcb46b'], [2500, '#bf915c'], [5000, '#93714f'], [9000, '#9d9289'], [15000, '#ebe7e1'], [30000, '#ffffff']],
+  terrain: [[0, '#1f7a3a'], [200, '#3f9443'], [500, '#77b04c'], [900, '#b6c75a'], [1400, '#e3d36b'], [2000, '#eeb359'], [2700, '#e08a45'],
+            [3500, '#c9623a'], [4500, '#a2483a'], [5800, '#7e4250'], [7500, '#7c6a8c'], [10000, '#a9a3c2'], [14000, '#dcdbe8'], [20000, '#ffffff'], [30000, '#ffffff']],
+  rainbow: [[0, '#1f9e89'], [800, '#3fbc56'], [1800, '#a8d43c'], [2800, '#f2d43a'], [3800, '#f39b2d'], [5000, '#e2512b'], [7000, '#c22f66'],
+            [10000, '#9a5bc4'], [15000, '#e3d5f1'], [22000, '#ffffff'], [30000, '#ffffff']],
   mars: [[0, '#5a2d1d'], [800, '#86452a'], [2500, '#b5653a'], [5000, '#d39665'], [9000, '#e5bf98'], [15000, '#f4e9dc'], [30000, '#ffffff']],
   water: [[0, '#79bad8'], [200, '#4f98c5'], [1000, '#2f72a8'], [3000, '#1c4e85'], [6000, '#102f5b'], [15000, '#0a1f40']]
 };
-const LUT = { terrain: makeLUT(PAL.terrain, 30000, 10), mars: makeLUT(PAL.mars, 30000, 10), water: makeLUT(PAL.water, 15000, 10) };
-// Inferno-like ramp for insolation (perceptually ordered, dark = little light)
-const INFERNO = [[0, '#000004'], [0.13, '#1b0c41'], [0.25, '#4a0c6b'], [0.38, '#781c6d'], [0.5, '#a52c60'], [0.63, '#cf4446'], [0.75, '#ed6925'], [0.88, '#fb9b06'], [1, '#fcffa4']];
-const LUT_INS = makeLUT(INFERNO.map(([t, c]) => [t * 1000, c]), 1000, 1);
+const LEG = {   // stops shown in the legend for each palette (metres above sea level)
+  terrain: [0, 500, 1400, 2700, 4500, 7500, 14000], rainbow: [0, 1800, 3800, 5000, 7000, 10000, 15000], mars: [0, 800, 2500, 5000, 9000, 15000]
+};
+const LUT = { terrain: makeLUT(PAL.terrain, 30000, 10), rainbow: makeLUT(PAL.rainbow, 30000, 10), mars: makeLUT(PAL.mars, 30000, 10), water: makeLUT(PAL.water, 15000, 10) };
+// Insolation colours: turbo ramp (many distinguishable shades), trimmed of its near-black ends
+function turboArr(x) {
+  const r = 0.13572138 + x * (4.61539260 + x * (-42.66032258 + x * (132.13108234 + x * (-152.94239396 + x * 59.28637943))));
+  const g = 0.09140261 + x * (2.19418839 + x * (4.84296658 + x * (-14.18503333 + x * (4.27729857 + x * 2.82956604))));
+  const b = 0.10667330 + x * (12.64194608 + x * (-60.58204836 + x * (110.36276771 + x * (-89.90310912 + x * 27.34824973))));
+  return [r, g, b].map(v => Math.round(clamp(v, 0, 1) * 255));
+}
+const LUT_INS = new Uint8ClampedArray(1001 * 3);
+for (let k = 0; k <= 1000; k++) { const c = turboArr(0.04 + 0.92 * k / 1000); LUT_INS[k * 3] = c[0]; LUT_INS[k * 3 + 1] = c[1]; LUT_INS[k * 3 + 2] = c[2]; }
 const insRGB = t => { const k = Math.round(clamp(t, 0, 1) * 1000) * 3; return [LUT_INS[k], LUT_INS[k + 1], LUT_INS[k + 2]]; };
+const insGrad = () => 'linear-gradient(90deg,' + Array.from({ length: 11 }, (_, i) => { const c = insRGB(i / 10); return 'rgb(' + c.join(',') + ') ' + (i * 10) + '%'; }).join(',') + ')';
+// Height units. With the same air on both planets, pressure falls with height g_Mars/g_Earth as fast on Mars,
+// so climbing 1 km on Mars thins the air like climbing 0.38 km on Earth (the same factor converts water depth to pressure).
+const H_EARTH = 3.721 / 9.807;
+const hConv = m => state.hUnit === 'earth' ? m * H_EARTH : m;
+const hUnitName = () => state.hUnit === 'earth' ? 'Earth-equivalent km' : 'km';
+const fmtKm = m => { const v = hConv(m) / 1000, a = Math.abs(v); return (a >= 10 ? v.toFixed(1) : a >= 1 ? v.toFixed(2) : v.toFixed(2)).replace('-', '−'); };
+const fmtH = m => fmtKm(m) + ' km';
 const fmtInt = v => Math.round(v).toLocaleString('en-US').replace('-', '−');
 const lonLabel = L => { const a = Math.round(Math.abs(L) * 100) / 100; return a === 0 ? '0°' : a === 180 ? '180°' : a + '°' + (L > 0 ? 'E' : 'W'); };
 
@@ -2566,13 +2615,70 @@ async function loadMola() {
         SHADE[r * MAP_W + c] = Math.round(clamp(0.3 + 0.7 * sh / Lz, 0.45, 1.4) * 100);
       }
     }
+    EMIN = ELEV[0]; EMAX = ELEV[0];
+    for (let i = 1; i < n; i++) { if (ELEV[i] < EMIN) EMIN = ELEV[i]; if (ELEV[i] > EMAX) EMAX = ELEV[i]; }
     mapImg = mcomp.createImageData(MAP_W, MAP_H);
+    maskImg = maskCtx.createImageData(MAP_W, MAP_H);
     mapReady = true; msgEl.hidden = true;
     sizeMap(); buildMap(); drawMap();
   } catch (e) {
     msgEl.textContent = e.message;
   }
 }
+// Fill craters and closed basins up to their spill points (priority flood from the ocean, 8-connected, wrapping in longitude).
+// Elevations are multiples of 5 m, so a bucket queue makes this linear in the number of cells.
+let FILL = null, BASIN = null, fillSea = NaN, EMIN = 0, EMAX = 0, waterDragging = false, waterTimer = 0;
+function fillDepressions(sea) {
+  if (FILL && fillSea === sea) return FILL;
+  const n = MAP_W * MAP_H, F = FILL || new Int16Array(n), done = new Uint8Array(n);
+  const nb = Math.round((EMAX - EMIN) / MAP_Q) + 1, head = new Int32Array(nb).fill(-1), next = new Int32Array(n);
+  const push = (i, lev) => { const b = (lev - EMIN) / MAP_Q | 0; next[i] = head[b]; head[b] = i; };
+  let seeds = 0;
+  for (let i = 0; i < n; i++) if (ELEV[i] <= sea) { F[i] = ELEV[i]; done[i] = 1; push(i, ELEV[i]); seeds++; }
+  if (!seeds) { let g = 0; for (let i = 1; i < n; i++) if (ELEV[i] < ELEV[g]) g = i; F[g] = ELEV[g]; done[g] = 1; push(g, ELEV[g]); }
+  for (let b = 0; b < nb; b++) {
+    while (head[b] !== -1) {
+      const i = head[b]; head[b] = next[i];
+      const lev = F[i], r = (i / MAP_W) | 0, c = i - r * MAP_W;
+      for (let dr = -1; dr <= 1; dr++) {
+        const rr = r + dr; if (rr < 0 || rr >= MAP_H) continue;
+        for (let dc = -1; dc <= 1; dc++) {
+          if (!dr && !dc) continue;
+          const cc = c + dc < 0 ? MAP_W - 1 : c + dc >= MAP_W ? 0 : c + dc, j = rr * MAP_W + cc;
+          if (done[j]) continue;
+          done[j] = 1;
+          const e = ELEV[j], f = e > lev ? e : lev;
+          F[j] = f; push(j, f);
+        }
+      }
+    }
+  }
+  // basin floors: each closed basin is a connected set of filled cells sharing one spill level; its floor is its lowest cell
+  const BF = BASIN || new Int16Array(n), seen = new Uint8Array(n), qu = new Int32Array(n);
+  for (let i0 = 0; i0 < n; i0++) {
+    if (seen[i0] || F[i0] <= ELEV[i0] || ELEV[i0] <= sea) continue;
+    const lev = F[i0]; let qh = 0, qt = 0, mn = ELEV[i0];
+    qu[qt++] = i0; seen[i0] = 1;
+    while (qh < qt) {
+      const i = qu[qh++], r = (i / MAP_W) | 0, c = i - r * MAP_W;
+      if (ELEV[i] < mn) mn = ELEV[i];
+      for (let dr = -1; dr <= 1; dr++) {
+        const rr = r + dr; if (rr < 0 || rr >= MAP_H) continue;
+        for (let dc = -1; dc <= 1; dc++) {
+          if (!dr && !dc) continue;
+          const cc = c + dc < 0 ? MAP_W - 1 : c + dc >= MAP_W ? 0 : c + dc, j = rr * MAP_W + cc;
+          if (seen[j] || F[j] !== lev || F[j] <= ELEV[j]) continue;
+          seen[j] = 1; qu[qt++] = j;
+        }
+      }
+    }
+    for (let k = 0; k < qt; k++) BF[qu[k]] = mn;
+  }
+  FILL = F; BASIN = BF; fillSea = sea;
+  return F;
+}
+// water surface of the basin holding cell i at the current fill fraction (floor + fraction × depth to the brim)
+const lakeLevel = (i, f) => BASIN[i] + f * (FILL[i] - BASIN[i]);
 function seaLevelOf(pct) {
   if (pct <= 0) return -Infinity;
   if (pct >= 100) return Infinity;
@@ -2628,11 +2734,17 @@ function insFixedMax() {           // the yearly maximum anywhere on the planet 
 
 function buildMap() {
   if (!mapReady) return;
-  const sea = seaLevelOf(state.waterPct), d = mapImg.data, pal = LUT[state.palette], wl = LUT.water;
+  const sea = seaLevelOf(state.waterPct), d = mapImg.data, md = maskImg.data, pal = LUT[state.palette], wl = LUT.water;
   const LMAX = pal.length / 3 - 1, WMAX = wl.length / 3 - 1, shadeOn = state.hillshade;
   const insOn = state.mapLayer === 'ins', prof = insOn ? insProfile() : null, op = state.insOp / 100;
-  const rowLand = new Float64Array(MAP_H);
-  for (let r = 0; r < MAP_H; r++) for (let c = 0; c < MAP_W; c++) if (ELEV[r * MAP_W + c] > sea) rowLand[r]++;
+  // while the water slider is being dragged, reuse the last lake fill and refresh it once the slider settles
+  const FL = !state.fillLakes ? null : (waterDragging && FILL && fillSea !== sea) ? FILL : fillDepressions(sea);
+  const bf = state.basinFill / 100;
+  const rowLand = new Float64Array(MAP_H), rowLake = new Float64Array(MAP_H);
+  for (let r = 0; r < MAP_H; r++) for (let c = 0; c < MAP_W; c++) {
+    const i = r * MAP_W + c, h = ELEV[i];
+    if (h > sea) { if (FL && FL[i] > h && h < lakeLevel(i, bf)) rowLake[r]++; else rowLand[r]++; }
+  }
   let lo = 0, hi = 1;
   if (insOn) {
     if (state.insDyn) {
@@ -2642,30 +2754,35 @@ function buildMap() {
       if (hi - lo < 1) { lo = Math.max(0, lo - 0.5); hi = lo + 1; }
     } else { lo = 0; hi = insFixedMax(); }
   }
-  let landW = 0, landIns = 0, allW = 0;
+  let landW = 0, landIns = 0, allW = 0, lakeW = 0;
   for (let r = 0; r < MAP_H; r++) {
     allW += MAP_W * ROW_COS[r];
     landW += rowLand[r] * ROW_COS[r];
+    lakeW += rowLake[r] * ROW_COS[r];
     let ir = 0, ig = 0, ib = 0;
     if (insOn) { [ir, ig, ib] = insRGB((prof[r] - lo) / (hi - lo)); landIns += rowLand[r] * ROW_COS[r] * prof[r]; }
     for (let c = 0; c < MAP_W; c++) {
       const src = r * MAP_W + (c < 720 ? c + 720 : c - 720), h = ELEV[src], o = (r * MAP_W + c) * 4;
-      if (h <= sea) {
-        const k = Math.min(WMAX, ((sea - h) / 10) | 0) * 3;
+      const depth = h <= sea ? sea - h : (FL && FL[src] > h ? lakeLevel(src, bf) - h : -1);
+      if (depth >= 0) {
+        const k = Math.min(WMAX, (depth / 10) | 0) * 3;
         d[o] = wl[k]; d[o + 1] = wl[k + 1]; d[o + 2] = wl[k + 2];
+        md[o + 3] = 0;
       } else {
         const k = Math.min(LMAX, ((h - sea) / 10) | 0) * 3;
         let R = pal[k], G = pal[k + 1], B = pal[k + 2];
         if (shadeOn) { const f = SHADE[src] / 100; R *= f; G *= f; B *= f; }
         if (insOn) { R = R * (1 - op) + ir * op; G = G * (1 - op) + ig * op; B = B * (1 - op) + ib * op; }
         d[o] = R; d[o + 1] = G; d[o + 2] = B;
+        md[o + 3] = 255;
       }
       d[o + 3] = 255;
     }
   }
   mcomp.putImageData(mapImg, 0, 0);
-  mapStats = { sea, land: landW / allW, insLand: landW > 0 ? landIns / landW : NaN, lo, hi, insOn };
-  mapParams = { sea, pal, wl, LMAX, WMAX, shadeOn, insOn, prof, op, lo, hi };
+  maskCtx.putImageData(maskImg, 0, 0);
+  mapStats = { sea, land: landW / allW, lake: lakeW / allW, insLand: landW > 0 ? landIns / landW : NaN, lo, hi, insOn };
+  mapParams = { sea, pal, wl, LMAX, WMAX, shadeOn, insOn, prof, op, lo, hi, FL, bf };
   mapBuildId++;
   renderMapLegend(); updateMapRead();
 }
@@ -2747,6 +2864,40 @@ function drawMap() {
     }
     g.restore();
   }
+  // iso-insolation lines every 100 W/m² (daily mean only), drawn over land; 100 and 500 are thicker
+  if (mapStats.insOn && state.insMetric === 'mean' && mapParams && mapParams.prof) {
+    const prof = mapParams.prof, levels = [];
+    for (let r = 0; r < MAP_H - 1; r++) {
+      const a = prof[r], bq = prof[r + 1];
+      for (let v = 100; v <= 2000; v += 100) {
+        if ((a < v && bq >= v) || (a >= v && bq < v)) levels.push({ v, lat: 90 - (r + 0.5 + (v - a) / (bq - a)) / MAP_PPD });
+      }
+    }
+    if (levels.length) {
+      const cw = Math.round(MW * MDPR), ch = Math.round(MH * MDPR);
+      if (contourCvs.width !== cw || contourCvs.height !== ch) { contourCvs.width = cw; contourCvs.height = ch; }
+      const t = contourCvs.getContext('2d');
+      t.setTransform(1, 0, 0, 1, 0, 0); t.clearRect(0, 0, cw, ch); t.setTransform(MDPR, 0, 0, MDPR, 0, 0);
+      t.strokeStyle = 'rgba(255,255,255,0.95)';
+      for (const L of levels) {
+        const y = mapY(L.lat); if (y < yt || y > yb) continue;
+        t.lineWidth = (L.v === 100 || L.v === 500) ? 2.8 : 1.1;
+        t.beginPath(); t.moveTo(xl, y); t.lineTo(xr, y); t.stroke();
+      }
+      t.globalCompositeOperation = 'destination-in'; t.imageSmoothingEnabled = true;
+      t.drawImage(landMask, (L0 + 180) * MAP_PPD, (90 - B1) * MAP_PPD, (L1 - L0) * MAP_PPD, (B1 - B0) * MAP_PPD, mapX(L0), mapY(B1), (L1 - L0) * s, (B1 - B0) * s);
+      t.globalCompositeOperation = 'source-over';
+      g.drawImage(contourCvs, 0, 0, MW, MH);
+      g.font = font(600, MW < 560 ? 9.5 : 10.5, 'm'); g.textAlign = 'right'; g.textBaseline = 'bottom';
+      g.lineJoin = 'round'; g.lineWidth = 3; g.strokeStyle = 'rgba(8,11,18,0.85)'; g.fillStyle = '#FFFFFF';
+      let lastY = -1e9;
+      for (const L of levels.slice().sort((p, q) => mapY(p.lat) - mapY(q.lat))) {
+        const y = mapY(L.lat); if (y < yt + 12 || y > yb - 4 || y - lastY < 14) continue;
+        const x = Math.min(xr, MW) - (y < 120 ? 50 : 8);
+        g.strokeText(L.v + ' W/m²', x, y - 2); g.fillText(L.v + ' W/m²', x, y - 2); lastY = y;
+      }
+    }
+  }
   // observer latitude
   {
     const y = mapY(state.obsLat);
@@ -2775,7 +2926,7 @@ function drawMap() {
   }
   // map frame
   g.strokeStyle = 'rgba(255,255,255,0.25)'; g.lineWidth = 1; g.strokeRect(Math.round(xl) + 0.5, Math.round(yt) + 0.5, Math.round(xr - xl) - 1, Math.round(yb - yt) - 1);
-  mapCvs.setAttribute('aria-label', 'Map of Mars, ' + (state.mapLayer === 'ins' ? 'insolation over elevation' : 'elevation') + ', water covering ' + state.waterPct + '% of the surface.');
+  mapCvs.setAttribute('aria-label', 'Map of Mars, ' + (state.mapLayer === 'ins' ? 'insolation over elevation' : 'elevation') + ', ocean covering ' + state.waterPct + '% of the surface' + (state.fillLakes ? ', craters and basins filled with lakes.' : '.'));
 }
 
 function renderMapLegend() {
@@ -2789,11 +2940,13 @@ function renderMapLegend() {
     wrap.append(t, bar, lab); box.append(wrap);
   };
   const stopsGrad = stops => 'linear-gradient(90deg,' + stops.map((st, i) => st[1] + ' ' + (100 * i / (stops.length - 1)).toFixed(1) + '%').join(',') + ')';
-  if (state.waterPct > 0) add('Water depth', stopsGrad(PAL.water.slice(0, 5)), ['0', '200', '1k', '3k', '6k m']);
-  add('Height above sea level', stopsGrad(PAL[state.palette].slice(0, 7)), ['0', '0.3', '1', '2.5', '5', '9', '15 km']);
+  const pal = PAL[state.palette], colorAt = v => { const k = Math.min(LUT[state.palette].length / 3 - 1, (v / 10) | 0) * 3, L = LUT[state.palette]; return 'rgb(' + L[k] + ',' + L[k + 1] + ',' + L[k + 2] + ')'; };
+  const legStops = LEG[state.palette], km = v => { const x = hConv(v) / 1000; return x === 0 ? '0' : (x < 1 ? x.toFixed(2) : x < 10 ? x.toFixed(1) : x.toFixed(0)); };
+  if (state.waterPct > 0 || state.fillLakes) add('Water depth, ' + hUnitName(), stopsGrad(PAL.water.slice(0, 5)), [0, 200, 1000, 3000, 6000].map(km));
+  add('Height above sea level, ' + hUnitName(), 'linear-gradient(90deg,' + legStops.map((v, i) => colorAt(v) + ' ' + (100 * i / (legStops.length - 1)).toFixed(1) + '%').join(',') + ')', legStops.map(km));
   if (mapStats.insOn) {
-    const { lo, hi } = mapStats, g = 'linear-gradient(90deg,' + INFERNO.map(([t, c]) => c + ' ' + (t * 100) + '%').join(',') + ')';
-    add((state.insMetric === 'mean' ? 'Daily-mean' : 'Peak') + ' insolation, W/m²' + (state.insDyn ? '' : ' (fixed scale)'), g, [fmtInt(lo), fmtInt((lo + hi) / 2), fmtInt(hi)]);
+    const { lo, hi } = mapStats;
+    add((state.insMetric === 'mean' ? 'Daily-mean' : 'Peak') + ' insolation, W/m²' + (state.insDyn ? '' : ' (fixed scale)'), insGrad(), [fmtInt(lo), fmtInt(lo + (hi - lo) / 4), fmtInt((lo + hi) / 2), fmtInt(lo + 3 * (hi - lo) / 4), fmtInt(hi)]);
   }
 }
 function updateMapRead() {
@@ -2806,23 +2959,30 @@ function updateMapRead() {
   if (mapHover) {
     const { lat, lon } = mapHover;
     const r = clamp(Math.floor((90 - lat) * MAP_PPD), 0, MAP_H - 1), c = clamp(Math.floor(mod(lon, 360) * MAP_PPD), 0, MAP_W - 1);
-    const h = ELEV[r * MAP_W + c];
+    const i = r * MAP_W + c, h = ELEV[i], FL = mapParams && mapParams.FL;
     line(b(latLabel(Math.round(lat * 100) / 100) + ', ' + lonLabel(Math.round(lon * 100) / 100)));
-    line('Elevation ', b(fmtInt(h) + ' m'));
-    if (h <= sea) line('Under water, ', b(fmtInt(sea - h) + ' m'), ' deep');
-    else line(isFinite(sea) ? 'Land, ' : 'Land', isFinite(sea) ? b(fmtInt(h - sea) + ' m') : '', isFinite(sea) ? ' above sea level' : '');
+    line('Elevation ', b(fmtH(h)), dim(' (MOLA datum)'));
+    if (h <= sea) line('Ocean, ', b(fmtH(sea - h)), ' deep');
+    else if (FL && FL[i] > h && h < lakeLevel(i, mapParams.bf)) { const W = lakeLevel(i, mapParams.bf); line('Lake, ', b(fmtH(W - h)), ' deep, surface ', b(fmtH(W - (isFinite(sea) ? sea : 0))), isFinite(sea) ? ' above sea level' : ' above the datum'); }
+    else line(isFinite(sea) ? 'Land, ' : 'Land', isFinite(sea) ? b(fmtH(h - sea)) : '', isFinite(sea) ? ' above sea level' : '');
     if (mapStats.insOn) {
       const v = insProfile()[r];
       line(state.insMetric === 'mean' ? 'Daily-mean insolation ' : 'Peak insolation ', b(fmtInt(v) + ' W/m²'));
     }
   } else line(dim('Hover over the map to read values'));
-  line(dim('Water covers ' + state.waterPct + '% of the surface, land ' + (100 - state.waterPct) + '%'));
+  const lakePct = state.fillLakes && isFinite(mapStats.lake) ? mapStats.lake * 100 : 0;
+  line(dim('Ocean ' + state.waterPct + '%' + (state.fillLakes ? ' · lakes ' + lakePct.toFixed(1) + '%' : '') + ' · land ' + Math.max(0, 100 - state.waterPct - lakePct).toFixed(state.fillLakes ? 1 : 0) + '% of the surface'));
+  if (state.hUnit === 'earth') line(dim('Heights in Earth-equivalent km: Mars km × 0.38'));
   if (mapStats.insOn && isFinite(mapStats.insLand)) line(dim('Average over land: '), b(fmtInt(mapStats.insLand) + ' W/m²'));
 }
 function updateMapControls() {
   const pr = (id, on) => $(id).setAttribute('aria-pressed', String(on));
   pr('mlElev', state.mapLayer === 'elev'); pr('mlIns', state.mapLayer === 'ins');
-  pr('palTerrain', state.palette === 'terrain'); pr('palMars', state.palette === 'mars');
+  pr('palTerrain', state.palette === 'terrain'); pr('palRainbow', state.palette === 'rainbow'); pr('palMars', state.palette === 'mars');
+  pr('huKm', state.hUnit === 'km'); pr('huEarth', state.hUnit === 'earth');
+  $('fillLakes').checked = state.fillLakes;
+  $('basinRow').hidden = !state.fillLakes; $('basinFill').value = state.basinFill;
+  setText('basinOut', state.basinFill === 100 ? '100% · full to the brim' : state.basinFill === 0 ? '0% · dry' : state.basinFill + '% of the depth');
   pr('iwDate', state.insWhen === 'date'); pr('iwYear', state.insWhen === 'year');
   pr('mmMean', state.insMetric === 'mean'); pr('mmNoon', state.insMetric === 'noon');
   pr('moReal', state.mapOrbit === 'real'); pr('moCirc', state.mapOrbit === 'circ');
@@ -2835,7 +2995,7 @@ function updateMapControls() {
   $('hillshade').checked = state.hillshade; $('insDyn').checked = state.insDyn;
   $('mapGrid').checked = state.mapGrid; $('mapSites').checked = state.mapSites;
   const sea = mapReady ? seaLevelOf(state.waterPct) : NaN;
-  setText('waterOut', state.waterPct + '%' + (mapReady ? (isFinite(sea) ? ' · sea level ' + fmtInt(sea) + ' m' : state.waterPct >= 100 ? ' · all water' : ' · no water') : ''));
+  setText('waterOut', state.waterPct + '%' + (mapReady ? (isFinite(sea) ? ' · sea level ' + fmtH(sea) : state.waterPct >= 100 ? ' · all water' : ' · no ocean') : ''));
   setText('insOpOut', state.insOp + '%');
   setText('gridLatOut', state.gridLat + '°'); setText('gridLonOut', state.gridLon + '°');
   updateMapDateOut();
@@ -2855,13 +3015,23 @@ $('mlElev').addEventListener('click', mapSet({ mapLayer: 'elev' }));
 $('mlIns').addEventListener('click', mapSet({ mapLayer: 'ins' }));
 $('palTerrain').addEventListener('click', mapSet({ palette: 'terrain' }));
 $('palMars').addEventListener('click', mapSet({ palette: 'mars' }));
+$('palRainbow').addEventListener('click', mapSet({ palette: 'rainbow' }));
+$('huKm').addEventListener('click', () => { state.hUnit = 'km'; updateMapControls(); renderMapLegend(); updateMapRead(); save(); });
+$('huEarth').addEventListener('click', () => { state.hUnit = 'earth'; updateMapControls(); renderMapLegend(); updateMapRead(); save(); });
+$('fillLakes').addEventListener('change', e => { state.fillLakes = e.target.checked; mapSettingsChanged(); });
+$('basinFill').addEventListener('input', e => { state.basinFill = +e.target.value; mapSettingsChanged(); });
 $('iwDate').addEventListener('click', mapSet({ insWhen: 'date' }));
 $('iwYear').addEventListener('click', mapSet({ insWhen: 'year' }));
 $('mmMean').addEventListener('click', mapSet({ insMetric: 'mean' }));
 $('mmNoon').addEventListener('click', mapSet({ insMetric: 'noon' }));
 $('moReal').addEventListener('click', mapSet({ mapOrbit: 'real' }));
 $('moCirc').addEventListener('click', mapSet({ mapOrbit: 'circ' }));
-$('water').addEventListener('input', e => { state.waterPct = +e.target.value; mapSettingsChanged(); });
+$('water').addEventListener('input', e => {
+  state.waterPct = +e.target.value; waterDragging = true;
+  clearTimeout(waterTimer); waterTimer = setTimeout(() => { waterDragging = false; scheduleMapBuild(); }, 220);
+  mapSettingsChanged();
+});
+$('water').addEventListener('change', () => { clearTimeout(waterTimer); waterDragging = false; scheduleMapBuild(); });
 $('insOp').addEventListener('input', e => { state.insOp = +e.target.value; mapSettingsChanged(); });
 $('hillshade').addEventListener('change', e => { state.hillshade = e.target.checked; mapSettingsChanged(); });
 $('insDyn').addEventListener('change', e => { state.insDyn = e.target.checked; mapSettingsChanged(); });
