@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Mars Insolation Project</title>
-<meta name="description" content="Interactive simulator of daylight and sunlight on Mars across its eccentric year: orbit and sky views, daylight and insolation by latitude, seasonal ratios, and two- and three-sun skies with mirrors at L4 and L5.">
+<meta name="description" content="Interactive simulator of daylight and sunlight on Mars across its eccentric year: orbit, sky and map views, daylight and insolation by latitude, seasonal ratios, and two- and three-sun skies with mirrors at L4 and L5.">
 <meta property="og:title" content="Mars Insolation Project">
-<meta property="og:description" content="Interactive simulator of daylight and sunlight on Mars across its eccentric year: orbit and sky views, daylight and insolation by latitude, seasonal ratios, and two- and three-sun skies with mirrors at L4 and L5.">
+<meta property="og:description" content="Interactive simulator of daylight and sunlight on Mars across its eccentric year: orbit, sky and map views, daylight and insolation by latitude, seasonal ratios, and two- and three-sun skies with mirrors at L4 and L5.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#0F141E">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='%23C4643D'/%3E%3Cpath d='M16 3a13 13 0 0 1 0 26z' fill='%23140b0a' opacity='.55'/%3E%3C/svg%3E">
@@ -170,7 +170,7 @@ body[data-layout="compact"] .layout {
   max-width: 1480px; margin: 0 auto; align-items: start;
 }
 body[data-layout="compact"] .viewer {
-  grid-column: 1; grid-row: 1 / span 4; display: flex; flex-direction: column;
+  grid-column: 1; grid-row: 1 / span 5; display: flex; flex-direction: column;
   position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px);
 }
 body[data-layout="compact"] .vside { display: contents; }
@@ -187,9 +187,43 @@ body[data-layout="compact"] .cpanel .side-h { flex: 1 1 260px; min-width: 0; }
 body[data-layout="compact"] .cpanel .filters { order: -1; flex: 1 1 100%; padding-bottom: 12px; border-bottom: 1px solid var(--grid); }
 body[data-layout="compact"] .cpanel:not(.lead) .filters { display: none; }
 body[data-layout="compact"].no-view .layout, body[data-layout="compact"].no-charts .layout { grid-template-columns: minmax(0, 1fr); }
-body[data-layout="compact"].no-view #pDur, body[data-layout="compact"].no-view #pIns, body[data-layout="compact"].no-view #pRat, body[data-layout="compact"].no-view .after,
+body[data-layout="compact"].no-view #pDur, body[data-layout="compact"].no-view #pIns, body[data-layout="compact"].no-view #pRat, body[data-layout="compact"].no-view #pMap, body[data-layout="compact"].no-view .after,
 body[data-layout="compact"].no-charts .after { grid-column: 1; }
 body[data-layout="compact"].no-charts .viewer { position: static; grid-row: auto; }
+
+/* ---------- map ---------- */
+.mgrp { display: grid; gap: 8px; }
+.mgrp input[type="range"] { width: 100%; margin: 0; accent-color: var(--accent); height: 20px; }
+.msel {
+  width: 100%; background: var(--surface); color: var(--ink); border: 1px solid var(--line);
+  border-radius: 7px; padding: 6px 8px; font-size: 12.5px;
+}
+.mapbox { position: relative; width: 100%; height: 100%; min-height: 0; border-radius: 8px; overflow: hidden; background: #0B0F16; }
+#mapCvs { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: grab; touch-action: none; }
+#mapCvs.dragging { cursor: grabbing; }
+.mapzoom { position: absolute; top: 10px; right: 10px; display: grid; gap: 4px; }
+.mbtn {
+  width: 30px; height: 30px; border-radius: 7px; border: 1px solid rgba(255,255,255,0.22);
+  background: rgba(11,15,22,0.78); color: #ECE6DD; font-size: 16px; line-height: 1; cursor: pointer; padding: 0;
+}
+.mbtn:hover { border-color: #E7AE6F; }
+.mbtn:focus-visible { outline: 2px solid #E7AE6F; outline-offset: 1px; }
+.mapmsg { position: absolute; inset: 0; display: grid; place-items: center; color: #C9CED8; font-size: 13px; padding: 20px; text-align: center; }
+.mlegend { display: grid; gap: 10px; }
+.mleg-t { font-family: var(--f-display); font-weight: 600; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 3px; }
+.mleg-bar { height: 10px; border-radius: 3px; }
+.mleg-lab { display: flex; justify-content: space-between; font-family: var(--f-mono); font-size: 10.5px; color: var(--ink-2); margin-top: 3px; font-variant-numeric: tabular-nums; }
+.mread {
+  font-family: var(--f-mono); font-size: 12px; color: var(--ink-2); background: var(--band-b);
+  border: 1px solid var(--grid); border-radius: 8px; padding: 8px 10px; display: grid; gap: 3px; font-variant-numeric: tabular-nums;
+}
+.mread b { color: var(--ink); font-weight: 500; }
+.mread .dim { color: var(--muted); }
+body[data-layout="full"] #pMap .plot { padding: 10px; }
+body[data-layout="compact"] #pMap { grid-column: 2; }
+body[data-layout="compact"] #pMap .mapbox { height: auto; aspect-ratio: 2 / 1.05; }
+body[data-layout="compact"] #pMap .side { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); align-items: start; gap: 14px 22px; }
+body[data-layout="compact"] #pMap .side-h { grid-column: 1 / -1; }
 
 /* ---------- viewer (always dark) ---------- */
 .viewer {
@@ -343,7 +377,8 @@ select.site {
 .switch input:focus-visible + .track { outline: 2px solid var(--accent); outline-offset: 2px; }
 .card-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
 .switch.sm { font-size: 12.5px; color: var(--ink-2); }
-.lineleg { display: inline-flex; gap: 14px; font-size: 12px; color: var(--ink-2); align-items: center; }
+.orbsel { gap: 6px 10px; }
+.lineleg { display: inline-flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12px; color: var(--ink-2); align-items: center; }
 .lineleg svg { width: 22px; height: 6px; vertical-align: middle; margin-right: 5px; }
 .presets { display: inline-flex; gap: 4px; align-items: center; flex-wrap: wrap; }
 .presets .flabel { margin-right: 2px; }
@@ -443,7 +478,7 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
 @media (max-width: 980px) {
   body[data-layout="compact"] .layout { grid-template-columns: minmax(0, 1fr); }
   body[data-layout="compact"] .viewer { position: static; grid-row: auto; }
-  body[data-layout="compact"] #pDur, body[data-layout="compact"] #pIns, body[data-layout="compact"] .after { grid-column: 1; grid-row: auto; }
+  body[data-layout="compact"] #pDur, body[data-layout="compact"] #pIns, body[data-layout="compact"] #pRat, body[data-layout="compact"] #pMap, body[data-layout="compact"] .after { grid-column: 1; grid-row: auto; }
 }
 @media (max-width: 900px) {
   body[data-layout="full"] .panel { grid-template-columns: minmax(0, 1fr); height: auto; min-height: 0; }
@@ -451,6 +486,8 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
   body[data-layout="full"] .vside { border-right: 0; overflow: visible; }
   body[data-layout="full"] .stage { order: -1; height: 72vh; height: 72dvh; min-height: 360px; }
   body[data-layout="full"] .cpanel .plot { height: 72vh; height: 72dvh; min-height: 380px; }
+  body[data-layout="full"] #pMap .plot { order: -1; height: auto; min-height: 0; }
+  body[data-layout="full"] #pMap .mapbox { height: auto; aspect-ratio: 2 / 1.1; }
   .topctl { align-items: flex-start; }
 }
 @media (max-width: 560px) {
@@ -488,6 +525,7 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
         <button type="button" class="js-show" data-panel="dur" aria-pressed="true">Daylight</button>
         <button type="button" class="js-show" data-panel="ins" aria-pressed="true">Insolation</button>
         <button type="button" class="js-show" data-panel="rat" aria-pressed="true">Ratio</button>
+        <button type="button" class="js-show" data-panel="map" aria-pressed="true">Map</button>
       </div>
       <span class="flabel" id="layLbl">Layout</span>
       <div class="seg small" role="group" aria-labelledby="layLbl">
@@ -644,15 +682,21 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
           <p class="msg" role="status"></p>
         </div>
         <div class="fgrp opts">
-          <label class="switch"><input type="checkbox" class="js-ideal"><span class="track"></span>Circular-orbit reference</label>
           <label class="switch" title="Plot southern latitudes from their own winter solstice (Ls 90°) so they line up with the northern ones"><input type="checkbox" class="js-flip"><span class="track"></span>Align southern seasons</label>
-          <span class="lineleg" hidden>
-            <span><svg viewBox="0 0 22 6" aria-hidden="true"><line x1="1" y1="3" x2="21" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Real orbit</span>
-            <span><svg viewBox="0 0 22 6" aria-hidden="true"><line x1="1" y1="3" x2="21" y2="3" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 4"/></svg>e = 0</span>
-          </span>
         </div>
       </div>
       <div class="card-tools">
+        <div class="fgrp orbsel"><span class="flabel">Orbit</span>
+          <div class="seg small" role="group" aria-label="Orbit shown on this chart">
+            <button type="button" class="js-orb" data-chart="dur" data-om="real" aria-pressed="true">Real</button>
+            <button type="button" class="js-orb" data-chart="dur" data-om="both" aria-pressed="false">Real + circular</button>
+            <button type="button" class="js-orb" data-chart="dur" data-om="circ" aria-pressed="false">Circular only</button>
+          </div>
+          <span class="lineleg" data-chart="dur" hidden>
+            <span><svg viewBox="0 0 22 6" aria-hidden="true"><line x1="1" y1="3" x2="21" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Real orbit</span>
+            <span><svg viewBox="0 0 22 6" aria-hidden="true"><line x1="1" y1="3" x2="21" y2="3" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 4"/></svg>Circular (e = 0)</span>
+          </span>
+        </div>
         <label class="switch sm" title="Fit the y axis from 10% below the lowest value to 10% above the highest, rounded to whole hours"><input type="checkbox" id="dynDur"><span class="track"></span>Dynamic y axis</label>
       </div>
     </div>
@@ -699,15 +743,21 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
           <p class="msg" role="status"></p>
         </div>
         <div class="fgrp opts">
-          <label class="switch"><input type="checkbox" class="js-ideal"><span class="track"></span>Circular-orbit reference</label>
           <label class="switch" title="Plot southern latitudes from their own winter solstice (Ls 90°) so they line up with the northern ones"><input type="checkbox" class="js-flip"><span class="track"></span>Align southern seasons</label>
-          <span class="lineleg" hidden>
-            <span><svg viewBox="0 0 22 6" aria-hidden="true"><line x1="1" y1="3" x2="21" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Real orbit</span>
-            <span><svg viewBox="0 0 22 6" aria-hidden="true"><line x1="1" y1="3" x2="21" y2="3" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 4"/></svg>e = 0</span>
-          </span>
         </div>
       </div>
       <div class="card-tools">
+        <div class="fgrp orbsel"><span class="flabel">Orbit</span>
+          <div class="seg small" role="group" aria-label="Orbit shown on this chart">
+            <button type="button" class="js-orb" data-chart="ins" data-om="real" aria-pressed="true">Real</button>
+            <button type="button" class="js-orb" data-chart="ins" data-om="both" aria-pressed="false">Real + circular</button>
+            <button type="button" class="js-orb" data-chart="ins" data-om="circ" aria-pressed="false">Circular only</button>
+          </div>
+          <span class="lineleg" data-chart="ins" hidden>
+            <span><svg viewBox="0 0 22 6" aria-hidden="true"><line x1="1" y1="3" x2="21" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Real orbit</span>
+            <span><svg viewBox="0 0 22 6" aria-hidden="true"><line x1="1" y1="3" x2="21" y2="3" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 4"/></svg>Circular (e = 0)</span>
+          </span>
+        </div>
         <div class="seg" role="group" aria-label="Insolation measure">
           <button type="button" id="mMean" aria-pressed="true">Daily mean</button>
           <button type="button" id="mNoon" aria-pressed="false">Noon peak</button>
@@ -759,15 +809,21 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
           <p class="msg" role="status"></p>
         </div>
         <div class="fgrp opts">
-          <label class="switch"><input type="checkbox" class="js-ideal"><span class="track"></span>Circular-orbit reference</label>
           <label class="switch" title="Plot southern latitudes from their own winter solstice (Ls 90°) so they line up with the northern ones"><input type="checkbox" class="js-flip"><span class="track"></span>Align southern seasons</label>
-          <span class="lineleg" hidden>
-            <span><svg viewBox="0 0 22 6" aria-hidden="true"><line x1="1" y1="3" x2="21" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Real orbit</span>
-            <span><svg viewBox="0 0 22 6" aria-hidden="true"><line x1="1" y1="3" x2="21" y2="3" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 4"/></svg>e = 0</span>
-          </span>
         </div>
       </div>
       <div class="card-tools">
+        <div class="fgrp orbsel"><span class="flabel">Orbit</span>
+          <div class="seg small" role="group" aria-label="Orbit shown on this chart">
+            <button type="button" class="js-orb" data-chart="rat" data-om="real" aria-pressed="true">Real</button>
+            <button type="button" class="js-orb" data-chart="rat" data-om="both" aria-pressed="false">Real + circular</button>
+            <button type="button" class="js-orb" data-chart="rat" data-om="circ" aria-pressed="false">Circular only</button>
+          </div>
+          <span class="lineleg" data-chart="rat" hidden>
+            <span><svg viewBox="0 0 22 6" aria-hidden="true"><line x1="1" y1="3" x2="21" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Real orbit</span>
+            <span><svg viewBox="0 0 22 6" aria-hidden="true"><line x1="1" y1="3" x2="21" y2="3" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 4"/></svg>Circular (e = 0)</span>
+          </span>
+        </div>
         <div class="seg" role="group" aria-label="Ratio measure">
           <button type="button" id="rMean" aria-pressed="true">Daily mean</button>
           <button type="button" id="rNoon" aria-pressed="false">Noon peak</button>
@@ -778,6 +834,100 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
     </div>
     <div class="plot" id="chartRat" tabindex="0" aria-label="Seasonal ratio chart. Use left and right arrow keys to move the date.">
       <div class="svgwrap"></div><div class="tip" hidden></div>
+    </div>
+  </section>
+
+  <section class="panel card cpanel" id="pMap" aria-label="Mars map">
+    <div class="side">
+      <div class="side-h"><h2>Mars map</h2><p class="sub" id="mapSub">Equirectangular projection of MOLA laser-altimeter topography at 4 pixels per degree. Drag to pan, scroll or pinch to zoom, click to set the observer latitude.</p></div>
+      <div class="mgrp">
+        <div class="spec-row"><span class="flabel">Water level</span><output id="waterOut"></output></div>
+        <input type="range" id="water" min="0" max="100" step="1" value="30" aria-label="Share of the surface covered by water, percent">
+      </div>
+      <div class="mgrp">
+        <div class="fgrp"><span class="flabel">Map</span>
+          <div class="seg small" role="group" aria-label="Map layer">
+            <button type="button" id="mlElev" aria-pressed="true">Elevation</button>
+            <button type="button" id="mlIns" aria-pressed="false">Insolation</button>
+          </div>
+        </div>
+        <div class="fgrp"><span class="flabel">Colours</span>
+          <div class="seg small" role="group" aria-label="Elevation colours">
+            <button type="button" id="palTerrain" aria-pressed="true">Terrain</button>
+            <button type="button" id="palMars" aria-pressed="false">Mars</button>
+          </div>
+          <label class="switch sm"><input type="checkbox" id="hillshade" checked><span class="track"></span>Hillshade</label>
+        </div>
+      </div>
+      <div class="mgrp" id="insOpts" hidden>
+        <div class="fgrp"><span class="flabel">When</span>
+          <div class="seg small" role="group" aria-label="Insolation period">
+            <button type="button" id="iwDate" aria-pressed="true">Chosen date</button>
+            <button type="button" id="iwYear" aria-pressed="false">Yearly average</button>
+          </div>
+        </div>
+        <div id="mapDateRow">
+          <div class="spec-row"><span class="flabel">Date</span><output id="mapDateOut"></output></div>
+          <input type="range" id="mapDate" min="0" max="668.6" step="0.1" value="0" aria-label="Date, synced with the Mars view">
+        </div>
+        <div class="fgrp"><span class="flabel">Measure</span>
+          <div class="seg small" role="group" aria-label="Insolation measure on the map">
+            <button type="button" id="mmMean" aria-pressed="true">Daily mean</button>
+            <button type="button" id="mmNoon" aria-pressed="false">Peak</button>
+          </div>
+        </div>
+        <div class="fgrp"><span class="flabel">Orbit</span>
+          <div class="seg small" role="group" aria-label="Orbit used for the insolation map">
+            <button type="button" id="moReal" aria-pressed="true">Real</button>
+            <button type="button" id="moCirc" aria-pressed="false">Circular (e = 0)</button>
+          </div>
+        </div>
+        <div>
+          <div class="spec-row"><span class="flabel">Insolation opacity</span><output id="insOpOut"></output></div>
+          <input type="range" id="insOp" min="0" max="100" step="5" value="65" aria-label="Insolation layer opacity over the elevation map, percent">
+        </div>
+        <label class="switch sm" title="Stretch the colours between the lowest and highest values on land instead of a fixed scale"><input type="checkbox" id="insDyn"><span class="track"></span>Dynamic colour scale</label>
+      </div>
+      <div class="mlegend" id="mapLegend"></div>
+      <div class="mgrp">
+        <label class="switch sm"><input type="checkbox" id="mapGrid" checked><span class="track"></span>Latitude and longitude lines</label>
+        <div id="gridRows">
+          <div class="spec-row"><span class="flabel">Latitude every</span><output id="gridLatOut"></output></div>
+          <input type="range" id="gridLat" min="1" max="30" step="1" value="15" aria-label="Spacing between latitude lines, degrees">
+          <div class="spec-row"><span class="flabel">Longitude every</span><output id="gridLonOut"></output></div>
+          <input type="range" id="gridLon" min="1" max="30" step="1" value="30" aria-label="Spacing between longitude lines, degrees">
+        </div>
+        <label class="switch sm"><input type="checkbox" id="mapSites" checked><span class="track"></span>Landing sites</label>
+      </div>
+      <div class="mgrp">
+        <select class="msel" id="region" aria-label="Zoom to a region">
+          <option value="">Zoom to a region</option>
+          <option value="all">Whole planet</option>
+          <option value="tharsis">Tharsis volcanoes</option>
+          <option value="olympus">Olympus Mons</option>
+          <option value="valles">Valles Marineris</option>
+          <option value="hellas">Hellas basin</option>
+          <option value="argyre">Argyre basin</option>
+          <option value="elysium">Elysium</option>
+          <option value="arabia">Arabia Terra</option>
+          <option value="utopia">Utopia Planitia</option>
+          <option value="borealis">Northern lowlands</option>
+          <option value="jezero">Jezero crater</option>
+          <option value="gale">Gale crater</option>
+        </select>
+      </div>
+      <div class="mread" id="mapRead" aria-live="polite"></div>
+    </div>
+    <div class="plot mapplot">
+      <div class="mapbox" id="mapBox">
+        <canvas id="mapCvs" tabindex="0" role="img" aria-label="Map of Mars"></canvas>
+        <div class="mapzoom">
+          <button type="button" class="mbtn" id="zIn" aria-label="Zoom in">+</button>
+          <button type="button" class="mbtn" id="zOut" aria-label="Zoom out">−</button>
+          <button type="button" class="mbtn" id="zReset" aria-label="Show the whole planet">⤢</button>
+        </div>
+        <div class="mapmsg" id="mapMsg">Loading MOLA elevation data…</div>
+      </div>
     </div>
   </section>
 
@@ -794,10 +944,11 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
         <li>One year is 686.98 Earth days, or 668.6 sols. A sol lasts 24 h 39 m 35 s, so one Mars hour (1/24 sol) is 1.0275 Earth hours.</li>
         <li>Daylight runs from the moment the Sun's centre rises above a flat horizon to the moment it sets. Refraction in the thin atmosphere and local terrain are ignored.</li>
         <li>Insolation is measured at the top of the atmosphere on level ground: 1361 W/m² at 1 AU, scaled by distance squared (713 W/m² at perihelion, 490 W/m² at aphelion). Dust can remove a large share of this before it reaches the surface.</li>
-        <li>The circular-orbit reference keeps the same tilt and the same starting solstice, fixes the distance at 1.5237 AU and advances L<sub>s</sub> at a constant rate.</li>
+        <li>The circular orbit (shown as a reference or on its own, per chart) keeps the same tilt and the same starting solstice, fixes the distance at 1.5237 AU and advances L<sub>s</sub> at a constant rate, so all four seasons last 167.1 sols.</li>
         <li>Two and three suns: mirror arrays at the Sun–Mars L4 and L5 points. They sit at Mars's distance from the Sun, so seen from Mars they shine from the orbital plane 60° west (L4) or east (L5) of the Sun, and their light is a fixed multiple of sunlight at Mars's current distance. Daylight counts any sun above the horizon; the peak is the brightest moment of the sol. 1.33× (or two 0.67× arrays) brings the average flux to about Earth's.</li>
         <li>Earth comparison lines are typical Earth values for the same measure: daily mean 100 and 500 W/m² for mid-latitude winter and summer, 250 and 450 for the tropics; noon peak 350 and 1300 for mid-latitude winter and summer, 700 for tropical winter and 1000 at the equator.</li>
         <li>Seasonal ratio divides each sol’s insolation by the dimmest value of the year at the same latitude, for the chosen measure. Earth references: about 5× (daily mean) and 4× (noon peak) at mid-latitudes, about 2× in the tropics.</li>
+        <li>Map: elevation from the Mars Global Surveyor MOLA gridded topography (MEGDR, 4 pixels per degree, about 15 km at the equator; Smith et al. 2003, NASA PDS Geosciences Node), stored to the nearest 5 m relative to the MOLA areoid. The water level is the share of the surface area that lies below sea level, so 30% fills the northern lowlands and the deep basins. The insolation layer uses the same flat-ground, top-of-atmosphere model as the charts, so it varies with latitude only; slopes and the atmosphere are not included.</li>
         <li>Clock times are local true solar time (LTST): 12:00 is when the Sun crosses the meridian. Today's position uses the Allison &amp; McEwen (2000) formula for L<sub>s</sub>.</li>
       </ul>
     </section>
@@ -983,15 +1134,17 @@ function peakArr(s, ideal) {      // the multi-sun peak needs a search over the 
 const PRESETS = { north: [0, 15, 30, 45, 60, 85], south: [0, -15, -30, -45, -60, -85], ns: [30, -30, 60, -60, 85, -85] };
 const STORE = 'mars-daylight-v1';
 const state = {
-  t: T_TODAY, tod: 14, obsLat: 45, view: 'orbit', units: 'mars', metric: 'mean', ideal: false,
-  lats: PRESETS.north.map((lat, i) => ({ lat, slot: i })), flip: false, dynDur: false, dynIns: false, dynRat: false, earthRef: true, layout: 'full', lineMode: 'chosen', specA: -90, specB: 90, specStep: 5, specOp: 70, show: { view: true, dur: true, ins: true, rat: true }, ratioMetric: 'mean', mode: 'natural', twoPos: 'L4', twoK: 'x133', threeK: 'x067', camOff: 0, playYear: false, playSol: false
+  t: T_TODAY, tod: 14, obsLat: 45, view: 'orbit', units: 'mars', metric: 'mean', orbit: { dur: 'real', ins: 'real', rat: 'real' },
+  lats: PRESETS.north.map((lat, i) => ({ lat, slot: i })), flip: false, dynDur: false, dynIns: false, dynRat: false, earthRef: true, layout: 'full', lineMode: 'chosen', specA: -90, specB: 90, specStep: 5, specOp: 70, show: { view: true, dur: true, ins: true, rat: true, map: true }, waterPct: 30, mapLayer: 'elev', palette: 'terrain', hillshade: true, insWhen: 'date', insMetric: 'mean', mapOrbit: 'real', insOp: 65, insDyn: false, mapGrid: true, gridLat: 15, gridLon: 30, mapSites: true, ratioMetric: 'mean', mode: 'natural', twoPos: 'L4', twoK: 'x133', threeK: 'x067', camOff: 0, playYear: false, playSol: false
 };
 try {
   const sv = JSON.parse(localStorage.getItem(STORE) || 'null');
   if (sv && typeof sv === 'object') {
     if (sv.units === 'earth' || sv.units === 'mars') state.units = sv.units;
     if (sv.metric === 'mean' || sv.metric === 'noon') state.metric = sv.metric;
-    if (typeof sv.ideal === 'boolean') state.ideal = sv.ideal;
+    const OMS = ['real', 'both', 'circ'];
+    if (sv.orbit && typeof sv.orbit === 'object') for (const k of ['dur', 'ins', 'rat']) { if (OMS.includes(sv.orbit[k])) state.orbit[k] = sv.orbit[k]; }
+    else if (sv.ideal === true) state.orbit = { dur: 'both', ins: 'both', rat: 'both' };
     if (typeof sv.flip === 'boolean') state.flip = sv.flip;
     if (typeof sv.dynDur === 'boolean') state.dynDur = sv.dynDur;
     if (typeof sv.dynIns === 'boolean') state.dynIns = sv.dynIns;
@@ -1004,8 +1157,18 @@ try {
     if (num(sv.specB, -90, 90)) state.specB = sv.specB;
     if (num(sv.specStep, 0.5, 15) && Math.abs(sv.specStep * 4 - Math.round(sv.specStep * 4)) < 1e-9) state.specStep = sv.specStep;
     if (num(sv.specOp, 5, 100)) state.specOp = sv.specOp;
-    if (sv.show && typeof sv.show === 'object' && ['view', 'dur', 'ins', 'rat'].some(k => sv.show[k] !== false))
-      state.show = { view: sv.show.view !== false, dur: sv.show.dur !== false, ins: sv.show.ins !== false, rat: sv.show.rat !== false };
+    if (sv.show && typeof sv.show === 'object' && ['view', 'dur', 'ins', 'rat', 'map'].some(k => sv.show[k] !== false))
+      state.show = { view: sv.show.view !== false, dur: sv.show.dur !== false, ins: sv.show.ins !== false, rat: sv.show.rat !== false, map: sv.show.map !== false };
+    if (num(sv.waterPct, 0, 100)) state.waterPct = Math.round(sv.waterPct);
+    if (sv.mapLayer === 'elev' || sv.mapLayer === 'ins') state.mapLayer = sv.mapLayer;
+    if (sv.palette === 'terrain' || sv.palette === 'mars') state.palette = sv.palette;
+    if (sv.insWhen === 'date' || sv.insWhen === 'year') state.insWhen = sv.insWhen;
+    if (sv.insMetric === 'mean' || sv.insMetric === 'noon') state.insMetric = sv.insMetric;
+    if (sv.mapOrbit === 'real' || sv.mapOrbit === 'circ') state.mapOrbit = sv.mapOrbit;
+    if (num(sv.insOp, 0, 100)) state.insOp = sv.insOp;
+    for (const k of ['hillshade', 'insDyn', 'mapGrid', 'mapSites']) if (typeof sv[k] === 'boolean') state[k] = sv[k];
+    if (num(sv.gridLat, 1, 30)) state.gridLat = Math.round(sv.gridLat);
+    if (num(sv.gridLon, 1, 30)) state.gridLon = Math.round(sv.gridLon);
     if (sv.ratioMetric === 'mean' || sv.ratioMetric === 'noon') state.ratioMetric = sv.ratioMetric;
     if (['natural', 'two', 'three'].includes(sv.mode)) state.mode = sv.mode;
     if (sv.twoPos === 'L4' || sv.twoPos === 'L5') state.twoPos = sv.twoPos;
@@ -1030,7 +1193,7 @@ applyMode();
 const MULTI = () => SRC.length > 1;
 const kLabel = k => (Math.abs(k - 4 / 3) < 1e-9 ? '1.33' : Math.abs(k - 2 / 3) < 1e-9 ? '0.67' : String(k)) + '× Sun';
 function save() {
-  try { localStorage.setItem(STORE, JSON.stringify({ units: state.units, metric: state.metric, ideal: state.ideal, flip: state.flip, dynDur: state.dynDur, dynIns: state.dynIns, dynRat: state.dynRat, earthRef: state.earthRef, layout: state.layout, lineMode: state.lineMode, specA: state.specA, specB: state.specB, specStep: state.specStep, specOp: state.specOp, show: state.show, ratioMetric: state.ratioMetric, mode: state.mode, twoPos: state.twoPos, twoK: state.twoK, threeK: state.threeK, lats: state.lats })); } catch (e) {}
+  try { localStorage.setItem(STORE, JSON.stringify({ units: state.units, metric: state.metric, orbit: state.orbit, flip: state.flip, dynDur: state.dynDur, dynIns: state.dynIns, dynRat: state.dynRat, earthRef: state.earthRef, layout: state.layout, lineMode: state.lineMode, specA: state.specA, specB: state.specB, specStep: state.specStep, specOp: state.specOp, show: state.show, ratioMetric: state.ratioMetric, waterPct: state.waterPct, mapLayer: state.mapLayer, palette: state.palette, hillshade: state.hillshade, insWhen: state.insWhen, insMetric: state.insMetric, mapOrbit: state.mapOrbit, insOp: state.insOp, insDyn: state.insDyn, mapGrid: state.mapGrid, gridLat: state.gridLat, gridLon: state.gridLon, mapSites: state.mapSites, mode: state.mode, twoPos: state.twoPos, twoK: state.twoK, threeK: state.threeK, lats: state.lats })); } catch (e) {}
 }
 
 /* ================= formatting ================= */
@@ -1102,8 +1265,12 @@ function rawArr(lat, kind, ideal) {
 function flipActive() { return state.flip && visLats().some(L => L.lat < 0); }
 function shiftOf(lat, ideal) { return (state.flip && lat < 0) ? (ideal ? YEAR / 2 : T_SUMMER) : 0; }
 function southOnly() { return flipActive() && !visLats().some(L => L.lat >= 0); }
-const frameToT = x => southOnly() ? mod(x + T_SUMMER, YEAR) : x;
-const tToFrame = t => southOnly() ? mod(t - T_SUMMER, YEAR) : t;
+// Per-chart orbit: 'real', 'both' (real + dashed circular reference) or 'circ' (circular only).
+// In the circular model every season lasts a quarter year, so the southern frame is shifted by exactly half a year.
+const orbitSeries = kind => ({ real: [false], both: [true, false], circ: [true] })[state.orbit[kind]];
+const anyCircular = () => Object.values(state.orbit).some(v => v !== 'real') || state.mapOrbit === 'circ';
+const frameToT = (x, c) => southOnly() ? mod(x + (c && c.prim ? YEAR / 2 : T_SUMMER), YEAR) : x;
+const tToFrame = (t, c) => southOnly() ? mod(t - (c && c.prim ? YEAR / 2 : T_SUMMER), YEAR) : t;
 const shiftCache = new Map();
 function valArr(lat, kind, ideal) {
   const a = rawArr(lat, kind, ideal), sh = shiftOf(lat, ideal);
@@ -1150,11 +1317,12 @@ function renderChart(c) {
   const X0 = m.l, X1 = W - m.r, Y0 = H - m.b, Y1 = m.t;
   const xs = t => X0 + (X1 - X0) * t / YEAR;
   const isDur = c.kind === 'dur', isRat = c.kind === 'rat', conv = valConv(c.kind);
-  const vis = visLats();
+  const vis = visLats(), prim = state.orbit[c.kind] === 'circ', shS = prim ? YEAR / 2 : T_SUMMER;
+  c.prim = prim;
   // y range: fixed full scale, or fitted to the visible lines when "Dynamic y axis" is on
   const dyn = (isDur ? state.dynDur : isRat ? state.dynRat : state.dynIns) && vis.length > 0;
   let mn = Infinity, mx = -Infinity;
-  if (dyn) for (const L of vis) for (const ideal of (state.ideal ? [false, true] : [false])) {
+  if (dyn) for (const L of vis) for (const ideal of orbitSeries(c.kind)) {
     const a = rawArr(L.lat, c.kind, ideal);
     for (let i = 0; i <= N; i++) { const v = conv(a[i]); if (v < mn) mn = v; if (v > mx) mx = v; }
   }
@@ -1195,8 +1363,9 @@ function renderChart(c) {
   P.push('<svg width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '" aria-hidden="true">');
   // season bands: one row normally, a northern and a southern row when aligned
   const NAMES = ['Winter', 'Spring', 'Summer', 'Autumn'];
-  const rows = [{ key: 'N', b: [0, T_SPRING, T_SUMMER, T_AUTUMN, YEAR] }];
-  if (flip) rows.push({ key: 'S', b: [0, T_AUTUMN - T_SUMMER, YEAR - T_SUMMER, YEAR - T_SUMMER + T_SPRING, YEAR] });
+  const EQ = [0, YEAR / 4, YEAR / 2, 3 * YEAR / 4, YEAR];
+  const rows = [{ key: 'N', b: prim ? EQ : [0, T_SPRING, T_SUMMER, T_AUTUMN, YEAR] }];
+  if (flip) rows.push({ key: 'S', b: prim ? EQ : [0, T_AUTUMN - T_SUMMER, YEAR - T_SUMMER, YEAR - T_SUMMER + T_SPRING, YEAR] });
   const bh = flip ? 16 : 19;
   rows.forEach((row, ri) => {
     const y = flip ? 6 + ri * 20 : 8, B = row.b;
@@ -1236,7 +1405,7 @@ function renderChart(c) {
   if (!flip) {
     const B = rows[0].b;
     for (let k = 1; k < 4; k++) { const x = xs(B[k]).toFixed(1); P.push('<line x1="' + x + '" x2="' + x + '" y1="' + Y1 + '" y2="' + Y0 + '" class="sbound"/>'); }
-    for (const t of [T_PERI, T_APH]) { const x = xs(t).toFixed(1); P.push('<line x1="' + x + '" x2="' + x + '" y1="' + Y1 + '" y2="' + Y0 + '" class="apsis"/>'); }
+    if (!prim) for (const t of [T_PERI, T_APH]) { const x = xs(t).toFixed(1); P.push('<line x1="' + x + '" x2="' + x + '" y1="' + Y1 + '" y2="' + Y0 + '" class="apsis"/>'); }
   }
   const xMax = YEAR * xFac();
   for (let v = 0; v <= xMax + 1e-6; v += 100) {
@@ -1245,11 +1414,11 @@ function renderChart(c) {
     P.push('<text x="' + x + '" y="' + (Y0 + 15) + '" class="tick" text-anchor="middle">' + v + '</text>');
   }
   // event markers: aphelion, perihelion, today; one row per hemisphere frame when aligned
-  const frames = flip ? [{ key: 'N', sh: 0 }, { key: 'S', sh: T_SUMMER }] : [{ key: '', sh: 0 }];
+  const frames = flip ? [{ key: 'N', sh: 0 }, { key: 'S', sh: shS }] : [{ key: '', sh: 0 }];
   frames.forEach((fr, ri) => {
     const rowY = Y0 + 31 + ri * 15;
     if (flip) P.push('<text x="' + (X0 - 8) + '" y="' + rowY + '" class="mark" text-anchor="end">' + fr.key + '</text>');
-    const marks = [{ t: mod(T_APH - fr.sh, YEAR), lab: 'aphelion' }, { t: mod(T_PERI - fr.sh, YEAR), lab: 'perihelion' }, { t: mod(T_TODAY - fr.sh, YEAR), lab: 'today', today: true }];
+    const marks = (prim ? [] : [{ t: mod(T_APH - fr.sh, YEAR), lab: 'aphelion' }, { t: mod(T_PERI - fr.sh, YEAR), lab: 'perihelion' }]).concat([{ t: mod(T_TODAY - fr.sh, YEAR), lab: 'today', today: true }]);
     for (const mk of marks) {
       const x = xs(mk.t);
       if (mk.today && !flip) P.push('<path d="M' + x.toFixed(1) + ' ' + (Y0 + 0.5) + 'l-4 7h8z" class="todaymk"/>');
@@ -1257,8 +1426,9 @@ function renderChart(c) {
       if (free) P.push('<text x="' + clamp(x, X0 + 30, X1 - 30).toFixed(1) + '" y="' + rowY + '" class="mark' + (mk.today ? ' today' : '') + '" text-anchor="middle">' + mk.lab + '</text>');
     }
   });
-  // series: circular reference beneath, real orbit on top
-  for (const ideal of (state.ideal ? [true, false] : [false])) {
+  // series: circular reference beneath (dashed), real orbit on top; circular-only draws solid lines
+  const dashIdeal = state.orbit[c.kind] === 'both';
+  for (const ideal of orbitSeries(c.kind)) {
     const spec = SPEC(), stride = vis.length > 150 ? 4 : vis.length > 24 ? 2 : 1, op = spec ? ' ;stroke-opacity:' + (state.specOp / 100) : '';
     for (const L of vis) {
       const a = valArr(L.lat, c.kind, ideal);
@@ -1269,15 +1439,15 @@ function renderChart(c) {
         d += (pen ? 'L' : 'M') + xs(i * DT).toFixed(1) + ' ' + ys(v).toFixed(1); pen = true;
       }
       if (!d) continue;
-      const emph = !spec && !ideal && Math.abs(L.lat - state.obsLat) < 0.05;
-      P.push('<path d="' + d + '" class="ser' + (ideal ? ' ideal' : '') + (emph ? ' emph' : '') + (spec ? ' sp' : '') + '" style="stroke:' + lineColor(L) + op + '"/>');
+      const emph = !spec && ideal === prim && Math.abs(L.lat - state.obsLat) < 0.05;
+      P.push('<path d="' + d + '" class="ser' + (ideal && dashIdeal ? ' ideal' : '') + (emph ? ' emph' : '') + (spec ? ' sp' : '') + '" style="stroke:' + lineColor(L) + op + '"/>');
     }
   }
   if (!vis.length) P.push('<text x="' + ((X0 + X1) / 2) + '" y="' + ((Y0 + Y1) / 2) + '" class="empty" text-anchor="middle">Add a latitude above to plot it</text>');
   // end labels with collision avoidance
   const labelled = SPEC() ? vis.filter((L, k) => k === 0 || k === vis.length - 1 || Math.abs(L.lat % 30) < 1e-9) : vis;
   const lastFinite = a => { for (let i = N; i >= 0; i--) if (isFinite(a[i])) return a[i]; return NaN; };
-  const ends = labelled.map(L => ({ L, v: conv(lastFinite(valArr(L.lat, c.kind, false))) })).filter(e => isFinite(e.v))
+  const ends = labelled.map(L => ({ L, v: conv(lastFinite(valArr(L.lat, c.kind, prim))) })).filter(e => isFinite(e.v))
     .map(e => ({ L: e.L, y: ys(e.v) })).sort((a, b) => a.y - b.y);
   for (let i = 1; i < ends.length; i++) if (ends[i].y < ends[i - 1].y + 13) ends[i].y = ends[i - 1].y + 13;
   const over = ends.length ? ends[ends.length - 1].y - (Y0 + 4) : 0;
@@ -1304,11 +1474,11 @@ function renderChart(c) {
   const pick = ev => { const r = c.svg.getBoundingClientRect(); return clamp((ev.clientX - r.left - X0) / (X1 - X0), 0, 1) * YEAR; };
   hit.addEventListener('pointermove', ev => {
     const x = pick(ev); setHover(Math.round(x / DT), c);
-    if (c.drag) setT(frameToT(x));
+    if (c.drag) setT(frameToT(x, c));
   });
   hit.addEventListener('pointerdown', ev => {
     c.drag = true; try { hit.setPointerCapture(ev.pointerId); } catch (e) {}
-    stopYear(); const x = pick(ev); setT(frameToT(x)); setHover(Math.round(x / DT), c);
+    stopYear(); const x = pick(ev); setT(frameToT(x, c)); setHover(Math.round(x / DT), c);
   });
   const end = () => { c.drag = false; };
   hit.addEventListener('pointerup', end);
@@ -1322,7 +1492,7 @@ function renderCharts() { renderChart(charts.dur); renderChart(charts.ins); rend
 function updateCursor(c) {
   if (!c.cur) return;
   const g = c.g, conv = valConv(c.kind), flip = flipActive();
-  const xN = g.xs(state.t), xS = g.xs(mod(state.t - T_SUMMER, YEAR));
+  const xN = g.xs(state.t), xS = g.xs(mod(state.t - (c.prim ? YEAR / 2 : T_SUMMER), YEAR));
   const setX = (el, x) => { el.setAttribute('x1', x.toFixed(1)); el.setAttribute('x2', x.toFixed(1)); };
   setX(c.cur.querySelector('.curN'), xN);
   if (flip) {
@@ -1334,7 +1504,7 @@ function updateCursor(c) {
   (c.dotVis || []).forEach((L, k) => {
     const x = (state.flip && L.lat < 0) ? xS : xN;
     circles[k].setAttribute('cx', x.toFixed(1));
-    const v = conv(valAt(rawArr(L.lat, c.kind, false), state.t));
+    const v = conv(valAt(rawArr(L.lat, c.kind, c.prim), state.t));
     circles[k].setAttribute('visibility', isFinite(v) ? 'inherit' : 'hidden');
     if (isFinite(v)) circles[k].setAttribute('cy', g.ys(v).toFixed(1));
   });
@@ -1348,7 +1518,7 @@ function setHover(i, src) {
     const line = c.hov.firstChild; line.setAttribute('x1', x.toFixed(1)); line.setAttribute('x2', x.toFixed(1));
     const circles = c.hov.querySelectorAll('circle');
     (c.dotVis || []).forEach((L, j) => {
-      const v = conv(valArr(L.lat, c.kind, false)[hoverIdx]);
+      const v = conv(valArr(L.lat, c.kind, c.prim)[hoverIdx]);
       circles[j].setAttribute('cx', x.toFixed(1));
       circles[j].setAttribute('visibility', isFinite(v) ? 'inherit' : 'hidden');
       if (isFinite(v)) circles[j].setAttribute('cy', g.ys(v).toFixed(1));
@@ -1366,13 +1536,14 @@ function fillTip(c, i, x) {
   tip.replaceChildren();
   const h = document.createElement('div'); h.className = 'tip-h';
   const s = document.createElement('div'); s.className = 'tip-s';
+  const OR = c.prim ? IDE : ORB;
   if (flipActive()) {
-    const so = orbitAt(mod(i * DT + T_SUMMER, YEAR));
+    const so = c.prim ? idealAt(mod(i * DT + YEAR / 2, YEAR)) : orbitAt(mod(i * DT + T_SUMMER, YEAR));
     h.textContent = (i * DT * xFac()).toFixed(0) + ' ' + unitShort() + ' after winter solstice';
-    s.append('North ', lsFrag(ORB[i].ls), ' · South ', lsFrag(so.ls));
+    s.append('North ', lsFrag(OR[i].ls), ' · South ', lsFrag(so.ls));
   } else {
-    h.append(dateLabel(i * DT, 0) + ' · ', lsFrag(ORB[i].ls));
-    s.textContent = 'Northern ' + SEASONS[seasonIdx(ORB[i].ls)] + ' · ' + ORB[i].r.toFixed(3) + ' AU';
+    h.append(dateLabel(i * DT, 0) + ' · ', lsFrag(OR[i].ls));
+    s.textContent = 'Northern ' + SEASONS[seasonIdx(OR[i].ls)] + ' · ' + OR[i].r.toFixed(3) + ' AU' + (c.prim ? ' (circular)' : '');
   }
   tip.append(h, s);
   const fmt = v => !isFinite(v) ? 'no sun' : isDur ? conv(v).toFixed(2) + ' h' : c.kind === 'rat' ? (v >= RATIO_CAP - 1e-9 ? '≥20×' : v.toFixed(2) + '×') : Math.round(v) + ' W/m²';
@@ -1381,9 +1552,9 @@ function fillTip(c, i, x) {
   for (const L of rowsL) {
     const row = document.createElement('div'); row.className = 'tip-r';
     const key = document.createElement('i'); key.style.background = lineColor(L);
-    const val = document.createElement('b'); val.textContent = fmt(valArr(L.lat, c.kind, false)[i]);
+    const val = document.createElement('b'); val.textContent = fmt(valArr(L.lat, c.kind, c.prim)[i]);
     const lab = document.createElement('span'); lab.textContent = latLabel(L.lat);
-    if (state.ideal) {
+    if (state.orbit[c.kind] === 'both') {
       const em = document.createElement('em'); em.textContent = 'e=0: ' + fmt(valArr(L.lat, c.kind, true)[i]);
       lab.append(em);
     }
@@ -1406,13 +1577,13 @@ for (const k in charts) {
     let d = 0;
     if (ev.key === 'ArrowRight') d = ev.shiftKey ? 10 : 1;
     else if (ev.key === 'ArrowLeft') d = ev.shiftKey ? -10 : -1;
-    else if (ev.key === 'Home') { setT(frameToT(0)); setHover(0, c); ev.preventDefault(); return; }
+    else if (ev.key === 'Home') { setT(frameToT(0, c)); setHover(0, c); ev.preventDefault(); return; }
     else return;
     ev.preventDefault(); stopYear();
     setT(mod(state.t + d / xFac(), YEAR));
-    setHover(Math.round(tToFrame(state.t) / DT), c);
+    setHover(Math.round(tToFrame(state.t, c) / DT), c);
   });
-  c.root.addEventListener('focus', () => setHover(Math.round(tToFrame(state.t) / DT), c));
+  c.root.addEventListener('focus', () => setHover(Math.round(tToFrame(state.t, c) / DT), c));
   c.root.addEventListener('blur', clearHover);
 }
 
@@ -1628,7 +1799,7 @@ function drawOrbit() {
   ctx.setLineDash([1, 4]); ctx.strokeStyle = 'rgba(231,174,111,0.45)';
   ctx.beginPath(); ctx.moveTo(pPeri[0], pPeri[1]); ctx.lineTo(pAph[0], pAph[1]); ctx.stroke(); ctx.setLineDash([]);
   // circular reference orbit
-  if (state.ideal) {
+  if (anyCircular()) {
     ctx.setLineDash([5, 5]); ctx.strokeStyle = 'rgba(236,230,221,0.32)'; ctx.lineWidth = 1;
     ctx.beginPath(); ctx.arc(sun[0], sun[1], MARS.a * sc, 0, 2 * Math.PI); ctx.stroke(); ctx.setLineDash([]);
   }
@@ -1678,7 +1849,7 @@ function drawOrbit() {
     ctx.fillStyle = g; ctx.beginPath(); ctx.arc(sun[0], sun[1], 40, 0, 2 * Math.PI); ctx.fill();
     ctx.fillStyle = '#FFF6E0'; ctx.beginPath(); ctx.arc(sun[0], sun[1], 6.5, 0, 2 * Math.PI); ctx.fill(); }
   // ghost Mars on the circular orbit
-  if (state.ideal) {
+  if (anyCircular()) {
     const id = idealAt(state.t), p = posLs(id.ls, MARS.a);
     ctx.strokeStyle = 'rgba(236,230,221,0.75)'; ctx.lineWidth = 1.3; ctx.setLineDash([2, 2]);
     ctx.beginPath(); ctx.arc(p[0], p[1], 6.5, 0, 2 * Math.PI); ctx.stroke(); ctx.setLineDash([]);
@@ -1976,14 +2147,14 @@ function setT(t) {
   state.t = mod(t, YEAR);
   $('date').value = state.t.toFixed(1);
   updateCursor(charts.dur); updateCursor(charts.ins); updateCursor(charts.rat);
-  updateReadouts(); scheduleDraw();
+  updateReadouts(); scheduleDraw(); mapDateChanged();
 }
 function setObs(lat) {
   state.obsLat = clamp(Math.round(lat * 10) / 10, -89.5, 89.5);
   $('obs').value = state.obsLat;
   const opt = Array.from($('site').options).find(o => o.value && Math.abs(+o.value - state.obsLat) < 0.06);
   $('site').value = opt ? opt.value : '';
-  renderChips(); renderCharts(); updateReadouts(); scheduleDraw();
+  renderChips(); renderCharts(); updateReadouts(); scheduleDraw(); scheduleMapDraw();
 }
 function updateSubs() {
   const timeLine = () => {
@@ -2006,8 +2177,12 @@ function updateSubs() {
              : 'Sunlight on level ground at the top of the atmosphere at local noon, the strongest moment of the sol (W/m²).'), timeLine());
   setText('mNoon', multi ? 'Daily peak' : 'Noon peak');
   setText('rNoon', multi ? 'Daily peak' : 'Noon peak');
+  if ($('mmNoon')) setText('mmNoon', multi ? 'Daily peak' : 'Noon peak');
   const meas = state.ratioMetric === 'mean' ? 'daily mean' : (multi ? 'daily peak' : 'noon peak');
   $('ratSub').replaceChildren('Each latitude’s ' + meas + ' insolation divided by its dimmest ' + meas + ' of the year, on a log scale capped at 20×. A line pinned at 20× either passes the cap or has a dimmest value of zero (polar night); gaps mark the night itself.', timeLine());
+  for (const [id, k] of [['durSub', 'dur'], ['insSub', 'ins'], ['ratSub', 'rat']]) {
+    if (state.orbit[k] === 'circ') $(id).append(' Showing the circular-orbit planet (e = 0): equal seasons, Sun always at 1.524 AU.');
+  }
   if (SPEC()) for (const id of ['durSub', 'insSub', 'ratSub']) $(id).append(' Lines run from blue at the southern end of the range to red at the northern end.');
 }
 function setUnits(u) {
@@ -2015,7 +2190,7 @@ function setUnits(u) {
   $('uMars').setAttribute('aria-pressed', String(u === 'mars')); $('uEarth').setAttribute('aria-pressed', String(u === 'earth'));
   updateSubs();
   $('date').max = YEAR.toFixed(1);
-  renderCharts(); renderTable(); renderCaption(); updateReadouts(); scheduleDraw(); save();
+  renderCharts(); renderTable(); renderCaption(); updateReadouts(); scheduleDraw(); mapDateChanged(true); save();
 }
 function setMetric(mm) {
   state.metric = mm;
@@ -2101,9 +2276,9 @@ document.querySelectorAll('.specOp').forEach(i => i.addEventListener('input', ()
 function applyShow() {
   const sh = state.show;
   document.querySelector('.panel.viewer').hidden = !sh.view;
-  $('pDur').hidden = !sh.dur; $('pIns').hidden = !sh.ins; $('pRat').hidden = !sh.rat;
+  $('pDur').hidden = !sh.dur; $('pIns').hidden = !sh.ins; $('pRat').hidden = !sh.rat; $('pMap').hidden = !sh.map;
   document.body.classList.toggle('no-view', !sh.view);
-  document.body.classList.toggle('no-charts', !sh.dur && !sh.ins && !sh.rat);
+  document.body.classList.toggle('no-charts', !sh.dur && !sh.ins && !sh.rat && !sh.map);
   // in the compact layout only the first visible chart carries the shared latitude controls
   const lead = ['pDur', 'pIns', 'pRat'].find(id => !$(id).hidden);
   for (const id of ['pDur', 'pIns', 'pRat']) $(id).classList.toggle('lead', id === lead);
@@ -2111,9 +2286,9 @@ function applyShow() {
 }
 document.querySelectorAll('.js-show').forEach(bt => bt.addEventListener('click', () => {
   const k = bt.dataset.panel, next = Object.assign({}, state.show, { [k]: !state.show[k] });
-  if (!next.view && !next.dur && !next.ins && !next.rat) return;   // keep at least one screen
+  if (!next.view && !next.dur && !next.ins && !next.rat && !next.map) return;   // keep at least one screen
   state.show = next; applyShow(); clearHover();
-  requestAnimationFrame(() => { sizeCanvas(); draw(); renderCharts(); });
+  requestAnimationFrame(() => { sizeCanvas(); draw(); renderCharts(); sizeMap(); drawMap(); });
   save();
 }));
 
@@ -2124,7 +2299,7 @@ function setLayout(l, init) {
   $('lyFull').setAttribute('aria-pressed', String(l === 'full'));
   $('lyCompact').setAttribute('aria-pressed', String(l === 'compact'));
   if (init) return;
-  clearHover(); sizeCanvas(); draw(); renderCharts(); save();
+  clearHover(); sizeCanvas(); draw(); renderCharts(); requestAnimationFrame(() => { sizeMap(); drawMap(); }); save();
 }
 $('lyFull').addEventListener('click', () => setLayout('full'));
 $('lyCompact').addEventListener('click', () => setLayout('compact'));
@@ -2152,7 +2327,7 @@ function updateModeBar() {
 function setMode(patch) {
   Object.assign(state, patch);
   applyMode(); updateModeBar(); clearHover();
-  updateSubs(); renderCharts(); renderTable(); renderCaption(); updateReadouts(); scheduleDraw(); save();
+  updateSubs(); renderCharts(); renderTable(); renderCaption(); updateReadouts(); scheduleDraw(); mapSettingsChanged(); save();
 }
 $('mdNatural').addEventListener('click', () => setMode({ mode: 'natural' }));
 $('mdTwo').addEventListener('click', () => setMode({ mode: 'two' }));
@@ -2201,18 +2376,18 @@ $('dynDur').addEventListener('change', e => { state.dynDur = e.target.checked; c
 $('dynIns').addEventListener('change', e => { state.dynIns = e.target.checked; clearHover(); renderChart(charts.ins); save(); });
 $('dynRat').addEventListener('change', e => { state.dynRat = e.target.checked; clearHover(); renderChart(charts.rat); save(); });
 const syncToggles = () => {
-  document.querySelectorAll('.js-ideal').forEach(i => { i.checked = state.ideal; });
   document.querySelectorAll('.js-flip').forEach(i => { i.checked = state.flip; });
-  document.querySelectorAll('.lineleg').forEach(l => { l.hidden = !state.ideal; });
+  document.querySelectorAll('.js-orb').forEach(b => b.setAttribute('aria-pressed', String(state.orbit[b.dataset.chart] === b.dataset.om)));
+  document.querySelectorAll('.lineleg').forEach(l => { l.hidden = state.orbit[l.dataset.chart] !== 'both'; });
 };
+document.querySelectorAll('.js-orb').forEach(b => b.addEventListener('click', () => {
+  state.orbit[b.dataset.chart] = b.dataset.om; syncToggles();
+  clearHover(); updateSubs(); renderChart(charts[b.dataset.chart]); scheduleDraw(); save();
+}));
 document.querySelectorAll('.js-flip').forEach(inp => inp.addEventListener('change', e => {
   state.flip = e.target.checked; syncToggles();
   msg(state.flip && !state.lats.some(L => L.lat < 0) ? 'Add a southern latitude, such as 45S, or pick the North vs south set to see it aligned.' : '');
   clearHover(); updateSubs(); renderCharts(); renderTable(); save();
-}));
-document.querySelectorAll('.js-ideal').forEach(inp => inp.addEventListener('change', e => {
-  state.ideal = e.target.checked; syncToggles();
-  renderCharts(); updateReadouts(); scheduleDraw(); save();
 }));
 
 let cdrag = null;
@@ -2249,8 +2424,534 @@ const ro = new ResizeObserver(() => {
   });
 });
 ro.observe(stage); ro.observe(charts.dur.root); ro.observe(charts.ins.root); ro.observe(charts.rat.root);
+const mro = new ResizeObserver(() => requestAnimationFrame(() => { if (sizeMap()) drawMap(); }));
+mro.observe($('mapBox'));
 let lastIH = window.innerHeight;
 window.addEventListener('resize', () => { if (window.innerHeight !== lastIH) { lastIH = window.innerHeight; sizeCanvas(); draw(); } });
+
+/* ================= Mars map ================= */
+// MOLA MEGDR 4 px/deg (1440 × 720, 0–360°E, 90°N → 90°S), quantized to 5 m, row-delta coded,
+// split into low/high byte planes, zlib-compressed and base64-encoded: see mola-4ppd.txt.
+const MAP_W = 1440, MAP_H = 720, MAP_PPD = 4, MAP_Q = 5, MARS_R = 3389500;
+const mapBox = $('mapBox'), mapCvs = $('mapCvs'), mctx = mapCvs.getContext('2d');
+const mapComp = document.createElement('canvas'); mapComp.width = MAP_W; mapComp.height = MAP_H;
+const mcomp = mapComp.getContext('2d');
+let ELEV = null, SHADE = null, HCUM = null, mapImg = null, mapReady = false, mapStats = {}, mapParams = null, mapBuildId = 0;
+// When zoomed in, the visible area is re-sampled at screen resolution (bilinear elevation) once the view settles,
+// so coastlines and relief stay smooth instead of showing the 15 km data pixels.
+const mapDetail = document.createElement('canvas');
+let detailKey = '', detailTimer = 0;
+const mapViewKey = () => [mapView.z.toFixed(5), mapView.cx.toFixed(5), mapView.cy.toFixed(5), MW, MH, MDPR, mapBuildId].join('|');
+function renderDetail() {
+  if (!mapReady || !mapParams || mapBox.closest('[hidden]') || mapView.z < 2) return;
+  clampView();
+  const key = mapViewKey(), P = mapParams;
+  let k = MDPR; if (MW * MH * k * k > 2.6e6) k = Math.sqrt(2.6e6 / (MW * MH));
+  const w = Math.max(1, Math.round(MW * k)), h = Math.max(1, Math.round(MH * k));
+  mapDetail.width = w; mapDetail.height = h;
+  const dctx = mapDetail.getContext('2d'), img = dctx.createImageData(w, h), d = img.data;
+  const cols0 = new Int32Array(w), cols1 = new Int32Array(w), fcs = new Float32Array(w), colOk = new Uint8Array(w);
+  for (let x = 0; x < w; x++) {
+    const lon = mapLon((x + 0.5) / k);
+    if (lon < -180 || lon > 180) continue;
+    const u = mod(lon, 360) * MAP_PPD - 0.5, c0 = Math.floor(u);
+    cols0[x] = mod(c0, MAP_W); cols1[x] = mod(c0 + 1, MAP_W); fcs[x] = u - c0; colOk[x] = 1;
+  }
+  for (let y = 0; y < h; y++) {
+    const lat = mapLat((y + 0.5) / k);
+    if (lat < -90 || lat > 90) continue;
+    const v = clamp((90 - lat) * MAP_PPD - 0.5, 0, MAP_H - 1), r0 = Math.floor(v), r1 = Math.min(MAP_H - 1, r0 + 1), fr = v - r0;
+    let ir = 0, ig = 0, ib = 0;
+    if (P.insOn) { const pv = lerp(P.prof[r0], P.prof[r1], fr); [ir, ig, ib] = insRGB((pv - P.lo) / (P.hi - P.lo)); }
+    const b0 = r0 * MAP_W, b1 = r1 * MAP_W;
+    for (let x = 0; x < w; x++) {
+      if (!colOk[x]) continue;
+      const c0 = cols0[x], c1 = cols1[x], fc = fcs[x], o = (y * w + x) * 4;
+      const e0 = ELEV[b0 + c0] + (ELEV[b0 + c1] - ELEV[b0 + c0]) * fc, e1 = ELEV[b1 + c0] + (ELEV[b1 + c1] - ELEV[b1 + c0]) * fc;
+      const hh = e0 + (e1 - e0) * fr;
+      if (hh <= P.sea) {
+        const kk = Math.min(P.WMAX, ((P.sea - hh) / 10) | 0) * 3;
+        d[o] = P.wl[kk]; d[o + 1] = P.wl[kk + 1]; d[o + 2] = P.wl[kk + 2];
+      } else {
+        const kk = Math.min(P.LMAX, ((hh - P.sea) / 10) | 0) * 3;
+        let R = P.pal[kk], G = P.pal[kk + 1], B = P.pal[kk + 2];
+        if (P.shadeOn) {
+          const s0 = SHADE[b0 + c0] + (SHADE[b0 + c1] - SHADE[b0 + c0]) * fc, s1 = SHADE[b1 + c0] + (SHADE[b1 + c1] - SHADE[b1 + c0]) * fc;
+          const f = (s0 + (s1 - s0) * fr) / 100; R *= f; G *= f; B *= f;
+        }
+        if (P.insOn) { R = R * (1 - P.op) + ir * P.op; G = G * (1 - P.op) + ig * P.op; B = B * (1 - P.op) + ib * P.op; }
+        d[o] = R; d[o + 1] = G; d[o + 2] = B;
+      }
+      d[o + 3] = 255;
+    }
+  }
+  dctx.putImageData(img, 0, 0);
+  detailKey = key;
+  drawMap();
+}
+const H_MIN = -8200, H_BIN = 10, H_BINS = 3000;           // histogram of area-weighted elevation, 10 m bins
+const mapView = { z: 1, cx: 0, cy: 0 };
+let MW = 0, MH = 0, MDPR = 1, mapHover = null;
+const ROW_COS = new Float64Array(MAP_H);
+for (let r = 0; r < MAP_H; r++) ROW_COS[r] = Math.cos((90 - (r + 0.5) / MAP_PPD) * D2R);
+const SITES = [
+  ['Viking 1', 22.27, -47.95], ['Viking 2', 47.64, 134.29], ['Pathfinder', 19.13, -33.22], ['Spirit', -14.57, 175.47],
+  ['Opportunity', -1.95, -5.53], ['Phoenix', 68.22, -125.75], ['Curiosity', -4.59, 137.44], ['InSight', 4.50, 135.62],
+  ['Perseverance', 18.44, 77.45], ['Zhurong', 25.07, 109.93]
+];
+const REGIONS = {
+  all: null, tharsis: [-112, 3, 70], olympus: [-134, 18.6, 22], valles: [-72, -9, 55], hellas: [69, -42, 48],
+  argyre: [-43, -49, 36], elysium: [147, 24, 38], arabia: [8, 18, 55], utopia: [117, 46, 60], borealis: [0, 62, 220],
+  jezero: [77.6, 18.4, 14], gale: [137.6, -5.2, 14]
+};
+const hex2rgb = h => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)];
+function makeLUT(stops, maxV, step) {     // stops: [[value, '#rrggbb'], …] ascending
+  const n = Math.floor(maxV / step) + 1, lut = new Uint8ClampedArray(n * 3), S = stops.map(([v, c]) => [v, hex2rgb(c)]);
+  for (let k = 0, j = 0; k < n; k++) {
+    const v = k * step;
+    while (j < S.length - 2 && v > S[j + 1][0]) j++;
+    const [v0, c0] = S[j], [v1, c1] = S[Math.min(j + 1, S.length - 1)], t = v1 > v0 ? clamp((v - v0) / (v1 - v0), 0, 1) : 0;
+    for (let ch = 0; ch < 3; ch++) lut[k * 3 + ch] = c0[ch] + (c1[ch] - c0[ch]) * t;
+  }
+  return lut;
+}
+const PAL = {
+  terrain: [[0, '#5f9150'], [300, '#86a85a'], [1000, '#bcb46b'], [2500, '#bf915c'], [5000, '#93714f'], [9000, '#9d9289'], [15000, '#ebe7e1'], [30000, '#ffffff']],
+  mars: [[0, '#5a2d1d'], [800, '#86452a'], [2500, '#b5653a'], [5000, '#d39665'], [9000, '#e5bf98'], [15000, '#f4e9dc'], [30000, '#ffffff']],
+  water: [[0, '#79bad8'], [200, '#4f98c5'], [1000, '#2f72a8'], [3000, '#1c4e85'], [6000, '#102f5b'], [15000, '#0a1f40']]
+};
+const LUT = { terrain: makeLUT(PAL.terrain, 30000, 10), mars: makeLUT(PAL.mars, 30000, 10), water: makeLUT(PAL.water, 15000, 10) };
+// Inferno-like ramp for insolation (perceptually ordered, dark = little light)
+const INFERNO = [[0, '#000004'], [0.13, '#1b0c41'], [0.25, '#4a0c6b'], [0.38, '#781c6d'], [0.5, '#a52c60'], [0.63, '#cf4446'], [0.75, '#ed6925'], [0.88, '#fb9b06'], [1, '#fcffa4']];
+const LUT_INS = makeLUT(INFERNO.map(([t, c]) => [t * 1000, c]), 1000, 1);
+const insRGB = t => { const k = Math.round(clamp(t, 0, 1) * 1000) * 3; return [LUT_INS[k], LUT_INS[k + 1], LUT_INS[k + 2]]; };
+const fmtInt = v => Math.round(v).toLocaleString('en-US').replace('-', '−');
+const lonLabel = L => { const a = Math.round(Math.abs(L) * 100) / 100; return a === 0 ? '0°' : a === 180 ? '180°' : a + '°' + (L > 0 ? 'E' : 'W'); };
+
+async function loadMola() {
+  const msgEl = $('mapMsg');
+  try {
+    if (typeof DecompressionStream === 'undefined') throw new Error('This browser cannot unpack the elevation data. Try a recent version of Chrome, Edge, Firefox or Safari.');
+    const res = await fetch('mola-4ppd.txt');
+    if (!res.ok) throw new Error('The elevation data did not load (HTTP ' + res.status + '). Reload the page to try again.');
+    const bin = atob((await res.text()).trim()), zb = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) zb[i] = bin.charCodeAt(i);
+    const buf = new Uint8Array(await new Response(new Blob([zb]).stream().pipeThrough(new DecompressionStream('deflate'))).arrayBuffer());
+    const n = MAP_W * MAP_H;
+    if (buf.length !== 2 * n) throw new Error('The elevation data has an unexpected size.');
+    ELEV = new Int16Array(n);
+    for (let r = 0; r < MAP_H; r++) {
+      let acc = 0;
+      for (let c = 0; c < MAP_W; c++) {
+        const i = r * MAP_W + c, d = ((buf[i] | (buf[n + i] << 8)) << 16) >> 16;
+        acc = c ? acc + d : d;
+        ELEV[i] = acc * MAP_Q;
+      }
+    }
+    // area-weighted elevation histogram → sea level for any water fraction
+    const hist = new Float64Array(H_BINS);
+    for (let r = 0; r < MAP_H; r++) for (let c = 0; c < MAP_W; c++) hist[clamp(Math.floor((ELEV[r * MAP_W + c] - H_MIN) / H_BIN), 0, H_BINS - 1)] += ROW_COS[r];
+    HCUM = new Float64Array(H_BINS + 1);
+    for (let k = 0; k < H_BINS; k++) HCUM[k + 1] = HCUM[k] + hist[k];
+    // hillshade: light from the northwest, 40° up, terrain exaggerated 10×
+    SHADE = new Uint8Array(n);
+    const dy = Math.PI * MARS_R / MAP_H, EX = 10, alt = 40 * D2R, Lx = -Math.cos(alt) * Math.SQRT1_2, Ly = Math.cos(alt) * Math.SQRT1_2, Lz = Math.sin(alt);
+    for (let r = 0; r < MAP_H; r++) {
+      const dx = dy * Math.max(0.15, ROW_COS[r]), rn = Math.max(0, r - 1), rs = Math.min(MAP_H - 1, r + 1);
+      for (let c = 0; c < MAP_W; c++) {
+        const ce = c === MAP_W - 1 ? 0 : c + 1, cw = c === 0 ? MAP_W - 1 : c - 1;
+        const gx = (ELEV[r * MAP_W + ce] - ELEV[r * MAP_W + cw]) / (2 * dx) * EX;
+        const gy = (ELEV[rn * MAP_W + c] - ELEV[rs * MAP_W + c]) / ((rs - rn) * dy) * EX;
+        const sh = (-gx * Lx - gy * Ly + Lz) / Math.sqrt(gx * gx + gy * gy + 1);
+        SHADE[r * MAP_W + c] = Math.round(clamp(0.3 + 0.7 * sh / Lz, 0.45, 1.4) * 100);
+      }
+    }
+    mapImg = mcomp.createImageData(MAP_W, MAP_H);
+    mapReady = true; msgEl.hidden = true;
+    sizeMap(); buildMap(); drawMap();
+  } catch (e) {
+    msgEl.textContent = e.message;
+  }
+}
+function seaLevelOf(pct) {
+  if (pct <= 0) return -Infinity;
+  if (pct >= 100) return Infinity;
+  const target = HCUM[H_BINS] * pct / 100;
+  let lo = 0, hi = H_BINS;
+  while (hi - lo > 1) { const m = (lo + hi) >> 1; if (HCUM[m] < target) lo = m; else hi = m; }
+  const f = (target - HCUM[lo]) / Math.max(1e-12, HCUM[lo + 1] - HCUM[lo]);
+  return H_MIN + (lo + f) * H_BIN;
+}
+
+// Insolation by latitude (flat ground, top of atmosphere): depends on latitude, date, measure, orbit and sky mode.
+const insCache = new Map();
+function insProfile() {
+  const circ = state.mapOrbit === 'circ', peak = state.insMetric === 'noon';
+  const key = MODE_KEY + '|' + (circ ? 'c' : 'r') + '|' + state.insMetric + '|' + (state.insWhen === 'year' ? 'year' : state.t.toFixed(2));
+  let prof = insCache.get(key);
+  if (prof) return prof;
+  prof = new Float32Array(MAP_H);
+  if (state.insWhen === 'date') {
+    const st = circ ? idealAt(state.t) : orbitAt(state.t);
+    for (let r = 0; r < MAP_H; r++) { const m = dayMetrics(90 - (r + 0.5) / MAP_PPD, st, !peak); prof[r] = peak ? m.noon : m.mean; }
+  } else {
+    // yearly average on a 1° latitude grid, every second date, then interpolated to the map rows
+    const src = circ ? IDE : ORB, grid = new Float64Array(181);
+    for (let k = 0; k <= 180; k++) {
+      let sum = 0, cnt = 0;
+      for (let i = 0; i < N; i += 2) { const m = dayMetrics(k - 90, src[i], !peak); sum += peak ? m.noon : m.mean; cnt++; }
+      grid[k] = sum / cnt;
+    }
+    for (let r = 0; r < MAP_H; r++) { const u = 90 - (r + 0.5) / MAP_PPD + 90, k = Math.min(179, Math.floor(u)); prof[r] = lerp(grid[k], grid[k + 1], u - k); }
+  }
+  if (insCache.size > 40) insCache.clear();
+  insCache.set(key, prof);
+  return prof;
+}
+const insMaxCache = new Map();
+function insFixedMax() {           // the yearly maximum anywhere on the planet for this sky, measure and orbit, rounded up to 50
+  const circ = state.mapOrbit === 'circ', key = MODE_KEY + '|' + (circ ? 'c' : 'r') + '|' + state.insMetric;
+  if (insMaxCache.has(key)) return insMaxCache.get(key);
+  let v = 0;
+  if (state.insMetric === 'noon') {
+    let x = 0, y = 0;
+    for (const src of SRC) { x += src.k * Math.cos(src.dl * D2R); y += src.k * Math.sin(src.dl * D2R); }
+    v = flux(circ ? MARS.a : MARS.a * (1 - MARS.e)) * Math.hypot(x, y);
+  } else {
+    const src = circ ? IDE : ORB;
+    for (let lat = -90; lat <= 90; lat += 2) for (let i = 0; i < N; i += 3) { const m = dayMetrics(lat, src[i], true).mean; if (m > v) v = m; }
+  }
+  v = Math.ceil(v / 50 - 0.02) * 50;
+  insMaxCache.set(key, v);
+  return v;
+}
+
+function buildMap() {
+  if (!mapReady) return;
+  const sea = seaLevelOf(state.waterPct), d = mapImg.data, pal = LUT[state.palette], wl = LUT.water;
+  const LMAX = pal.length / 3 - 1, WMAX = wl.length / 3 - 1, shadeOn = state.hillshade;
+  const insOn = state.mapLayer === 'ins', prof = insOn ? insProfile() : null, op = state.insOp / 100;
+  const rowLand = new Float64Array(MAP_H);
+  for (let r = 0; r < MAP_H; r++) for (let c = 0; c < MAP_W; c++) if (ELEV[r * MAP_W + c] > sea) rowLand[r]++;
+  let lo = 0, hi = 1;
+  if (insOn) {
+    if (state.insDyn) {
+      lo = Infinity; hi = -Infinity;
+      for (let r = 0; r < MAP_H; r++) if (rowLand[r] > 0) { if (prof[r] < lo) lo = prof[r]; if (prof[r] > hi) hi = prof[r]; }
+      if (!isFinite(lo)) { lo = 0; hi = 1; }
+      if (hi - lo < 1) { lo = Math.max(0, lo - 0.5); hi = lo + 1; }
+    } else { lo = 0; hi = insFixedMax(); }
+  }
+  let landW = 0, landIns = 0, allW = 0;
+  for (let r = 0; r < MAP_H; r++) {
+    allW += MAP_W * ROW_COS[r];
+    landW += rowLand[r] * ROW_COS[r];
+    let ir = 0, ig = 0, ib = 0;
+    if (insOn) { [ir, ig, ib] = insRGB((prof[r] - lo) / (hi - lo)); landIns += rowLand[r] * ROW_COS[r] * prof[r]; }
+    for (let c = 0; c < MAP_W; c++) {
+      const src = r * MAP_W + (c < 720 ? c + 720 : c - 720), h = ELEV[src], o = (r * MAP_W + c) * 4;
+      if (h <= sea) {
+        const k = Math.min(WMAX, ((sea - h) / 10) | 0) * 3;
+        d[o] = wl[k]; d[o + 1] = wl[k + 1]; d[o + 2] = wl[k + 2];
+      } else {
+        const k = Math.min(LMAX, ((h - sea) / 10) | 0) * 3;
+        let R = pal[k], G = pal[k + 1], B = pal[k + 2];
+        if (shadeOn) { const f = SHADE[src] / 100; R *= f; G *= f; B *= f; }
+        if (insOn) { R = R * (1 - op) + ir * op; G = G * (1 - op) + ig * op; B = B * (1 - op) + ib * op; }
+        d[o] = R; d[o + 1] = G; d[o + 2] = B;
+      }
+      d[o + 3] = 255;
+    }
+  }
+  mcomp.putImageData(mapImg, 0, 0);
+  mapStats = { sea, land: landW / allW, insLand: landW > 0 ? landIns / landW : NaN, lo, hi, insOn };
+  mapParams = { sea, pal, wl, LMAX, WMAX, shadeOn, insOn, prof, op, lo, hi };
+  mapBuildId++;
+  renderMapLegend(); updateMapRead();
+}
+let mapBuildQueued = false, mapDrawQueued = false;
+function scheduleMapBuild() { if (!mapBuildQueued) { mapBuildQueued = true; requestAnimationFrame(() => { mapBuildQueued = false; if (!$('pMap').hidden) { buildMap(); drawMap(); } }); } }
+function scheduleMapDraw() { if (!mapDrawQueued) { mapDrawQueued = true; requestAnimationFrame(() => { mapDrawQueued = false; drawMap(); }); } }
+
+function sizeMap() {
+  if (mapBox.closest('[hidden]')) return false;
+  const w = Math.max(200, Math.floor(mapBox.clientWidth)), h = Math.max(120, Math.floor(mapBox.clientHeight));
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
+  if (w === MW && h === MH && dpr === MDPR) return false;
+  MW = w; MH = h; MDPR = dpr;
+  mapCvs.width = Math.round(w * dpr); mapCvs.height = Math.round(h * dpr);
+  return true;
+}
+const mapScale = () => Math.min(MW / 360, MH / 180) * mapView.z;
+function clampView() {
+  mapView.z = clamp(mapView.z, 1, 40);
+  const s = mapScale(), hw = MW / (2 * s), hh = MH / (2 * s);
+  mapView.cx = hw >= 180 ? 0 : clamp(mapView.cx, -180 + hw, 180 - hw);
+  mapView.cy = hh >= 90 ? 0 : clamp(mapView.cy, -90 + hh, 90 - hh);
+}
+const mapX = L => MW / 2 + (L - mapView.cx) * mapScale();
+const mapY = B => MH / 2 - (B - mapView.cy) * mapScale();
+const mapLon = x => mapView.cx + (x - MW / 2) / mapScale();
+const mapLat = y => mapView.cy - (y - MH / 2) / mapScale();
+
+function drawMap() {
+  if (!MW || mapBox.closest('[hidden]')) return;
+  const g = mctx;
+  g.setTransform(MDPR, 0, 0, MDPR, 0, 0);
+  g.fillStyle = '#0B0F16'; g.fillRect(0, 0, MW, MH);
+  if (!mapReady) return;
+  clampView();
+  const s = mapScale();
+  const L0 = Math.max(-180, mapLon(0)), L1 = Math.min(180, mapLon(MW)), B1 = Math.min(90, mapLat(0)), B0 = Math.max(-90, mapLat(MH));
+  g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high';
+  g.drawImage(mapComp, (L0 + 180) * MAP_PPD, (90 - B1) * MAP_PPD, (L1 - L0) * MAP_PPD, (B1 - B0) * MAP_PPD, mapX(L0), mapY(B1), (L1 - L0) * s, (B1 - B0) * s);
+  if (mapView.z >= 2) {
+    if (detailKey === mapViewKey()) g.drawImage(mapDetail, 0, 0, MW, MH);
+    else { clearTimeout(detailTimer); detailTimer = setTimeout(renderDetail, 160); }
+  }
+  const xl = mapX(L0), xr = mapX(L1), yt = mapY(B1), yb = mapY(B0);
+  // latitude / longitude lines
+  if (state.mapGrid) {
+    g.save();
+    g.beginPath(); g.rect(xl, yt, xr - xl, yb - yt); g.clip();
+    const dLat = state.gridLat, dLon = state.gridLon, pxLat = dLat * s, pxLon = dLon * s;
+    g.lineWidth = 1;
+    for (let B = Math.ceil(B0 / dLat) * dLat; B <= B1 + 1e-9; B += dLat) {
+      if (Math.abs(B) >= 90) continue;
+      const y = Math.round(mapY(B)) + 0.5;
+      g.strokeStyle = B === 0 ? 'rgba(255,255,255,0.75)' : 'rgba(255,255,255,' + (pxLat < 6 ? 0.18 : 0.38) + ')';
+      g.beginPath(); g.moveTo(xl, y); g.lineTo(xr, y); g.stroke();
+    }
+    for (let L = Math.ceil(L0 / dLon) * dLon; L <= L1 + 1e-9; L += dLon) {
+      const x = Math.round(mapX(L)) + 0.5;
+      g.strokeStyle = L === 0 ? 'rgba(255,255,255,0.75)' : 'rgba(255,255,255,' + (pxLon < 6 ? 0.18 : 0.38) + ')';
+      g.beginPath(); g.moveTo(x, yt); g.lineTo(x, yb); g.stroke();
+    }
+    // labels, thinned so they never collide
+    g.font = font(500, MW < 560 ? 9.5 : 10.5, 'm'); g.textBaseline = 'middle';
+    g.lineJoin = 'round'; g.lineWidth = 3; g.strokeStyle = 'rgba(8,11,18,0.85)'; g.fillStyle = '#F1ECE4';
+    const kLat = Math.max(1, Math.ceil(26 / pxLat)), kLon = Math.max(1, Math.ceil(52 / pxLon));
+    g.textAlign = 'left';
+    for (let B = Math.ceil(B0 / dLat) * dLat; B <= B1 + 1e-9; B += dLat) {
+      if (Math.abs(B) >= 90 || Math.round(B / dLat) % kLat !== 0) continue;
+      const y = mapY(B), t = B === 0 ? '0°' : Math.abs(B) + '°' + (B > 0 ? 'N' : 'S');
+      if (y < yt + 8 || y > yb - 8) continue;
+      g.strokeText(t, Math.max(xl, 0) + 5, y - 7); g.fillText(t, Math.max(xl, 0) + 5, y - 7);
+    }
+    g.textAlign = 'center';
+    for (let L = Math.ceil(L0 / dLon) * dLon; L <= L1 + 1e-9; L += dLon) {
+      if (Math.round(L / dLon) % kLon !== 0) continue;
+      const x = mapX(L), y = Math.min(yb, MH) - 9;
+      if (x < xl + 14 || x > xr - 14) continue;
+      g.strokeText(lonLabel(L), x, y); g.fillText(lonLabel(L), x, y);
+    }
+    g.restore();
+  }
+  // observer latitude
+  {
+    const y = mapY(state.obsLat);
+    if (y > yt && y < yb) {
+      g.save(); g.setLineDash([6, 5]); g.strokeStyle = 'rgba(231,174,111,0.95)'; g.lineWidth = 1.5;
+      g.beginPath(); g.moveTo(xl, y); g.lineTo(xr, y); g.stroke(); g.restore();
+      g.font = font(600, MW < 560 ? 10 : 11, 'd'); g.textAlign = 'left'; g.textBaseline = 'top';
+      g.lineWidth = 3; g.strokeStyle = 'rgba(8,11,18,0.85)'; g.fillStyle = '#E7AE6F';
+      const t = 'OBSERVER ' + latLabel(Math.round(state.obsLat * 10) / 10);
+      g.strokeText(t, Math.max(xl, 0) + 5, y + 3); g.fillText(t, Math.max(xl, 0) + 5, y + 3);
+    }
+  }
+  // landing sites
+  if (state.mapSites) {
+    g.font = font(500, MW < 560 ? 9.5 : 10.5, 'b'); g.textAlign = 'left'; g.textBaseline = 'middle';
+    const names = s >= (MW < 560 ? 4 : 2);
+    for (const [name, B, L] of SITES) {
+      const x = mapX(L), y = mapY(B);
+      if (x < -20 || x > MW + 20 || y < -20 || y > MH + 20) continue;
+      g.beginPath(); g.arc(x, y, MW < 560 ? 2.8 : 3.6, 0, 2 * Math.PI);
+      g.fillStyle = '#FFFFFF'; g.fill(); g.lineWidth = 1.6; g.strokeStyle = '#141922'; g.stroke();
+      if (!names) continue;
+      g.lineWidth = 3; g.strokeStyle = 'rgba(8,11,18,0.8)'; g.fillStyle = '#FFFFFF';
+      g.strokeText(name, x + 7, y); g.fillText(name, x + 7, y);
+    }
+  }
+  // map frame
+  g.strokeStyle = 'rgba(255,255,255,0.25)'; g.lineWidth = 1; g.strokeRect(Math.round(xl) + 0.5, Math.round(yt) + 0.5, Math.round(xr - xl) - 1, Math.round(yb - yt) - 1);
+  mapCvs.setAttribute('aria-label', 'Map of Mars, ' + (state.mapLayer === 'ins' ? 'insolation over elevation' : 'elevation') + ', water covering ' + state.waterPct + '% of the surface.');
+}
+
+function renderMapLegend() {
+  const box = $('mapLegend'); box.replaceChildren();
+  const add = (title, grad, labels) => {
+    const wrap = document.createElement('div');
+    const t = document.createElement('div'); t.className = 'mleg-t'; t.textContent = title;
+    const bar = document.createElement('div'); bar.className = 'mleg-bar'; bar.style.background = grad;
+    const lab = document.createElement('div'); lab.className = 'mleg-lab';
+    for (const s of labels) { const sp = document.createElement('span'); sp.textContent = s; lab.append(sp); }
+    wrap.append(t, bar, lab); box.append(wrap);
+  };
+  const stopsGrad = stops => 'linear-gradient(90deg,' + stops.map((st, i) => st[1] + ' ' + (100 * i / (stops.length - 1)).toFixed(1) + '%').join(',') + ')';
+  if (state.waterPct > 0) add('Water depth', stopsGrad(PAL.water.slice(0, 5)), ['0', '200', '1k', '3k', '6k m']);
+  add('Height above sea level', stopsGrad(PAL[state.palette].slice(0, 7)), ['0', '0.3', '1', '2.5', '5', '9', '15 km']);
+  if (mapStats.insOn) {
+    const { lo, hi } = mapStats, g = 'linear-gradient(90deg,' + INFERNO.map(([t, c]) => c + ' ' + (t * 100) + '%').join(',') + ')';
+    add((state.insMetric === 'mean' ? 'Daily-mean' : 'Peak') + ' insolation, W/m²' + (state.insDyn ? '' : ' (fixed scale)'), g, [fmtInt(lo), fmtInt((lo + hi) / 2), fmtInt(hi)]);
+  }
+}
+function updateMapRead() {
+  const box = $('mapRead'); box.replaceChildren();
+  const line = (...parts) => { const d = document.createElement('div'); for (const p of parts) d.append(p); box.append(d); };
+  const b = t => { const e = document.createElement('b'); e.textContent = t; return e; };
+  const dim = t => { const e = document.createElement('span'); e.className = 'dim'; e.textContent = t; return e; };
+  if (!mapReady) { line(dim('Waiting for the elevation data…')); return; }
+  const sea = mapStats.sea;
+  if (mapHover) {
+    const { lat, lon } = mapHover;
+    const r = clamp(Math.floor((90 - lat) * MAP_PPD), 0, MAP_H - 1), c = clamp(Math.floor(mod(lon, 360) * MAP_PPD), 0, MAP_W - 1);
+    const h = ELEV[r * MAP_W + c];
+    line(b(latLabel(Math.round(lat * 100) / 100) + ', ' + lonLabel(Math.round(lon * 100) / 100)));
+    line('Elevation ', b(fmtInt(h) + ' m'));
+    if (h <= sea) line('Under water, ', b(fmtInt(sea - h) + ' m'), ' deep');
+    else line(isFinite(sea) ? 'Land, ' : 'Land', isFinite(sea) ? b(fmtInt(h - sea) + ' m') : '', isFinite(sea) ? ' above sea level' : '');
+    if (mapStats.insOn) {
+      const v = insProfile()[r];
+      line(state.insMetric === 'mean' ? 'Daily-mean insolation ' : 'Peak insolation ', b(fmtInt(v) + ' W/m²'));
+    }
+  } else line(dim('Hover over the map to read values'));
+  line(dim('Water covers ' + state.waterPct + '% of the surface, land ' + (100 - state.waterPct) + '%'));
+  if (mapStats.insOn && isFinite(mapStats.insLand)) line(dim('Average over land: '), b(fmtInt(mapStats.insLand) + ' W/m²'));
+}
+function updateMapControls() {
+  const pr = (id, on) => $(id).setAttribute('aria-pressed', String(on));
+  pr('mlElev', state.mapLayer === 'elev'); pr('mlIns', state.mapLayer === 'ins');
+  pr('palTerrain', state.palette === 'terrain'); pr('palMars', state.palette === 'mars');
+  pr('iwDate', state.insWhen === 'date'); pr('iwYear', state.insWhen === 'year');
+  pr('mmMean', state.insMetric === 'mean'); pr('mmNoon', state.insMetric === 'noon');
+  pr('moReal', state.mapOrbit === 'real'); pr('moCirc', state.mapOrbit === 'circ');
+  setText('mmNoon', MULTI() ? 'Daily peak' : 'Noon peak');
+  $('insOpts').hidden = state.mapLayer !== 'ins';
+  $('mapDateRow').hidden = state.insWhen !== 'date';
+  $('gridRows').hidden = !state.mapGrid;
+  $('water').value = state.waterPct; $('insOp').value = state.insOp;
+  $('gridLat').value = state.gridLat; $('gridLon').value = state.gridLon;
+  $('hillshade').checked = state.hillshade; $('insDyn').checked = state.insDyn;
+  $('mapGrid').checked = state.mapGrid; $('mapSites').checked = state.mapSites;
+  const sea = mapReady ? seaLevelOf(state.waterPct) : NaN;
+  setText('waterOut', state.waterPct + '%' + (mapReady ? (isFinite(sea) ? ' · sea level ' + fmtInt(sea) + ' m' : state.waterPct >= 100 ? ' · all water' : ' · no water') : ''));
+  setText('insOpOut', state.insOp + '%');
+  setText('gridLatOut', state.gridLat + '°'); setText('gridLonOut', state.gridLon + '°');
+  updateMapDateOut();
+}
+function updateMapDateOut() {
+  $('mapDate').max = YEAR.toFixed(1);
+  $('mapDate').value = state.t.toFixed(1);
+  const o = $('mapDateOut'); o.replaceChildren(dateLabel(state.t, 1) + ' · ', lsFrag((state.mapOrbit === 'circ' ? idealAt(state.t) : orbitAt(state.t)).ls));
+}
+function mapSettingsChanged() { updateMapControls(); scheduleMapBuild(); scheduleDraw(); save(); }
+function mapDateChanged(force) {
+  updateMapDateOut();
+  if (force || (state.mapLayer === 'ins' && state.insWhen === 'date')) scheduleMapBuild();
+}
+const mapSet = patch => () => { Object.assign(state, patch); mapSettingsChanged(); };
+$('mlElev').addEventListener('click', mapSet({ mapLayer: 'elev' }));
+$('mlIns').addEventListener('click', mapSet({ mapLayer: 'ins' }));
+$('palTerrain').addEventListener('click', mapSet({ palette: 'terrain' }));
+$('palMars').addEventListener('click', mapSet({ palette: 'mars' }));
+$('iwDate').addEventListener('click', mapSet({ insWhen: 'date' }));
+$('iwYear').addEventListener('click', mapSet({ insWhen: 'year' }));
+$('mmMean').addEventListener('click', mapSet({ insMetric: 'mean' }));
+$('mmNoon').addEventListener('click', mapSet({ insMetric: 'noon' }));
+$('moReal').addEventListener('click', mapSet({ mapOrbit: 'real' }));
+$('moCirc').addEventListener('click', mapSet({ mapOrbit: 'circ' }));
+$('water').addEventListener('input', e => { state.waterPct = +e.target.value; mapSettingsChanged(); });
+$('insOp').addEventListener('input', e => { state.insOp = +e.target.value; mapSettingsChanged(); });
+$('hillshade').addEventListener('change', e => { state.hillshade = e.target.checked; mapSettingsChanged(); });
+$('insDyn').addEventListener('change', e => { state.insDyn = e.target.checked; mapSettingsChanged(); });
+$('mapGrid').addEventListener('change', e => { state.mapGrid = e.target.checked; updateMapControls(); scheduleMapDraw(); save(); });
+$('mapSites').addEventListener('change', e => { state.mapSites = e.target.checked; scheduleMapDraw(); save(); });
+$('gridLat').addEventListener('input', e => { state.gridLat = +e.target.value; updateMapControls(); scheduleMapDraw(); save(); });
+$('gridLon').addEventListener('input', e => { state.gridLon = +e.target.value; updateMapControls(); scheduleMapDraw(); save(); });
+$('mapDate').addEventListener('input', e => { stopYear(); setT(+e.target.value); });
+$('region').addEventListener('change', e => {
+  const key = e.target.value; e.target.value = '';
+  if (!key) return;
+  const R = REGIONS[key];
+  if (!R) { mapView.z = 1; mapView.cx = 0; mapView.cy = 0; }
+  else { const s0 = Math.min(MW / 360, MH / 180); mapView.z = (MW / R[2]) / s0; mapView.cx = R[0]; mapView.cy = R[1]; }
+  scheduleMapDraw();
+});
+function zoomAt(f, px, py) {
+  const lon = mapLon(px), lat = mapLat(py);
+  mapView.z = clamp(mapView.z * f, 1, 40);
+  const s = mapScale();
+  mapView.cx = lon - (px - MW / 2) / s; mapView.cy = lat + (py - MH / 2) / s;
+  scheduleMapDraw();
+}
+$('zIn').addEventListener('click', () => zoomAt(1.6, MW / 2, MH / 2));
+$('zOut').addEventListener('click', () => zoomAt(1 / 1.6, MW / 2, MH / 2));
+$('zReset').addEventListener('click', () => { mapView.z = 1; mapView.cx = 0; mapView.cy = 0; scheduleMapDraw(); });
+mapCvs.addEventListener('wheel', ev => {
+  ev.preventDefault();
+  const r = mapCvs.getBoundingClientRect(), dy = ev.deltaMode === 1 ? ev.deltaY * 16 : ev.deltaY;
+  zoomAt(Math.exp(-dy * 0.0016), ev.clientX - r.left, ev.clientY - r.top);
+}, { passive: false });
+const mptr = new Map();
+let mdrag = null, mpinch = null;
+mapCvs.addEventListener('pointerdown', ev => {
+  try { mapCvs.setPointerCapture(ev.pointerId); } catch (e) {}
+  mptr.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
+  if (mptr.size === 1) mdrag = { x: ev.clientX, y: ev.clientY, cx: mapView.cx, cy: mapView.cy, moved: 0, t: performance.now() };
+  if (mptr.size === 2) {
+    const [a, b2] = [...mptr.values()], r = mapCvs.getBoundingClientRect();
+    mpinch = { d: Math.hypot(a.x - b2.x, a.y - b2.y), z: mapView.z, mx: (a.x + b2.x) / 2 - r.left, my: (a.y + b2.y) / 2 - r.top, lon: 0, lat: 0 };
+    mpinch.lon = mapLon(mpinch.mx); mpinch.lat = mapLat(mpinch.my);
+    mdrag = null;
+  }
+  mapCvs.classList.add('dragging');
+});
+mapCvs.addEventListener('pointermove', ev => {
+  const r = mapCvs.getBoundingClientRect(), px = ev.clientX - r.left, py = ev.clientY - r.top;
+  if (mptr.has(ev.pointerId)) mptr.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
+  if (mpinch && mptr.size === 2) {
+    const [a, b2] = [...mptr.values()];
+    mapView.z = clamp(mpinch.z * Math.hypot(a.x - b2.x, a.y - b2.y) / Math.max(1, mpinch.d), 1, 40);
+    const s = mapScale(); mapView.cx = mpinch.lon - (mpinch.mx - MW / 2) / s; mapView.cy = mpinch.lat + (mpinch.my - MH / 2) / s;
+    scheduleMapDraw(); return;
+  }
+  if (mdrag) {
+    const s = mapScale(), dx = ev.clientX - mdrag.x, dy = ev.clientY - mdrag.y;
+    mdrag.moved = Math.max(mdrag.moved, Math.hypot(dx, dy));
+    mapView.cx = mdrag.cx - dx / s; mapView.cy = mdrag.cy + dy / s;
+    scheduleMapDraw();
+  }
+  const lon = mapLon(px), lat = mapLat(py);
+  mapHover = (lon >= -180 && lon <= 180 && lat >= -90 && lat <= 90) ? { lon, lat } : null;
+  updateMapRead();
+});
+const mapUp = ev => {
+  if (mdrag && mdrag.moved < 5 && performance.now() - mdrag.t < 500 && mptr.size === 1) {
+    const r = mapCvs.getBoundingClientRect(), lat = mapLat(ev.clientY - r.top), lon = mapLon(ev.clientX - r.left);
+    if (lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180) setObs(lat);
+  }
+  mptr.delete(ev.pointerId);
+  if (mptr.size < 2) mpinch = null;
+  if (mptr.size === 0) { mdrag = null; mapCvs.classList.remove('dragging'); }
+};
+mapCvs.addEventListener('pointerup', mapUp);
+mapCvs.addEventListener('pointercancel', ev => { mptr.delete(ev.pointerId); mpinch = null; mdrag = null; mapCvs.classList.remove('dragging'); });
+mapCvs.addEventListener('pointerleave', () => { if (!mdrag) { mapHover = null; updateMapRead(); } });
+mapCvs.addEventListener('dblclick', ev => { const r = mapCvs.getBoundingClientRect(); zoomAt(2, ev.clientX - r.left, ev.clientY - r.top); });
+mapCvs.addEventListener('keydown', ev => {
+  const s = mapScale(), step = 60 / s;
+  const k = ev.key;
+  if (k === '+' || k === '=') zoomAt(1.4, MW / 2, MH / 2);
+  else if (k === '-' || k === '_') zoomAt(1 / 1.4, MW / 2, MH / 2);
+  else if (k === '0') { mapView.z = 1; mapView.cx = 0; mapView.cy = 0; scheduleMapDraw(); }
+  else if (k === 'ArrowLeft') { mapView.cx -= step; scheduleMapDraw(); }
+  else if (k === 'ArrowRight') { mapView.cx += step; scheduleMapDraw(); }
+  else if (k === 'ArrowUp') { mapView.cy += step; scheduleMapDraw(); }
+  else if (k === 'ArrowDown') { mapView.cy -= step; scheduleMapDraw(); }
+  else return;
+  ev.preventDefault();
+});
 
 /* ================= boot ================= */
 syncToggles(); $('dynDur').checked = state.dynDur; $('dynIns').checked = state.dynIns; $('dynRat').checked = state.dynRat; document.querySelectorAll('.js-earth').forEach(i => { i.checked = state.earthRef; });
@@ -2267,7 +2968,9 @@ setMetric(state.metric);
 setUnits(state.units);
 setT(state.t);
 draw();
-if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { renderCharts(); draw(); });
+updateMapControls(); updateMapRead(); sizeMap(); drawMap();
+loadMola().then(() => updateMapControls());
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { renderCharts(); draw(); drawMap(); });
 })();
 </script>
 
