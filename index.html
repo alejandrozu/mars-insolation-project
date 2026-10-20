@@ -876,7 +876,7 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
         <div class="fgrp"><span class="flabel">Show</span>
           <div class="seg small" role="group" aria-label="Insolation, or the temperature that much sunlight would give">
             <button type="button" id="isWm" aria-pressed="true">Insolation, W/m²</button>
-            <button type="button" id="isTemp" aria-pressed="false" title="The temperature an Earth-like planet would have for that much sunlight, cooled with height. Not a forecast: oceans, winds and clouds are ignored.">Insolation-based temperature</button>
+            <button type="button" id="isTemp" aria-pressed="false" title="The temperature an Earth-like planet would reach with this sunlight, from an energy-balance model calibrated on Earth's climate, cooled with height. Not a forecast of Mars's real weather.">Insolation-based temperature</button>
           </div>
         </div>
         <div class="fgrp" id="tUnitRow" hidden><span class="flabel">Units</span>
@@ -885,6 +885,16 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
             <button type="button" id="tuF" aria-pressed="false">°F</button>
             <button type="button" id="tuK" aria-pressed="false">K</button>
           </div>
+        </div>
+        <div id="heatRow" hidden>
+          <div class="fgrp"><span class="flabel">Setting</span>
+            <div class="seg small" role="group" aria-label="How much the sea softens the seasons">
+              <button type="button" id="hsCont" aria-pressed="false" title="Land covers 85% of each latitude: hot summers, cold winters">Continental</button>
+              <button type="button" id="hsMixed" aria-pressed="true" title="Half land, half sea at each latitude, like Earth's northern mid-latitudes">Mixed</button>
+              <button type="button" id="hsMari" aria-pressed="false" title="Land covers 15% of each latitude: mild seasons">Maritime</button>
+            </div>
+          </div>
+          <p class="mhint" id="heatHint"></p>
         </div>
         <div id="lapseRow" hidden>
           <div class="spec-row"><span class="flabel">Lapse rate</span><output id="lapseOut"></output></div>
@@ -980,7 +990,7 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
         <li>Earth comparison lines are typical Earth values for the same measure: daily mean 100 and 500 W/m² for mid-latitude winter and summer, 250 and 450 for the tropics; noon peak 350 and 1300 for mid-latitude winter and summer, 700 for tropical winter and 1000 at the equator.</li>
         <li>Seasonal ratio divides each sol’s insolation by the dimmest value of the year at the same latitude, for the chosen measure. Earth references: about 5× (daily mean) and 4× (noon peak) at mid-latitudes, about 2× in the tropics.</li>
         <li>Map: elevation from the Mars Global Surveyor MOLA gridded topography (MEGDR, 4 pixels per degree, about 15 km at the equator; Smith et al. 2003, NASA PDS Geosciences Node), stored to the nearest 5 m relative to the MOLA areoid. The water level is the share of the surface area that lies below sea level, so 30% fills the northern lowlands and the deep basins. With "Fill craters and closed basins" on, every closed depression also holds a lake with a flat surface, set by the basin fill slider as a fraction of the way from the basin's floor to its spill point (100% is full to the brim, as rain would leave it if nothing evaporated); lakes come on top of the ocean share. Earth-equivalent km multiply Mars heights by g<sub>Mars</sub>/g<sub>Earth</sub> = 0.38: with the same air, pressure falls that much more slowly with height on Mars, so Olympus Mons (about 22 km above a 30% sea) thins the air like an 8.6 km climb on Earth. The insolation layer uses the same flat-ground, top-of-atmosphere model as the charts, so it varies with latitude only; slopes and the atmosphere are not included.</li>
-        <li>Insolation-based temperature: the temperature an Earth-like planet would have for the daily-mean insolation at each point, T = 288 K × (S / 340 W/m²)<sup>¼</sup> (calibrated on Earth's global mean), minus cooling with height above sea level at the lapse rate (default 6.5 K per Earth-equivalent km, the standard atmosphere, which is 2.5 K per Mars km because the cooling rate scales with gravity). Heights are measured from sea level (from the MOLA datum when there is no ocean). It is a way to compare how warm the sunlight makes places, not a real temperature: oceans, winds, clouds and heat storage, which smooth out real climates, are ignored, and places in polar night come out at absolute zero.</li>
+        <li>Insolation-based temperature: what an Earth-like planet would reach with this sunlight, from a seasonal energy-balance model calibrated on Earth (Budyko–Sellers type, after North &amp; Coakley 1979). Each 2° latitude band has a land and a sea box that absorb sunlight with Earth's albedo pattern, radiate 203.3 + 2.09·T W/m² (Earth's satellite fit, T in °C), store heat (land and air 1.0×10⁷ J/m²/K, a 24 m ocean mixed layer 1.0×10⁸), swap heat with each other (2.0 W/m²/K) and pass it poleward by diffusion (0.649 W/m²/K). The heat capacities and exchange were fitted to Earth's seasons: on Earth's orbit the model gives a 15 °C global mean, 29 °C at the equator and −7 / 23 °C (January / July) on land at 45°N in the mixed setting. Continental, mixed and maritime set land to 85%, 50% or 15% of each band. The map shows the land temperature, cooled with height above sea level at the lapse rate (default 6.5 K per Earth-equivalent km, 2.5 K per Mars km). It ignores Mars's own oceans and lakes as drawn, mountains blocking winds, deserts, clouds that change with climate, and ice that grows when it is cold, so read it as how warm the sunlight makes places, not a forecast. Mars's year is 1.9 Earth years long, so its seasons have more time to heat and cool than Earth's.</li>
         <li>Clock times are local true solar time (LTST): 12:00 is when the Sun crosses the meridian. Today's position uses the Allison &amp; McEwen (2000) formula for L<sub>s</sub>.</li>
       </ul>
     </section>
@@ -1167,7 +1177,7 @@ const PRESETS = { north: [0, 15, 30, 45, 60, 85], south: [0, -15, -30, -45, -60,
 const STORE = 'mars-daylight-v1';
 const state = {
   t: T_TODAY, tod: 14, obsLat: 45, view: 'orbit', units: 'mars', metric: 'mean', orbit: { dur: 'real', ins: 'real', rat: 'real' },
-  lats: PRESETS.north.map((lat, i) => ({ lat, slot: i })), flip: false, dynDur: false, dynIns: false, dynRat: false, earthRef: true, layout: 'full', lineMode: 'chosen', specA: -90, specB: 90, specStep: 5, specOp: 70, show: { view: true, dur: true, ins: true, rat: true, map: true }, waterPct: 30, fillLakes: true, basinFill: 100, hUnit: 'km', mapLayer: 'elev', palette: 'terrain', hillshade: true, insWhen: 'date', insMetric: 'mean', mapOrbit: 'real', insShow: 'wm', tUnit: 'C', lapse: 6.5, insOp: 65, insDyn: false, mapGrid: true, gridLat: 15, gridLon: 30, mapSites: true, ratioMetric: 'mean', mode: 'natural', twoPos: 'L4', twoK: 'x133', threeK: 'x067', camOff: 0, playYear: false, playSol: false
+  lats: PRESETS.north.map((lat, i) => ({ lat, slot: i })), flip: false, dynDur: false, dynIns: false, dynRat: false, earthRef: true, layout: 'full', lineMode: 'chosen', specA: -90, specB: 90, specStep: 5, specOp: 70, show: { view: true, dur: true, ins: true, rat: true, map: true }, waterPct: 30, fillLakes: true, basinFill: 100, hUnit: 'km', mapLayer: 'elev', palette: 'terrain', hillshade: true, insWhen: 'date', insMetric: 'mean', mapOrbit: 'real', insShow: 'wm', tUnit: 'C', heat: 'mixed', lapse: 6.5, insOp: 65, insDyn: false, mapGrid: true, gridLat: 15, gridLon: 30, mapSites: true, ratioMetric: 'mean', mode: 'natural', twoPos: 'L4', twoK: 'x133', threeK: 'x067', camOff: 0, playYear: false, playSol: false
 };
 try {
   const sv = JSON.parse(localStorage.getItem(STORE) || 'null');
@@ -1203,6 +1213,7 @@ try {
     if (num(sv.lapse, 0, 10)) state.lapse = sv.lapse;
     if (sv.insShow === 'wm' || sv.insShow === 'temp') state.insShow = sv.insShow;
     if (['C', 'F', 'K'].includes(sv.tUnit)) state.tUnit = sv.tUnit;
+    if (['cont', 'mixed', 'mari'].includes(sv.heat)) state.heat = sv.heat;
     for (const k of ['hillshade', 'insDyn', 'mapGrid', 'mapSites', 'fillLakes']) if (typeof sv[k] === 'boolean') state[k] = sv[k];
     if (num(sv.gridLat, 1, 30)) state.gridLat = Math.round(sv.gridLat);
     if (num(sv.gridLon, 1, 30)) state.gridLon = Math.round(sv.gridLon);
@@ -1230,7 +1241,7 @@ applyMode();
 const MULTI = () => SRC.length > 1;
 const kLabel = k => (Math.abs(k - 4 / 3) < 1e-9 ? '1.33' : Math.abs(k - 2 / 3) < 1e-9 ? '0.67' : String(k)) + '× Sun';
 function save() {
-  try { localStorage.setItem(STORE, JSON.stringify({ units: state.units, metric: state.metric, orbit: state.orbit, flip: state.flip, dynDur: state.dynDur, dynIns: state.dynIns, dynRat: state.dynRat, earthRef: state.earthRef, layout: state.layout, lineMode: state.lineMode, specA: state.specA, specB: state.specB, specStep: state.specStep, specOp: state.specOp, show: state.show, ratioMetric: state.ratioMetric, waterPct: state.waterPct, fillLakes: state.fillLakes, basinFill: state.basinFill, hUnit: state.hUnit, mapLayer: state.mapLayer, palette: state.palette, hillshade: state.hillshade, insWhen: state.insWhen, insMetric: state.insMetric, mapOrbit: state.mapOrbit, insShow: state.insShow, tUnit: state.tUnit, lapse: state.lapse, insOp: state.insOp, insDyn: state.insDyn, mapGrid: state.mapGrid, gridLat: state.gridLat, gridLon: state.gridLon, mapSites: state.mapSites, mode: state.mode, twoPos: state.twoPos, twoK: state.twoK, threeK: state.threeK, lats: state.lats })); } catch (e) {}
+  try { localStorage.setItem(STORE, JSON.stringify({ units: state.units, metric: state.metric, orbit: state.orbit, flip: state.flip, dynDur: state.dynDur, dynIns: state.dynIns, dynRat: state.dynRat, earthRef: state.earthRef, layout: state.layout, lineMode: state.lineMode, specA: state.specA, specB: state.specB, specStep: state.specStep, specOp: state.specOp, show: state.show, ratioMetric: state.ratioMetric, waterPct: state.waterPct, fillLakes: state.fillLakes, basinFill: state.basinFill, hUnit: state.hUnit, mapLayer: state.mapLayer, palette: state.palette, hillshade: state.hillshade, insWhen: state.insWhen, insMetric: state.insMetric, mapOrbit: state.mapOrbit, insShow: state.insShow, tUnit: state.tUnit, heat: state.heat, lapse: state.lapse, insOp: state.insOp, insDyn: state.insDyn, mapGrid: state.mapGrid, gridLat: state.gridLat, gridLon: state.gridLon, mapSites: state.mapSites, mode: state.mode, twoPos: state.twoPos, twoK: state.twoK, threeK: state.threeK, lats: state.lats })); } catch (e) {}
 }
 
 /* ================= formatting ================= */
@@ -2503,7 +2514,7 @@ function renderDetail() {
     if (lat < -90 || lat > 90) continue;
     const v = clamp((90 - lat) * MAP_PPD - 0.5, 0, MAP_H - 1), r0 = Math.floor(v), r1 = Math.min(MAP_H - 1, r0 + 1), fr = v - r0;
     let ir = 0, ig = 0, ib = 0, pv = 0, tb = 0;
-    if (P.insOn) { pv = lerp(P.prof[r0], P.prof[r1], fr); [ir, ig, ib] = insRGB((pv - P.lo) / (P.hi - P.lo)); if (P.tempOn) tb = lerp(P.TB[r0], P.TB[r1], fr); }
+    if (P.insOn) { pv = lerp(P.prof[r0], P.prof[r1], fr); if (P.tempOn) tb = lerp(P.TB[r0], P.TB[r1], fr); else [ir, ig, ib] = insRGB((pv - P.lo) / (P.hi - P.lo)); }
     const b0 = r0 * MAP_W, b1 = r1 * MAP_W;
     for (let x = 0; x < w; x++) {
       if (!colOk[x]) continue;
@@ -2531,7 +2542,7 @@ function renderDetail() {
           const f = (s0 + (s1 - s0) * fr) / 100; R *= f; G *= f; B *= f;
         }
         if (P.insOn) {
-          if (P.tempOn) [ir, ig, ib] = insRGB((Math.max(0, tb - P.gK * (hh - P.hRef)) - P.lo) / (P.hi - P.lo));
+          if (P.tempOn) [ir, ig, ib] = tempRGB((Math.max(0, tb - P.gK * (hh - P.hRef)) - P.lo) / (P.hi - P.lo));
           R = R * (1 - P.op) + ir * P.op; G = G * (1 - P.op) + ig * P.op; B = B * (1 - P.op) + ib * P.op;
         }
         d[o] = R; d[o + 1] = G; d[o + 2] = B;
@@ -2592,6 +2603,20 @@ function turboArr(x) {
 const LUT_INS = new Uint8ClampedArray(1001 * 3);
 for (let k = 0; k <= 1000; k++) { const c = turboArr(0.04 + 0.92 * k / 1000); LUT_INS[k * 3] = c[0]; LUT_INS[k * 3 + 1] = c[1]; LUT_INS[k * 3 + 2] = c[2]; }
 const insRGB = t => { const k = Math.round(clamp(t, 0, 1) * 1000) * 3; return [LUT_INS[k], LUT_INS[k + 1], LUT_INS[k + 2]]; };
+// Temperature colours pinned to temperatures: blue −20 °C, cyan 0, green 10, yellow 20, orange 30, red 40, darker beyond
+const TEMP_STOPS = [[-60, '#141b4d'], [-40, '#1f3c99'], [-20, '#2f6fdf'], [0, '#22d3ee'], [10, '#22c55e'], [20, '#facc15'], [30, '#f97316'], [40, '#dc2626'], [50, '#991b1b'], [60, '#5a0b0b']];
+const LUT_TEMP = new Uint8ClampedArray(1001 * 3);
+(() => {
+  const rgb = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+  for (let k = 0; k <= 1000; k++) {
+    const T = -60 + 120 * k / 1000; let i = 0;
+    while (i < TEMP_STOPS.length - 2 && T > TEMP_STOPS[i + 1][0]) i++;
+    const [t0, c0] = TEMP_STOPS[i], [t1, c1] = TEMP_STOPS[i + 1], f = clamp((T - t0) / (t1 - t0), 0, 1), a = rgb(c0), b = rgb(c1);
+    for (let j = 0; j < 3; j++) LUT_TEMP[k * 3 + j] = Math.round(a[j] + (b[j] - a[j]) * f);
+  }
+})();
+const tempRGB = t => { const k = Math.round(clamp(t, 0, 1) * 1000) * 3; return [LUT_TEMP[k], LUT_TEMP[k + 1], LUT_TEMP[k + 2]]; };
+const tempGrad = () => 'linear-gradient(90deg,' + TEMP_STOPS.map(([v, c]) => c + ' ' + ((v + 60) / 1.2).toFixed(1) + '%').join(',') + ')';
 const insGrad = () => 'linear-gradient(90deg,' + Array.from({ length: 11 }, (_, i) => { const c = insRGB(i / 10); return 'rgb(' + c.join(',') + ') ' + (i * 10) + '%'; }).join(',') + ')';
 // Height units. With the same air on both planets, pressure falls with height g_Mars/g_Earth as fast on Mars,
 // so climbing 1 km on Mars thins the air like climbing 0.38 km on Earth (the same factor converts water depth to pressure).
@@ -2758,11 +2783,120 @@ function insFixedMax() {           // the yearly maximum anywhere on the planet 
   return v;
 }
 
-// Insolation-based temperature: the temperature an Earth-like planet would have for a given daily-mean insolation, from the
-// radiative relation T = 288 K × (S / 340 W/m²)^¼ (Earth's global mean), minus cooling with height above sea level at the
-// lapse rate (K per Earth-equivalent km, so × 0.38 per Mars km). It ignores oceans, winds, clouds and heat storage.
-const insTemp = S => 288 * Math.pow(Math.max(0, S) / 340, 0.25);
-const T_FIXED = [193.15, 333.15];      // fixed colour scale: −80 … +60 °C
+// Insolation-based temperature: an Earth-calibrated seasonal energy-balance model (Budyko–Sellers type, after North &
+// Coakley 1979). Every 2° latitude band has a land box and a sea box, each obeying
+//   C dT/dt = S (1 − α) − (A + B T) + transport + land–sea exchange
+// with Earth's outgoing longwave fit A + B T (A = 203.3 W/m², B = 2.09 W/m²/K, T in °C), Earth's zonal-mean albedo,
+// poleward transport as diffusion in sin(latitude) (D = 0.649 W/m²/K), heat capacities of 1.0e7 J/m²/K (land and the air
+// over it) and 1.0e8 J/m²/K (a 24 m ocean mixed layer), and a land–sea exchange of 2.0 W/m²/K. The heat capacities and
+// exchange were fitted to Earth's seasonal cycle; on Earth's own orbit the model gives a 15 °C global mean, 29 °C at the
+// equator and −7 °C (January) / 23 °C (July) on land at 45°N in the mixed setting. The map shows the land box at sea level,
+// cooled with height at the lapse rate. Linear in T, so the yearly average is the steady state of the yearly-mean sunlight.
+const EBM_NB = 90, EBM_A = 203.3, EBM_B = 2.09, EBM_D = 0.649, EBM_CL = 1.0e7, EBM_CO = 1.0e8, EBM_NU = 2.0;
+const HEAT_F = { cont: 0.85, mixed: 0.5, mari: 0.15 };
+const HEAT_EARTH = { cont: [-11.6, 26.8], mixed: [-7.3, 22.6], mari: [-0.7, 16.3] };   // model on Earth: land at 45°N, Jan / Jul
+const EBM_LAT = new Float64Array(EBM_NB), EBM_ALB = new Float64Array(EBM_NB), EBM_LO = new Float64Array(EBM_NB), EBM_UP = new Float64Array(EBM_NB);
+(() => {
+  const xe = new Float64Array(EBM_NB + 1), xc = new Float64Array(EBM_NB), dx = new Float64Array(EBM_NB);
+  const AL = [0.26, 0.25, 0.24, 0.27, 0.33, 0.41, 0.49, 0.56, 0.62, 0.65];        // top-of-atmosphere albedo every 10° from the equator
+  for (let i = 0; i <= EBM_NB; i++) xe[i] = Math.sin((-90 + 180 * i / EBM_NB) * D2R);
+  for (let i = 0; i < EBM_NB; i++) {
+    EBM_LAT[i] = -90 + (i + 0.5) * 180 / EBM_NB; dx[i] = xe[i + 1] - xe[i]; xc[i] = (xe[i] + xe[i + 1]) / 2;
+    const u = Math.abs(EBM_LAT[i]) / 10, k = Math.min(8, Math.floor(u)); EBM_ALB[i] = lerp(AL[k], AL[k + 1], u - k);
+  }
+  for (let i = 0; i < EBM_NB - 1; i++) { const k = EBM_D * (1 - xe[i + 1] * xe[i + 1]) / (xc[i + 1] - xc[i]); EBM_UP[i] = -k / dx[i]; EBM_LO[i + 1] = -k / dx[i + 1]; }
+})();
+const ebmCache = new Map();
+function ebmForcing(circ) {          // absorbed sunlight minus A, per band and date (N + 1 dates, the last equal to the first)
+  const key = 'F|' + MODE_KEY + '|' + (circ ? 'c' : 'r');
+  let F = ebmCache.get(key);
+  if (F) return F;
+  const src = circ ? IDE : ORB, W = N + 1;
+  F = { F: new Float64Array(EBM_NB * W), mean: new Float64Array(EBM_NB) };
+  for (let b = 0; b < EBM_NB; b++) {
+    let sum = 0;
+    for (let j = 0; j < N; j++) { const v = dayMetrics(EBM_LAT[b], src[j], true).mean * (1 - EBM_ALB[b]) - EBM_A; F.F[b * W + j] = v; sum += v; }
+    F.F[b * W + N] = F.F[b * W]; F.mean[b] = sum / N;
+  }
+  ebmCache.set(key, F);
+  return F;
+}
+function ebmSteady(circ) {           // yearly-mean temperature (°C): (B + L) T = mean forcing, a tridiagonal solve
+  const key = 'S|' + MODE_KEY + '|' + (circ ? 'c' : 'r');
+  let T = ebmCache.get(key);
+  if (T) return T;
+  const F = ebmForcing(circ).mean, n = EBM_NB, c = new Float64Array(n), d = new Float64Array(n);
+  T = new Float64Array(n);
+  for (let i = 0; i < n; i++) {
+    const a = EBM_LO[i], dg = EBM_B - EBM_LO[i] - EBM_UP[i] - (i > 0 ? a * c[i - 1] : 0);
+    c[i] = EBM_UP[i] / dg; d[i] = (F[i] - (i > 0 ? a * d[i - 1] : 0)) / dg;
+  }
+  for (let i = n - 1; i >= 0; i--) T[i] = d[i] - (i < n - 1 ? c[i] * T[i + 1] : 0);
+  ebmCache.set(key, T);
+  return T;
+}
+function ebmSeasonal(circ, heat) {   // land temperature (°C) per band and date, the periodic solution
+  const key = 'L|' + MODE_KEY + '|' + (circ ? 'c' : 'r') + '|' + heat;
+  let out = ebmCache.get(key);
+  if (out) return out;
+  const f = HEAT_F[heat], nb = EBM_NB, n = 2 * nb, W = N + 1, dt = DT * MARS.solSec, FF = ebmForcing(circ).F, Tbar = ebmSteady(circ);
+  // banded matrix (half-width 2), unknowns interleaved: land of band i at 2i, sea at 2i + 1; diagonally dominant, so no pivoting
+  const M = new Float64Array(n * 5), at = (i, j) => i * 5 + j - i + 2, Cv = new Float64Array(n);
+  for (let i = 0; i < nb; i++) {
+    const Lii = -EBM_LO[i] - EBM_UP[i], rl = 2 * i, ro = rl + 1;
+    Cv[rl] = EBM_CL / dt; Cv[ro] = EBM_CO / dt;
+    M[at(rl, rl)] = Cv[rl] + EBM_B + Lii + EBM_NU / f; M[at(rl, ro)] = -EBM_NU / f;
+    M[at(ro, ro)] = Cv[ro] + EBM_B + Lii + EBM_NU / (1 - f); M[at(ro, rl)] = -EBM_NU / (1 - f);
+    if (i > 0) { M[at(rl, rl - 2)] = EBM_LO[i]; M[at(ro, ro - 2)] = EBM_LO[i]; }
+    if (i < nb - 1) { M[at(rl, rl + 2)] = EBM_UP[i]; M[at(ro, ro + 2)] = EBM_UP[i]; }
+  }
+  for (let k = 0; k < n; k++) {
+    const pv = M[at(k, k)], top = Math.min(n - 1, k + 2);
+    for (let i = k + 1; i <= top; i++) {
+      const l = M[at(i, k)] / pv; if (!l) continue;
+      M[at(i, k)] = l;
+      for (let j = k + 1; j <= top; j++) M[at(i, j)] -= l * M[at(k, j)];
+    }
+  }
+  const x = new Float64Array(n), x0 = new Float64Array(n), TL = new Float32Array(nb * W);
+  for (let i = 0; i < nb; i++) { x[2 * i] = Tbar[i]; x[2 * i + 1] = Tbar[i]; }
+  for (let yr = 0; yr < 40; yr++) {
+    x0.set(x);
+    for (let j = 1; j <= N; j++) {
+      for (let r = 0; r < n; r++) x[r] = Cv[r] * x[r] + FF[(r >> 1) * W + j];
+      for (let i = 1; i < n; i++) for (let k = Math.max(0, i - 2); k < i; k++) x[i] -= M[at(i, k)] * x[k];
+      for (let i = n - 1; i >= 0; i--) { for (let j2 = i + 1; j2 <= Math.min(n - 1, i + 2); j2++) x[i] -= M[at(i, j2)] * x[j2]; x[i] /= M[at(i, i)]; }
+      for (let b = 0; b < nb; b++) TL[b * W + j] = x[2 * b];
+    }
+    let dmax = 0; for (let r = 0; r < n; r++) dmax = Math.max(dmax, Math.abs(x[r] - x0[r]));
+    if (dmax < 0.01) break;
+  }
+  for (let b = 0; b < nb; b++) TL[b * W] = TL[b * W + N];
+  if (ebmCache.size > 60) ebmCache.clear();
+  ebmCache.set(key, TL);
+  return TL;
+}
+function tempProfile() {             // sea-level insolation-based temperature (K) for every map row
+  const circ = state.mapOrbit === 'circ', year = state.insWhen === 'year';
+  const key = 'T|' + MODE_KEY + '|' + (circ ? 'c' : 'r') + '|' + (year ? 'year' : state.heat + '|' + state.t.toFixed(2));
+  let prof = insCache.get(key);
+  if (prof) return prof;
+  const band = new Float64Array(EBM_NB);
+  if (year) band.set(ebmSteady(circ));
+  else {
+    const TL = ebmSeasonal(circ, state.heat), W = N + 1, u = mod(state.t, YEAR) / DT, j0 = Math.min(N - 1, Math.floor(u)), fr = u - j0;
+    for (let b = 0; b < EBM_NB; b++) band[b] = lerp(TL[b * W + j0], TL[b * W + j0 + 1], fr);
+  }
+  prof = new Float32Array(MAP_H);
+  for (let r = 0; r < MAP_H; r++) {
+    const u = clamp((90 - (r + 0.5) / MAP_PPD + 90) * EBM_NB / 180 - 0.5, 0, EBM_NB - 1), b = Math.min(EBM_NB - 2, Math.floor(u));
+    prof[r] = lerp(band[b], band[b + 1], u - b) + 273.15;
+  }
+  if (insCache.size > 40) insCache.clear();
+  insCache.set(key, prof);
+  return prof;
+}
+const T_FIXED = [213.15, 333.15];      // colour scale: −60 … +60 °C (darkest colours beyond)
 function fmtTemp(K, digits = 0) {
   const u = state.tUnit, v = u === 'K' ? K : u === 'F' ? (K - 273.15) * 9 / 5 + 32 : K - 273.15;
   return v.toFixed(digits).replace('-', '−') + (u === 'K' ? ' K' : u === 'F' ? ' °F' : ' °C');
@@ -2784,7 +2918,7 @@ function buildMap() {
   const bf = state.basinFill / 100;
   const hRef = isFinite(sea) ? sea : 0, gK = state.lapse * H_EARTH / 1000;   // K per Mars metre
   let TB = null;
-  if (tempOn) { TB = new Float32Array(MAP_H); for (let r = 0; r < MAP_H; r++) TB[r] = insTemp(prof[r]); }
+  if (tempOn) TB = tempProfile();
   const n = MAP_W * MAP_H;
   if (!VGRID) { VGRID = new Float32Array(n); DGRID = new Float32Array(n); }
   const V = VGRID, D = DGRID;
@@ -2810,14 +2944,15 @@ function buildMap() {
   }
   let lo = 0, hi = 1;
   if (insOn) {
-    if (state.insDyn) {
+    if (tempOn) { lo = T_FIXED[0]; hi = T_FIXED[1]; }
+    else if (state.insDyn) {
       lo = isFinite(vmin) ? vmin : 0; hi = isFinite(vmax) ? vmax : 1;
       if (hi - lo < 1) { lo = Math.max(0, lo - 0.5); hi = lo + 1; }
-    } else if (tempOn) { lo = T_FIXED[0]; hi = T_FIXED[1]; }
+    }
     else { lo = 0; hi = insFixedMax(); }
   }
   // pass 2: colours
-  const span = hi - lo;
+  const span = hi - lo, LI = tempOn ? LUT_TEMP : LUT_INS;
   for (let r = 0; r < MAP_H; r++) {
     for (let c = 0; c < MAP_W; c++) {
       const src = r * MAP_W + (c < 720 ? c + 720 : c - 720), k = r * MAP_W + c, o = k * 4, depth = D[k];
@@ -2831,7 +2966,7 @@ function buildMap() {
         if (shadeOn) { const f = SHADE[src] / 100; R *= f; G *= f; B *= f; }
         if (insOn) {
           const t = clamp((V[k] - lo) / span, 0, 1), qi = Math.round(t * 1000) * 3;
-          R = R * (1 - op) + LUT_INS[qi] * op; G = G * (1 - op) + LUT_INS[qi + 1] * op; B = B * (1 - op) + LUT_INS[qi + 2] * op;
+          R = R * (1 - op) + LI[qi] * op; G = G * (1 - op) + LI[qi + 1] * op; B = B * (1 - op) + LI[qi + 2] * op;
         }
         d[o] = R; d[o + 1] = G; d[o + 2] = B;
         md[o + 3] = 255;
@@ -2845,18 +2980,18 @@ function buildMap() {
   mapParams = { sea, pal, wl, LMAX, WMAX, shadeOn, insOn, prof, op, lo, hi, FL, bf, tempOn, TB, hRef, gK };
   // iso-insolation contours (daily mean only); skipped while the water slider is moving
   if (insOn && (tempOn || state.insMetric === 'mean')) {
-    const ckey = [sea, state.fillLakes ? fillSea : 'dry', bf, MODE_KEY, state.mapOrbit, state.insWhen, state.insWhen === 'date' ? state.t.toFixed(2) : '', tempOn, tempOn ? state.lapse : ''].join('|');
+    const ckey = [sea, state.fillLakes ? fillSea : 'dry', bf, MODE_KEY, state.mapOrbit, state.insWhen, state.insWhen === 'date' ? state.t.toFixed(2) : '', tempOn, tempOn ? state.lapse + '|' + state.heat : ''].join('|');
     if (ckey === contourKey && mapContours) { /* unchanged: reuse */ }
     else if (contourHide) { mapContours = null; contourKey = ''; }
     else if (waterDragging && mapContours) { /* keep the previous lines until the water slider settles */ }
-    else { mapContours = tempOn ? computeContours(V, 273.15, 10, T_FIXED[0] - 0.01, v => Math.abs(v - 273.15) < 0.01) : computeContours(V, 0, 100, 100, v => v === 100 || v === 500); contourKey = ckey; }
+    else { mapContours = tempOn ? computeContours(V, 273.15, 15, T_FIXED[0] - 0.01, v => Math.abs(v - 273.15) < 0.01) : computeContours(V, 0, 100, 100, v => v === 100 || v === 500); contourKey = ckey; }
   } else { mapContours = null; contourKey = ''; }
   mapBuildId++;
   renderMapLegend(); updateMapRead();
 }
 // Marching squares on the land insolation grid (water cells are NaN, so lines stop at shorelines).
 // Paths are in map-pixel coordinates (x 0…1440 from 180°W, y 0…720 from 90°N). Insolation: every 100 W/m², thick at 100 and 500.
-// Temperature: every 10 K (= 10 °C) from −80 °C up, thick at 0 °C.
+// Temperature: every 15 °C from −60 °C up, thick at 0 °C.
 function computeContours(V, base, step, minLevel, isThick) {
   const thin = new Path2D(), thick = new Path2D(), labels = [];
   let segs = 0;
@@ -2962,7 +3097,7 @@ function drawMap() {
     }
     g.restore();
   }
-  // iso-insolation lines every 100 W/m² (daily mean only; thick at 100 and 500) or isotherms every 10 °C (thick at 0 °C), over land
+  // iso-insolation lines every 100 W/m² (daily mean only; thick at 100 and 500) or isotherms every 15 °C (thick at 0 °C), over land
   if (mapContours && mapStats.insOn) {
     const k = s / MAP_PPD, ox = mapX(-180), oy = mapY(90);
     g.save();
@@ -3034,7 +3169,7 @@ function renderMapLegend() {
   add('Height above sea level, ' + hUnitName(), 'linear-gradient(90deg,' + legStops.map((v, i) => colorAt(v) + ' ' + (100 * i / (legStops.length - 1)).toFixed(1) + '%').join(',') + ')', legStops.map(km));
   if (mapStats.insOn) {
     const { lo, hi } = mapStats, qs = [lo, lo + (hi - lo) / 4, (lo + hi) / 2, lo + 3 * (hi - lo) / 4, hi];
-    if (mapParams && mapParams.tempOn) add('Insolation-based temperature' + (state.insDyn ? '' : ' (fixed scale)'), insGrad(), qs.map(v => fmtTemp(v)));
+    if (mapParams && mapParams.tempOn) add('Insolation-based temperature', tempGrad(), [-60, -40, -20, 0, 20, 40, 60].map(v => fmtTemp(v + 273.15)));
     else add((state.insMetric === 'mean' ? 'Daily-mean' : 'Peak') + ' insolation, W/m²' + (state.insDyn ? '' : ' (fixed scale)'), insGrad(), qs.map(fmtInt));
   }
 }
@@ -3060,8 +3195,7 @@ function updateMapRead() {
       const isLand = !(h <= sea) && !(FL && FL[i] > h && h < lakeLevel(i, P.bf));
       if (P.tempOn && isLand) {
         const dT = P.gK * (h - P.hRef), T = Math.max(0, P.TB[r] - dT);
-        if (v < 0.5) line('Insolation-based temperature: ', dim('no sunlight'));
-        else line('Insolation-based temp. ', b(fmtTemp(T)), dim(' (' + (dT >= 0 ? '−' : '+') + Math.abs(dT).toFixed(1) + ' K from height)'));
+        line('Insolation-based temp. ', b(fmtTemp(T)), dim(' (' + (dT >= 0 ? '−' : '+') + Math.abs(dT).toFixed(1) + ' K from height)'));
       }
     }
   } else line(dim('Hover over the map to read values'));
@@ -3069,7 +3203,7 @@ function updateMapRead() {
   line(dim('Ocean ' + state.waterPct + '%' + (state.fillLakes ? ' · lakes ' + lakePct.toFixed(1) + '%' : '') + ' · land ' + Math.max(0, 100 - state.waterPct - lakePct).toFixed(state.fillLakes ? 1 : 0) + '% of the surface'));
   if (state.hUnit === 'earth') line(dim('Heights in Earth-equivalent km: Mars km × 0.38'));
   if (mapStats.insOn && isFinite(mapStats.insLand)) line(dim('Average over land: '), b(mapParams && mapParams.tempOn ? fmtTemp(mapStats.insLand) : fmtInt(mapStats.insLand) + ' W/m²'));
-  if (mapStats.insOn && mapParams && mapParams.tempOn) line(dim('Insolation-based: ignores oceans, winds, clouds and heat storage'));
+  if (mapStats.insOn && mapParams && mapParams.tempOn) line(dim('Insolation-based: Earth’s climate response to this sunlight, not a forecast'));
 }
 function updateMapControls() {
   const pr = (id, on) => $(id).setAttribute('aria-pressed', String(on));
@@ -3087,6 +3221,12 @@ function updateMapControls() {
   pr('tuC', state.tUnit === 'C'); pr('tuF', state.tUnit === 'F'); pr('tuK', state.tUnit === 'K');
   $('tUnitRow').hidden = !tempOn; $('measRow').hidden = tempOn;
   $('lapseRow').hidden = !tempOn; $('lapse').value = state.lapse;
+  $('heatRow').hidden = !tempOn || state.insWhen === 'year';
+  $('insDyn').closest('label').hidden = tempOn;
+  pr('hsCont', state.heat === 'cont'); pr('hsMixed', state.heat === 'mixed'); pr('hsMari', state.heat === 'mari');
+  const he = HEAT_EARTH[state.heat];
+  setText('heatHint', 'Land is ' + Math.round(HEAT_F[state.heat] * 100) + '% of each latitude band. The same model on Earth gives '
+    + fmtTemp(he[0] + 273.15) + ' in January and ' + fmtTemp(he[1] + 273.15) + ' in July on land at 45°N.');
   setText('lapseOut', state.lapse.toFixed(1) + ' K per Earth-eq. km');
   setText('lapseHint', 'Air cools ' + (state.lapse * H_EARTH).toFixed(2) + ' K per Mars km above sea level' + (state.lapse === 6.5 ? ' (Earth’s standard atmosphere)' : ''));
   setText('mmNoon', MULTI() ? 'Daily peak' : 'Noon peak');
@@ -3132,6 +3272,9 @@ $('moReal').addEventListener('click', mapSet({ mapOrbit: 'real' }));
 $('moCirc').addEventListener('click', mapSet({ mapOrbit: 'circ' }));
 $('isWm').addEventListener('click', mapSet({ insShow: 'wm' }));
 $('isTemp').addEventListener('click', mapSet({ insShow: 'temp' }));
+$('hsCont').addEventListener('click', mapSet({ heat: 'cont' }));
+$('hsMixed').addEventListener('click', mapSet({ heat: 'mixed' }));
+$('hsMari').addEventListener('click', mapSet({ heat: 'mari' }));
 for (const [id, u] of [['tuC', 'C'], ['tuF', 'F'], ['tuK', 'K']]) $(id).addEventListener('click', () => { state.tUnit = u; updateMapControls(); renderMapLegend(); updateMapRead(); scheduleMapDraw(); save(); });
 $('lapse').addEventListener('input', e => { state.lapse = +e.target.value; holdContours(); mapSettingsChanged(); });
 $('water').addEventListener('input', e => {
