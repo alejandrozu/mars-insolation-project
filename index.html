@@ -1,0 +1,2275 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mars Insolation Project</title>
+<meta name="description" content="Interactive simulator of daylight and sunlight on Mars across its eccentric year: orbit and sky views, daylight and insolation by latitude, seasonal ratios, and two- and three-sun skies with mirrors at L4 and L5.">
+<meta property="og:title" content="Mars Insolation Project">
+<meta property="og:description" content="Interactive simulator of daylight and sunlight on Mars across its eccentric year: orbit and sky views, daylight and insolation by latitude, seasonal ratios, and two- and three-sun skies with mirrors at L4 and L5.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0F141E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='%23C4643D'/%3E%3Cpath d='M16 3a13 13 0 0 1 0 26z' fill='%23140b0a' opacity='.55'/%3E%3C/svg%3E">
+<style>
+:root { color-scheme: light; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+body { margin: 0; font-size: 14px; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: a fixed-dark viewing window (orbit or sky dome) on the left, a calm instrument sheet with two
+   year-long time series on the right; one shared date cursor ties every panel together. */
+:root {
+  --bg: #E8EBEF;
+  --surface: #F8F9FB;
+  --ink: #141922;
+  --ink-2: #4A5361;
+  --muted: #6C7584;
+  --line: #D3D8DF;
+  --grid: #E4E7EC;
+  --accent: #9A5418;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #F2E4D5;
+  --band-a: #E2E6EC;
+  --band-b: #EDF0F3;
+  --shadow: rgba(20, 25, 34, 0.14);
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100;
+  --s5: #e87ba4; --s6: #008300; --s7: #6250d6; --s8: #e34948;
+  /* the viewer is a window into space: same in both themes */
+  --space-0: #080B12;
+  --space-1: #0F141E;
+  --space-2: #182030;
+  --space-line: #283244;
+  --space-ink: #ECE6DD;
+  --space-muted: #929AA9;
+  --space-accent: #E7AE6F;
+  --space-accent-ink: #1B1208;
+  --f-display: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --f-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E1117; --surface: #161A22; --ink: #E7E5E0; --ink-2: #B3B8C2; --muted: #848C9A;
+    --line: #2B313C; --grid: #212630; --accent: #E39B57; --accent-ink: #1A1108; --accent-soft: #33261A;
+    --band-a: #1F242E; --band-b: #1A1E27; --shadow: rgba(0, 0, 0, 0.45);
+    --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500;
+    --s5: #d55181; --s6: #008300; --s7: #9085e9; --s8: #e66767;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E1117; --surface: #161A22; --ink: #E7E5E0; --ink-2: #B3B8C2; --muted: #848C9A;
+  --line: #2B313C; --grid: #212630; --accent: #E39B57; --accent-ink: #1A1108; --accent-soft: #33261A;
+  --band-a: #1F242E; --band-b: #1A1E27; --shadow: rgba(0, 0, 0, 0.45);
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500;
+  --s5: #d55181; --s6: #008300; --s7: #9085e9; --s8: #e66767;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--f-body); font-size: 14px; line-height: 1.45;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 40px;
+}
+button, input, select { font: inherit; color: inherit; }
+sub { font-size: 0.72em; line-height: 0; }
+
+.top {
+  display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between;
+  gap: 14px 28px; max-width: 1480px; margin: 0 auto; padding-block: 22px 18px;
+}
+h1 {
+  font-family: var(--f-display); font-weight: 600; text-transform: uppercase;
+  font-size: clamp(28px, 3.4vw, 40px); letter-spacing: 0.015em; line-height: 0.95;
+  margin: 0; text-wrap: balance;
+}
+.consts {
+  display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 8px 0 0;
+  font-family: var(--f-mono); font-size: 12px; color: var(--muted);
+}
+.consts b { font-weight: 500; color: var(--ink-2); }
+.unitbox { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.topctl { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.seg.small button { font-size: 12px; padding: 3px 9px; }
+.seg.multi button[aria-pressed="true"] { background: var(--accent-soft); color: var(--ink); }
+.seg.multi button[aria-pressed="false"] { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--line); }
+body[data-layout="full"] .top, body[data-layout="full"] .modebar { max-width: none; }
+.flabel {
+  font-family: var(--f-display); font-weight: 600; font-size: 12px; text-transform: uppercase;
+  letter-spacing: 0.09em; color: var(--muted);
+}
+
+.seg {
+  display: inline-flex; gap: 2px; padding: 2px; border-radius: 8px;
+  border: 1px solid var(--line); background: var(--surface);
+}
+.seg button {
+  border: 0; background: transparent; color: var(--ink-2); cursor: pointer;
+  font-size: 13px; font-weight: 500; padding: 5px 12px; border-radius: 6px; white-space: nowrap;
+}
+.seg button:hover { background: var(--grid); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.seg button small { font-weight: 400; opacity: 0.8; }
+button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible, .plot:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px;
+}
+
+.modebar {
+  max-width: 1480px; margin: 0 auto 18px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 24px;
+  padding: 10px 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+}
+.mode-grp { display: inline-flex; align-items: center; gap: 8px 10px; flex-wrap: wrap; }
+.mode-sum { margin: 0; flex: 1 1 300px; min-width: 0; font-size: 12.5px; color: var(--ink-2); }
+.mode-sum b { font-family: var(--f-mono); font-weight: 500; color: var(--ink); }
+.panel { min-width: 0; }
+.vtitle { display: none; }
+
+/* ---------- full-screen layout: three screens, each full width and 90% of the viewport tall ---------- */
+body[data-layout="full"] .layout { display: grid; gap: 18px; }
+body[data-layout="full"] .panel {
+  display: grid; grid-template-columns: minmax(280px, 350px) minmax(0, 1fr);
+  height: 90vh; height: 90dvh; min-height: 560px; overflow: hidden;
+}
+body[data-layout="full"] .cpanel { padding: 0; }
+body[data-layout="full"] .cpanel .side {
+  display: flex; flex-direction: column; gap: 18px; padding: 20px 18px;
+  border-right: 1px solid var(--line); overflow-y: auto; min-height: 0;
+}
+body[data-layout="full"] .side-h h2 { font-size: 26px; }
+body[data-layout="full"] .cpanel .card-tools { flex-direction: column; align-items: flex-start; gap: 10px; }
+body[data-layout="full"] .cpanel .plot { margin: 0; padding: 14px 10px 8px 6px; height: 100%; min-height: 0; }
+body[data-layout="full"] .svgwrap { height: 100%; min-height: 0; overflow: hidden; }
+body[data-layout="full"] .vside {
+  display: flex; flex-direction: column; min-height: 0; overflow-y: auto;
+  border-right: 1px solid var(--space-line); background: var(--space-1);
+}
+body[data-layout="full"] .vtitle {
+  display: block; flex: 1 0 100%; margin: 0; font-family: var(--f-display); font-weight: 600; font-size: 26px;
+  text-transform: uppercase; letter-spacing: 0.03em; line-height: 1.05;
+}
+body[data-layout="full"] .vhead { border-bottom: 0; padding: 18px 14px 12px; }
+body[data-layout="full"] .vside .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+body[data-layout="full"] .vside .vcap { margin-top: auto; }
+body[data-layout="full"] .ctl.obsrow { grid-template-columns: auto minmax(0, 1fr); }
+body[data-layout="full"] .ctl.obsrow .sidebox { grid-column: 1 / -1; }
+body[data-layout="full"] select.site { max-width: none; flex: 1; }
+body[data-layout="full"] .stage { position: relative; height: 100%; min-height: 0; }
+body[data-layout="full"] #cvs { position: absolute; inset: 0; width: 100%; height: 100%; }
+body[data-layout="full"] .after { display: grid; gap: 14px; }
+
+/* ---------- compact layout: viewer on the left, both charts stacked on the right ---------- */
+body[data-layout="compact"] .layout {
+  display: grid; grid-template-columns: minmax(0, 45fr) minmax(0, 55fr); gap: 14px 22px;
+  max-width: 1480px; margin: 0 auto; align-items: start;
+}
+body[data-layout="compact"] .viewer {
+  grid-column: 1; grid-row: 1 / span 4; display: flex; flex-direction: column;
+  position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px);
+}
+body[data-layout="compact"] .vside { display: contents; }
+body[data-layout="compact"] .vhead { order: 1; }
+body[data-layout="compact"] .stage { order: 2; }
+body[data-layout="compact"] .vcap { order: 3; }
+body[data-layout="compact"] .ctl { order: 4; }
+body[data-layout="compact"] .stats { order: 5; }
+body[data-layout="compact"] #pDur { grid-column: 2; }
+body[data-layout="compact"] #pIns, body[data-layout="compact"] #pRat { grid-column: 2; }
+body[data-layout="compact"] .after { grid-column: 2; display: grid; gap: 14px; }
+body[data-layout="compact"] .cpanel .side { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 10px 16px; }
+body[data-layout="compact"] .cpanel .side-h { flex: 1 1 260px; min-width: 0; }
+body[data-layout="compact"] .cpanel .filters { order: -1; flex: 1 1 100%; padding-bottom: 12px; border-bottom: 1px solid var(--grid); }
+body[data-layout="compact"] .cpanel:not(.lead) .filters { display: none; }
+body[data-layout="compact"].no-view .layout, body[data-layout="compact"].no-charts .layout { grid-template-columns: minmax(0, 1fr); }
+body[data-layout="compact"].no-view #pDur, body[data-layout="compact"].no-view #pIns, body[data-layout="compact"].no-view #pRat, body[data-layout="compact"].no-view .after,
+body[data-layout="compact"].no-charts .after { grid-column: 1; }
+body[data-layout="compact"].no-charts .viewer { position: static; grid-row: auto; }
+
+/* ---------- viewer (always dark) ---------- */
+.viewer {
+  background: var(--space-1); color: var(--space-ink);
+  border: 1px solid var(--space-line); border-radius: 14px; overflow: hidden;
+}
+.vhead {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px 14px; flex-wrap: wrap;
+  padding: 10px 14px; border-bottom: 1px solid var(--space-line); background: var(--space-0);
+}
+.seg.dark { background: var(--space-1); border-color: var(--space-line); }
+.seg.dark button { color: var(--space-muted); }
+.seg.dark button:hover { background: var(--space-2); }
+.seg.dark button[aria-pressed="true"] { background: var(--space-accent); color: var(--space-accent-ink); }
+.viewer :focus-visible { outline-color: var(--space-accent); }
+.vhint { margin: 0; font-size: 12px; color: var(--space-muted); }
+.stage { position: relative; background: var(--space-0); }
+.vcap {
+  margin: 0; padding: 7px 14px 8px; background: var(--space-0); border-top: 1px solid var(--space-line);
+  font-family: var(--f-mono); font-size: 11px; color: var(--space-muted); display: flex; flex-wrap: wrap; gap: 2px 16px;
+}
+.vcap .sw { display: inline-block; width: 14px; height: 0; border-top: 2px solid var(--space-accent); vertical-align: middle; margin-right: 5px; }
+.vcap .sw.d { border-top: 1.5px dashed var(--space-muted); }
+.vcap .sw.m { border-top-color: #BED7FF; }
+.vcap .dia { display: inline-block; width: 7px; height: 7px; background: #DCEBFF; transform: rotate(45deg); margin-right: 6px; vertical-align: 1px; }
+.vcap .ring { display: inline-block; width: 9px; height: 9px; border: 1.5px solid var(--space-accent); border-radius: 50%; vertical-align: -1px; margin-right: 5px; }
+#cvs { display: block; width: 100%; height: 320px; cursor: grab; touch-action: none; }
+#cvs.ground { touch-action: pan-y; }
+#cvs:active { cursor: grabbing; }
+
+.ctl {
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center;
+  gap: 12px; padding: 10px 14px; border-top: 1px solid var(--space-line);
+}
+.ctl-main { min-width: 0; display: grid; gap: 2px; }
+.ctl-row { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.ctl-row label {
+  font-family: var(--f-display); font-weight: 600; font-size: 12px; text-transform: uppercase;
+  letter-spacing: 0.09em; color: var(--space-muted);
+}
+.ctl-row output { font-family: var(--f-mono); font-size: 13px; font-variant-numeric: tabular-nums; text-align: right; }
+.ctl input[type="range"] { width: 100%; margin: 4px 0 0; accent-color: var(--space-accent); height: 20px; }
+.ctl-ico {
+  width: 34px; height: 34px; display: grid; place-items: center; border-radius: 50%;
+  border: 1px solid var(--space-line); font-family: var(--f-mono); font-size: 14px; color: var(--space-muted);
+}
+.play {
+  width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--space-line);
+  background: var(--space-2); color: var(--space-ink); cursor: pointer; display: grid; place-items: center; padding: 0;
+}
+.play:hover { border-color: var(--space-accent); }
+.play[aria-pressed="true"] { background: var(--space-accent); color: var(--space-accent-ink); border-color: var(--space-accent); }
+.play svg { width: 14px; height: 14px; fill: currentColor; }
+.play .i-pause { display: none; }
+.play[aria-pressed="true"] .i-play { display: none; }
+.play[aria-pressed="true"] .i-pause { display: block; }
+.ghost {
+  border: 1px solid var(--space-line); background: transparent; color: var(--space-ink);
+  border-radius: 7px; padding: 6px 10px; font-size: 12.5px; cursor: pointer; white-space: nowrap;
+}
+.ghost:hover { border-color: var(--space-accent); }
+.sidebox { display: flex; gap: 6px; align-items: center; }
+select.site {
+  background: var(--space-2); color: var(--space-ink); border: 1px solid var(--space-line);
+  border-radius: 7px; padding: 6px 6px; font-size: 12.5px; max-width: 150px;
+}
+
+.stats {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px;
+  background: var(--space-line); border-top: 1px solid var(--space-line);
+}
+.stat { background: var(--space-1); padding: 10px 12px 11px; min-width: 0; }
+.stat .k {
+  font-family: var(--f-display); font-weight: 600; font-size: 11.5px; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--space-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.stat .v { font-family: var(--f-mono); font-weight: 500; font-size: 15px; margin-top: 2px; font-variant-numeric: tabular-nums; }
+.stat .s { font-size: 11.5px; color: var(--space-muted); margin-top: 1px; }
+
+/* ---------- charts column ---------- */
+.filters { display: grid; gap: 12px; }
+.fgrp { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; }
+.fgrp.opts { gap: 8px 18px; }
+.spec { display: grid; gap: 4px; max-width: 420px; }
+.spec-row { display: flex; justify-content: space-between; align-items: baseline; margin-top: 4px; }
+.spec-row output { font-family: var(--f-mono); font-size: 12.5px; color: var(--ink); font-variant-numeric: tabular-nums; }
+.spec input[type="range"] { width: 100%; margin: 0; accent-color: var(--accent); height: 20px; }
+.dual { position: relative; height: 22px; }
+.dual::before {
+  content: ""; position: absolute; left: 8px; right: 8px; top: 9px; height: 4px; border-radius: 2px; background: var(--line);
+}
+.dual .dual-fill { position: absolute; top: 9px; height: 4px; border-radius: 2px; background: var(--accent); }
+.dual input[type="range"] {
+  position: absolute; inset: 0; width: 100%; height: 22px; margin: 0; background: transparent;
+  -webkit-appearance: none; appearance: none; pointer-events: none;
+}
+.dual input[type="range"]::-webkit-slider-runnable-track { background: transparent; height: 22px; }
+.dual input[type="range"]::-moz-range-track { background: transparent; }
+.dual input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; pointer-events: auto; width: 16px; height: 16px; margin-top: 3px; border-radius: 50%;
+  background: var(--surface); border: 2px solid var(--accent); cursor: pointer;
+}
+.dual input[type="range"]::-moz-range-thumb {
+  pointer-events: auto; width: 12px; height: 12px; border-radius: 50%; background: var(--surface); border: 2px solid var(--accent); cursor: pointer;
+}
+.cbar { margin-top: 8px; }
+.cbar-grad { height: 10px; border-radius: 3px; }
+.cbar-lab { display: flex; justify-content: space-between; font-family: var(--f-mono); font-size: 11px; color: var(--ink-2); margin-top: 3px; }
+.plot .ser.sp { stroke-width: 1.6; }
+.lat-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  display: inline-flex; align-items: center; border: 1px solid var(--line); background: var(--surface);
+  border-radius: 999px; overflow: hidden;
+}
+.chip.obs { border-color: var(--ink-2); }
+.chip-main {
+  display: inline-flex; align-items: center; gap: 7px; border: 0; background: transparent; cursor: pointer;
+  font-family: var(--f-mono); font-size: 12.5px; padding: 4px 4px 4px 10px; color: var(--ink);
+}
+.chip-main i { display: inline-block; width: 14px; height: 3px; border-radius: 2px; }
+.chip-main .pin { font-size: 10px; color: var(--muted); }
+.chip-x {
+  border: 0; background: transparent; cursor: pointer; color: var(--muted);
+  width: 26px; height: 26px; font-size: 16px; line-height: 1; padding: 0;
+}
+.chip-x:hover { color: var(--ink); }
+.addf { display: inline-flex; gap: 4px; }
+.addf input {
+  width: 92px; border: 1px solid var(--line); background: var(--surface); border-radius: 7px;
+  padding: 4px 8px; font-family: var(--f-mono); font-size: 12.5px;
+}
+.btn {
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 7px;
+  padding: 4px 10px; font-size: 12.5px; cursor: pointer; font-weight: 500;
+}
+.btn:hover { border-color: var(--ink-2); }
+.opt-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; }
+.switch { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 500; font-size: 13px; }
+.switch input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.switch .track {
+  width: 32px; height: 18px; border-radius: 999px; background: var(--line); position: relative; flex: none;
+  transition: background 0.15s;
+}
+.switch .track::after {
+  content: ""; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%;
+  background: var(--surface); box-shadow: 0 1px 2px var(--shadow); transition: transform 0.15s;
+}
+.switch input:checked + .track { background: var(--accent); }
+.switch input:checked + .track::after { transform: translateX(14px); }
+.switch input:focus-visible + .track { outline: 2px solid var(--accent); outline-offset: 2px; }
+.card-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+.switch.sm { font-size: 12.5px; color: var(--ink-2); }
+.lineleg { display: inline-flex; gap: 14px; font-size: 12px; color: var(--ink-2); align-items: center; }
+.lineleg svg { width: 22px; height: 6px; vertical-align: middle; margin-right: 5px; }
+.presets { display: inline-flex; gap: 4px; align-items: center; flex-wrap: wrap; }
+.presets .flabel { margin-right: 2px; }
+.linkbtn {
+  border: 0; background: transparent; color: var(--ink-2); cursor: pointer; font-size: 12.5px;
+  padding: 2px 6px; border-radius: 5px; text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px;
+}
+.linkbtn:hover { color: var(--ink); background: var(--grid); }
+.msg { margin: 0; font-size: 12.5px; color: var(--accent); min-height: 0; }
+.msg:empty { display: none; }
+
+.card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+  padding: 14px 14px 10px; min-width: 0;
+}
+.card-h { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px 16px; flex-wrap: wrap; }
+.card-h > div:first-child { min-width: 0; flex: 1 1 260px; }
+.card h2 {
+  font-family: var(--f-display); font-weight: 600; font-size: 21px; text-transform: uppercase;
+  letter-spacing: 0.03em; margin: 0; line-height: 1.05;
+}
+.card .sub { margin: 4px 0 0; color: var(--muted); font-size: 12.5px; max-width: 68ch; }
+.plot { position: relative; margin-top: 8px; border-radius: 6px; }
+.svgwrap { min-height: 236px; }
+.plot svg { display: block; overflow: visible; }
+.plot .hit { cursor: crosshair; touch-action: pan-y; }
+.plot text { font-family: var(--f-mono); }
+.plot .tick { font-size: 11px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+.plot .grid { stroke: var(--grid); stroke-width: 1; }
+.plot .axis { stroke: var(--line); stroke-width: 1; }
+.plot .sbound { stroke: var(--line); stroke-width: 1; }
+.plot .apsis { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 1 3; opacity: 0.7; }
+.plot .band.a { fill: var(--band-a); }
+.plot .band.b { fill: var(--band-b); }
+.plot .bandt {
+  font-family: var(--f-display); font-weight: 600; font-size: 11.5px; letter-spacing: 0.07em;
+  text-transform: uppercase; fill: var(--ink-2);
+}
+.plot .mark { font-size: 10.5px; fill: var(--muted); }
+.plot .todaymk { fill: var(--ink-2); }
+.plot .earth { stroke: var(--ink-2); fill: none; }
+.plot .earth.mid { stroke-width: 6; opacity: 0.16; }
+.plot .earth.trop { stroke-width: 2; opacity: 0.32; }
+.plot .earthl {
+  font-size: 10.5px; fill: var(--ink-2); paint-order: stroke; stroke: var(--surface);
+  stroke-width: 3px; stroke-linejoin: round;
+}
+.plot .ser { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.plot .ser.emph { stroke-width: 3.2; }
+.plot .ser.ideal { stroke-width: 1.5; stroke-dasharray: 5 4; opacity: 0.8; }
+.plot .key { stroke-width: 2.5; stroke-linecap: round; }
+.plot .endl { font-size: 11px; fill: var(--ink-2); }
+.plot .curl { stroke: var(--ink); stroke-width: 1.25; opacity: 0.75; }
+.plot .curl.curS { opacity: 0.4; }
+.plot .curt { font-size: 10px; font-weight: 500; fill: var(--ink-2); }
+.plot .mark.today { fill: var(--ink-2); }
+.plot .hovl { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 3; }
+.plot .dot { stroke: var(--surface); stroke-width: 2; }
+.plot .empty { font-family: var(--f-body); font-size: 13px; fill: var(--muted); }
+.tip {
+  position: absolute; z-index: 3; pointer-events: none; min-width: 168px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+  box-shadow: 0 8px 28px var(--shadow); padding: 8px 10px; font-size: 12px;
+}
+.tip-h { font-family: var(--f-mono); font-weight: 500; font-size: 12px; color: var(--ink); }
+.tip-s { font-size: 11.5px; color: var(--muted); margin-bottom: 6px; }
+.tip-r { display: grid; grid-template-columns: 14px auto 1fr; gap: 0 8px; align-items: baseline; padding: 1px 0; }
+.tip-r i { display: block; width: 12px; height: 2.5px; border-radius: 2px; align-self: center; }
+.tip-r b { font-family: var(--f-mono); font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; text-align: right; }
+.tip-r span { color: var(--ink-2); font-family: var(--f-mono); }
+.tip-r em { font-style: normal; color: var(--muted); font-size: 11px; margin-left: 4px; }
+
+details.card summary {
+  cursor: pointer; font-family: var(--f-display); font-weight: 600; font-size: 16px;
+  text-transform: uppercase; letter-spacing: 0.04em; list-style-position: inside;
+}
+details.card[open] summary { margin-bottom: 8px; }
+.tbl-wrap { overflow-x: auto; }
+table { border-collapse: collapse; font-family: var(--f-mono); font-size: 12px; font-variant-numeric: tabular-nums; }
+th {
+  font-family: var(--f-display); font-weight: 600; font-size: 11.5px; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--muted); text-align: right; padding: 4px 10px; vertical-align: bottom;
+}
+th small { display: block; font-family: var(--f-mono); font-weight: 400; text-transform: none; letter-spacing: 0; font-size: 10.5px; }
+th:first-child, td:first-child { text-align: left; }
+td { padding: 6px 10px; border-top: 1px solid var(--grid); text-align: right; white-space: nowrap; }
+td small { display: block; color: var(--muted); }
+td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; margin-right: 6px; vertical-align: middle; }
+
+.notes { font-size: 12.5px; color: var(--ink-2); padding: 4px 2px 0; }
+.notes h3 {
+  font-family: var(--f-display); font-weight: 600; font-size: 14px; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--muted); margin: 0 0 6px;
+}
+.notes ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; max-width: 78ch; }
+
+@media (max-width: 980px) {
+  body[data-layout="compact"] .layout { grid-template-columns: minmax(0, 1fr); }
+  body[data-layout="compact"] .viewer { position: static; grid-row: auto; }
+  body[data-layout="compact"] #pDur, body[data-layout="compact"] #pIns, body[data-layout="compact"] .after { grid-column: 1; grid-row: auto; }
+}
+@media (max-width: 900px) {
+  body[data-layout="full"] .panel { grid-template-columns: minmax(0, 1fr); height: auto; min-height: 0; }
+  body[data-layout="full"] .cpanel .side { border-right: 0; border-bottom: 1px solid var(--line); overflow: visible; }
+  body[data-layout="full"] .vside { border-right: 0; overflow: visible; }
+  body[data-layout="full"] .stage { order: -1; height: 72vh; height: 72dvh; min-height: 360px; }
+  body[data-layout="full"] .cpanel .plot { height: 72vh; height: 72dvh; min-height: 380px; }
+  .topctl { align-items: flex-start; }
+}
+@media (max-width: 560px) {
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ctl { gap: 10px; padding: 10px 12px; }
+  .ctl.obsrow { grid-template-columns: auto minmax(0, 1fr); }
+  .ctl.obsrow .sidebox { grid-column: 1 / -1; }
+  select.site { max-width: none; flex: 1; }
+  .vhint { display: none; }
+}
+@media (max-height: 700px) { body[data-layout="compact"] .viewer { position: static; } }
+@media (prefers-reduced-motion: reduce) {
+  .switch .track, .switch .track::after { transition: none; }
+}
+</style>
+
+</head>
+<body>
+<header class="top">
+  <div>
+    <h1>Mars Insolation Project</h1>
+    <p class="consts">
+      <span>e = <b>0.0934</b></span>
+      <span>obliquity <b>25.19°</b></span>
+      <span>1 sol = <b>24 h 39 m 35 s</b></span>
+      <span>1 year = <b>668.6 sols</b> = 687.0 days</span>
+      <span>perihelion at L<sub>s</sub> <b>251°</b></span>
+    </p>
+  </div>
+  <div class="topctl">
+    <div class="unitbox">
+      <span class="flabel" id="showLbl">Show</span>
+      <div class="seg small multi" role="group" aria-labelledby="showLbl">
+        <button type="button" class="js-show" data-panel="view" aria-pressed="true">Mars view</button>
+        <button type="button" class="js-show" data-panel="dur" aria-pressed="true">Daylight</button>
+        <button type="button" class="js-show" data-panel="ins" aria-pressed="true">Insolation</button>
+        <button type="button" class="js-show" data-panel="rat" aria-pressed="true">Ratio</button>
+      </div>
+      <span class="flabel" id="layLbl">Layout</span>
+      <div class="seg small" role="group" aria-labelledby="layLbl">
+        <button type="button" id="lyFull" aria-pressed="true">Full screen</button>
+        <button type="button" id="lyCompact" aria-pressed="false">Compact</button>
+      </div>
+    </div>
+    <div class="unitbox">
+      <span class="flabel" id="unitsLbl">Measure time in</span>
+      <div class="seg" role="group" aria-labelledby="unitsLbl">
+        <button type="button" id="uMars" aria-pressed="true">Mars hours <small>(sol = 24 h)</small></button>
+        <button type="button" id="uEarth" aria-pressed="false">Earth hours</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="modebar" aria-label="Sky mode">
+  <div class="mode-grp">
+    <span class="flabel" id="skyLbl">Sky</span>
+    <div class="seg" role="group" aria-labelledby="skyLbl">
+      <button type="button" id="mdNatural" aria-pressed="true">Natural</button>
+      <button type="button" id="mdTwo" aria-pressed="false">Two suns</button>
+      <button type="button" id="mdThree" aria-pressed="false">Three suns</button>
+    </div>
+  </div>
+  <div class="mode-grp" id="optTwo" hidden>
+    <span class="flabel" id="posLbl">Mirrors at</span>
+    <div class="seg" role="group" aria-labelledby="posLbl">
+      <button type="button" id="posL4" aria-pressed="true">L4 · morning</button>
+      <button type="button" id="posL5" aria-pressed="false">L5 · evening</button>
+    </div>
+    <span class="flabel" id="twoKLbl">Strength</span>
+    <div class="seg" role="group" aria-labelledby="twoKLbl">
+      <button type="button" id="twoK1" aria-pressed="false">1× Sun</button>
+      <button type="button" id="twoK133" aria-pressed="true">1.33× Sun</button>
+    </div>
+  </div>
+  <div class="mode-grp" id="optThree" hidden>
+    <span class="flabel" id="threeKLbl">Each mirror</span>
+    <div class="seg" role="group" aria-labelledby="threeKLbl">
+      <button type="button" id="threeK05" aria-pressed="false">0.5× Sun</button>
+      <button type="button" id="threeK067" aria-pressed="true">0.67× Sun</button>
+    </div>
+  </div>
+  <p class="mode-sum" id="modeSum"></p>
+</section>
+
+<main class="layout" id="layout">
+  <section class="panel viewer" aria-label="Simulation view">
+    <div class="side vside">
+      <div class="vhead">
+        <h2 class="vtitle">Mars view</h2>
+      <div class="seg dark" role="group" aria-label="View">
+        <button type="button" id="vOrbit" aria-pressed="true">Orbit</button>
+        <button type="button" id="vGround" aria-pressed="false">Ground</button>
+      </div>
+      <p class="vhint" id="vhint">Drag Mars around its orbit to change the date</p>
+      </div>
+      <div class="ctl">
+        <button class="play" id="playYear" type="button" aria-pressed="false" aria-label="Play through the Martian year">
+          <svg class="i-play" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.5v11l9.5-5.5z"/></svg>
+          <svg class="i-pause" viewBox="0 0 14 14" aria-hidden="true"><path d="M2.5 1.5h3.2v11H2.5zM8.3 1.5h3.2v11H8.3z"/></svg>
+        </button>
+        <div class="ctl-main">
+          <div class="ctl-row"><label for="date">Date</label><output id="dateOut" for="date"></output></div>
+          <input type="range" id="date" min="0" max="668.6" step="0.1" value="0">
+        </div>
+        <button class="ghost" id="todayBtn" type="button">Today</button>
+      </div>
+
+      <div class="ctl" id="todRow" hidden>
+        <button class="play" id="playSol" type="button" aria-pressed="false" aria-label="Play through one sol">
+          <svg class="i-play" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.5v11l9.5-5.5z"/></svg>
+          <svg class="i-pause" viewBox="0 0 14 14" aria-hidden="true"><path d="M2.5 1.5h3.2v11H2.5zM8.3 1.5h3.2v11H8.3z"/></svg>
+        </button>
+        <div class="ctl-main">
+          <div class="ctl-row"><label for="tod">Local true solar time</label><output id="todOut" for="tod"></output></div>
+          <input type="range" id="tod" min="0" max="24" step="0.05" value="14">
+        </div>
+        <button class="ghost" id="noonBtn" type="button">Noon</button>
+      </div>
+
+      <div class="ctl obsrow">
+        <span class="ctl-ico" aria-hidden="true">φ</span>
+        <div class="ctl-main">
+          <div class="ctl-row"><label for="obs">Observer latitude</label><output id="obsOut" for="obs"></output></div>
+          <input type="range" id="obs" min="-89.5" max="89.5" step="0.1" value="45">
+        </div>
+        <div class="sidebox">
+          <select class="site" id="site" aria-label="Jump to a landing site">
+            <option value="">Landing sites</option>
+            <option value="68.22">Phoenix · 68.2°N</option>
+            <option value="47.64">Viking 2 · 47.6°N</option>
+            <option value="25.07">Zhurong · 25.1°N</option>
+            <option value="18.44">Perseverance · 18.4°N</option>
+            <option value="-1.95">Opportunity · 1.9°S</option>
+            <option value="-4.59">Curiosity · 4.6°S</option>
+          </select>
+          <button class="ghost" id="addObs" type="button" title="Add this latitude to the charts">+ Chart</button>
+        </div>
+      </div>
+
+      <div class="stats" id="stats">
+        <div class="stat"><div class="k">Date</div><div class="v" id="stDate"></div><div class="s" id="stDateS"></div></div>
+        <div class="stat"><div class="k">Season</div><div class="v" id="stSeason"></div><div class="s" id="stSeasonS"></div></div>
+        <div class="stat"><div class="k">Sun distance</div><div class="v" id="stSun"></div><div class="s" id="stSunS"></div></div>
+        <div class="stat"><div class="k" id="st8K"></div><div class="v" id="st8V"></div><div class="s" id="st8S"></div></div>
+        <div class="stat"><div class="k" id="stDayK">Daylight</div><div class="v" id="stDay"></div><div class="s" id="stDayS"></div></div>
+        <div class="stat"><div class="k" id="stRiseK">Sunrise – sunset</div><div class="v" id="stRise"></div><div class="s" id="stRiseS"></div></div>
+        <div class="stat"><div class="k">Noon Sun</div><div class="v" id="stNoon"></div><div class="s" id="stNoonS"></div></div>
+        <div class="stat"><div class="k">Daily mean</div><div class="v" id="stMean"></div><div class="s" id="stMeanS"></div></div>
+      </div>
+      <p class="vcap" id="vcap"></p>
+    </div>
+    <div class="stage" id="stage"><canvas id="cvs" role="img" aria-label="Mars on its orbit"></canvas></div>
+  </section>
+
+  <section class="panel card cpanel" id="pDur" aria-label="Daylight duration">
+    <div class="side">
+      <div class="side-h"><h2>Daylight duration</h2><p class="sub" id="durSub"></p></div>
+      <div class="filters">
+        <div class="fgrp">
+          <span class="flabel">Lines</span>
+          <div class="seg small" role="group" aria-label="Which latitudes to plot">
+            <button type="button" class="js-lm" data-lm="chosen" aria-pressed="true">Chosen latitudes</button>
+            <button type="button" class="js-lm" data-lm="spectrum" aria-pressed="false">Spectrum</button>
+          </div>
+        </div>
+        <div class="spec" hidden>
+          <div class="spec-row"><span class="flabel">Range</span><output class="specRangeOut"></output></div>
+          <div class="dual">
+            <input type="range" class="specA" min="-90" max="90" step="1" value="-90" aria-label="Southern end of the latitude range">
+            <input type="range" class="specB" min="-90" max="90" step="1" value="90" aria-label="Northern end of the latitude range">
+          </div>
+          <div class="spec-row"><span class="flabel">Every</span><output class="specStepOut"></output></div>
+          <input type="range" class="specStep" min="0.5" max="15" step="0.25" value="5" aria-label="Spacing between sampled latitudes, degrees">
+          <div class="spec-row"><span class="flabel">Opacity</span><output class="specOpOut"></output></div>
+          <input type="range" class="specOp" min="5" max="100" step="5" value="70" aria-label="Line opacity, percent">
+          <div class="cbar"><div class="cbar-grad"></div><div class="cbar-lab"><span class="cbA"></span><span class="cbM"></span><span class="cbB"></span></div></div>
+        </div>
+        <div class="fgrp latgrp">
+          <span class="flabel">Latitudes</span>
+          <div class="chips"></div>
+          <form class="addf" autocomplete="off">
+            <input class="addLat" inputmode="text" placeholder="e.g. 45S" aria-label="Latitude to add; use S or a minus sign for south">
+            <button class="btn" type="submit">Add</button>
+          </form>
+          <span class="presets"><span class="flabel">Sets</span>
+            <button class="linkbtn" type="button" data-preset="north">North</button>
+            <button class="linkbtn" type="button" data-preset="south">South</button>
+            <button class="linkbtn" type="button" data-preset="ns">North vs south</button>
+          </span>
+          <p class="msg" role="status"></p>
+        </div>
+        <div class="fgrp opts">
+          <label class="switch"><input type="checkbox" class="js-ideal"><span class="track"></span>Circular-orbit reference</label>
+          <label class="switch" title="Plot southern latitudes from their own winter solstice (Ls 90°) so they line up with the northern ones"><input type="checkbox" class="js-flip"><span class="track"></span>Align southern seasons</label>
+          <span class="lineleg" hidden>
+            <span><svg viewBox="0 0 22 6" aria-hidden="true"><line x1="1" y1="3" x2="21" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Real orbit</span>
+            <span><svg viewBox="0 0 22 6" aria-hidden="true"><line x1="1" y1="3" x2="21" y2="3" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 4"/></svg>e = 0</span>
+          </span>
+        </div>
+      </div>
+      <div class="card-tools">
+        <label class="switch sm" title="Fit the y axis from 10% below the lowest value to 10% above the highest, rounded to whole hours"><input type="checkbox" id="dynDur"><span class="track"></span>Dynamic y axis</label>
+      </div>
+    </div>
+    <div class="plot" id="chartDur" tabindex="0" aria-label="Daylight duration chart. Use left and right arrow keys to move the date.">
+      <div class="svgwrap"></div><div class="tip" hidden></div>
+    </div>
+  </section>
+
+  <section class="panel card cpanel" id="pIns" aria-label="Insolation">
+    <div class="side">
+      <div class="side-h"><h2>Insolation</h2><p class="sub" id="insSub"></p></div>
+      <div class="filters">
+        <div class="fgrp">
+          <span class="flabel">Lines</span>
+          <div class="seg small" role="group" aria-label="Which latitudes to plot">
+            <button type="button" class="js-lm" data-lm="chosen" aria-pressed="true">Chosen latitudes</button>
+            <button type="button" class="js-lm" data-lm="spectrum" aria-pressed="false">Spectrum</button>
+          </div>
+        </div>
+        <div class="spec" hidden>
+          <div class="spec-row"><span class="flabel">Range</span><output class="specRangeOut"></output></div>
+          <div class="dual">
+            <input type="range" class="specA" min="-90" max="90" step="1" value="-90" aria-label="Southern end of the latitude range">
+            <input type="range" class="specB" min="-90" max="90" step="1" value="90" aria-label="Northern end of the latitude range">
+          </div>
+          <div class="spec-row"><span class="flabel">Every</span><output class="specStepOut"></output></div>
+          <input type="range" class="specStep" min="0.5" max="15" step="0.25" value="5" aria-label="Spacing between sampled latitudes, degrees">
+          <div class="spec-row"><span class="flabel">Opacity</span><output class="specOpOut"></output></div>
+          <input type="range" class="specOp" min="5" max="100" step="5" value="70" aria-label="Line opacity, percent">
+          <div class="cbar"><div class="cbar-grad"></div><div class="cbar-lab"><span class="cbA"></span><span class="cbM"></span><span class="cbB"></span></div></div>
+        </div>
+        <div class="fgrp latgrp">
+          <span class="flabel">Latitudes</span>
+          <div class="chips"></div>
+          <form class="addf" autocomplete="off">
+            <input class="addLat" inputmode="text" placeholder="e.g. 45S" aria-label="Latitude to add; use S or a minus sign for south">
+            <button class="btn" type="submit">Add</button>
+          </form>
+          <span class="presets"><span class="flabel">Sets</span>
+            <button class="linkbtn" type="button" data-preset="north">North</button>
+            <button class="linkbtn" type="button" data-preset="south">South</button>
+            <button class="linkbtn" type="button" data-preset="ns">North vs south</button>
+          </span>
+          <p class="msg" role="status"></p>
+        </div>
+        <div class="fgrp opts">
+          <label class="switch"><input type="checkbox" class="js-ideal"><span class="track"></span>Circular-orbit reference</label>
+          <label class="switch" title="Plot southern latitudes from their own winter solstice (Ls 90°) so they line up with the northern ones"><input type="checkbox" class="js-flip"><span class="track"></span>Align southern seasons</label>
+          <span class="lineleg" hidden>
+            <span><svg viewBox="0 0 22 6" aria-hidden="true"><line x1="1" y1="3" x2="21" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Real orbit</span>
+            <span><svg viewBox="0 0 22 6" aria-hidden="true"><line x1="1" y1="3" x2="21" y2="3" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 4"/></svg>e = 0</span>
+          </span>
+        </div>
+      </div>
+      <div class="card-tools">
+        <div class="seg" role="group" aria-label="Insolation measure">
+          <button type="button" id="mMean" aria-pressed="true">Daily mean</button>
+          <button type="button" id="mNoon" aria-pressed="false">Noon peak</button>
+        </div>
+        <label class="switch sm" title="Reference lines for typical Earth insolation"><input type="checkbox" class="js-earth"><span class="track"></span>Earth comparison</label>
+        <label class="switch sm" title="Top of the y axis at the next 50 W/m² above the highest value"><input type="checkbox" id="dynIns"><span class="track"></span>Dynamic y axis</label>
+      </div>
+    </div>
+    <div class="plot" id="chartIns" tabindex="0" aria-label="Insolation chart. Use left and right arrow keys to move the date.">
+      <div class="svgwrap"></div><div class="tip" hidden></div>
+    </div>
+  </section>
+
+  <section class="panel card cpanel" id="pRat" aria-label="Seasonal ratio">
+    <div class="side">
+      <div class="side-h"><h2>Seasonal ratio</h2><p class="sub" id="ratSub"></p></div>
+      <div class="filters">
+        <div class="fgrp">
+          <span class="flabel">Lines</span>
+          <div class="seg small" role="group" aria-label="Which latitudes to plot">
+            <button type="button" class="js-lm" data-lm="chosen" aria-pressed="true">Chosen latitudes</button>
+            <button type="button" class="js-lm" data-lm="spectrum" aria-pressed="false">Spectrum</button>
+          </div>
+        </div>
+        <div class="spec" hidden>
+          <div class="spec-row"><span class="flabel">Range</span><output class="specRangeOut"></output></div>
+          <div class="dual">
+            <input type="range" class="specA" min="-90" max="90" step="1" value="-90" aria-label="Southern end of the latitude range">
+            <input type="range" class="specB" min="-90" max="90" step="1" value="90" aria-label="Northern end of the latitude range">
+          </div>
+          <div class="spec-row"><span class="flabel">Every</span><output class="specStepOut"></output></div>
+          <input type="range" class="specStep" min="0.5" max="15" step="0.25" value="5" aria-label="Spacing between sampled latitudes, degrees">
+          <div class="spec-row"><span class="flabel">Opacity</span><output class="specOpOut"></output></div>
+          <input type="range" class="specOp" min="5" max="100" step="5" value="70" aria-label="Line opacity, percent">
+          <div class="cbar"><div class="cbar-grad"></div><div class="cbar-lab"><span class="cbA"></span><span class="cbM"></span><span class="cbB"></span></div></div>
+        </div>
+        <div class="fgrp latgrp">
+          <span class="flabel">Latitudes</span>
+          <div class="chips"></div>
+          <form class="addf" autocomplete="off">
+            <input class="addLat" inputmode="text" placeholder="e.g. 45S" aria-label="Latitude to add; use S or a minus sign for south">
+            <button class="btn" type="submit">Add</button>
+          </form>
+          <span class="presets"><span class="flabel">Sets</span>
+            <button class="linkbtn" type="button" data-preset="north">North</button>
+            <button class="linkbtn" type="button" data-preset="south">South</button>
+            <button class="linkbtn" type="button" data-preset="ns">North vs south</button>
+          </span>
+          <p class="msg" role="status"></p>
+        </div>
+        <div class="fgrp opts">
+          <label class="switch"><input type="checkbox" class="js-ideal"><span class="track"></span>Circular-orbit reference</label>
+          <label class="switch" title="Plot southern latitudes from their own winter solstice (Ls 90°) so they line up with the northern ones"><input type="checkbox" class="js-flip"><span class="track"></span>Align southern seasons</label>
+          <span class="lineleg" hidden>
+            <span><svg viewBox="0 0 22 6" aria-hidden="true"><line x1="1" y1="3" x2="21" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Real orbit</span>
+            <span><svg viewBox="0 0 22 6" aria-hidden="true"><line x1="1" y1="3" x2="21" y2="3" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 4"/></svg>e = 0</span>
+          </span>
+        </div>
+      </div>
+      <div class="card-tools">
+        <div class="seg" role="group" aria-label="Ratio measure">
+          <button type="button" id="rMean" aria-pressed="true">Daily mean</button>
+          <button type="button" id="rNoon" aria-pressed="false">Noon peak</button>
+        </div>
+        <label class="switch sm" title="Reference lines for Earth’s seasonal ratios"><input type="checkbox" class="js-earth"><span class="track"></span>Earth comparison</label>
+        <label class="switch sm" title="Top of the log axis just above the highest visible ratio instead of 20×"><input type="checkbox" id="dynRat"><span class="track"></span>Dynamic y axis</label>
+      </div>
+    </div>
+    <div class="plot" id="chartRat" tabindex="0" aria-label="Seasonal ratio chart. Use left and right arrow keys to move the date.">
+      <div class="svgwrap"></div><div class="tip" hidden></div>
+    </div>
+  </section>
+
+  <div class="after">
+    <details class="card">
+      <summary>Values at key dates</summary>
+      <div class="tbl-wrap" id="tbl"></div>
+    </details>
+
+    <section class="notes" aria-label="Model notes">
+      <h3>Model</h3>
+      <ul>
+        <li>Keplerian orbit with e = 0.0934 and a = 1.5237 AU. Perihelion falls at L<sub>s</sub> 250.9°, just before the northern winter solstice, so northern autumn and winter are the short seasons and the southern summer gets the strongest sunlight.</li>
+        <li>One year is 686.98 Earth days, or 668.6 sols. A sol lasts 24 h 39 m 35 s, so one Mars hour (1/24 sol) is 1.0275 Earth hours.</li>
+        <li>Daylight runs from the moment the Sun's centre rises above a flat horizon to the moment it sets. Refraction in the thin atmosphere and local terrain are ignored.</li>
+        <li>Insolation is measured at the top of the atmosphere on level ground: 1361 W/m² at 1 AU, scaled by distance squared (713 W/m² at perihelion, 490 W/m² at aphelion). Dust can remove a large share of this before it reaches the surface.</li>
+        <li>The circular-orbit reference keeps the same tilt and the same starting solstice, fixes the distance at 1.5237 AU and advances L<sub>s</sub> at a constant rate.</li>
+        <li>Two and three suns: mirror arrays at the Sun–Mars L4 and L5 points. They sit at Mars's distance from the Sun, so seen from Mars they shine from the orbital plane 60° west (L4) or east (L5) of the Sun, and their light is a fixed multiple of sunlight at Mars's current distance. Daylight counts any sun above the horizon; the peak is the brightest moment of the sol. 1.33× (or two 0.67× arrays) brings the average flux to about Earth's.</li>
+        <li>Earth comparison lines are typical Earth values for the same measure: daily mean 100 and 500 W/m² for mid-latitude winter and summer, 250 and 450 for the tropics; noon peak 350 and 1300 for mid-latitude winter and summer, 700 for tropical winter and 1000 at the equator.</li>
+        <li>Seasonal ratio divides each sol’s insolation by the dimmest value of the year at the same latitude, for the chosen measure. Earth references: about 5× (daily mean) and 4× (noon peak) at mid-latitudes, about 2× in the tropics.</li>
+        <li>Clock times are local true solar time (LTST): 12:00 is when the Sun crosses the meridian. Today's position uses the Allison &amp; McEwen (2000) formula for L<sub>s</sub>.</li>
+      </ul>
+    </section>
+  </div>
+</main>
+
+<script>
+(function () {
+'use strict';
+
+/* ================= physics ================= */
+const D2R = Math.PI / 180, R2D = 180 / Math.PI;
+const MARS = { e: 0.0934, a: 1.52368, obl: 25.19, lsPeri: 250.87, yearDays: 686.98, solSec: 88775.244, S1: 1361, sunArcmin1AU: 31.99 };
+MARS.solH = MARS.solSec / 3600;                       // 24.6598 Earth hours
+const YEAR = MARS.yearDays * 86400 / MARS.solSec;     // 668.60 sols
+const SIN_OBL = Math.sin(MARS.obl * D2R);
+const mod = (a, n) => ((a % n) + n) % n;
+const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
+const lerp = (a, b, t) => a + (b - a) * t;
+const smooth = (e0, e1, x) => { const t = clamp((x - e0) / (e1 - e0), 0, 1); return t * t * (3 - 2 * t); };
+
+function nuToM(nu) {
+  const e = MARS.e;
+  const E = 2 * Math.atan(Math.sqrt((1 - e) / (1 + e)) * Math.tan(nu / 2));
+  return E - e * Math.sin(E);
+}
+const M0 = nuToM((270 - MARS.lsPeri) * D2R);           // mean anomaly at the northern winter solstice
+
+function orbitAt(t) {                                   // t: sols since northern winter solstice
+  const e = MARS.e, M = M0 + 2 * Math.PI * t / YEAR;
+  let E = M;
+  for (let k = 0; k < 12; k++) {
+    const f = E - e * Math.sin(E) - M;
+    E -= f / (1 - e * Math.cos(E));
+    if (Math.abs(f) < 1e-12) break;
+  }
+  const nu = 2 * Math.atan2(Math.sqrt(1 + e) * Math.sin(E / 2), Math.sqrt(1 - e) * Math.cos(E / 2));
+  return { ls: mod(nu * R2D + MARS.lsPeri, 360), r: MARS.a * (1 - e * Math.cos(E)) };
+}
+function idealAt(t) { return { ls: mod(270 + 360 * t / YEAR, 360), r: MARS.a }; }
+function tOfLs(ls) {
+  const nu = mod(ls - MARS.lsPeri + 180, 360) - 180;
+  let t = mod((nuToM(nu * D2R) - M0) / (2 * Math.PI) * YEAR, YEAR);
+  if (t > YEAR - 1e-7) t = 0;
+  return t;
+}
+function rOfLs(ls) { const e = MARS.e; return MARS.a * (1 - e * e) / (1 + e * Math.cos((ls - MARS.lsPeri) * D2R)); }
+function decl(ls) { return Math.asin(SIN_OBL * Math.sin(ls * D2R)); }
+function sunsetH(phi, d) {
+  if (Math.cos(phi) < 1e-9) { const s = phi * d; return s > 0 ? Math.PI : (s < 0 ? 0 : Math.PI / 2); }
+  const c = -Math.tan(phi) * Math.tan(d);
+  return c >= 1 ? 0 : (c <= -1 ? Math.PI : Math.acos(c));
+}
+function flux(r) { return MARS.S1 / (r * r); }
+// Light sources. dl: ecliptic offset from the Sun as seen from Mars; k: strength as a multiple of sunlight at Mars.
+// Mirrors at L4/L5 form an equilateral triangle with the Sun and Mars, so they sit 60° from the Sun in the orbital plane.
+// L4 leads Mars in its orbit and appears at Ls − 60° (rises first); L5 trails and appears at Ls + 60° (sets last).
+let SRC = [{ dl: 0, k: 1, name: 'Sun' }], MODE_KEY = 'natural';
+const COS_OBL = Math.cos(MARS.obl * D2R);
+function srcGeom(ls, dl) {
+  const L = (ls + dl) * D2R;
+  return { d: Math.asin(SIN_OBL * Math.sin(L)), ra: Math.atan2(Math.sin(L) * COS_OBL, Math.cos(L)) };
+}
+function raOffset(ls, dl) {   // right-ascension lead of a source over the Sun, radians in (-π, π]
+  if (!dl) return 0;
+  const a = srcGeom(ls, dl).ra, b = srcGeom(ls, 0).ra;
+  return mod(a - b + Math.PI, 2 * Math.PI) - Math.PI;
+}
+function unionArcs(ivs) {     // union of daylight intervals on the 24-h solar clock
+  if (ivs.some(v => v.w >= 12 - 1e-9)) return { total: 24, segs: [[0, 24]], full: true };
+  const raw = [];
+  for (const v of ivs) {
+    if (v.w <= 1e-9) continue;
+    const a = mod(v.c - v.w, 24), b = a + 2 * v.w;
+    if (b > 24) raw.push([a, 24], [0, b - 24]); else raw.push([a, b]);
+  }
+  raw.sort((x, y) => x[0] - y[0]);
+  const m = [];
+  for (const r of raw) { const l = m[m.length - 1]; if (l && r[0] <= l[1] + 1e-9) l[1] = Math.max(l[1], r[1]); else m.push([r[0], r[1]]); }
+  let total = 0; for (const g of m) total += g[1] - g[0];
+  if (total >= 24 - 1e-6) return { total: 24, segs: [[0, 24]], full: true };
+  if (m.length > 1 && m[0][0] <= 1e-9 && m[m.length - 1][1] >= 24 - 1e-9) { const last = m.pop(); m[0] = [last[0], m[0][1] + 24]; }
+  return { total, segs: m };
+}
+const PEAK_BUF = new Float64Array(72);
+function dayMetrics(lat, st, noPeak) {
+  const phi = lat * D2R, sp = Math.sin(phi), cp = Math.cos(phi), S = flux(st.r);
+  const d = decl(st.ls), H = sunsetH(phi, d);
+  const noonEl = 90 - Math.abs(lat - d * R2D);
+  if (SRC.length === 1) {
+    let mean = S / Math.PI * (H * sp * Math.sin(d) + cp * Math.cos(d) * Math.sin(H));
+    if (mean < 0) mean = 0;
+    const w = 12 * H / Math.PI;
+    return { durM: 2 * w, segs: w > 0 ? [[12 - w, 12 + w]] : [], mean, noonEl, noon: noonEl > 0 ? S * Math.sin(noonEl * D2R) : 0, H, d, S };
+  }
+  const sunRa = srcGeom(st.ls, 0).ra;
+  let mean = 0; const ivs = [], parts = [];
+  for (const src of SRC) {
+    const g = src.dl ? srcGeom(st.ls, src.dl) : { d, ra: sunRa };
+    const H0 = src.dl ? sunsetH(phi, g.d) : H;
+    const q = src.k * S / Math.PI * (H0 * sp * Math.sin(g.d) + cp * Math.cos(g.d) * Math.sin(H0));
+    if (q > 0) mean += q;
+    const off = mod(g.ra - sunRa + Math.PI, 2 * Math.PI) - Math.PI;
+    parts.push({ k: src.k, a: sp * Math.sin(g.d), b: cp * Math.cos(g.d), off });
+    ivs.push({ c: 12 + off * 12 / Math.PI, w: H0 * 12 / Math.PI });
+  }
+  const un = unionArcs(ivs);
+  let peak = 0;
+  if (!noPeak) {
+    const NS = 72, fs = PEAK_BUF; let bj = 0;
+    for (let j = 0; j < NS; j++) {
+      const hh = (j / NS) * 2 * Math.PI - Math.PI; let f = 0;
+      for (const pt of parts) { const h = pt.a + pt.b * Math.cos(hh - pt.off); if (h > 0) f += pt.k * h; }
+      fs[j] = f; if (f > peak) { peak = f; bj = j; }
+    }
+    const fm = fs[(bj + NS - 1) % NS], fp = fs[(bj + 1) % NS], den = fm - 2 * peak + fp;
+    if (den < 0 && peak > 0) peak -= 0.125 * (fm - fp) * (fm - fp) / den;   // vertex of the parabola through the three samples
+    peak *= S;
+  }
+  return { durM: un.total, segs: un.segs, mean, noonEl, noon: peak, H, d, S, multi: true };
+}
+function sunENU(phi, d, H) {                            // east, north, up unit vector of the Sun
+  const cd = Math.cos(d), sd = Math.sin(d), cp = Math.cos(phi), sp = Math.sin(phi), ch = Math.cos(H);
+  return [-cd * Math.sin(H), sd * cp - cd * ch * sp, sd * sp + cd * ch * cp];
+}
+// Allison & McEwen (2000), the Mars24 algorithm, without the small planetary perturbation terms
+function marsLs(date) {
+  const jd = date.getTime() / 864e5 + 2440587.5, dt = jd + 69.184 / 86400 - 2451545.0;
+  const M = (19.3871 + 0.52402073 * dt) * D2R, aFMS = 270.3871 + 0.524038496 * dt;
+  const eoc = (10.691 + 3e-7 * dt) * Math.sin(M) + 0.623 * Math.sin(2 * M) + 0.050 * Math.sin(3 * M)
+            + 0.005 * Math.sin(4 * M) + 0.0005 * Math.sin(5 * M);
+  return mod(aFMS + eoc, 360);
+}
+function marsYear(date, ls) {
+  const jd = date.getTime() / 864e5 + 2440587.5, x = (jd - 2435208.5) / 686.9726;
+  let n = Math.floor(x); const f = x - n;
+  if (f > 0.85 && ls < 90) n++;
+  if (f < 0.15 && ls > 270) n--;
+  return n + 1;
+}
+
+const N = 668, DT = YEAR / N;
+const ORB = [], IDE = [];
+for (let i = 0; i <= N; i++) { ORB.push(orbitAt(i * DT)); IDE.push(idealAt(i * DT)); }
+const T_SPRING = tOfLs(0), T_SUMMER = tOfLs(90), T_AUTUMN = tOfLs(180);
+const T_PERI = tOfLs(MARS.lsPeri), T_APH = tOfLs(MARS.lsPeri + 180);
+const NOW = new Date(), LS_TODAY = marsLs(NOW), T_TODAY = tOfLs(LS_TODAY), MY_TODAY = marsYear(NOW, LS_TODAY);
+
+// Gridline steps. Hours: the largest of 3, 2 or 1 h that still gives at least 8 lines.
+// W/m²: the finest round step that divides the axis, keeps lines at least 20 px apart and at most 16 of them.
+function hourStep(range) { for (const st of [3, 2, 1]) if (range / st + 1 >= 8) return st; return 1; }
+function wattStep(top, plotPx) {
+  const ok = [25, 50, 75, 100, 150, 250, 300, 500].filter(st => Math.abs(top / st - Math.round(top / st)) < 1e-9);
+  for (const st of ok) if (top / st <= 15 && plotPx * st / top >= 20) return st;
+  return ok.length ? ok[ok.length - 1] : 50;
+}
+const cache = new Map();
+function series(lat) {
+  const ck = MODE_KEY + '|' + lat;
+  let s = cache.get(ck);
+  if (s) return s;
+  const mk = () => new Float64Array(N + 1), single = SRC.length === 1;
+  s = { lat, dur: mk(), mean: mk(), durI: mk(), meanI: mk(), noon: single ? mk() : null, noonI: single ? mk() : null };
+  for (let i = 0; i <= N; i++) {
+    const a = dayMetrics(lat, ORB[i], true), b = dayMetrics(lat, IDE[i], true);
+    s.dur[i] = a.durM; s.mean[i] = a.mean; s.durI[i] = b.durM; s.meanI[i] = b.mean;
+    if (single) { s.noon[i] = a.noon; s.noonI[i] = b.noon; }
+  }
+  cache.set(ck, s);
+  return s;
+}
+function peakArr(s, ideal) {      // the multi-sun peak needs a search over the sol, so it is computed only when shown
+  const key = ideal ? 'noonI' : 'noon';
+  if (!s[key]) {
+    const a = new Float64Array(N + 1), src = ideal ? IDE : ORB;
+    for (let i = 0; i <= N; i++) a[i] = dayMetrics(s.lat, src[i]).noon;
+    s[key] = a;
+  }
+  return s[key];
+}
+
+/* ================= state ================= */
+const PRESETS = { north: [0, 15, 30, 45, 60, 85], south: [0, -15, -30, -45, -60, -85], ns: [30, -30, 60, -60, 85, -85] };
+const STORE = 'mars-daylight-v1';
+const state = {
+  t: T_TODAY, tod: 14, obsLat: 45, view: 'orbit', units: 'mars', metric: 'mean', ideal: false,
+  lats: PRESETS.north.map((lat, i) => ({ lat, slot: i })), flip: false, dynDur: false, dynIns: false, dynRat: false, earthRef: true, layout: 'full', lineMode: 'chosen', specA: -90, specB: 90, specStep: 5, specOp: 70, show: { view: true, dur: true, ins: true, rat: true }, ratioMetric: 'mean', mode: 'natural', twoPos: 'L4', twoK: 'x133', threeK: 'x067', camOff: 0, playYear: false, playSol: false
+};
+try {
+  const sv = JSON.parse(localStorage.getItem(STORE) || 'null');
+  if (sv && typeof sv === 'object') {
+    if (sv.units === 'earth' || sv.units === 'mars') state.units = sv.units;
+    if (sv.metric === 'mean' || sv.metric === 'noon') state.metric = sv.metric;
+    if (typeof sv.ideal === 'boolean') state.ideal = sv.ideal;
+    if (typeof sv.flip === 'boolean') state.flip = sv.flip;
+    if (typeof sv.dynDur === 'boolean') state.dynDur = sv.dynDur;
+    if (typeof sv.dynIns === 'boolean') state.dynIns = sv.dynIns;
+    if (typeof sv.dynRat === 'boolean') state.dynRat = sv.dynRat;
+    if (typeof sv.earthRef === 'boolean') state.earthRef = sv.earthRef;
+    if (sv.layout === 'full' || sv.layout === 'compact') state.layout = sv.layout;
+    if (sv.lineMode === 'chosen' || sv.lineMode === 'spectrum') state.lineMode = sv.lineMode;
+    const num = (v, lo, hi) => typeof v === 'number' && v >= lo && v <= hi;
+    if (num(sv.specA, -90, 90)) state.specA = sv.specA;
+    if (num(sv.specB, -90, 90)) state.specB = sv.specB;
+    if (num(sv.specStep, 0.5, 15) && Math.abs(sv.specStep * 4 - Math.round(sv.specStep * 4)) < 1e-9) state.specStep = sv.specStep;
+    if (num(sv.specOp, 5, 100)) state.specOp = sv.specOp;
+    if (sv.show && typeof sv.show === 'object' && ['view', 'dur', 'ins', 'rat'].some(k => sv.show[k] !== false))
+      state.show = { view: sv.show.view !== false, dur: sv.show.dur !== false, ins: sv.show.ins !== false, rat: sv.show.rat !== false };
+    if (sv.ratioMetric === 'mean' || sv.ratioMetric === 'noon') state.ratioMetric = sv.ratioMetric;
+    if (['natural', 'two', 'three'].includes(sv.mode)) state.mode = sv.mode;
+    if (sv.twoPos === 'L4' || sv.twoPos === 'L5') state.twoPos = sv.twoPos;
+    if (sv.twoK === 'x1' || sv.twoK === 'x133') state.twoK = sv.twoK;
+    if (sv.threeK === 'x05' || sv.threeK === 'x067') state.threeK = sv.threeK;
+    if (Array.isArray(sv.lats)) {
+      const seen = new Set(), slots = new Set();
+      const ok = sv.lats.every(L => L && typeof L.lat === 'number' && L.lat >= -90 && L.lat <= 90 && !seen.has(L.lat) && seen.add(L.lat)
+        && Number.isInteger(L.slot) && L.slot >= 0 && L.slot < 8 && !slots.has(L.slot) && slots.add(L.slot));
+      if (ok && sv.lats.length <= 8) state.lats = sv.lats.map(L => ({ lat: L.lat, slot: L.slot }));
+    }
+  }
+} catch (e) { /* storage unavailable: defaults */ }
+const KVAL = { x1: 1, x133: 4 / 3, x05: 0.5, x067: 2 / 3 };
+function applyMode() {
+  if (state.mode === 'two') SRC = [{ dl: 0, k: 1, name: 'Sun' }, { dl: state.twoPos === 'L4' ? -60 : 60, k: KVAL[state.twoK], name: state.twoPos }];
+  else if (state.mode === 'three') SRC = [{ dl: 0, k: 1, name: 'Sun' }, { dl: -60, k: KVAL[state.threeK], name: 'L4' }, { dl: 60, k: KVAL[state.threeK], name: 'L5' }];
+  else SRC = [{ dl: 0, k: 1, name: 'Sun' }];
+  MODE_KEY = state.mode === 'two' ? 'two|' + state.twoPos + '|' + state.twoK : state.mode === 'three' ? 'three|' + state.threeK : 'natural';
+}
+applyMode();
+const MULTI = () => SRC.length > 1;
+const kLabel = k => (Math.abs(k - 4 / 3) < 1e-9 ? '1.33' : Math.abs(k - 2 / 3) < 1e-9 ? '0.67' : String(k)) + '× Sun';
+function save() {
+  try { localStorage.setItem(STORE, JSON.stringify({ units: state.units, metric: state.metric, ideal: state.ideal, flip: state.flip, dynDur: state.dynDur, dynIns: state.dynIns, dynRat: state.dynRat, earthRef: state.earthRef, layout: state.layout, lineMode: state.lineMode, specA: state.specA, specB: state.specB, specStep: state.specStep, specOp: state.specOp, show: state.show, ratioMetric: state.ratioMetric, mode: state.mode, twoPos: state.twoPos, twoK: state.twoK, threeK: state.threeK, lats: state.lats })); } catch (e) {}
+}
+
+/* ================= formatting ================= */
+const $ = id => document.getElementById(id);
+const EARTH = () => state.units === 'earth';
+const durOut = h => EARTH() ? h * MARS.solH / 24 : h;
+const xFac = () => EARTH() ? MARS.solSec / 86400 : 1;
+const unitShort = () => EARTH() ? 'days' : 'sols';
+function latLabel(l) {
+  const a = Math.abs(l), s = Number.isInteger(a) ? String(a) : String(+a.toFixed(2));
+  return l === 0 ? '0°' : s + '°' + (l > 0 ? 'N' : 'S');
+}
+function fmtHM(h) {
+  let hh = Math.floor(h), mm = Math.round((h - hh) * 60);
+  if (mm === 60) { hh++; mm = 0; }
+  return hh + ' h ' + String(mm).padStart(2, '0') + ' m';
+}
+function fmtClock(h) {
+  let m = Math.round(mod(h, 24) * 60) % 1440;
+  return String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');
+}
+function dateLabel(t, dec) { return (EARTH() ? 'Day ' : 'Sol ') + (t * xFac()).toFixed(dec); }
+const SEASONS = ['spring', 'summer', 'autumn', 'winter'];
+function seasonIdx(ls) { return Math.floor(mod(ls, 360) / 90); }
+function lsFrag(ls, prefix) {
+  const f = document.createDocumentFragment();
+  if (prefix) f.append(prefix);
+  const sub = document.createElement('sub'); sub.textContent = 's';
+  f.append('L', sub, ' ' + ls.toFixed(1) + '°');
+  return f;
+}
+function setText(id, txt) { const el = $(id); if (el.textContent !== txt) el.textContent = txt; }
+const colorVar = slot => 'var(--s' + (slot + 1) + ')';
+
+/* ================= charts ================= */
+const charts = {
+  dur: { kind: 'dur', root: $('chartDur') },
+  ins: { kind: 'ins', root: $('chartIns') },
+  rat: { kind: 'rat', root: $('chartRat') }
+};
+for (const k in charts) { const c = charts[k]; c.wrap = c.root.querySelector('.svgwrap'); c.tip = c.root.querySelector('.tip'); }
+let hoverIdx = null;
+
+// Seasonal ratio: light divided by the dimmest value of the year at that latitude (same orbit, same metric).
+// A dimmest value of zero (polar night) makes the ratio infinite: drawn at the cap while lit, left blank while dark.
+const RATIO_CAP = 20;
+function ratioArr(s, metric, ideal) {
+  const key = 'rat|' + metric + '|' + (ideal ? 1 : 0);
+  if (s[key]) return s[key];
+  const base = metric === 'mean' ? (ideal ? s.meanI : s.mean) : peakArr(s, ideal);
+  let mn = Infinity; for (let i = 0; i <= N; i++) if (base[i] < mn) mn = base[i];
+  const out = new Float64Array(N + 1);
+  for (let i = 0; i <= N; i++) {
+    if (mn > 0.5) out[i] = Math.min(RATIO_CAP, base[i] / mn);
+    else out[i] = base[i] > 0.5 ? RATIO_CAP : NaN;
+  }
+  s[key] = out;
+  return out;
+}
+function rawArr(lat, kind, ideal) {
+  const s = series(lat);
+  if (kind === 'dur') return ideal ? s.durI : s.dur;
+  if (kind === 'rat') return ratioArr(s, state.ratioMetric, ideal);
+  if (state.metric === 'mean') return ideal ? s.meanI : s.mean;
+  return peakArr(s, ideal);
+}
+// Southern latitudes, when aligned, are plotted from their own winter solstice (Ls 90°).
+// Real orbit: Ls 270° -> 90° takes T_SUMMER sols. Circular orbit: exactly half a year.
+function flipActive() { return state.flip && visLats().some(L => L.lat < 0); }
+function shiftOf(lat, ideal) { return (state.flip && lat < 0) ? (ideal ? YEAR / 2 : T_SUMMER) : 0; }
+function southOnly() { return flipActive() && !visLats().some(L => L.lat >= 0); }
+const frameToT = x => southOnly() ? mod(x + T_SUMMER, YEAR) : x;
+const tToFrame = t => southOnly() ? mod(t - T_SUMMER, YEAR) : t;
+const shiftCache = new Map();
+function valArr(lat, kind, ideal) {
+  const a = rawArr(lat, kind, ideal), sh = shiftOf(lat, ideal);
+  if (!sh) return a;
+  let m = shiftCache.get(a); if (!m) { m = new Map(); shiftCache.set(a, m); }
+  let b = m.get(sh); if (b) return b;
+  b = new Float64Array(N + 1);
+  for (let i = 0; i <= N; i++) b[i] = valAt(a, mod(i * DT + sh, YEAR));
+  m.set(sh, b);
+  return b;
+}
+function valConv(kind) { return kind === 'dur' ? durOut : (v => v); }
+function valAt(arr, t) {
+  const u = clamp(t / DT, 0, N), i = Math.min(N - 1, Math.floor(u));
+  return lerp(arr[i], arr[i + 1], u - i);
+}
+function chosenLats() { return state.lats.slice().sort((a, b) => b.lat - a.lat); }
+// Turbo colormap (Mikhailov 2019): a perceptually smoothed rainbow, polynomial fit
+function turbo(x) {
+  x = clamp(x, 0, 1);
+  const r = 0.13572138 + x * (4.61539260 + x * (-42.66032258 + x * (132.13108234 + x * (-152.94239396 + x * 59.28637943))));
+  const g = 0.09140261 + x * (2.19418839 + x * (4.84296658 + x * (-14.18503333 + x * (4.27729857 + x * 2.82956604))));
+  const b = 0.10667330 + x * (12.64194608 + x * (-60.58204836 + x * (110.36276771 + x * (-89.90310912 + x * 27.34824973))));
+  return 'rgb(' + [r, g, b].map(v => Math.round(clamp(v, 0, 1) * 255)).join(',') + ')';
+}
+// The extreme ends of turbo are near-black blue and deep red, which vanish on a dark background; use 7–93%.
+const specColor = t => turbo(0.07 + 0.86 * clamp(t, 0, 1));
+function spectrumLats() {
+  const a = Math.min(state.specA, state.specB), b = Math.max(state.specA, state.specB), st = state.specStep, out = [];
+  for (let v = a; v <= b + 1e-9; v += st) out.push(Math.round(v * 100) / 100);
+  if (out[out.length - 1] < b - 1e-9) out.push(b);
+  return out.map(lat => ({ lat, color: specColor(b === a ? 0.5 : (lat - a) / (b - a)) })).sort((x, y) => y.lat - x.lat);
+}
+const SPEC = () => state.lineMode === 'spectrum';
+function visLats() { return SPEC() ? spectrumLats() : chosenLats(); }
+const lineColor = L => L.color || colorVar(L.slot);
+
+function renderChart(c) {
+  if (c.root.closest('[hidden]')) return;
+  const flip = flipActive();
+  const W = Math.max(260, Math.floor(c.wrap.clientWidth));
+  const H = state.layout === 'full' ? Math.max(280, Math.floor(c.wrap.clientHeight)) : (W < 520 ? 240 : 290) + (flip ? 30 : 0);
+  const m = { l: 44, r: 60, t: flip ? 48 : 34, b: flip ? 56 : 40 };
+  const X0 = m.l, X1 = W - m.r, Y0 = H - m.b, Y1 = m.t;
+  const xs = t => X0 + (X1 - X0) * t / YEAR;
+  const isDur = c.kind === 'dur', isRat = c.kind === 'rat', conv = valConv(c.kind);
+  const vis = visLats();
+  // y range: fixed full scale, or fitted to the visible lines when "Dynamic y axis" is on
+  const dyn = (isDur ? state.dynDur : isRat ? state.dynRat : state.dynIns) && vis.length > 0;
+  let mn = Infinity, mx = -Infinity;
+  if (dyn) for (const L of vis) for (const ideal of (state.ideal ? [false, true] : [false])) {
+    const a = rawArr(L.lat, c.kind, ideal);
+    for (let i = 0; i <= N; i++) { const v = conv(a[i]); if (v < mn) mn = v; if (v > mx) mx = v; }
+  }
+  let lo = 0, hi, ticks = [];
+  if (isRat) {
+    // log axis from 1×; dynamic: top at the next step of the ladder above the highest visible ratio (+5%), else 20×
+    lo = 1;
+    hi = dyn ? ([1.1, 1.2, 1.3, 1.5, 1.75, 2, 2.5, 3, 4, 5, 7, 10, 15, 20].find(v => v >= Math.max(1.05, mx * 1.05) - 1e-9) || RATIO_CAP) : RATIO_CAP;
+    const px = Y0 - Y1, pos = v => px * Math.log(v) / Math.log(hi);
+    let last = -1e9;
+    for (const v of [1, 1.05, 1.1, 1.15, 1.2, 1.3, 1.4, 1.5, 1.75, 2, 2.5, 3, 4, 5, 7, 10, 15, 20]) {
+      if (v > hi + 1e-9) break;
+      if (pos(v) - last >= 24) { ticks.push(v); last = pos(v); }
+    }
+    if (ticks[ticks.length - 1] !== hi) { if (pos(hi) - pos(ticks[ticks.length - 1]) < 24 && ticks.length > 1) ticks.pop(); ticks.push(hi); }
+  } else if (isDur) {
+    const cap = EARTH() ? MARS.solH : 24;
+    if (dyn) {
+      lo = Math.max(0, Math.floor(mn * 0.9));
+      hi = Math.min(cap, Math.ceil(mx * 1.1));
+      if (hi - lo < 1) lo = Math.max(0, Math.floor(hi) - 1);
+      const r = hi - lo, step = hourStep(r);
+      for (let v = lo; v <= hi + 1e-9; v += step) ticks.push(v);
+    } else {
+      hi = cap;
+      for (let v = 0, st = hourStep(hi); v <= hi + 1e-9; v += st) ticks.push(v);
+    }
+  } else {
+    hi = dyn ? Math.max(50, Math.floor(mx / 50) * 50 + 50) : (state.metric === 'mean' ? 600 : 1500);
+    const step = wattStep(hi, Y0 - Y1);
+    for (let v = 0; v <= hi + 1e-6; v += step) ticks.push(v);
+  }
+  const ys = isRat ? (v => Y0 - (Y0 - Y1) * Math.log(clamp(v, lo, hi)) / Math.log(hi)) : (v => Y0 - (Y0 - Y1) * (v - lo) / (hi - lo));
+  c.g = { W, H, X0, X1, Y0, Y1, xs, ys };
+  c.vis = vis;
+
+  const P = [];
+  P.push('<svg width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '" aria-hidden="true">');
+  // season bands: one row normally, a northern and a southern row when aligned
+  const NAMES = ['Winter', 'Spring', 'Summer', 'Autumn'];
+  const rows = [{ key: 'N', b: [0, T_SPRING, T_SUMMER, T_AUTUMN, YEAR] }];
+  if (flip) rows.push({ key: 'S', b: [0, T_AUTUMN - T_SUMMER, YEAR - T_SUMMER, YEAR - T_SUMMER + T_SPRING, YEAR] });
+  const bh = flip ? 16 : 19;
+  rows.forEach((row, ri) => {
+    const y = flip ? 6 + ri * 20 : 8, B = row.b;
+    if (flip) P.push('<text x="' + (X0 - 8) + '" y="' + (y + bh / 2 + 4).toFixed(1) + '" class="bandt" text-anchor="end">' + row.key + '</text>');
+    for (let k = 0; k < 4; k++) {
+      const xa = xs(B[k]) + (k ? 1 : 0), xb = xs(B[k + 1]) - (k < 3 ? 1 : 0), w = xb - xa;
+      P.push('<rect x="' + xa.toFixed(1) + '" y="' + y + '" width="' + w.toFixed(1) + '" height="' + bh + '" rx="3" class="band ' + (k % 2 ? 'b' : 'a') + '"/>');
+      const len = (B[k + 1] - B[k]) * xFac();
+      const lab = w > 122 ? NAMES[k] + ' · ' + len.toFixed(0) + ' ' + unitShort() : (w > 54 ? NAMES[k] : (w > 26 ? NAMES[k].slice(0, 3) : ''));
+      if (lab) P.push('<text x="' + ((xa + xb) / 2).toFixed(1) + '" y="' + (y + bh / 2 + 4).toFixed(1) + '" class="bandt" text-anchor="middle">' + lab + '</text>');
+    }
+  });
+  for (const v of ticks) {
+    const y = ys(v);
+    P.push('<line x1="' + X0 + '" x2="' + X1 + '" y1="' + y.toFixed(1) + '" y2="' + y.toFixed(1) + '" class="' + (v === lo ? 'axis' : 'grid') + '"/>');
+    P.push('<text x="' + (X0 - 8) + '" y="' + (y + 3.8).toFixed(1) + '" class="tick" text-anchor="end">' + v + (isRat ? '×' : '') + '</text>');
+  }
+  if (ticks[ticks.length - 1] < hi - 1e-6) {
+    const y = ys(hi).toFixed(1);
+    P.push('<line x1="' + X0 + '" x2="' + X1 + '" y1="' + y + '" y2="' + y + '" class="grid"/>');
+  }
+  // Earth comparison lines (only those inside the current y range)
+  if (!isDur && state.earthRef) {
+    const REF = isRat
+      ? (state.ratioMetric === 'mean' ? [[5, 'mid-latitude', 1], [2, 'tropics', 0]] : [[4, 'mid-latitude', 1], [2, 'tropics', 0]])
+      : state.metric === 'mean'
+      ? [[100, 'mid-latitude winter', 1], [500, 'mid-latitude summer', 1], [250, 'tropics winter', 0], [450, 'tropics summer', 0]]
+      : [[350, 'mid-latitude winter', 1], [1300, 'mid-latitude summer', 1], [700, 'tropics winter', 0], [1000, 'equator', 0]];
+    for (const [v, lab, mid] of REF) {
+      if (v < lo || v > hi) continue;
+      const y = ys(v);
+      P.push('<line x1="' + X0 + '" x2="' + X1 + '" y1="' + y.toFixed(1) + '" y2="' + y.toFixed(1) + '" class="earth ' + (mid ? 'mid' : 'trop') + '"/>');
+      const ty = y - 7 < Y1 + 9 ? y + 14 : y - 7;
+      P.push('<text x="' + (X0 + 6) + '" y="' + ty.toFixed(1) + '" class="earthl">Earth ' + lab + ' · ' + v + (isRat ? '×' : '') + '</text>');
+    }
+  }
+  if (!flip) {
+    const B = rows[0].b;
+    for (let k = 1; k < 4; k++) { const x = xs(B[k]).toFixed(1); P.push('<line x1="' + x + '" x2="' + x + '" y1="' + Y1 + '" y2="' + Y0 + '" class="sbound"/>'); }
+    for (const t of [T_PERI, T_APH]) { const x = xs(t).toFixed(1); P.push('<line x1="' + x + '" x2="' + x + '" y1="' + Y1 + '" y2="' + Y0 + '" class="apsis"/>'); }
+  }
+  const xMax = YEAR * xFac();
+  for (let v = 0; v <= xMax + 1e-6; v += 100) {
+    const x = xs(v / xFac()).toFixed(1);
+    P.push('<line x1="' + x + '" x2="' + x + '" y1="' + Y0 + '" y2="' + (Y0 + 4) + '" class="axis"/>');
+    P.push('<text x="' + x + '" y="' + (Y0 + 15) + '" class="tick" text-anchor="middle">' + v + '</text>');
+  }
+  // event markers: aphelion, perihelion, today; one row per hemisphere frame when aligned
+  const frames = flip ? [{ key: 'N', sh: 0 }, { key: 'S', sh: T_SUMMER }] : [{ key: '', sh: 0 }];
+  frames.forEach((fr, ri) => {
+    const rowY = Y0 + 31 + ri * 15;
+    if (flip) P.push('<text x="' + (X0 - 8) + '" y="' + rowY + '" class="mark" text-anchor="end">' + fr.key + '</text>');
+    const marks = [{ t: mod(T_APH - fr.sh, YEAR), lab: 'aphelion' }, { t: mod(T_PERI - fr.sh, YEAR), lab: 'perihelion' }, { t: mod(T_TODAY - fr.sh, YEAR), lab: 'today', today: true }];
+    for (const mk of marks) {
+      const x = xs(mk.t);
+      if (mk.today && !flip) P.push('<path d="M' + x.toFixed(1) + ' ' + (Y0 + 0.5) + 'l-4 7h8z" class="todaymk"/>');
+      const free = !mk.today || marks.every(o => o === mk || Math.abs(xs(o.t) - x) > 66);
+      if (free) P.push('<text x="' + clamp(x, X0 + 30, X1 - 30).toFixed(1) + '" y="' + rowY + '" class="mark' + (mk.today ? ' today' : '') + '" text-anchor="middle">' + mk.lab + '</text>');
+    }
+  });
+  // series: circular reference beneath, real orbit on top
+  for (const ideal of (state.ideal ? [true, false] : [false])) {
+    const spec = SPEC(), stride = vis.length > 150 ? 4 : vis.length > 24 ? 2 : 1, op = spec ? ' ;stroke-opacity:' + (state.specOp / 100) : '';
+    for (const L of vis) {
+      const a = valArr(L.lat, c.kind, ideal);
+      let d = '', pen = false;
+      for (let i = 0; i <= N; i += (i + stride > N && i < N ? N - i : stride)) {
+        const v = conv(a[i]);
+        if (!isFinite(v)) { pen = false; continue; }
+        d += (pen ? 'L' : 'M') + xs(i * DT).toFixed(1) + ' ' + ys(v).toFixed(1); pen = true;
+      }
+      if (!d) continue;
+      const emph = !spec && !ideal && Math.abs(L.lat - state.obsLat) < 0.05;
+      P.push('<path d="' + d + '" class="ser' + (ideal ? ' ideal' : '') + (emph ? ' emph' : '') + (spec ? ' sp' : '') + '" style="stroke:' + lineColor(L) + op + '"/>');
+    }
+  }
+  if (!vis.length) P.push('<text x="' + ((X0 + X1) / 2) + '" y="' + ((Y0 + Y1) / 2) + '" class="empty" text-anchor="middle">Add a latitude above to plot it</text>');
+  // end labels with collision avoidance
+  const labelled = SPEC() ? vis.filter((L, k) => k === 0 || k === vis.length - 1 || Math.abs(L.lat % 30) < 1e-9) : vis;
+  const lastFinite = a => { for (let i = N; i >= 0; i--) if (isFinite(a[i])) return a[i]; return NaN; };
+  const ends = labelled.map(L => ({ L, v: conv(lastFinite(valArr(L.lat, c.kind, false))) })).filter(e => isFinite(e.v))
+    .map(e => ({ L: e.L, y: ys(e.v) })).sort((a, b) => a.y - b.y);
+  for (let i = 1; i < ends.length; i++) if (ends[i].y < ends[i - 1].y + 13) ends[i].y = ends[i - 1].y + 13;
+  const over = ends.length ? ends[ends.length - 1].y - (Y0 + 4) : 0;
+  if (over > 0) for (const e of ends) e.y -= over;
+  for (const e of ends) {
+    const y = e.y.toFixed(1);
+    P.push('<line x1="' + (X1 + 6) + '" x2="' + (X1 + 15) + '" y1="' + y + '" y2="' + y + '" class="key" style="stroke:' + lineColor(e.L) + '"/>');
+    P.push('<text x="' + (X1 + 19) + '" y="' + (e.y + 3.8).toFixed(1) + '" class="endl">' + latLabel(e.L.lat) + '</text>');
+  }
+  c.dotVis = SPEC() ? [] : vis;
+  const dots = r => c.dotVis.map(L => '<circle r="' + r + '" cx="0" cy="0" class="dot" style="fill:' + lineColor(L) + '"/>').join('');
+  P.push('<g class="hov" visibility="hidden"><line class="hovl" x1="0" x2="0" y1="' + Y1 + '" y2="' + Y0 + '"/>' + dots(3.5) + '</g>');
+  P.push('<g class="cur"><line class="curl curN" x1="0" x2="0" y1="' + Y1 + '" y2="' + Y0 + '"/>'
+    + (flip ? '<line class="curl curS" x1="0" x2="0" y1="' + Y1 + '" y2="' + Y0 + '"/><text class="curt" x="0" y="' + (Y1 + 10) + '">N</text><text class="curt" x="0" y="' + (Y1 + 10) + '">S</text>' : '')
+    + dots(4.5) + '</g>');
+  const hitTop = Y1 - (flip ? 44 : 26);
+  P.push('<rect class="hit" x="' + X0 + '" y="' + hitTop + '" width="' + (X1 - X0) + '" height="' + (Y0 - hitTop) + '" fill="transparent"/>');
+  P.push('</svg>');
+  c.wrap.innerHTML = P.join('');
+  c.svg = c.wrap.firstChild;
+  c.cur = c.svg.querySelector('.cur');
+  c.hov = c.svg.querySelector('.hov');
+  const hit = c.svg.querySelector('.hit');
+  const pick = ev => { const r = c.svg.getBoundingClientRect(); return clamp((ev.clientX - r.left - X0) / (X1 - X0), 0, 1) * YEAR; };
+  hit.addEventListener('pointermove', ev => {
+    const x = pick(ev); setHover(Math.round(x / DT), c);
+    if (c.drag) setT(frameToT(x));
+  });
+  hit.addEventListener('pointerdown', ev => {
+    c.drag = true; try { hit.setPointerCapture(ev.pointerId); } catch (e) {}
+    stopYear(); const x = pick(ev); setT(frameToT(x)); setHover(Math.round(x / DT), c);
+  });
+  const end = () => { c.drag = false; };
+  hit.addEventListener('pointerup', end);
+  hit.addEventListener('pointercancel', () => { end(); clearHover(); });
+  hit.addEventListener('pointerleave', () => { if (!c.drag) clearHover(); });
+  updateCursor(c);
+  if (hoverIdx != null) setHover(hoverIdx, null);
+}
+function renderCharts() { renderChart(charts.dur); renderChart(charts.ins); renderChart(charts.rat); }
+
+function updateCursor(c) {
+  if (!c.cur) return;
+  const g = c.g, conv = valConv(c.kind), flip = flipActive();
+  const xN = g.xs(state.t), xS = g.xs(mod(state.t - T_SUMMER, YEAR));
+  const setX = (el, x) => { el.setAttribute('x1', x.toFixed(1)); el.setAttribute('x2', x.toFixed(1)); };
+  setX(c.cur.querySelector('.curN'), xN);
+  if (flip) {
+    setX(c.cur.querySelector('.curS'), xS);
+    const ts = c.cur.querySelectorAll('.curt');
+    ts[0].setAttribute('x', (xN + 4).toFixed(1)); ts[1].setAttribute('x', (xS + 4).toFixed(1));
+  }
+  const circles = c.cur.querySelectorAll('circle');
+  (c.dotVis || []).forEach((L, k) => {
+    const x = (state.flip && L.lat < 0) ? xS : xN;
+    circles[k].setAttribute('cx', x.toFixed(1));
+    const v = conv(valAt(rawArr(L.lat, c.kind, false), state.t));
+    circles[k].setAttribute('visibility', isFinite(v) ? 'inherit' : 'hidden');
+    if (isFinite(v)) circles[k].setAttribute('cy', g.ys(v).toFixed(1));
+  });
+}
+function setHover(i, src) {
+  hoverIdx = clamp(i, 0, N);
+  for (const k in charts) {
+    const c = charts[k];
+    if (!c.hov) continue;
+    const g = c.g, x = g.xs(hoverIdx * DT), conv = valConv(c.kind);
+    const line = c.hov.firstChild; line.setAttribute('x1', x.toFixed(1)); line.setAttribute('x2', x.toFixed(1));
+    const circles = c.hov.querySelectorAll('circle');
+    (c.dotVis || []).forEach((L, j) => {
+      const v = conv(valArr(L.lat, c.kind, false)[hoverIdx]);
+      circles[j].setAttribute('cx', x.toFixed(1));
+      circles[j].setAttribute('visibility', isFinite(v) ? 'inherit' : 'hidden');
+      if (isFinite(v)) circles[j].setAttribute('cy', g.ys(v).toFixed(1));
+    });
+    c.hov.setAttribute('visibility', 'visible');
+    if (c === src) fillTip(c, hoverIdx, x); else c.tip.hidden = true;
+  }
+}
+function clearHover() {
+  hoverIdx = null;
+  for (const k in charts) { const c = charts[k]; if (c.hov) c.hov.setAttribute('visibility', 'hidden'); c.tip.hidden = true; }
+}
+function fillTip(c, i, x) {
+  const tip = c.tip, g = c.g, isDur = c.kind === 'dur', conv = valConv(c.kind);
+  tip.replaceChildren();
+  const h = document.createElement('div'); h.className = 'tip-h';
+  const s = document.createElement('div'); s.className = 'tip-s';
+  if (flipActive()) {
+    const so = orbitAt(mod(i * DT + T_SUMMER, YEAR));
+    h.textContent = (i * DT * xFac()).toFixed(0) + ' ' + unitShort() + ' after winter solstice';
+    s.append('North ', lsFrag(ORB[i].ls), ' · South ', lsFrag(so.ls));
+  } else {
+    h.append(dateLabel(i * DT, 0) + ' · ', lsFrag(ORB[i].ls));
+    s.textContent = 'Northern ' + SEASONS[seasonIdx(ORB[i].ls)] + ' · ' + ORB[i].r.toFixed(3) + ' AU';
+  }
+  tip.append(h, s);
+  const fmt = v => !isFinite(v) ? 'no sun' : isDur ? conv(v).toFixed(2) + ' h' : c.kind === 'rat' ? (v >= RATIO_CAP - 1e-9 ? '≥20×' : v.toFixed(2) + '×') : Math.round(v) + ' W/m²';
+  let rowsL = c.vis;
+  if (rowsL.length > 10) { const n = rowsL.length; rowsL = Array.from({ length: 10 }, (_, k) => c.vis[Math.round(k * (n - 1) / 9)]); }
+  for (const L of rowsL) {
+    const row = document.createElement('div'); row.className = 'tip-r';
+    const key = document.createElement('i'); key.style.background = lineColor(L);
+    const val = document.createElement('b'); val.textContent = fmt(valArr(L.lat, c.kind, false)[i]);
+    const lab = document.createElement('span'); lab.textContent = latLabel(L.lat);
+    if (state.ideal) {
+      const em = document.createElement('em'); em.textContent = 'e=0: ' + fmt(valArr(L.lat, c.kind, true)[i]);
+      lab.append(em);
+    }
+    row.append(key, val, lab);
+    tip.append(row);
+  }
+  if (!c.vis.length) { const p = document.createElement('div'); p.className = 'tip-s'; p.textContent = 'No latitudes selected'; tip.append(p); }
+  if (rowsL.length < c.vis.length) { const p = document.createElement('div'); p.className = 'tip-s'; p.style.margin = '6px 0 0'; p.textContent = 'Showing 10 of ' + c.vis.length + ' latitudes'; tip.append(p); }
+  tip.hidden = false;
+  const tw = tip.offsetWidth, th = tip.offsetHeight;
+  let left = x + 14;
+  if (left + tw > g.W - 2) left = x - 14 - tw;
+  if (left < 0) left = Math.max(0, g.W - tw);
+  tip.style.left = (c.wrap.offsetLeft + left) + 'px';
+  tip.style.top = (c.wrap.offsetTop + Math.max(0, Math.min(g.Y1, g.H - th))) + 'px';
+}
+for (const k in charts) {
+  const c = charts[k];
+  c.root.addEventListener('keydown', ev => {
+    let d = 0;
+    if (ev.key === 'ArrowRight') d = ev.shiftKey ? 10 : 1;
+    else if (ev.key === 'ArrowLeft') d = ev.shiftKey ? -10 : -1;
+    else if (ev.key === 'Home') { setT(frameToT(0)); setHover(0, c); ev.preventDefault(); return; }
+    else return;
+    ev.preventDefault(); stopYear();
+    setT(mod(state.t + d / xFac(), YEAR));
+    setHover(Math.round(tToFrame(state.t) / DT), c);
+  });
+  c.root.addEventListener('focus', () => setHover(Math.round(tToFrame(state.t) / DT), c));
+  c.root.addEventListener('blur', clearHover);
+}
+
+/* ================= key-date table ================= */
+function renderTable() {
+  const flip = flipActive();
+  const keys = [
+    { name: 'winter solstice', ls: 270, season: true }, { name: 'spring equinox', ls: 0, season: true },
+    { name: 'Aphelion', ls: mod(MARS.lsPeri + 180, 360) }, { name: 'summer solstice', ls: 90, season: true },
+    { name: 'autumn equinox', ls: 180, season: true }, { name: 'Perihelion', ls: MARS.lsPeri }
+  ];
+  const tbl = document.createElement('table');
+  const thead = document.createElement('thead'), hr = document.createElement('tr');
+  const th0 = document.createElement('th'); th0.textContent = 'Latitude'; hr.append(th0);
+  for (const k of keys) {
+    const th = document.createElement('th');
+    const nm = k.season ? (flip ? k.name[0].toUpperCase() + k.name.slice(1) : 'N ' + k.name) : k.name;
+    th.append(nm);
+    const sm = document.createElement('small');
+    if (k.season && flip) sm.append(lsFrag(k.ls, 'N '), ' · ', lsFrag(mod(k.ls + 180, 360), 'S '));
+    else sm.append(lsFrag(k.ls), ' · ' + dateLabel(tOfLs(k.ls), 0).toLowerCase());
+    th.append(sm); hr.append(th);
+  }
+  const thR = document.createElement('th'); thR.append('Seasonal ratio');
+  const smR = document.createElement('small'); smR.textContent = 'brightest ÷ dimmest'; thR.append(smR); hr.append(thR);
+  thead.append(hr); tbl.append(thead);
+  const tb = document.createElement('tbody');
+  for (const L of visLats()) {
+    const tr = document.createElement('tr');
+    const td0 = document.createElement('td'); const key = document.createElement('i'); key.style.background = lineColor(L);
+    td0.append(key, latLabel(L.lat)); tr.append(td0);
+    for (const k of keys) {
+      const ls = (flip && k.season && L.lat < 0) ? mod(k.ls + 180, 360) : k.ls;
+      const mt = dayMetrics(L.lat, orbitAt(tOfLs(ls)));
+      const td = document.createElement('td');
+      td.append(durOut(mt.durM).toFixed(2) + ' h');
+      const sm = document.createElement('small');
+      sm.textContent = Math.round(state.metric === 'mean' ? mt.mean : mt.noon) + ' W/m²';
+      td.append(sm); tr.append(td);
+    }
+    { // brightest ÷ dimmest over the year, for each insolation measure
+      const sr = series(L.lat), td = document.createElement('td');
+      const ratio = a => { let mn = Infinity, mx = 0; for (let i = 0; i <= N; i++) { if (a[i] < mn) mn = a[i]; if (a[i] > mx) mx = a[i]; } return mn > 0.5 ? (mx / mn).toFixed(2) + '×' : '∞'; };
+      td.append(ratio(sr.mean) + ' mean');
+      const sm = document.createElement('small'); sm.textContent = ratio(peakArr(sr, false)) + ' peak';
+      td.append(sm); tr.append(td);
+    }
+    tb.append(tr);
+  }
+  tbl.append(tb);
+  const cap = document.createElement('caption');
+  cap.style.cssText = 'caption-side:bottom;text-align:left;padding-top:8px;font-family:var(--f-body);font-size:12px;color:var(--muted)';
+  cap.textContent = 'Each cell: daylight in ' + (EARTH() ? 'Earth' : 'Mars') + ' hours, then ' + (state.metric === 'mean' ? 'daily-mean' : 'noon') + ' insolation.'
+    + (flip ? ' Southern rows use their own solstices and equinoxes.' : '');
+  tbl.append(cap);
+  $('tbl').replaceChildren(tbl);
+}
+
+/* ================= chips & latitude management ================= */
+function renderChips() {
+  document.querySelectorAll('.chips').forEach(box => { box.replaceChildren(); buildChips(box); });
+}
+function buildChips(box) {
+  for (const L of chosenLats()) {
+    const chip = document.createElement('span');
+    const isObs = Math.abs(L.lat - state.obsLat) < 0.05;
+    chip.className = 'chip' + (isObs ? ' obs' : '');
+    const main = document.createElement('button'); main.type = 'button'; main.className = 'chip-main';
+    main.title = 'Set the observer to ' + latLabel(L.lat);
+    const key = document.createElement('i'); key.style.background = colorVar(L.slot);
+    main.append(key, latLabel(L.lat));
+    if (isObs) { const pin = document.createElement('span'); pin.className = 'pin'; pin.textContent = '◉'; pin.title = 'Observer latitude'; main.append(pin); }
+    main.addEventListener('click', () => setObs(L.lat));
+    const x = document.createElement('button'); x.type = 'button'; x.className = 'chip-x';
+    x.setAttribute('aria-label', 'Remove ' + latLabel(L.lat)); x.textContent = '×';
+    x.addEventListener('click', () => { state.lats = state.lats.filter(o => o !== L); latsChanged(); });
+    chip.append(main, x);
+    box.append(chip);
+  }
+}
+function msg(t) { document.querySelectorAll('.msg').forEach(e => { e.textContent = t || ''; }); }
+function addLat(lat) {
+  lat = Math.round(lat * 10) / 10;
+  if (!(lat >= -90 && lat <= 90)) { msg('Latitude must be between 90°S and 90°N.'); return false; }
+  if (state.lats.some(L => Math.abs(L.lat - lat) < 0.05)) { msg(latLabel(lat) + ' is already on the charts.'); return false; }
+  const used = new Set(state.lats.map(L => L.slot));
+  let slot = -1; for (let s = 0; s < 8; s++) if (!used.has(s)) { slot = s; break; }
+  if (slot < 0) { msg('Up to 8 latitudes. Remove one to add another.'); return false; }
+  state.lats.push({ lat, slot }); msg(''); latsChanged(); return true;
+}
+function latsChanged() { renderChips(); updateSubs(); renderCharts(); renderTable(); save(); }
+document.querySelectorAll('.addf').forEach(form => form.addEventListener('submit', ev => {
+  ev.preventDefault();
+  const inp = form.querySelector('.addLat'), raw = inp.value.trim();
+  const m = raw.match(/^([-+−]?)\s*(\d+(?:[.,]\d+)?)\s*°?\s*([NnSs])?$/);
+  if (!m) { msg('Type a latitude like 45, -45, 45S or 22.5N.'); return; }
+  let v = parseFloat(m[2].replace(',', '.'));
+  if (m[1] === '-' || m[1] === '−' || (m[3] && m[3].toUpperCase() === 'S')) v = -v;
+  if (addLat(v)) inp.value = '';
+}));
+document.querySelectorAll('[data-preset]').forEach(b => b.addEventListener('click', () => {
+  state.lats = PRESETS[b.dataset.preset].map((lat, i) => ({ lat, slot: i })); msg(''); latsChanged();
+}));
+$('addObs').addEventListener('click', () => addLat(state.obsLat));
+
+/* ================= viewer canvas ================= */
+const stage = $('stage'), cvs = $('cvs'), ctx = cvs.getContext('2d');
+let CW = 0, CH = 0, DPR = 1, drawQueued = false;
+const SC = {
+  bg0: '#080B12', bg1: '#111827', line: 'rgba(236,230,221,0.16)', ink: '#ECE6DD', muted: '#929AA9',
+  accent: '#E7AE6F', mars: '#C4643D', marsLit: '#D98A5E'
+};
+function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const STARS = (() => { const r = rng(7), a = []; for (let i = 0; i < 240; i++) a.push([r(), r(), r() * 1.1 + 0.25, r() * 0.6 + 0.15]); return a; })();
+const SKYSTARS = (() => { const r = rng(42), a = []; for (let i = 0; i < 220; i++) { const u = r(), th = r() * 2 * Math.PI, z = Math.sqrt(u); const q = Math.sqrt(1 - z * z); a.push([q * Math.cos(th), q * Math.sin(th), z, r() * 1.1 + 0.3, r() * 0.7 + 0.3]); } return a; })();
+
+function sizeCanvas() {
+  if (stage.closest('[hidden]')) return;
+  const w = Math.max(240, Math.floor(stage.clientWidth));
+  let h;
+  if (state.layout === 'full') { h = Math.max(300, Math.floor(stage.clientHeight)); cvs.style.height = ''; }
+  else {
+    const wide = window.innerWidth > 980;
+    h = Math.round(clamp(w * 0.86, 300, wide ? Math.max(320, Math.min(600, window.innerHeight - 430)) : 600));
+    cvs.style.height = h + 'px';
+  }
+  DPR = Math.min(2, window.devicePixelRatio || 1);
+  cvs.width = Math.round(w * DPR); cvs.height = Math.round(h * DPR);
+  CW = w; CH = h; GEO = null;
+}
+function scheduleDraw() { if (!drawQueued) { drawQueued = true; requestAnimationFrame(() => { drawQueued = false; draw(); }); } }
+function draw() {
+  if (!CW || stage.closest('[hidden]')) return;
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  if (state.view === 'orbit') drawOrbit(); else drawGround();
+}
+function font(w, px, fam) { return w + ' ' + px + 'px ' + (fam === 'd' ? '"Barlow Condensed", "Arial Narrow", sans-serif' : fam === 'b' ? '"IBM Plex Sans", system-ui, sans-serif' : '"IBM Plex Mono", ui-monospace, monospace'); }
+function spaceBg(W, H) {
+  const g = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, Math.max(W, H) * 0.75);
+  g.addColorStop(0, SC.bg1); g.addColorStop(1, SC.bg0);
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+}
+
+let GEO = null;
+function orbitGeometry(W, H) {
+  if (GEO && GEO.W === W && GEO.H === H) return GEO;
+  const e = MARS.e, a = MARS.a, b = a * Math.sqrt(1 - e * e), lp = (MARS.lsPeri + 180) * D2R;
+  const ux = Math.cos(lp), uy = Math.sin(lp), vx = -uy, vy = ux;
+  const pts = []; let mnx = 1e9, mxx = -1e9, mny = 1e9, mxy = -1e9;
+  for (let k = 0; k <= 360; k += 2) {
+    const E = k * D2R, A = a * (Math.cos(E) - e), Bv = b * Math.sin(E);
+    const x = A * ux + Bv * vx, y = A * uy + Bv * vy; pts.push([x, y]);
+    mnx = Math.min(mnx, x); mxx = Math.max(mxx, x); mny = Math.min(mny, y); mxy = Math.max(mxy, y);
+  }
+  const mg = clamp(Math.min(W, H) * 0.1, 34, 58);
+  let scale = Math.min((W - 2 * mg) / (mxx - mnx), (H - 2 * mg) / (mxy - mny));
+  const iR = clamp(Math.min(W, H) * 0.072, 24, 40), ic = [16 + iR, 26 + iR];
+  let sx = 0, sy = 0;
+  for (let it = 0; it < 24; it++) {
+    sx = W / 2 - scale * (mnx + mxx) / 2; sy = H / 2 + scale * (mny + mxy) / 2;
+    // keep the orbit (and its tick labels) clear of the inset and of its two caption lines below it
+    let dmin = 1e9, hitsCaption = false;
+    const cx0 = ic[0] - iR - 8, cx1 = ic[0] - iR + 168, cy0 = ic[1] + iR + 4, cy1 = ic[1] + iR + 42;
+    for (const p of pts) {
+      const X = sx + scale * p[0], Y = sy - scale * p[1];
+      dmin = Math.min(dmin, Math.hypot(X - ic[0], Y - ic[1]));
+      if (X > cx0 - 22 && X < cx1 && Y > cy0 - 16 && Y < cy1 + 16) hitsCaption = true;
+    }
+    if (dmin > iR + 54 && !hitsCaption) break;
+    scale *= 0.965;
+  }
+  GEO = { W, H, scale, sx, sy, iR, ic };
+  return GEO;
+}
+
+function drawOrbit() {
+  const W = CW, H = CH;
+  spaceBg(W, H);
+  for (const s of STARS) { ctx.fillStyle = 'rgba(236,230,221,' + s[3] + ')'; ctx.fillRect(s[0] * W, s[1] * H, s[2], s[2]); }
+  const G = orbitGeometry(W, H), sc = G.scale;
+  const P = (x, y) => [G.sx + sc * x, G.sy - sc * y];
+  const posLs = (ls, rr) => { const r = rr || rOfLs(ls), lam = (ls + 180) * D2R; return P(r * Math.cos(lam), r * Math.sin(lam)); };
+  const sun = [G.sx, G.sy];
+  const st = orbitAt(state.t), cur = seasonIdx(st.ls);
+  const small = Math.min(W, H) < 420;
+
+  // season wedges: area swept is proportional to time (Kepler's second law)
+  const starts = [270, 0, 90, 180], names = ['N winter', 'N spring', 'N summer', 'N autumn'];
+  const bounds = [0, T_SPRING, T_SUMMER, T_AUTUMN, YEAR];
+  for (let k = 0; k < 4; k++) {
+    const ls0 = starts[k];
+    ctx.beginPath(); ctx.moveTo(sun[0], sun[1]);
+    for (let l = 0; l <= 90; l += 2) { const p = posLs(ls0 + l); ctx.lineTo(p[0], p[1]); }
+    ctx.closePath();
+    const isCur = seasonIdx(ls0 + 45) === cur;
+    ctx.fillStyle = isCur ? 'rgba(231,174,111,0.13)' : (k % 2 ? 'rgba(236,230,221,0.035)' : 'rgba(236,230,221,0.065)');
+    ctx.fill();
+    const mid = posLs(ls0 + 45, rOfLs(ls0 + 45) * 0.56);
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = isCur ? SC.ink : SC.muted;
+    ctx.font = font(600, small ? 11 : 12.5, 'd');
+    ctx.fillText(names[k].toUpperCase(), mid[0], mid[1] - 8);
+    ctx.font = font(400, small ? 10 : 11, 'm');
+    ctx.fillText(((bounds[k + 1] - bounds[k]) * xFac()).toFixed(1) + ' ' + unitShort(), mid[0], mid[1] + 8);
+  }
+  // equinox / solstice rays and labels
+  ctx.setLineDash([3, 4]); ctx.strokeStyle = 'rgba(236,230,221,0.22)'; ctx.lineWidth = 1;
+  const card = [[0, 'N spring equinox'], [90, 'N summer solstice'], [180, 'N autumn equinox'], [270, 'N winter solstice']];
+  for (const [ls] of card) { const p = posLs(ls); ctx.beginPath(); ctx.moveTo(sun[0], sun[1]); ctx.lineTo(p[0], p[1]); ctx.stroke(); }
+  ctx.setLineDash([]);
+  // line of apsides
+  const pPeri = posLs(MARS.lsPeri), pAph = posLs(MARS.lsPeri + 180);
+  ctx.setLineDash([1, 4]); ctx.strokeStyle = 'rgba(231,174,111,0.45)';
+  ctx.beginPath(); ctx.moveTo(pPeri[0], pPeri[1]); ctx.lineTo(pAph[0], pAph[1]); ctx.stroke(); ctx.setLineDash([]);
+  // circular reference orbit
+  if (state.ideal) {
+    ctx.setLineDash([5, 5]); ctx.strokeStyle = 'rgba(236,230,221,0.32)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.arc(sun[0], sun[1], MARS.a * sc, 0, 2 * Math.PI); ctx.stroke(); ctx.setLineDash([]);
+  }
+  // the orbit
+  ctx.strokeStyle = 'rgba(236,230,221,0.6)'; ctx.lineWidth = 1.3;
+  ctx.beginPath();
+  for (let l = 0; l <= 360; l += 1.5) { const p = posLs(l); l ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); }
+  ctx.closePath(); ctx.stroke();
+  // equal-time ticks
+  const stepT = 50 / xFac();
+  ctx.font = font(400, 9.5, 'm'); ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  for (let k = 0; k * stepT < YEAR - 4; k++) {
+    const o = orbitAt(k * stepT), p = posLs(o.ls, o.r);
+    const dx = p[0] - sun[0], dy = p[1] - sun[1], dl = Math.hypot(dx, dy), nx = dx / dl, ny = dy / dl;
+    ctx.strokeStyle = 'rgba(236,230,221,0.7)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(p[0] - nx * 3, p[1] - ny * 3); ctx.lineTo(p[0] + nx * 4, p[1] + ny * 4); ctx.stroke();
+    const nearApsis = Math.abs(k * stepT - T_APH) < 15 || Math.abs(k * stepT - T_PERI) < 15;
+    if (k % 2 === 0 && k > 0 && !nearApsis) { ctx.fillStyle = SC.muted; ctx.fillText(String(k * 50), p[0] + nx * 13, p[1] + ny * 12); }
+  }
+  // cardinal labels, inside the orbit
+  ctx.font = font(400, small ? 9.5 : 10.5, 'm');
+  for (const [ls, nm] of card) {
+    const p = posLs(ls), dx = sun[0] - p[0], dy = sun[1] - p[1], dl = Math.hypot(dx, dy);
+    const horiz = Math.abs(dx) > Math.abs(dy);
+    ctx.textAlign = horiz ? (dx > 0 ? 'left' : 'right') : 'center';
+    ctx.textBaseline = 'middle';
+    const ox = p[0] + dx / dl * 12, oy = horiz ? p[1] : p[1] + (dy > 0 ? 22 : -22);
+    ctx.fillStyle = SC.ink; ctx.fillText('Ls ' + ls + '°', ox, oy - 7);
+    ctx.fillStyle = SC.muted; ctx.fillText(nm, ox, oy + 7);
+  }
+  // apsides
+  for (const [p, nm, r] of [[pPeri, 'Perihelion', MARS.a * (1 - MARS.e)], [pAph, 'Aphelion', MARS.a * (1 + MARS.e)]]) {
+    ctx.fillStyle = SC.accent;
+    ctx.beginPath(); ctx.moveTo(p[0], p[1] - 4.5); ctx.lineTo(p[0] + 4.5, p[1]); ctx.lineTo(p[0], p[1] + 4.5); ctx.lineTo(p[0] - 4.5, p[1]); ctx.closePath(); ctx.fill();
+    const dx = p[0] - sun[0], dy = p[1] - sun[1], dl = Math.hypot(dx, dy);
+    const lx = p[0] + dx / dl * 24, ly = p[1] + dy / dl * 22;
+    ctx.textAlign = dx > 0 ? 'left' : 'right'; ctx.textBaseline = 'middle';
+    ctx.font = font(600, small ? 11 : 12, 'd'); ctx.fillStyle = SC.accent; ctx.fillText(nm.toUpperCase(), lx, ly - 7);
+    ctx.font = font(400, 10, 'm'); ctx.fillStyle = SC.muted; ctx.fillText(r.toFixed(3) + ' AU', lx, ly + 7);
+  }
+  // today
+  { const o = orbitAt(T_TODAY), p = posLs(o.ls, o.r);
+    ctx.strokeStyle = SC.accent; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(p[0], p[1], 5, 0, 2 * Math.PI); ctx.stroke(); }
+  // Sun
+  { const g = ctx.createRadialGradient(sun[0], sun[1], 0, sun[0], sun[1], 40);
+    g.addColorStop(0, 'rgba(255,240,205,0.95)'); g.addColorStop(0.18, 'rgba(255,206,130,0.7)'); g.addColorStop(1, 'rgba(255,170,80,0)');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(sun[0], sun[1], 40, 0, 2 * Math.PI); ctx.fill();
+    ctx.fillStyle = '#FFF6E0'; ctx.beginPath(); ctx.arc(sun[0], sun[1], 6.5, 0, 2 * Math.PI); ctx.fill(); }
+  // ghost Mars on the circular orbit
+  if (state.ideal) {
+    const id = idealAt(state.t), p = posLs(id.ls, MARS.a);
+    ctx.strokeStyle = 'rgba(236,230,221,0.75)'; ctx.lineWidth = 1.3; ctx.setLineDash([2, 2]);
+    ctx.beginPath(); ctx.arc(p[0], p[1], 6.5, 0, 2 * Math.PI); ctx.stroke(); ctx.setLineDash([]);
+    ctx.font = font(400, 10, 'm'); ctx.fillStyle = SC.muted; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.fillText('e = 0', p[0] + 10, p[1] + 10);
+  }
+  // mirror arrays at L4 / L5 (same distance from the Sun as Mars, 60° along the orbit)
+  const pm = posLs(st.ls, st.r);
+  for (const src of SRC) {
+    if (!src.dl) continue;
+    const pq = posLs(st.ls - src.dl, st.r);
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'rgba(255,214,150,0.32)'; ctx.beginPath(); ctx.moveTo(sun[0], sun[1]); ctx.lineTo(pq[0], pq[1]); ctx.stroke();
+    ctx.strokeStyle = 'rgba(190,215,255,0.6)'; ctx.setLineDash([4, 3]);
+    ctx.beginPath(); ctx.moveTo(pq[0], pq[1]); ctx.lineTo(pm[0], pm[1]); ctx.stroke(); ctx.setLineDash([]);
+    const g = ctx.createRadialGradient(pq[0], pq[1], 0, pq[0], pq[1], 18);
+    g.addColorStop(0, 'rgba(210,228,255,0.55)'); g.addColorStop(1, 'rgba(210,228,255,0)');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(pq[0], pq[1], 18, 0, 2 * Math.PI); ctx.fill();
+    ctx.fillStyle = '#E4EFFF';
+    ctx.beginPath(); ctx.moveTo(pq[0], pq[1] - 5.5); ctx.lineTo(pq[0] + 5.5, pq[1]); ctx.lineTo(pq[0], pq[1] + 5.5); ctx.lineTo(pq[0] - 5.5, pq[1]); ctx.closePath(); ctx.fill();
+    const dx = pq[0] - sun[0], dy = pq[1] - sun[1], dl = Math.hypot(dx, dy);
+    const lx = pq[0] - dx / dl * 16, ly = pq[1] - dy / dl * 22;
+    ctx.textAlign = dx > 0 ? 'right' : 'left'; ctx.textBaseline = 'middle';
+    ctx.font = font(700, 12.5, 'd'); ctx.fillStyle = '#DCEBFF'; ctx.fillText(src.name + ' MIRRORS', lx, ly - 7);
+    ctx.font = font(400, 10, 'm'); ctx.fillStyle = SC.muted; ctx.fillText(kLabel(src.k), lx, ly + 7);
+  }
+  // Mars
+  ctx.strokeStyle = 'rgba(255,214,160,0.25)'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(sun[0], sun[1]); ctx.lineTo(pm[0], pm[1]); ctx.stroke();
+  const rm = 8.5, toSun = Math.atan2(sun[1] - pm[1], sun[0] - pm[0]);
+  { const g = ctx.createRadialGradient(pm[0], pm[1], 0, pm[0], pm[1], 22);
+    g.addColorStop(0, 'rgba(231,174,111,0.35)'); g.addColorStop(1, 'rgba(231,174,111,0)');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(pm[0], pm[1], 22, 0, 2 * Math.PI); ctx.fill(); }
+  ctx.fillStyle = SC.marsLit; ctx.beginPath(); ctx.arc(pm[0], pm[1], rm, 0, 2 * Math.PI); ctx.fill();
+  ctx.fillStyle = 'rgba(14,8,8,0.78)'; ctx.beginPath(); ctx.arc(pm[0], pm[1], rm, toSun + Math.PI / 2, toSun + 3 * Math.PI / 2); ctx.closePath(); ctx.fill();
+  // projected north pole: fixed in space, toward ecliptic longitude 90°
+  ctx.strokeStyle = SC.ink; ctx.lineWidth = 1.4;
+  ctx.beginPath(); ctx.moveTo(pm[0], pm[1] + rm + 4); ctx.lineTo(pm[0], pm[1] - rm - 9); ctx.stroke();
+  ctx.fillStyle = SC.ink; ctx.beginPath(); ctx.moveTo(pm[0], pm[1] - rm - 13); ctx.lineTo(pm[0] - 3.5, pm[1] - rm - 7); ctx.lineTo(pm[0] + 3.5, pm[1] - rm - 7); ctx.closePath(); ctx.fill();
+  ctx.font = font(500, 10, 'm'); ctx.textAlign = 'center'; ctx.textBaseline = 'bottom'; ctx.fillText('N', pm[0], pm[1] - rm - 14);
+  { const dx = pm[0] - sun[0], dy = pm[1] - sun[1], dl = Math.hypot(dx, dy);
+    const lx = pm[0] + dx / dl * 22 + (dx > 0 ? 6 : -6), ly = pm[1] + dy / dl * 18;
+    ctx.textAlign = dx > 0 ? 'left' : 'right'; ctx.textBaseline = 'middle';
+    ctx.font = font(700, 13, 'd'); ctx.fillStyle = SC.ink; ctx.fillText('MARS', lx, ly - 7);
+    ctx.font = font(400, 10, 'm'); ctx.fillStyle = SC.muted; ctx.fillText('Ls ' + st.ls.toFixed(1) + '°', lx, ly + 7); }
+  drawInset(G.ic, G.iR, decl(st.ls));
+  cvs.setAttribute('aria-label', 'Orbit view: Mars at Ls ' + st.ls.toFixed(1) + ' degrees, ' + st.r.toFixed(3) + ' AU from the Sun, northern ' + SEASONS[cur] + '.');
+}
+
+function drawInset(ic, R, d) {
+  const [cx, cy] = ic;
+  ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+  // sunlight
+  ctx.strokeStyle = 'rgba(255,214,150,0.35)'; ctx.lineWidth = 1;
+  for (const f of [-0.75, -0.25, 0.25, 0.75]) {
+    const yy = cy + f * R, xe = cx - Math.sqrt(R * R - f * f * R * R);
+    ctx.beginPath(); ctx.moveTo(4, yy); ctx.lineTo(xe - 2, yy); ctx.stroke();
+  }
+  ctx.save();
+  ctx.beginPath(); ctx.arc(cx, cy, R, 0, 2 * Math.PI); ctx.clip();
+  const g = ctx.createRadialGradient(cx - R * 0.5, cy - R * 0.2, R * 0.1, cx, cy, R * 1.1);
+  g.addColorStop(0, '#E39A6C'); g.addColorStop(1, '#9E4A2A');
+  ctx.fillStyle = g; ctx.fillRect(cx - R, cy - R, 2 * R, 2 * R);
+  ctx.fillStyle = 'rgba(10,7,9,0.78)'; ctx.fillRect(cx, cy - R, R, 2 * R);
+  const nS = [-Math.sin(d), -Math.cos(d)], eS = [-Math.cos(d), Math.sin(d)];
+  const seg = (lat) => {
+    const p = lat * D2R, c = [cx + R * Math.sin(p) * nS[0], cy + R * Math.sin(p) * nS[1]], h = R * Math.cos(p);
+    return [[c[0] + h * eS[0], c[1] + h * eS[1]], [c[0] - h * eS[0], c[1] - h * eS[1]]];
+  };
+  for (const lat of [-60, -30, 0, 30, 60]) {
+    const [A, B] = seg(lat);
+    ctx.strokeStyle = lat === 0 ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.18)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(A[0], A[1]); ctx.lineTo(B[0], B[1]); ctx.stroke();
+  }
+  // observer parallel: lit part to the left of the terminator
+  const [A, B] = seg(state.obsLat);
+  let split = null;
+  if ((A[0] - cx) * (B[0] - cx) < 0) { const f = (cx - A[0]) / (B[0] - A[0]); split = [A[0] + f * (B[0] - A[0]), A[1] + f * (B[1] - A[1])]; }
+  ctx.lineWidth = 2.4; ctx.lineCap = 'round';
+  if (split) {
+    ctx.strokeStyle = SC.accent; ctx.beginPath(); ctx.moveTo(A[0], A[1]); ctx.lineTo(split[0], split[1]); ctx.stroke();
+    ctx.strokeStyle = 'rgba(231,174,111,0.4)'; ctx.beginPath(); ctx.moveTo(split[0], split[1]); ctx.lineTo(B[0], B[1]); ctx.stroke();
+  } else {
+    ctx.strokeStyle = A[0] < cx ? SC.accent : 'rgba(231,174,111,0.4)';
+    ctx.beginPath(); ctx.moveTo(A[0], A[1]); ctx.lineTo(B[0], B[1]); ctx.stroke();
+  }
+  ctx.restore();
+  ctx.strokeStyle = 'rgba(236,230,221,0.35)'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.arc(cx, cy, R, 0, 2 * Math.PI); ctx.stroke();
+  // spin axis
+  ctx.strokeStyle = SC.ink; ctx.lineWidth = 1.3;
+  ctx.beginPath(); ctx.moveTo(cx - nS[0] * R * 1.22, cy - nS[1] * R * 1.22); ctx.lineTo(cx + nS[0] * R * 1.22, cy + nS[1] * R * 1.22); ctx.stroke();
+  ctx.font = font(500, 10, 'm'); ctx.fillStyle = SC.ink; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText('N', cx + nS[0] * R * 1.42, cy + nS[1] * R * 1.42);
+  ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+  const dd = d * R2D;
+  ctx.font = font(600, 11, 'd'); ctx.fillStyle = SC.muted;
+  ctx.fillText('SIDE VIEW · SUN FROM LEFT', cx - R - 4, cy + R + 20);
+  ctx.font = font(400, 10, 'm');
+  ctx.fillText('Sun overhead at ' + Math.abs(dd).toFixed(1) + '°' + (dd >= 0 ? 'N' : 'S'), cx - R - 4, cy + R + 34);
+}
+
+function drawGround() {
+  const W = CW, H = CH;
+  ctx.fillStyle = SC.bg0; ctx.fillRect(0, 0, W, H);
+  const st = orbitAt(state.t), lat = state.obsLat, phi = lat * D2R, d = decl(st.ls);
+  const Hh = (state.tod - 12) * 15 * D2R, sun = sunENU(phi, d, Hh);
+  const el = Math.asin(clamp(sun[2], -1, 1)) * R2D, az = mod(Math.atan2(sun[0], sun[1]) * R2D, 360);
+  const R = Math.min(W * 0.42, H * 0.52), gcx = W / 2, gcy = H * 0.665;
+  const beta = 24 * D2R, cb = Math.cos(beta), sb = Math.sin(beta);
+  const camAz = ((lat >= 0 ? 180 : 0) + state.camOff) * D2R;
+  const rx = Math.cos(camAz), ry = -Math.sin(camAz), fx = Math.sin(camAz), fy = Math.cos(camAz);
+  const proj = (E, Nn, U, k) => { const s = k || 1, x = E * rx + Nn * ry, dd = E * fx + Nn * fy; return [gcx + R * s * x, gcy - R * s * (U * cb + dd * sb), dd]; };
+  const extra = SRC.filter(x => x.dl).map(x => {
+    const g = srcGeom(st.ls, x.dl), v = sunENU(phi, g.d, Hh - raOffset(st.ls, x.dl));
+    return { src: x, d: g.d, v, el: Math.asin(clamp(v[2], -1, 1)) * R2D };
+  });
+  const elSky = Math.max(el, ...extra.map(x => x.el));
+  const day = smooth(-5, 12, elSky), halo = smooth(-9, -1, el) * (1 - smooth(4, 16, el));
+  const sp = proj(sun[0], sun[1], sun[2]);
+  const mix = (a, b, t) => 'rgb(' + a.map((v, i) => Math.round(lerp(v, b[i], t))).join(',') + ')';
+  // sky (back of the dome)
+  ctx.save();
+  ctx.beginPath(); ctx.arc(gcx, gcy, R, 0, Math.PI, true); ctx.ellipse(gcx, gcy, R, R * sb, 0, Math.PI, 2 * Math.PI, false); ctx.closePath();
+  ctx.clip();
+  const lg = ctx.createLinearGradient(0, gcy - R, 0, gcy);
+  lg.addColorStop(0, mix([7, 9, 18], [172, 122, 86], day));
+  lg.addColorStop(1, mix([24, 24, 36], [218, 176, 134], day));
+  ctx.fillStyle = lg; ctx.fillRect(gcx - R, gcy - R, 2 * R, R * (1 + sb));
+  if (day < 0.98) {
+    const sa = Math.pow(1 - day, 2);
+    for (const s of SKYSTARS) { const p = proj(s[0], s[1], s[2]); ctx.fillStyle = 'rgba(236,230,221,' + (s[4] * sa).toFixed(3) + ')'; ctx.fillRect(p[0], p[1], s[3], s[3]); }
+  }
+  if (halo > 0.01) {
+    const hg = ctx.createRadialGradient(sp[0], sp[1], 0, sp[0], sp[1], R * 0.6);
+    hg.addColorStop(0, 'rgba(160,196,236,' + (0.85 * halo).toFixed(3) + ')'); hg.addColorStop(0.45, 'rgba(110,150,205,' + (0.35 * halo).toFixed(3) + ')'); hg.addColorStop(1, 'rgba(90,120,180,0)');
+    ctx.fillStyle = hg; ctx.fillRect(gcx - R, gcy - R, 2 * R, R * (1 + sb));
+  }
+  if (day > 0.02 && el > -1) {
+    const wg = ctx.createRadialGradient(sp[0], sp[1], 0, sp[0], sp[1], R * 0.35);
+    wg.addColorStop(0, 'rgba(255,236,206,' + (0.55 * day).toFixed(3) + ')'); wg.addColorStop(1, 'rgba(255,236,206,0)');
+    ctx.fillStyle = wg; ctx.fillRect(gcx - R, gcy - R, 2 * R, R * (1 + sb));
+  }
+  ctx.restore();
+  // ground
+  const light = 0.22 + 0.78 * day;
+  const gg = ctx.createLinearGradient(0, gcy - R * sb, 0, gcy + R * sb);
+  gg.addColorStop(0, mix([0, 0, 0], [150, 82, 50], light)); gg.addColorStop(1, mix([0, 0, 0], [86, 42, 26], light));
+  ctx.fillStyle = gg; ctx.beginPath(); ctx.ellipse(gcx, gcy, R, R * sb, 0, 0, 2 * Math.PI); ctx.fill();
+  // altitude rings & meridians
+  ctx.lineWidth = 1; ctx.strokeStyle = 'rgba(255,255,255,0.13)';
+  for (const alt of [30, 60]) {
+    const ca = Math.cos(alt * D2R), sa = Math.sin(alt * D2R);
+    ctx.beginPath();
+    for (let k = 0; k <= 72; k++) { const th = k / 72 * 2 * Math.PI, p = proj(ca * Math.sin(th), ca * Math.cos(th), sa); k ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); }
+    ctx.stroke();
+  }
+  for (const th0 of [0, 90]) {
+    ctx.beginPath();
+    for (let k = 0; k <= 36; k++) { const t = k / 36 * Math.PI, c = Math.cos(t), s = Math.sin(t);
+      const p = th0 === 0 ? proj(0, c, s) : proj(c, 0, s); k ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); }
+    ctx.stroke();
+  }
+  ctx.strokeStyle = 'rgba(236,230,221,0.45)';
+  ctx.beginPath(); ctx.ellipse(gcx, gcy, R, R * sb, 0, 0, 2 * Math.PI); ctx.stroke();
+  ctx.font = font(600, 13, 'd'); ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  for (const [nm, A] of [['N', 0], ['E', 90], ['S', 180], ['W', 270]]) {
+    const p = proj(Math.sin(A * D2R), Math.cos(A * D2R), 0, 1.09);
+    ctx.fillStyle = p[2] < -0.3 ? SC.ink : 'rgba(236,230,221,0.7)'; ctx.fillText(nm, p[0], p[1]);
+  }
+  // sun paths
+  const pathFor = (dd) => {
+    const segs = []; let curS = null, prev = null;
+    for (let k = 0; k <= 240; k++) {
+      const h = -Math.PI + k / 240 * 2 * Math.PI, v = sunENU(phi, dd, h);
+      if (prev && (prev[2] >= 0) !== (v[2] >= 0)) {
+        const f = prev[2] / (prev[2] - v[2]), m = [lerp(prev[0], v[0], f), lerp(prev[1], v[1], f), 0];
+        if (curS) { curS.push(proj(m[0], m[1], 0)); segs.push(curS); curS = null; } else curS = [proj(m[0], m[1], 0)];
+      }
+      if (v[2] >= 0) { if (!curS) curS = []; curS.push(proj(v[0], v[1], v[2])); }
+      prev = v;
+    }
+    if (curS) segs.push(curS);
+    return segs;
+  };
+  const strokeSegs = segs => { for (const s of segs) { ctx.beginPath(); s.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); ctx.stroke(); } };
+  ctx.setLineDash([4, 4]); ctx.lineWidth = 1.1;
+  ctx.font = font(400, 9.5, 'm'); ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+  for (const [dd, lab] of [[MARS.obl * D2R, 'Ls 90°'], [0, 'Ls 0°/180°'], [-MARS.obl * D2R, 'Ls 270°']]) {
+    ctx.strokeStyle = 'rgba(236,230,221,0.28)';
+    strokeSegs(pathFor(dd));
+    const v = sunENU(phi, dd, 0);
+    if (v[2] > 0.02) { const p = proj(v[0], v[1], v[2]); ctx.fillStyle = 'rgba(236,230,221,0.55)'; ctx.fillText(lab, p[0] - 8, p[1] + 9); }
+  }
+  ctx.setLineDash([]);
+  ctx.strokeStyle = 'rgba(190,215,255,0.7)'; ctx.lineWidth = 1.5;
+  for (const x of extra) strokeSegs(pathFor(x.d));
+  ctx.strokeStyle = 'rgba(255,214,150,0.95)'; ctx.lineWidth = 2;
+  strokeSegs(pathFor(d));
+  ctx.font = font(500, 10, 'm'); ctx.textAlign = 'center';
+  for (let hr = 0; hr < 24; hr++) {
+    const v = sunENU(phi, d, (hr - 12) * 15 * D2R);
+    if (v[2] < 0) continue;
+    const p = proj(v[0], v[1], v[2]);
+    ctx.fillStyle = 'rgba(255,214,150,0.95)'; ctx.beginPath(); ctx.arc(p[0], p[1], hr % 3 ? 1.6 : 2.6, 0, 2 * Math.PI); ctx.fill();
+    if (hr % 3 === 0) { ctx.fillStyle = 'rgba(255,236,206,0.9)'; ctx.fillText(String(hr).padStart(2, '0'), p[0], p[1] - 11); }
+  }
+  // observer
+  ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.beginPath(); ctx.ellipse(gcx, gcy + 2, 9, 3, 0, 0, 2 * Math.PI); ctx.fill();
+  ctx.strokeStyle = SC.ink; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(gcx, gcy); ctx.lineTo(gcx, gcy - 13); ctx.stroke();
+  ctx.fillStyle = SC.accent; ctx.beginPath(); ctx.moveTo(gcx, gcy - 13); ctx.lineTo(gcx + 9, gcy - 10); ctx.lineTo(gcx, gcy - 7); ctx.closePath(); ctx.fill();
+  // mirror suns
+  for (const x of extra) {
+    if (x.el <= -1) continue;
+    const p = proj(x.v[0], x.v[1], x.v[2]), rr = clamp(6.4 * MARS.a / st.r, 4, 9) * Math.sqrt(x.src.k) * 0.9;
+    const g = ctx.createRadialGradient(p[0], p[1], 0, p[0], p[1], rr * 5);
+    g.addColorStop(0, 'rgba(225,238,255,0.85)'); g.addColorStop(0.25, 'rgba(200,222,255,0.4)'); g.addColorStop(1, 'rgba(200,222,255,0)');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(p[0], p[1], rr * 5, 0, 2 * Math.PI); ctx.fill();
+    ctx.fillStyle = '#EEF5FF'; ctx.beginPath(); ctx.arc(p[0], p[1], rr, 0, 2 * Math.PI); ctx.fill();
+    ctx.font = font(700, 11, 'd'); ctx.fillStyle = '#DCEBFF'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.fillText(x.src.name, p[0] + rr + 6, p[1] - rr - 4);
+  }
+  // the Sun
+  if (el > -1) {
+    const rpx = clamp(6.4 * MARS.a / st.r, 4, 9);
+    const g = ctx.createRadialGradient(sp[0], sp[1], 0, sp[0], sp[1], rpx * 5);
+    g.addColorStop(0, 'rgba(255,248,230,0.9)'); g.addColorStop(0.25, 'rgba(255,230,190,0.45)'); g.addColorStop(1, 'rgba(255,220,170,0)');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(sp[0], sp[1], rpx * 5, 0, 2 * Math.PI); ctx.fill();
+    ctx.fillStyle = '#FFF8E8'; ctx.beginPath(); ctx.arc(sp[0], sp[1], rpx, 0, 2 * Math.PI); ctx.fill();
+  }
+  // dome outline
+  ctx.strokeStyle = 'rgba(236,230,221,0.3)'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.arc(gcx, gcy, R, Math.PI, 2 * Math.PI); ctx.stroke();
+  // overlay text
+  const small = W < 420;
+  ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+  ctx.font = font(700, small ? 18 : 22, 'd'); ctx.fillStyle = SC.ink; ctx.fillText(latLabel(Math.round(lat * 10) / 10), 14, 30);
+  ctx.font = font(400, 10.5, 'm'); ctx.fillStyle = SC.muted;
+  ctx.fillText(small ? 'Ls ' + st.ls.toFixed(1) + '°' : 'Ls ' + st.ls.toFixed(1) + '° · ' + dateLabel(state.t, 0).toLowerCase(), 14, 47);
+  ctx.textAlign = 'right';
+  ctx.font = font(700, small ? 18 : 22, 'd'); ctx.fillStyle = SC.ink; ctx.fillText(fmtClock(state.tod) + ' LTST', W - 14, 30);
+  ctx.font = font(400, 10.5, 'm'); ctx.fillStyle = SC.muted;
+  ctx.fillText(el > 0 ? (small ? el.toFixed(1) + '° · az ' + az.toFixed(0) + '°' : 'Sun ' + el.toFixed(1) + '° up, azimuth ' + az.toFixed(0) + '°') : (small ? 'below horizon' : 'Sun ' + Math.abs(el).toFixed(1) + '° below horizon'), W - 14, 47);
+  cvs.setAttribute('aria-label', 'Sky dome at ' + latLabel(lat) + ', ' + fmtClock(state.tod) + ' local true solar time. ' + (el > 0 ? 'Sun ' + el.toFixed(1) + ' degrees above the horizon.' : 'Sun below the horizon.'));
+}
+
+/* ================= readouts ================= */
+function updateReadouts() {
+  const st = orbitAt(state.t), m = dayMetrics(state.obsLat, st), si = seasonIdx(st.ls);
+  const dl = $('dateOut'); dl.replaceChildren(dateLabel(state.t, 1) + ' · ', lsFrag(st.ls));
+  setText('stDate', dateLabel(state.t, 1));
+  const sd = $('stDateS'); sd.replaceChildren(lsFrag(st.ls));
+  setText('stSeason', 'N ' + SEASONS[si]);
+  setText('stSeasonS', 'S ' + SEASONS[(si + 2) % 4]);
+  setText('stSun', st.r.toFixed(3) + ' AU');
+  const kx = SRC.reduce((a, b) => a + b.k, 0) - 1;
+  setText('stSunS', MULTI() ? 'Sun ' + Math.round(m.S) + ' + mirrors ' + Math.round(m.S * kx) + ' W/m²' : Math.round(m.S) + ' W/m² · disc ' + (MARS.sunArcmin1AU / st.r).toFixed(1) + '′');
+  setText('stDayK', 'Daylight at ' + latLabel(Math.round(state.obsLat * 10) / 10));
+  setText('stDay', fmtHM(durOut(m.durM)));
+  const multi = MULTI(), sunWord = multi ? 'A sun is always up' : 'Sun never sets';
+  setText('stDayS', m.durM >= 23.999 ? sunWord : m.durM <= 0.001 ? 'Polar night' : (multi ? 'any sun up, ' : '') + (EARTH() ? 'Earth hours' : 'Mars hours'));
+  setText('stRiseK', multi ? 'First light – last light' : 'Sunrise – sunset');
+  if (m.durM >= 23.999) { setText('stRise', 'all sol'); setText('stRiseS', multi ? 'no night' : 'midnight Sun'); }
+  else if (m.durM <= 0.001) { setText('stRise', 'none'); setText('stRiseS', multi ? 'every sun stays down' : 'Sun stays down'); }
+  else if (m.segs.length === 1) { setText('stRise', fmtClock(m.segs[0][0]) + '–' + fmtClock(m.segs[0][1])); setText('stRiseS', 'LTST, Mars clock'); }
+  else { setText('stRise', fmtClock(m.segs[0][0]) + '–' + fmtClock(m.segs[0][1]) + ' +' + (m.segs.length - 1)); setText('stRiseS', m.segs.length + ' separate spells of light'); }
+  setText('stNoon', m.noonEl > 0 ? m.noonEl.toFixed(1) + '°' : 'below');
+  setText('stNoonS', multi ? 'peak ' + Math.round(m.noon) + ' W/m², all suns' : (m.noonEl > 0 ? Math.round(m.noon) + ' W/m² at noon' : 'horizon all sol'));
+  setText('stMean', Math.round(m.mean) + ' W/m²');
+  setText('stMeanS', (m.mean * MARS.solSec / 3.6e6).toFixed(2) + ' kWh/m² per sol');
+  if (state.view === 'ground') {
+    const hS = (state.tod - 12) * 15 * D2R, phiO = state.obsLat * D2R;
+    let tot = 0, el = -90;
+    for (const src of SRC) {
+      const dd = src.dl ? srcGeom(st.ls, src.dl).d : m.d;
+      const v = sunENU(phiO, dd, hS - raOffset(st.ls, src.dl));
+      if (v[2] > 0) tot += src.k * m.S * v[2];
+      if (!src.dl) el = Math.asin(clamp(v[2], -1, 1)) * R2D;
+    }
+    setText('st8K', multi ? 'Light now' : 'Sun now');
+    setText('st8V', tot > 0 ? Math.round(tot) + ' W/m²' : 'dark');
+    setText('st8S', fmtClock(state.tod) + ' LTST, Sun ' + (el > 0 ? el.toFixed(1) + '° up' : 'below horizon'));
+  } else {
+    const id = idealAt(state.t), diff = mod(st.ls - id.ls + 180, 360) - 180;
+    setText('st8K', 'If e were 0');
+    const v = $('st8V'); v.replaceChildren(lsFrag(id.ls));
+    setText('st8S', 'real orbit is ' + Math.abs(diff).toFixed(1) + '° ' + (diff >= 0 ? 'ahead' : 'behind'));
+  }
+  setText('obsOut', latLabel(Math.round(state.obsLat * 10) / 10));
+  setText('todOut', fmtClock(state.tod));
+}
+
+/* ================= state changes ================= */
+function setT(t) {
+  state.t = mod(t, YEAR);
+  $('date').value = state.t.toFixed(1);
+  updateCursor(charts.dur); updateCursor(charts.ins); updateCursor(charts.rat);
+  updateReadouts(); scheduleDraw();
+}
+function setObs(lat) {
+  state.obsLat = clamp(Math.round(lat * 10) / 10, -89.5, 89.5);
+  $('obs').value = state.obsLat;
+  const opt = Array.from($('site').options).find(o => o.value && Math.abs(+o.value - state.obsLat) < 0.06);
+  $('site').value = opt ? opt.value : '';
+  renderChips(); renderCharts(); updateReadouts(); scheduleDraw();
+}
+function updateSubs() {
+  const timeLine = () => {
+    const f = document.createDocumentFragment(), unit = EARTH() ? 'Earth days' : 'sols';
+    if (flipActive()) {
+      const a = document.createElement('sub'); a.textContent = 's';
+      const b = document.createElement('sub'); b.textContent = 's';
+      f.append(' Time runs in ' + unit + ' from each hemisphere’s own winter solstice: L', a, ' 270° in the north, L', b, ' 90° in the south.');
+    } else f.append(' Time runs in ' + unit + ' from the northern winter solstice.');
+    return f;
+  };
+  const multi = MULTI();
+  $('durSub').replaceChildren((multi ? 'Hours with at least one sun above the horizon' : 'Sunrise to sunset') + (EARTH()
+    ? ', in Earth hours (1 sol = 24.66 h, so polar day tops out at 24.66).'
+    : ', in Mars hours (1 sol = 24 h).'), timeLine());
+  const light = multi ? 'Sunlight plus mirror light' : 'Sunlight';
+  $('insSub').replaceChildren(state.metric === 'mean'
+    ? light + ' on level ground at the top of the atmosphere, averaged over the whole sol (W/m²).'
+    : (multi ? light + ' on level ground at the top of the atmosphere at the brightest moment of the sol, which is not always noon (W/m²).'
+             : 'Sunlight on level ground at the top of the atmosphere at local noon, the strongest moment of the sol (W/m²).'), timeLine());
+  setText('mNoon', multi ? 'Daily peak' : 'Noon peak');
+  setText('rNoon', multi ? 'Daily peak' : 'Noon peak');
+  const meas = state.ratioMetric === 'mean' ? 'daily mean' : (multi ? 'daily peak' : 'noon peak');
+  $('ratSub').replaceChildren('Each latitude’s ' + meas + ' insolation divided by its dimmest ' + meas + ' of the year, on a log scale capped at 20×. A line pinned at 20× either passes the cap or has a dimmest value of zero (polar night); gaps mark the night itself.', timeLine());
+  if (SPEC()) for (const id of ['durSub', 'insSub', 'ratSub']) $(id).append(' Lines run from blue at the southern end of the range to red at the northern end.');
+}
+function setUnits(u) {
+  state.units = u;
+  $('uMars').setAttribute('aria-pressed', String(u === 'mars')); $('uEarth').setAttribute('aria-pressed', String(u === 'earth'));
+  updateSubs();
+  $('date').max = YEAR.toFixed(1);
+  renderCharts(); renderTable(); renderCaption(); updateReadouts(); scheduleDraw(); save();
+}
+function setMetric(mm) {
+  state.metric = mm;
+  $('mMean').setAttribute('aria-pressed', String(mm === 'mean')); $('mNoon').setAttribute('aria-pressed', String(mm === 'noon'));
+  updateSubs();
+  renderChart(charts.ins); renderTable(); save();
+}
+function setRatioMetric(mm) {
+  state.ratioMetric = mm;
+  $('rMean').setAttribute('aria-pressed', String(mm === 'mean')); $('rNoon').setAttribute('aria-pressed', String(mm === 'noon'));
+  updateSubs(); clearHover(); renderChart(charts.rat); save();
+}
+$('rMean').addEventListener('click', () => setRatioMetric('mean'));
+$('rNoon').addEventListener('click', () => setRatioMetric('noon'));
+function setView(v) {
+  state.view = v;
+  $('vOrbit').setAttribute('aria-pressed', String(v === 'orbit')); $('vGround').setAttribute('aria-pressed', String(v === 'ground'));
+  $('todRow').hidden = v !== 'ground';
+  cvs.classList.toggle('ground', v === 'ground');
+  setText('vhint', v === 'orbit' ? 'Drag Mars around its orbit to change the date' : 'Drag sideways to look around the sky');
+  if (v !== 'ground') stopSol();
+  renderCaption(); updateReadouts(); scheduleDraw();
+}
+function renderCaption() {
+  const cap = $('vcap'); cap.replaceChildren();
+  const item = (cls, ...parts) => { const s = document.createElement('span'); if (cls) { const i = document.createElement('i'); i.className = cls; s.append(i); } s.append(...parts); cap.append(s); };
+  if (state.view === 'orbit') {
+    item('', 'Ticks every 50 ' + (EARTH() ? 'Earth days' : 'sols') + ' from the N winter solstice');
+    item('', 'Wedge area ∝ season length (Kepler’s second law)');
+    item('ring', lsFrag(LS_TODAY, 'Today: '), ', Mars Year ' + MY_TODAY);
+    if (MULTI()) item('dia', 'Mirror arrays and their light paths');
+  } else {
+    item('sw', 'Sun’s path for the chosen date, hours in LTST');
+    if (MULTI()) item('sw m', 'Mirror suns');
+    item('sw d', 'Solstices and equinoxes');
+  }
+}
+
+/* ================= spectrum controls (two synced copies) ================= */
+function updateSpecUI() {
+  const spec = SPEC(), a = Math.min(state.specA, state.specB), b = Math.max(state.specA, state.specB);
+  document.querySelectorAll('.js-lm').forEach(bt => bt.setAttribute('aria-pressed', String(bt.dataset.lm === state.lineMode)));
+  document.querySelectorAll('.spec').forEach(e => { e.hidden = !spec; });
+  document.querySelectorAll('.latgrp').forEach(e => { e.hidden = spec; });
+  const n = spectrumLats().length;
+  document.querySelectorAll('.specA').forEach(i => { i.value = state.specA; });
+  document.querySelectorAll('.specB').forEach(i => { i.value = state.specB; });
+  document.querySelectorAll('.specStep').forEach(i => { i.value = state.specStep; });
+  document.querySelectorAll('.specOp').forEach(i => { i.value = state.specOp; });
+  document.querySelectorAll('.specRangeOut').forEach(o => { o.textContent = latLabel(a) + ' to ' + latLabel(b) + ' · ' + n + ' lines'; });
+  document.querySelectorAll('.specStepOut').forEach(o => { o.textContent = state.specStep + '°'; });
+  document.querySelectorAll('.specOpOut').forEach(o => { o.textContent = state.specOp + '%'; });
+  const stops = []; for (let k = 0; k <= 10; k++) stops.push(specColor(k / 10) + ' ' + (k * 10) + '%');
+  document.querySelectorAll('.cbar-grad').forEach(g => { g.style.background = 'linear-gradient(90deg,' + stops.join(',') + ')'; });
+  document.querySelectorAll('.cbA').forEach(e => { e.textContent = latLabel(a); });
+  document.querySelectorAll('.cbB').forEach(e => { e.textContent = latLabel(b); });
+  document.querySelectorAll('.cbM').forEach(e => { e.textContent = latLabel(Math.round((a + b) / 2)); });
+  document.querySelectorAll('.dual').forEach(d => {
+    let f = d.querySelector('.dual-fill');
+    if (!f) { f = document.createElement('div'); f.className = 'dual-fill'; d.prepend(f); }
+    const pa = (a + 90) / 180, pb = (b + 90) / 180;   // thumbs travel 8 px in from each end
+    f.style.left = 'calc(8px + (100% - 16px) * ' + pa + ')';
+    f.style.width = 'calc((100% - 16px) * ' + (pb - pa) + ')';
+  });
+}
+let specQueued = false;
+function specChanged() {
+  updateSpecUI();
+  if (specQueued) return; specQueued = true;
+  requestAnimationFrame(() => { specQueued = false; clearHover(); updateSubs(); renderCharts(); renderTable(); save(); });
+}
+document.querySelectorAll('.js-lm').forEach(bt => bt.addEventListener('click', () => { state.lineMode = bt.dataset.lm; specChanged(); }));
+document.querySelectorAll('.specA').forEach(i => i.addEventListener('input', () => { state.specA = Math.min(+i.value, state.specB); if (+i.value > state.specB) i.value = state.specB; specChanged(); }));
+document.querySelectorAll('.specB').forEach(i => i.addEventListener('input', () => { state.specB = Math.max(+i.value, state.specA); if (+i.value < state.specA) i.value = state.specA; specChanged(); }));
+document.querySelectorAll('.specStep').forEach(i => i.addEventListener('input', () => { state.specStep = +i.value; specChanged(); }));
+document.querySelectorAll('.specOp').forEach(i => i.addEventListener('input', () => {
+  state.specOp = +i.value; updateSpecUI();
+  document.querySelectorAll('.plot path.ser.sp').forEach(pth => { pth.style.strokeOpacity = String(state.specOp / 100); });
+  save();
+}));
+
+/* ================= panel visibility ================= */
+function applyShow() {
+  const sh = state.show;
+  document.querySelector('.panel.viewer').hidden = !sh.view;
+  $('pDur').hidden = !sh.dur; $('pIns').hidden = !sh.ins; $('pRat').hidden = !sh.rat;
+  document.body.classList.toggle('no-view', !sh.view);
+  document.body.classList.toggle('no-charts', !sh.dur && !sh.ins && !sh.rat);
+  // in the compact layout only the first visible chart carries the shared latitude controls
+  const lead = ['pDur', 'pIns', 'pRat'].find(id => !$(id).hidden);
+  for (const id of ['pDur', 'pIns', 'pRat']) $(id).classList.toggle('lead', id === lead);
+  document.querySelectorAll('.js-show').forEach(bt => bt.setAttribute('aria-pressed', String(sh[bt.dataset.panel])));
+}
+document.querySelectorAll('.js-show').forEach(bt => bt.addEventListener('click', () => {
+  const k = bt.dataset.panel, next = Object.assign({}, state.show, { [k]: !state.show[k] });
+  if (!next.view && !next.dur && !next.ins && !next.rat) return;   // keep at least one screen
+  state.show = next; applyShow(); clearHover();
+  requestAnimationFrame(() => { sizeCanvas(); draw(); renderCharts(); });
+  save();
+}));
+
+/* ================= layout ================= */
+function setLayout(l, init) {
+  state.layout = l;
+  document.body.dataset.layout = l;
+  $('lyFull').setAttribute('aria-pressed', String(l === 'full'));
+  $('lyCompact').setAttribute('aria-pressed', String(l === 'compact'));
+  if (init) return;
+  clearHover(); sizeCanvas(); draw(); renderCharts(); save();
+}
+$('lyFull').addEventListener('click', () => setLayout('full'));
+$('lyCompact').addEventListener('click', () => setLayout('compact'));
+
+/* ================= sky modes ================= */
+const MEAN_FLUX = MARS.S1 / (MARS.a * MARS.a * Math.sqrt(1 - MARS.e * MARS.e));   // annual-mean sunlight at Mars
+function updateModeBar() {
+  const pr = (id, on) => $(id).setAttribute('aria-pressed', String(on));
+  pr('mdNatural', state.mode === 'natural'); pr('mdTwo', state.mode === 'two'); pr('mdThree', state.mode === 'three');
+  pr('posL4', state.twoPos === 'L4'); pr('posL5', state.twoPos === 'L5');
+  pr('twoK1', state.twoK === 'x1'); pr('twoK133', state.twoK === 'x133');
+  pr('threeK05', state.threeK === 'x05'); pr('threeK067', state.threeK === 'x067');
+  $('optTwo').hidden = state.mode !== 'two'; $('optThree').hidden = state.mode !== 'three';
+  const F = SRC.reduce((a, b) => a + b.k, 0), mean = MEAN_FLUX * F;
+  const sum = $('modeSum'); sum.replaceChildren();
+  const b = t => { const e = document.createElement('b'); e.textContent = t; return e; };
+  let lead;
+  if (state.mode === 'natural') lead = 'Sunlight only. ';
+  else if (state.mode === 'two') lead = state.twoPos === 'L4'
+    ? 'Mirror array at L4, 60° ahead of Mars in its orbit: seen from Mars it sits 60° west of the Sun and rises first. '
+    : 'Mirror array at L5, 60° behind Mars in its orbit: seen from Mars it sits 60° east of the Sun and sets last. ';
+  else lead = 'Mirror arrays at L4 and L5: a morning sun 60° west and an evening sun 60° east of the real one. ';
+  sum.append(lead, 'Average flux at Mars ', b(Math.round(mean) + ' W/m²'), ', ' + Math.round(100 * mean / MARS.S1) + '% of Earth’s 1361 W/m².');
+}
+function setMode(patch) {
+  Object.assign(state, patch);
+  applyMode(); updateModeBar(); clearHover();
+  updateSubs(); renderCharts(); renderTable(); renderCaption(); updateReadouts(); scheduleDraw(); save();
+}
+$('mdNatural').addEventListener('click', () => setMode({ mode: 'natural' }));
+$('mdTwo').addEventListener('click', () => setMode({ mode: 'two' }));
+$('mdThree').addEventListener('click', () => setMode({ mode: 'three' }));
+$('posL4').addEventListener('click', () => setMode({ twoPos: 'L4' }));
+$('posL5').addEventListener('click', () => setMode({ twoPos: 'L5' }));
+$('twoK1').addEventListener('click', () => setMode({ twoK: 'x1' }));
+$('twoK133').addEventListener('click', () => setMode({ twoK: 'x133' }));
+$('threeK05').addEventListener('click', () => setMode({ threeK: 'x05' }));
+$('threeK067').addEventListener('click', () => setMode({ threeK: 'x067' }));
+document.querySelectorAll('.js-earth').forEach(inp => inp.addEventListener('change', e => {
+  state.earthRef = e.target.checked;
+  document.querySelectorAll('.js-earth').forEach(i => { i.checked = state.earthRef; });
+  renderChart(charts.ins); renderChart(charts.rat); save();
+}));
+
+/* ================= animation ================= */
+let raf = 0, last = 0;
+function loop(ts) {
+  const dt = last ? Math.min(0.05, (ts - last) / 1000) : 0; last = ts;
+  if (state.playYear) setT(state.t + dt * 46);
+  if (state.playSol) { state.tod = mod(state.tod + dt * 2.4, 24); $('tod').value = state.tod.toFixed(2); updateReadouts(); scheduleDraw(); }
+  if (state.playYear || state.playSol) raf = requestAnimationFrame(loop); else { raf = 0; last = 0; }
+}
+function kick() { if (!raf) { last = 0; raf = requestAnimationFrame(loop); } }
+function stopYear() { state.playYear = false; $('playYear').setAttribute('aria-pressed', 'false'); }
+function stopSol() { state.playSol = false; $('playSol').setAttribute('aria-pressed', 'false'); }
+$('playYear').addEventListener('click', () => { state.playYear = !state.playYear; $('playYear').setAttribute('aria-pressed', String(state.playYear)); kick(); });
+$('playSol').addEventListener('click', () => { state.playSol = !state.playSol; $('playSol').setAttribute('aria-pressed', String(state.playSol)); kick(); });
+
+/* ================= wiring ================= */
+$('date').addEventListener('input', e => { stopYear(); setT(+e.target.value); });
+$('tod').addEventListener('input', e => { stopSol(); state.tod = +e.target.value; updateReadouts(); scheduleDraw(); });
+$('obs').addEventListener('input', e => setObs(+e.target.value));
+$('site').addEventListener('change', e => { if (e.target.value) setObs(+e.target.value); });
+$('todayBtn').addEventListener('click', () => { stopYear(); setT(T_TODAY); });
+$('todayBtn').title = 'Mars on ' + NOW.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) + ': Ls ' + LS_TODAY.toFixed(1) + '°, Mars Year ' + MY_TODAY;
+$('noonBtn').addEventListener('click', () => { stopSol(); state.tod = 12; $('tod').value = 12; updateReadouts(); scheduleDraw(); });
+$('uMars').addEventListener('click', () => setUnits('mars'));
+$('uEarth').addEventListener('click', () => setUnits('earth'));
+$('mMean').addEventListener('click', () => setMetric('mean'));
+$('mNoon').addEventListener('click', () => setMetric('noon'));
+$('vOrbit').addEventListener('click', () => setView('orbit'));
+$('vGround').addEventListener('click', () => setView('ground'));
+$('dynDur').addEventListener('change', e => { state.dynDur = e.target.checked; clearHover(); renderChart(charts.dur); save(); });
+$('dynIns').addEventListener('change', e => { state.dynIns = e.target.checked; clearHover(); renderChart(charts.ins); save(); });
+$('dynRat').addEventListener('change', e => { state.dynRat = e.target.checked; clearHover(); renderChart(charts.rat); save(); });
+const syncToggles = () => {
+  document.querySelectorAll('.js-ideal').forEach(i => { i.checked = state.ideal; });
+  document.querySelectorAll('.js-flip').forEach(i => { i.checked = state.flip; });
+  document.querySelectorAll('.lineleg').forEach(l => { l.hidden = !state.ideal; });
+};
+document.querySelectorAll('.js-flip').forEach(inp => inp.addEventListener('change', e => {
+  state.flip = e.target.checked; syncToggles();
+  msg(state.flip && !state.lats.some(L => L.lat < 0) ? 'Add a southern latitude, such as 45S, or pick the North vs south set to see it aligned.' : '');
+  clearHover(); updateSubs(); renderCharts(); renderTable(); save();
+}));
+document.querySelectorAll('.js-ideal').forEach(inp => inp.addEventListener('change', e => {
+  state.ideal = e.target.checked; syncToggles();
+  renderCharts(); updateReadouts(); scheduleDraw(); save();
+}));
+
+let cdrag = null;
+function orbitPick(ev) {
+  const r = cvs.getBoundingClientRect(), G = orbitGeometry(CW, CH);
+  const x = (ev.clientX - r.left - G.sx) / G.scale, y = (G.sy - (ev.clientY - r.top)) / G.scale;
+  if (Math.hypot(x, y) < 0.15) return;
+  setT(tOfLs(mod(Math.atan2(y, x) * R2D - 180, 360)));
+}
+cvs.addEventListener('pointerdown', ev => {
+  try { cvs.setPointerCapture(ev.pointerId); } catch (e) {}
+  cdrag = { x: ev.clientX, off: state.camOff };
+  if (state.view === 'orbit') { stopYear(); orbitPick(ev); }
+});
+cvs.addEventListener('pointermove', ev => {
+  if (!cdrag) return;
+  if (state.view === 'orbit') orbitPick(ev);
+  else { state.camOff = cdrag.off - (ev.clientX - cdrag.x) * 0.35; scheduleDraw(); }
+});
+const endC = () => { cdrag = null; };
+cvs.addEventListener('pointerup', endC); cvs.addEventListener('pointercancel', endC);
+
+let resizeQueued = false;
+const ro = new ResizeObserver(() => {
+  if (resizeQueued) return; resizeQueued = true;
+  requestAnimationFrame(() => {
+    resizeQueued = false;
+    const full = state.layout === 'full';
+    if (Math.floor(stage.clientWidth) !== CW || (full && Math.max(300, Math.floor(stage.clientHeight)) !== CH)) { sizeCanvas(); draw(); }
+    for (const k in charts) {
+      const c = charts[k];
+      if (!c.g || Math.max(260, Math.floor(c.wrap.clientWidth)) !== c.g.W || (full && Math.max(280, Math.floor(c.wrap.clientHeight)) !== c.g.H)) renderChart(c);
+    }
+  });
+});
+ro.observe(stage); ro.observe(charts.dur.root); ro.observe(charts.ins.root); ro.observe(charts.rat.root);
+let lastIH = window.innerHeight;
+window.addEventListener('resize', () => { if (window.innerHeight !== lastIH) { lastIH = window.innerHeight; sizeCanvas(); draw(); } });
+
+/* ================= boot ================= */
+syncToggles(); $('dynDur').checked = state.dynDur; $('dynIns').checked = state.dynIns; $('dynRat').checked = state.dynRat; document.querySelectorAll('.js-earth').forEach(i => { i.checked = state.earthRef; });
+setRatioMetric(state.ratioMetric);
+updateModeBar();
+$('date').max = YEAR.toFixed(1);
+$('obs').value = state.obsLat; $('tod').value = state.tod;
+setLayout(state.layout, true);
+applyShow();
+updateSpecUI();
+sizeCanvas();
+renderChips();
+setMetric(state.metric);
+setUnits(state.units);
+setT(state.t);
+draw();
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { renderCharts(); draw(); });
+})();
+</script>
+
+</body>
+</html>
