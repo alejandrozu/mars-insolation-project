@@ -14,7 +14,7 @@ Mars has a sol close to an Earth day and an axial tilt close to Earth's (25.19°
 - **Daylight duration**, **insolation** (daily mean or peak) and **seasonal ratio** (brightest ÷ dimmest, log scale) across the year for any set of latitudes, or a whole spectrum of them.
 - **Circular orbit**: each chart can show the real orbit, the real orbit with the e = 0 planet as a dashed reference, or the circular planet alone.
 - **Align southern seasons**: plots southern latitudes from their own winter solstice.
-- **Two, 2.5 and three suns**: mirror arrays at the Sun–Mars L4 and/or L5 points, at strengths that can bring the average flux to Earth's level. In the 2.5-suns sky, L4 matches the Sun and L5 adds the rest (0.31× Sun) but blocks the middle third of the disc it lights, sending that light to the northern and southern thirds.
+- **Two, 2.5 and three suns**: mirror arrays at the Sun–Mars L4 and/or L5 points, at strengths that can bring the average flux to Earth's level. In the 2.5-suns sky, L4 matches the Sun and L5 adds the rest (0.31× Sun) but blocks the middle third of the disc it lights (an east–west strip through the centre, which on the ground is a band tilted with the seasons), sending that light to the northern and southern thirds; for comparison the strip can also be fixed on the latitudes within 15.4° of the equator.
 - **Earth comparison** lines, Mars or Earth hours, dynamic or fixed axes, and full-screen or compact layouts.
 
 ## Model
