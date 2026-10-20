@@ -596,6 +596,13 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
     <span class="flabel" id="ciLbl" title="Shapes the mirror light like a concave lens: dimmer near the middle of the disc it lights, brighter toward its north and south edges, same average">Counterirradiance</span>
     <input type="range" id="twoCI" min="0" max="1" step="0.05" value="0" aria-labelledby="ciLbl">
     <output id="twoCIOut" class="ci-out">k = 0</output>
+    <span class="flabel" id="phLbl" title="Moves the dimmest line of the mirror light north (+) or south (−) of the middle of the disc it sees; past the brightest point the light stays at its maximum">Phase</span>
+    <input type="range" id="twoPh" min="-45" max="45" step="2.5" value="0" aria-labelledby="phLbl">
+    <output id="twoPhOut" class="ci-out">0°</output>
+    <div class="seg" role="group" aria-label="Phase fixed or following the seasons">
+      <button type="button" id="phFixed" aria-pressed="true">Fixed</button>
+      <button type="button" id="phSeason" aria-pressed="false" title="The dimmest line swings with the seasons, p × sin Ls: into the summer hemisphere, north in northern summer and south in southern summer">Follows seasons</button>
+    </div>
   </div>
   <div class="mode-grp" id="optThree" hidden>
     <span class="flabel" id="threeKLbl">Each mirror</span>
@@ -1024,7 +1031,7 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
         <li>Daylight runs from the moment the Sun's centre rises above a flat horizon to the moment it sets. Refraction in the thin atmosphere and local terrain are ignored.</li>
         <li>Insolation is measured at the top of the atmosphere on level ground: 1361 W/m² at 1 AU, scaled by distance squared (713 W/m² at perihelion, 490 W/m² at aphelion). Dust can remove a large share of this before it reaches the surface.</li>
         <li>The circular orbit (shown as a reference or on its own, per chart) keeps the same tilt and the same starting solstice, fixes the distance at 1.5237 AU and advances L<sub>s</sub> at a constant rate, so all four seasons last 167.1 sols.</li>
-        <li>Two and three suns: mirror arrays at the Sun–Mars L4 and L5 points. They sit at Mars's distance from the Sun, so seen from Mars they shine from the orbital plane 60° west (L4) or east (L5) of the Sun, and their light is a fixed multiple of sunlight at Mars's current distance. Daylight counts any sun above the horizon; the peak is the brightest moment of the sol. 1.33× (or two 0.67× arrays) brings the average flux to about Earth's. Counterirradiance (two suns): the array shapes its beam like a concave lens, with intensity 1 − k·cos 2a across the disc it lights, where a is the angle from the disc's east–west centre line, i.e. the latitude as seen from the array. On the ground that centre line is a great circle through the point under the array, tilted with its declination, so a equals the real latitude when the array is over the equator. The profile is divided by its average over the disc, 1 − k/2, so the array still delivers 1× or 1.33× on average; k = 1 leaves the centre line dark and makes the north and south edges 4× the average.</li>
+        <li>Two and three suns: mirror arrays at the Sun–Mars L4 and L5 points. They sit at Mars's distance from the Sun, so seen from Mars they shine from the orbital plane 60° west (L4) or east (L5) of the Sun, and their light is a fixed multiple of sunlight at Mars's current distance. Daylight counts any sun above the horizon; the peak is the brightest moment of the sol. 1.33× (or two 0.67× arrays) brings the average flux to about Earth's. Counterirradiance (two suns): the array shapes its beam like a concave lens, with intensity 1 − k·cos 2a across the disc it lights, where a is the angle from the disc's east–west centre line, i.e. the latitude as seen from the array. On the ground that centre line is a great circle through the point under the array, tilted with its declination, so a equals the real latitude when the array is over the equator. The profile is divided by its average over the disc, 1 − k/2, so the array still delivers 1× or 1.33× on average; k = 1 leaves the centre line dark and makes the north and south edges 4× the average. Phase p moves the dimmest line to a = p, 1 − k·cos 2(a − p), held at its maximum once |a − p| passes 90°, again divided by its disc average; the phase can be fixed or follow the seasons (p × sin Ls), putting the dimmest line in the summer hemisphere.</li>
         <li>Earth comparison lines are typical Earth values for the same measure: daily mean 100 and 500 W/m² for mid-latitude winter and summer, 250 and 450 for the tropics; noon peak 350 and 1300 for mid-latitude winter and summer, 700 for tropical winter and 1000 at the equator.</li>
         <li>Seasonal ratio divides each sol’s insolation by the dimmest value of the year at the same latitude, for the chosen measure. Earth references: about 5× (daily mean) and 4× (noon peak) at mid-latitudes, about 2× in the tropics.</li>
         <li>Map: elevation from the Mars Global Surveyor MOLA gridded topography (MEGDR, 4 pixels per degree, about 15 km at the equator; Smith et al. 2003, NASA PDS Geosciences Node), stored to the nearest 5 m relative to the MOLA areoid. The water level is the share of the surface area that lies below sea level, so 30% fills the northern lowlands and the deep basins. With "Fill craters and closed basins" on, every closed depression also holds a lake with a flat surface, set by the basin fill slider as a fraction of the way from the basin's floor to its spill point (100% is full to the brim, as rain would leave it if nothing evaporated); lakes come on top of the ocean share. Earth-equivalent km multiply Mars heights by g<sub>Mars</sub>/g<sub>Earth</sub> = 0.38: with the same air, pressure falls that much more slowly with height on Mars, so Olympus Mons (about 22 km above a 30% sea) thins the air like an 8.6 km climb on Earth. The insolation layer uses the same flat-ground, top-of-atmosphere model as the charts, so it varies with latitude only; slopes and the atmosphere are not included.</li>
@@ -1118,14 +1125,34 @@ function unionArcs(ivs) {     // union of daylight intervals on the 24-h solar c
 // array (on the ground the centre line is a great circle through the point under the array, tilted with its declination, so a is
 // the true latitude when the array is over the equator). With y = sin a that is (1 − k) + 2k y², whose average over the disc is
 // 1 − k/2, so the profile is divided by it and the array still delivers its stated average. k = 1 leaves the centre line dark.
-const ciProfile = (kc, y) => ((1 - kc) + 2 * kc * y * y) / (1 - kc / 2);
+// Phase p moves the dimmest line to a = p: 1 − k cos 2(a − p), held at its maximum 1 + k once |a − p| passes 90°. The disc
+// average N(k, p) is ∫ f(a) cos²a da / (π/2) over −90°…90°, done in closed form, and the profile is divided by it. With the phase
+// following the seasons, p = P sin Ls, so the dimmest line sits in the summer hemisphere.
+const C2I = (a0, a1) => (a1 - a0) / 2 + (Math.sin(2 * a1) - Math.sin(2 * a0)) / 4;                     // ∫ cos²a
+const C2CI = (a0, a1, p) => { const F = a => Math.sin(2 * a - 2 * p) / 4 + Math.sin(4 * a - 2 * p) / 16 + a * Math.cos(2 * p) / 4; return F(a1) - F(a0); };   // ∫ cos²a cos 2(a − p)
+function ciNorm(kc, p) {
+  const h = Math.PI / 2, lo = Math.max(-h, p - h), hi = Math.min(h, p + h);
+  let I = C2I(-h, h) - kc * C2CI(lo, hi, p);
+  if (p > 0) I += kc * C2I(-h, p - h); else if (p < 0) I += kc * C2I(p + h, h);
+  return I / (Math.PI / 2);   // ∫ cos²a over the whole range is π/2, so a flat profile averages 1
+}
+const ciPhase = (src, ls) => src.phMode === 'season' ? src.ph * Math.sin(ls * D2R) : src.ph;
+// the profile at disc position y for given k and phase, divided by its disc average n
+const ciProf = (kc, p, n, y) => p === 0 ? ((1 - kc) + 2 * kc * y * y) / n : (1 - kc * Math.cos(2 * clamp(Math.asin(clamp(y, -1, 1)) - p, -Math.PI / 2, Math.PI / 2))) / n;
 // a source's light at a point (latitude sine sp), relative to its average, with the source at declination d and sinEl above the horizon
-const srcTrans = (src, sp, d, sinEl) => src.ci ? ciProfile(src.ci, (sp - Math.sin(d) * sinEl) / Math.cos(d)) : 1;
+const srcTrans = (src, sp, d, sinEl, ls) => { if (!src.ci) return 1; const p = ciPhase(src, ls); return ciProf(src.ci, p, ciNorm(src.ci, p), (sp - Math.sin(d) * sinEl) / Math.cos(d)); };
 // One source over one sol: the integral over hour angle of its elevation sine times the profile (× S/2π gives the daily mean).
-// y is linear in sin e = a + b cos H and the profile is quadratic in y, so the integral is exact from the moments of sin e.
-function srcDay(sp, cp, d, H0, src) {
+// Without phase y is linear in sin e = a + b cos H and the profile is quadratic in y, so the integral is exact from the moments
+// of sin e; with a phase it is summed over the sol.
+function srcDay(sp, cp, d, H0, src, ls) {
   const sd = Math.sin(d), cd = Math.cos(d), a = sp * sd, b = cp * cd, s1 = Math.sin(H0), I1 = 2 * (a * H0 + b * s1);
   if (!src.ci) return I1;
+  const pph = ciPhase(src, ls);
+  if (pph !== 0) {
+    const kc = src.ci, nn = ciNorm(kc, pph), n = 96, dh = H0 / n; let sum = 0;
+    for (let i = 0; i < n; i++) { const mu = a + b * Math.cos((i + 0.5) * dh); if (mu > 0) sum += mu * ciProf(kc, pph, nn, (sp - sd * mu) / cd); }
+    return 2 * sum * dh;
+  }
   const c2 = H0 / 2 + Math.sin(2 * H0) / 4, kc = src.ci;
   const I2 = 2 * (a * a * H0 + 2 * a * b * s1 + b * b * c2);
   const I3 = 2 * (a * a * a * H0 + 3 * a * a * b * s1 + 3 * a * b * b * c2 + b * b * b * (s1 - s1 * s1 * s1 / 3));
@@ -1147,11 +1174,12 @@ function dayMetrics(lat, st, noPeak) {
   for (const src of SRC) {
     const g = src.dl ? srcGeom(st.ls, src.dl) : { d, ra: sunRa };
     const H0 = src.dl ? sunsetH(phi, g.d) : H, kk = src.k;
-    const q = kk * S / (2 * Math.PI) * srcDay(sp, cp, g.d, H0, src);
+    const q = kk * S / (2 * Math.PI) * srcDay(sp, cp, g.d, H0, src, st.ls);
     if (q > 0) mean += q;
     const off = mod(g.ra - sunRa + Math.PI, 2 * Math.PI) - Math.PI;
     const sdg = Math.sin(g.d), cdg = Math.cos(g.d), kc = src.ci || 0;
-    parts.push({ k: kk, a: sp * sdg, b: cp * cdg, off, tr: kc ? (h => ciProfile(kc, (sp - sdg * h) / cdg)) : null });
+    const pph = kc ? ciPhase(src, st.ls) : 0, nn = kc ? ciNorm(kc, pph) : 1;
+    parts.push({ k: kk, a: sp * sdg, b: cp * cdg, off, tr: kc ? (h => ciProf(kc, pph, nn, (sp - sdg * h) / cdg)) : null });
     ivs.push({ c: 12 + off * 12 / Math.PI, w: H0 * 12 / Math.PI });
   }
   const un = unionArcs(ivs);
@@ -1234,7 +1262,7 @@ const PRESETS = { north: [0, 15, 30, 45, 60, 85], south: [0, -15, -30, -45, -60,
 const STORE = 'mars-daylight-v1';
 const state = {
   t: T_TODAY, tod: 14, obsLat: 45, view: 'orbit', units: 'mars', metric: 'mean', orbit: { dur: 'real', ins: 'real', rat: 'real' },
-  lats: PRESETS.north.map((lat, i) => ({ lat, slot: i })), flip: false, dynDur: false, dynIns: false, dynRat: false, earthRef: true, layout: 'full', lineMode: 'chosen', specA: -90, specB: 90, specStep: 5, specOp: 70, show: { view: true, dur: true, ins: true, rat: true, map: true }, waterPct: 30, fillLakes: true, basinFill: 100, hUnit: 'km', mapLayer: 'elev', palette: 'terrain', hillshade: true, insWhen: 'date', insMetric: 'mean', mapOrbit: 'real', insShow: 'wm', tUnit: 'C', heat: 'mixed', lapse: 6.5, insOp: 65, insDyn: false, mapGrid: true, gridLat: 15, gridLon: 30, mapSites: true, ratioMetric: 'mean', mode: 'natural', twoCI: 0, twoPos: 'L4', twoK: 'x133', threeK: 'x067', camOff: 0, playYear: false, playSol: false
+  lats: PRESETS.north.map((lat, i) => ({ lat, slot: i })), flip: false, dynDur: false, dynIns: false, dynRat: false, earthRef: true, layout: 'full', lineMode: 'chosen', specA: -90, specB: 90, specStep: 5, specOp: 70, show: { view: true, dur: true, ins: true, rat: true, map: true }, waterPct: 30, fillLakes: true, basinFill: 100, hUnit: 'km', mapLayer: 'elev', palette: 'terrain', hillshade: true, insWhen: 'date', insMetric: 'mean', mapOrbit: 'real', insShow: 'wm', tUnit: 'C', heat: 'cont', lapse: 6.5, insOp: 65, insDyn: false, mapGrid: true, gridLat: 15, gridLon: 30, mapSites: true, ratioMetric: 'mean', mode: 'natural', twoCI: 0, twoPh: 0, twoPhMode: 'fixed', twoPos: 'L4', twoK: 'x133', threeK: 'x067', camOff: 0, playYear: false, playSol: false
 };
 try {
   const sv = JSON.parse(localStorage.getItem(STORE) || 'null');
@@ -1270,13 +1298,15 @@ try {
     if (num(sv.lapse, 0, 10)) state.lapse = sv.lapse;
     if (sv.insShow === 'wm' || sv.insShow === 'temp') state.insShow = sv.insShow;
     if (['C', 'F', 'K'].includes(sv.tUnit)) state.tUnit = sv.tUnit;
-    if (['cont', 'mixed', 'mari'].includes(sv.heat)) state.heat = sv.heat;
+    if (sv.v >= 2 && ['cont', 'mixed', 'mari'].includes(sv.heat)) state.heat = sv.heat;
     for (const k of ['hillshade', 'insDyn', 'mapGrid', 'mapSites', 'fillLakes']) if (typeof sv[k] === 'boolean') state[k] = sv[k];
     if (num(sv.gridLat, 1, 30)) state.gridLat = Math.round(sv.gridLat);
     if (num(sv.gridLon, 1, 30)) state.gridLon = Math.round(sv.gridLon);
     if (sv.ratioMetric === 'mean' || sv.ratioMetric === 'noon') state.ratioMetric = sv.ratioMetric;
     if (['natural', 'two', 'three'].includes(sv.mode)) state.mode = sv.mode;
     if (num(sv.twoCI, 0, 1)) state.twoCI = Math.round(sv.twoCI * 20) / 20;
+    if (num(sv.twoPh, -45, 45)) state.twoPh = Math.round(sv.twoPh * 2) / 2;
+    if (sv.twoPhMode === 'fixed' || sv.twoPhMode === 'season') state.twoPhMode = sv.twoPhMode;
     if (sv.twoPos === 'L4' || sv.twoPos === 'L5') state.twoPos = sv.twoPos;
     if (sv.twoK === 'x1' || sv.twoK === 'x133') state.twoK = sv.twoK;
     if (sv.threeK === 'x05' || sv.threeK === 'x067') state.threeK = sv.threeK;
@@ -1290,17 +1320,17 @@ try {
 } catch (e) { /* storage unavailable: defaults */ }
 const KVAL = { x1: 1, x133: 4 / 3, x05: 0.5, x067: 2 / 3 };
 function applyMode() {
-  if (state.mode === 'two') SRC = [{ dl: 0, k: 1, name: 'Sun' }, { dl: state.twoPos === 'L4' ? -60 : 60, k: KVAL[state.twoK], name: state.twoPos, ci: state.twoCI || 0,
+  if (state.mode === 'two') SRC = [{ dl: 0, k: 1, name: 'Sun' }, { dl: state.twoPos === 'L4' ? -60 : 60, k: KVAL[state.twoK], name: state.twoPos, ci: state.twoCI || 0, ph: (state.twoPh || 0) * D2R, phMode: state.twoPhMode,
     label: kLabel(KVAL[state.twoK]) + (state.twoCI ? ' avg · k = ' + state.twoCI.toFixed(2) : '') }];
   else if (state.mode === 'three') SRC = [{ dl: 0, k: 1, name: 'Sun' }, { dl: -60, k: KVAL[state.threeK], name: 'L4' }, { dl: 60, k: KVAL[state.threeK], name: 'L5' }];
   else SRC = [{ dl: 0, k: 1, name: 'Sun' }];
-  MODE_KEY = state.mode === 'two' ? 'two|' + state.twoPos + '|' + state.twoK + '|' + (state.twoCI || 0).toFixed(2) : state.mode === 'three' ? 'three|' + state.threeK : 'natural';
+  MODE_KEY = state.mode === 'two' ? 'two|' + state.twoPos + '|' + state.twoK + '|' + (state.twoCI || 0).toFixed(2) + '|' + (state.twoCI ? state.twoPh + state.twoPhMode : '') : state.mode === 'three' ? 'three|' + state.threeK : 'natural';
 }
 applyMode();
 const MULTI = () => SRC.length > 1;
 const kLabel = k => (Math.abs(k - 4 / 3) < 1e-9 ? '1.33' : Math.abs(k - 2 / 3) < 1e-9 ? '0.67' : String(k)) + '× Sun';
 function save() {
-  try { localStorage.setItem(STORE, JSON.stringify({ units: state.units, metric: state.metric, orbit: state.orbit, flip: state.flip, dynDur: state.dynDur, dynIns: state.dynIns, dynRat: state.dynRat, earthRef: state.earthRef, layout: state.layout, lineMode: state.lineMode, specA: state.specA, specB: state.specB, specStep: state.specStep, specOp: state.specOp, show: state.show, ratioMetric: state.ratioMetric, waterPct: state.waterPct, fillLakes: state.fillLakes, basinFill: state.basinFill, hUnit: state.hUnit, mapLayer: state.mapLayer, palette: state.palette, hillshade: state.hillshade, insWhen: state.insWhen, insMetric: state.insMetric, mapOrbit: state.mapOrbit, insShow: state.insShow, tUnit: state.tUnit, heat: state.heat, lapse: state.lapse, insOp: state.insOp, insDyn: state.insDyn, mapGrid: state.mapGrid, gridLat: state.gridLat, gridLon: state.gridLon, mapSites: state.mapSites, mode: state.mode, twoCI: state.twoCI, twoPos: state.twoPos, twoK: state.twoK, threeK: state.threeK, lats: state.lats })); } catch (e) {}
+  try { localStorage.setItem(STORE, JSON.stringify({ v: 2, units: state.units, metric: state.metric, orbit: state.orbit, flip: state.flip, dynDur: state.dynDur, dynIns: state.dynIns, dynRat: state.dynRat, earthRef: state.earthRef, layout: state.layout, lineMode: state.lineMode, specA: state.specA, specB: state.specB, specStep: state.specStep, specOp: state.specOp, show: state.show, ratioMetric: state.ratioMetric, waterPct: state.waterPct, fillLakes: state.fillLakes, basinFill: state.basinFill, hUnit: state.hUnit, mapLayer: state.mapLayer, palette: state.palette, hillshade: state.hillshade, insWhen: state.insWhen, insMetric: state.insMetric, mapOrbit: state.mapOrbit, insShow: state.insShow, tUnit: state.tUnit, heat: state.heat, lapse: state.lapse, insOp: state.insOp, insDyn: state.insDyn, mapGrid: state.mapGrid, gridLat: state.gridLat, gridLon: state.gridLon, mapSites: state.mapSites, mode: state.mode, twoCI: state.twoCI, twoPh: state.twoPh, twoPhMode: state.twoPhMode, twoPos: state.twoPos, twoK: state.twoK, threeK: state.threeK, lats: state.lats })); } catch (e) {}
 }
 
 /* ================= formatting ================= */
@@ -2072,7 +2102,7 @@ function drawGround() {
   const proj = (E, Nn, U, k) => { const s = k || 1, x = E * rx + Nn * ry, dd = E * fx + Nn * fy; return [gcx + R * s * x, gcy - R * s * (U * cb + dd * sb), dd]; };
   const extra = SRC.filter(x => x.dl).map(x => {
     const g = srcGeom(st.ls, x.dl), v = sunENU(phi, g.d, Hh - raOffset(st.ls, x.dl));
-    return { src: x, d: g.d, v, el: Math.asin(clamp(v[2], -1, 1)) * R2D, tr: srcTrans(x, Math.sin(phi), g.d, v[2]) };
+    return { src: x, d: g.d, v, el: Math.asin(clamp(v[2], -1, 1)) * R2D, tr: srcTrans(x, Math.sin(phi), g.d, v[2], st.ls) };
   });
   const elSky = Math.max(el, ...extra.map(x => x.el));
   const day = smooth(-5, 12, elSky), halo = smooth(-9, -1, el) * (1 - smooth(4, 16, el));
@@ -2240,7 +2270,7 @@ function updateReadouts() {
     for (const src of SRC) {
       const dd = src.dl ? srcGeom(st.ls, src.dl).d : m.d;
       const v = sunENU(phiO, dd, hS - raOffset(st.ls, src.dl));
-      if (v[2] > 0) tot += src.k * srcTrans(src, Math.sin(phiO), dd, v[2]) * m.S * v[2];
+      if (v[2] > 0) tot += src.k * srcTrans(src, Math.sin(phiO), dd, v[2], st.ls) * m.S * v[2];
       if (!src.dl) el = Math.asin(clamp(v[2], -1, 1)) * R2D;
     }
     setText('st8K', multi ? 'Light now' : 'Sun now');
@@ -2488,6 +2518,7 @@ $('lyCompact').addEventListener('click', () => setLayout('compact'));
 
 /* ================= sky modes ================= */
 const MEAN_FLUX = MARS.S1 / (MARS.a * MARS.a * Math.sqrt(1 - MARS.e * MARS.e));   // annual-mean sunlight at Mars
+const phText = () => { const v = +state.twoPh; return state.twoPhMode === 'season' ? '±' + Math.abs(v) + '°' + (v < 0 ? ' (reversed)' : '') : (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v) + '°'; };
 function updateModeBar() {
   const pr = (id, on) => $(id).setAttribute('aria-pressed', String(on));
   pr('mdNatural', state.mode === 'natural'); pr('mdTwo', state.mode === 'two'); pr('mdThree', state.mode === 'three');
@@ -2496,6 +2527,8 @@ function updateModeBar() {
   pr('threeK05', state.threeK === 'x05'); pr('threeK067', state.threeK === 'x067');
   $('optTwo').hidden = state.mode !== 'two'; $('optThree').hidden = state.mode !== 'three';
   $('twoCI').value = state.twoCI; setText('twoCIOut', 'k = ' + (+state.twoCI).toFixed(2));
+  $('twoPh').value = state.twoPh; setText('twoPhOut', phText());
+  pr('phFixed', state.twoPhMode === 'fixed'); pr('phSeason', state.twoPhMode === 'season');
   const F = SRC.reduce((a, b) => a + b.k, 0), mean = MEAN_FLUX * F;
   const sum = $('modeSum'); sum.replaceChildren();
   const b = t => { const e = document.createElement('b'); e.textContent = t; return e; };
@@ -2507,8 +2540,9 @@ function updateModeBar() {
   else lead = 'Mirror arrays at L4 and L5: a morning sun 60° west and an evening sun 60° east of the real one. ';
   let ciText = '';
   if (state.mode === 'two' && state.twoCI > 0) {
-    const kc = state.twoCI, K = KVAL[state.twoK], f = x => (K * x / (1 - kc / 2)).toFixed(2) + '× Sun';
-    ciText = ' Counterirradiance k = ' + kc.toFixed(2) + ': the array spreads its light like a concave lens, 1 − k·cos 2a across the disc it lights, with a measured from the disc’s east–west centre line (the latitude seen from the array, equal to the real latitude when the array is over the equator): ' + f(1 - kc) + ' along the centre line, ' + f(1) + ' at a = ±45°, ' + f(1 + kc) + ' at the north and south edges, scaled so the average stays ' + kLabel(K) + '.';
+    const kc = state.twoCI, K = KVAL[state.twoK], f = x => (K * x / ciNorm(kc, 0)).toFixed(2) + '× Sun';
+    const ph = +state.twoPh, phS = state.twoPhMode === 'season';
+    ciText = ' Counterirradiance k = ' + kc.toFixed(2) + ': the array spreads its light like a concave lens, 1 − k·cos 2(a − p) across the disc it lights, with a measured from the disc’s east–west centre line (the latitude seen from the array, equal to the real latitude when the array is over the equator)' + (ph === 0 ? ': ' + f(1 - kc) + ' along the centre line, ' + f(1) + ' at a = ±45°, ' + f(1 + kc) + ' at the north and south edges' : phS ? ' and the dimmest line swinging ' + Math.abs(ph) + '° ' + (ph > 0 ? 'into the summer hemisphere' : 'into the winter hemisphere') + ' with the seasons (p = ' + ph + '° × sin Ls), held at the maximum beyond 90° from it' : ' and the dimmest line moved to a = ' + phText() + ', held at the maximum beyond 90° from it') + ', scaled so the average stays ' + kLabel(K) + '.';
   }
   sum.append(lead, 'Average flux at Mars ', b(Math.round(mean) + ' W/m²'), ', ' + Math.round(100 * mean / MARS.S1) + '% of Earth’s 1361 W/m².' + ciText);
 }
@@ -2531,6 +2565,13 @@ $('twoCI').addEventListener('input', e => {
   clearTimeout(ciTimer); ciTimer = setTimeout(() => setMode({}), 350);
 });
 $('twoCI').addEventListener('change', () => { clearTimeout(ciTimer); setMode({}); });
+$('twoPh').addEventListener('input', e => {
+  state.twoPh = Math.round(+e.target.value * 2) / 2; setText('twoPhOut', phText());
+  clearTimeout(ciTimer); ciTimer = setTimeout(() => setMode({}), 350);
+});
+$('twoPh').addEventListener('change', () => { clearTimeout(ciTimer); setMode({}); });
+$('phFixed').addEventListener('click', () => setMode({ twoPhMode: 'fixed' }));
+$('phSeason').addEventListener('click', () => setMode({ twoPhMode: 'season' }));
 $('threeK05').addEventListener('click', () => setMode({ threeK: 'x05' }));
 $('threeK067').addEventListener('click', () => setMode({ threeK: 'x067' }));
 document.querySelectorAll('.js-earth').forEach(inp => inp.addEventListener('change', e => {
