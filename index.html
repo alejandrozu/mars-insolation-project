@@ -598,8 +598,8 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
   <div class="mode-grp" id="optTwo" hidden>
     <span class="flabel" id="posLbl">Mirrors at</span>
     <div class="seg" role="group" aria-labelledby="posLbl">
-      <button type="button" id="posL4" aria-pressed="true">L4 · morning</button>
-      <button type="button" id="posL5" aria-pressed="false">L5 · evening</button>
+      <button type="button" id="posL4" aria-pressed="false">L4 · morning</button>
+      <button type="button" id="posL5" aria-pressed="true">L5 · evening</button>
     </div>
     <span class="flabel" id="twoKLbl">Strength</span>
     <div class="seg" role="group" aria-labelledby="twoKLbl">
@@ -607,11 +607,11 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
       <button type="button" id="twoK133" aria-pressed="true">1.33× Sun</button>
     </div>
     <span class="flabel" id="ciLbl" title="Shapes the mirror light like a concave lens: dimmer near the middle of the disc it lights, brighter toward its north and south edges, same average">Counterirradiance</span>
-    <input type="range" id="twoCI" min="0" max="1" step="0.05" value="0.5" aria-labelledby="ciLbl">
-    <output id="twoCIOut" class="ci-out">k = 0.50</output>
+    <input type="range" id="twoCI" min="0" max="1" step="0.05" value="0.85" aria-labelledby="ciLbl">
+    <output id="twoCIOut" class="ci-out">k = 0.85</output>
     <span class="flabel" id="phLbl" title="Moves the dimmest line of the mirror light north (+) or south (−) of the middle of the disc it sees; past the brightest point the light stays at its maximum">Phase</span>
-    <input type="range" id="twoPh" min="-45" max="45" step="2.5" value="30" aria-labelledby="phLbl">
-    <output id="twoPhOut" class="ci-out">±30°</output>
+    <input type="range" id="twoPh" min="-45" max="45" step="2.5" value="25" aria-labelledby="phLbl">
+    <output id="twoPhOut" class="ci-out">±25°</output>
     <div class="seg" role="group" aria-label="Phase fixed or following the seasons">
       <button type="button" id="phFixed" aria-pressed="false">Fixed</button>
       <button type="button" id="phSeason" aria-pressed="true" title="The dimmest line swings with the seasons, p × sin Ls: into the summer hemisphere, north in northern summer and south in southern summer">Follows seasons</button>
@@ -621,8 +621,8 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
       <input type="range" id="twoShift" min="-180" max="180" step="5" value="0" aria-labelledby="phShiftLbl">
       <output id="twoShiftOut" class="ci-out">Ls +0°</output></span>
       <span class="ci-pair"><span class="flabel" id="phBiasLbl" title="Adds the same offset to the phase all year: the dimmest line sits this far north (+) or south (−) on average, so the other side gets more light">Bias</span>
-      <input type="range" id="twoBias" min="-30" max="30" step="2.5" value="0" aria-labelledby="phBiasLbl">
-      <output id="twoBiasOut" class="ci-out">0°</output></span>
+      <input type="range" id="twoBias" min="-30" max="30" step="2.5" value="12.5" aria-labelledby="phBiasLbl">
+      <output id="twoBiasOut" class="ci-out">+12.5°</output></span>
     </span>
   </div>
   <div class="mode-grp" id="optThree" hidden>
@@ -965,6 +965,11 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
           <input type="range" id="lapse" min="0" max="10" step="0.5" value="6.5" aria-label="Lapse rate in kelvin per Earth-equivalent kilometre">
           <p class="mhint" id="lapseHint"></p>
         </div>
+        <div id="isoRow" hidden>
+          <div class="spec-row"><span class="flabel" id="isoLbl">Isotherms</span><output id="isoOut"></output></div>
+          <input type="range" id="isoStep" min="1" max="30" step="1" value="10" aria-labelledby="isoLbl">
+          <p class="mhint">Counted up and down from 0 °C; the 0 °C line is drawn thick.</p>
+        </div>
         <div class="fgrp"><span class="flabel">When</span>
           <div class="seg small" role="group" aria-label="Insolation period">
             <button type="button" id="iwDate" aria-pressed="true">Chosen date</button>
@@ -1298,7 +1303,7 @@ const PRESETS = { north: [0, 15, 30, 45, 60, 85], south: [0, -15, -30, -45, -60,
 const STORE = 'mars-daylight-v1';
 const state = {
   t: T_TODAY, tod: 14, obsLat: 45, view: 'orbit', units: 'mars', metric: 'mean', orbit: { dur: 'real', ins: 'real', rat: 'real' },
-  lats: PRESETS.north.map((lat, i) => ({ lat, slot: i })), flip: false, dynDur: false, dynIns: false, dynRat: false, earthRef: true, layout: 'full', lineMode: 'chosen', specA: -90, specB: 90, specStep: 5, specOp: 70, show: { view: true, dur: true, ins: true, rat: true, map: true, lat: true }, ltCut: 3, ltRef: true, waterPct: 30, fillLakes: true, basinFill: 100, hUnit: 'km', mapLayer: 'elev', palette: 'terrain', hillshade: true, insWhen: 'date', insMetric: 'mean', mapOrbit: 'real', insShow: 'wm', tUnit: 'C', heat: 'cont', lapse: 6.5, insOp: 65, insDyn: false, mapGrid: true, gridLat: 15, gridLon: 30, mapSites: true, ratioMetric: 'mean', mode: 'natural', twoCI: 0.5, twoPh: 30, twoPhMode: 'season', twoShift: 0, twoBias: 0, twoPos: 'L4', twoK: 'x133', threeK: 'x067', camOff: 0, playYear: false, playSol: false
+  lats: PRESETS.north.map((lat, i) => ({ lat, slot: i })), flip: false, dynDur: false, dynIns: false, dynRat: false, earthRef: true, layout: 'full', lineMode: 'chosen', specA: -90, specB: 90, specStep: 5, specOp: 70, show: { view: true, dur: true, ins: true, rat: true, map: true, lat: true }, ltCut: 3, ltRef: true, isoStep: 10, waterPct: 30, fillLakes: true, basinFill: 100, hUnit: 'km', mapLayer: 'elev', palette: 'terrain', hillshade: true, insWhen: 'date', insMetric: 'mean', mapOrbit: 'real', insShow: 'wm', tUnit: 'C', heat: 'cont', lapse: 6.5, insOp: 65, insDyn: false, mapGrid: true, gridLat: 15, gridLon: 30, mapSites: true, ratioMetric: 'mean', mode: 'natural', twoCI: 0.85, twoPh: 25, twoPhMode: 'season', twoShift: 0, twoBias: 12.5, twoPos: 'L5', twoK: 'x133', threeK: 'x067', camOff: 0, playYear: false, playSol: false
 };
 try {
   const sv = JSON.parse(localStorage.getItem(STORE) || 'null');
@@ -1334,6 +1339,7 @@ try {
     if (sv.mapOrbit === 'real' || sv.mapOrbit === 'circ') state.mapOrbit = sv.mapOrbit;
     if (num(sv.insOp, 0, 100)) state.insOp = sv.insOp;
     if (num(sv.lapse, 0, 10)) state.lapse = sv.lapse;
+    if (num(sv.isoStep, 1, 30)) state.isoStep = Math.round(sv.isoStep);
     if (sv.insShow === 'wm' || sv.insShow === 'temp') state.insShow = sv.insShow;
     if (['C', 'F', 'K'].includes(sv.tUnit)) state.tUnit = sv.tUnit;
     if (sv.v >= 2 && ['cont', 'mixed', 'mari'].includes(sv.heat)) state.heat = sv.heat;
@@ -1342,14 +1348,14 @@ try {
     if (num(sv.gridLon, 1, 30)) state.gridLon = Math.round(sv.gridLon);
     if (sv.ratioMetric === 'mean' || sv.ratioMetric === 'noon') state.ratioMetric = sv.ratioMetric;
     if (['natural', 'two', 'three'].includes(sv.mode)) state.mode = sv.mode;
-    if (sv.v >= 3) {      // saves from before the k = 0.5, ±30° default keep the new default shaping
+    if (sv.v >= 4) {      // saves from before the L5, k = 0.85, ±25°, +12.5° default take the new default shaping and position
       if (num(sv.twoCI, 0, 1)) state.twoCI = Math.round(sv.twoCI * 20) / 20;
       if (num(sv.twoPh, -45, 45)) state.twoPh = Math.round(sv.twoPh * 2) / 2;
       if (sv.twoPhMode === 'fixed' || sv.twoPhMode === 'season') state.twoPhMode = sv.twoPhMode;
       if (num(sv.twoShift, -180, 180)) state.twoShift = Math.round(sv.twoShift / 5) * 5;
       if (num(sv.twoBias, -30, 30)) state.twoBias = Math.round(sv.twoBias * 2) / 2;
+      if (sv.twoPos === 'L4' || sv.twoPos === 'L5') state.twoPos = sv.twoPos;
     }
-    if (sv.twoPos === 'L4' || sv.twoPos === 'L5') state.twoPos = sv.twoPos;
     if (sv.twoK === 'x1' || sv.twoK === 'x133') state.twoK = sv.twoK;
     if (sv.threeK === 'x05' || sv.threeK === 'x067') state.threeK = sv.threeK;
     if (Array.isArray(sv.lats)) {
@@ -1372,7 +1378,7 @@ const kLabel = k => (Math.abs(k - 4 / 3) < 1e-9 ? '1.33' : Math.abs(k - 2 / 3) <
 applyMode();
 const MULTI = () => SRC.length > 1;
 function save() {
-  try { localStorage.setItem(STORE, JSON.stringify({ v: 3, ltCut: state.ltCut, ltRef: state.ltRef, units: state.units, metric: state.metric, orbit: state.orbit, flip: state.flip, dynDur: state.dynDur, dynIns: state.dynIns, dynRat: state.dynRat, earthRef: state.earthRef, layout: state.layout, lineMode: state.lineMode, specA: state.specA, specB: state.specB, specStep: state.specStep, specOp: state.specOp, show: state.show, ratioMetric: state.ratioMetric, waterPct: state.waterPct, fillLakes: state.fillLakes, basinFill: state.basinFill, hUnit: state.hUnit, mapLayer: state.mapLayer, palette: state.palette, hillshade: state.hillshade, insWhen: state.insWhen, insMetric: state.insMetric, mapOrbit: state.mapOrbit, insShow: state.insShow, tUnit: state.tUnit, heat: state.heat, lapse: state.lapse, insOp: state.insOp, insDyn: state.insDyn, mapGrid: state.mapGrid, gridLat: state.gridLat, gridLon: state.gridLon, mapSites: state.mapSites, mode: state.mode, twoCI: state.twoCI, twoPh: state.twoPh, twoPhMode: state.twoPhMode, twoShift: state.twoShift, twoBias: state.twoBias, twoPos: state.twoPos, twoK: state.twoK, threeK: state.threeK, lats: state.lats })); } catch (e) {}
+  try { localStorage.setItem(STORE, JSON.stringify({ v: 4, isoStep: state.isoStep, ltCut: state.ltCut, ltRef: state.ltRef, units: state.units, metric: state.metric, orbit: state.orbit, flip: state.flip, dynDur: state.dynDur, dynIns: state.dynIns, dynRat: state.dynRat, earthRef: state.earthRef, layout: state.layout, lineMode: state.lineMode, specA: state.specA, specB: state.specB, specStep: state.specStep, specOp: state.specOp, show: state.show, ratioMetric: state.ratioMetric, waterPct: state.waterPct, fillLakes: state.fillLakes, basinFill: state.basinFill, hUnit: state.hUnit, mapLayer: state.mapLayer, palette: state.palette, hillshade: state.hillshade, insWhen: state.insWhen, insMetric: state.insMetric, mapOrbit: state.mapOrbit, insShow: state.insShow, tUnit: state.tUnit, heat: state.heat, lapse: state.lapse, insOp: state.insOp, insDyn: state.insDyn, mapGrid: state.mapGrid, gridLat: state.gridLat, gridLon: state.gridLon, mapSites: state.mapSites, mode: state.mode, twoCI: state.twoCI, twoPh: state.twoPh, twoPhMode: state.twoPhMode, twoShift: state.twoShift, twoBias: state.twoBias, twoPos: state.twoPos, twoK: state.twoK, threeK: state.threeK, lats: state.lats })); } catch (e) {}
 }
 
 /* ================= formatting ================= */
@@ -3239,19 +3245,19 @@ function buildMap() {
   mapParams = { sea, pal, wl, LMAX, WMAX, shadeOn, insOn, prof, op, lo, hi, FL, bf, tempOn, TB, hRef, gK };
   // iso-insolation contours (daily mean only); skipped while the water slider is moving
   if (insOn && (tempOn || state.insMetric === 'mean')) {
-    const ckey = [sea, state.fillLakes ? fillSea : 'dry', bf, MODE_KEY, state.mapOrbit, state.insWhen, state.insWhen === 'date' ? state.t.toFixed(2) : '', tempOn, tempOn ? state.lapse + '|' + state.heat : ''].join('|');
+    const ckey = [sea, state.fillLakes ? fillSea : 'dry', bf, MODE_KEY, state.mapOrbit, state.insWhen, state.insWhen === 'date' ? state.t.toFixed(2) : '', tempOn, tempOn ? state.lapse + '|' + state.heat + '|' + state.isoStep : ''].join('|');
     if (ckey === contourKey && mapContours) { /* unchanged: reuse */ }
     else if (contourHide) { mapContours = null; contourKey = ''; }
     else if (waterDragging && mapContours) { /* keep the previous lines until the water slider settles */ }
     else if (st > 1) { /* half-resolution preview: keep the current lines */ }
-    else { mapContours = tempOn ? computeContours(V, 273.15, 10, T_FIXED[0] - 0.01, v => Math.abs(v - 273.15) < 0.01) : computeContours(V, 0, 100, 100, v => v === 100 || v === 500); contourKey = ckey; }
+    else { mapContours = tempOn ? computeContours(V, 273.15, state.isoStep, 273.15 - Math.floor(60 / state.isoStep + 1e-9) * state.isoStep - 0.01, v => Math.abs(v - 273.15) < 0.01) : computeContours(V, 0, 100, 100, v => v === 100 || v === 500); contourKey = ckey; }
   } else { mapContours = null; contourKey = ''; }
   mapBuildId++;
   renderMapLegend(); updateMapRead();
 }
 // Marching squares on the land insolation grid (water cells are NaN, so lines stop at shorelines).
 // Paths are in map-pixel coordinates (x 0…1440 from 180°W, y 0…720 from 90°N). Insolation: every 100 W/m², thick at 100 and 500.
-// Temperature: every 10 °C from −60 °C up, thick at 0 °C.
+// Temperature: every state.isoStep °C counted from 0 °C (down to about −60 °C), thick at 0 °C.
 function computeContours(V, base, step, minLevel, isThick) {
   const thin = new Path2D(), thick = new Path2D(), labels = [];
   let segs = 0;
@@ -3358,7 +3364,7 @@ function drawMap() {
     }
     g.restore();
   }
-  // iso-insolation lines every 100 W/m² (daily mean only; thick at 100 and 500) or isotherms every 10 °C (thick at 0 °C), over land
+  // iso-insolation lines every 100 W/m² (daily mean only; thick at 100 and 500) or isotherms every state.isoStep °C from 0 °C (thick at 0 °C), over land
   if (mapContours && mapStats.insOn) {
     // traced once into a screen-sized layer per set of lines and view, so redraws (observer line, sites) only blit it
     const lk = [contourKey, mapView.z.toFixed(5), mapView.cx.toFixed(5), mapView.cy.toFixed(5), MW, MH, MDPR, state.tUnit, mapContours.labels.length, document.fonts ? document.fonts.status : ''].join('|');
@@ -3491,6 +3497,7 @@ function updateMapControls() {
   pr('tuC', state.tUnit === 'C'); pr('tuF', state.tUnit === 'F'); pr('tuK', state.tUnit === 'K');
   $('tUnitRow').hidden = !tempOn; $('measRow').hidden = tempOn;
   $('lapseRow').hidden = !tempOn; $('lapse').value = state.lapse;
+  $('isoRow').hidden = !tempOn; $('isoStep').value = state.isoStep; setText('isoOut', isoText());
   $('heatRow').hidden = !tempOn || state.insWhen === 'year';
   $('insDyn').closest('label').hidden = tempOn;
   pr('hsCont', state.heat === 'cont'); pr('hsMixed', state.heat === 'mixed'); pr('hsMari', state.heat === 'mari');
@@ -3545,6 +3552,9 @@ $('hsCont').addEventListener('click', mapSet({ heat: 'cont' }));
 $('hsMixed').addEventListener('click', mapSet({ heat: 'mixed' }));
 $('hsMari').addEventListener('click', mapSet({ heat: 'mari' }));
 for (const [id, u] of [['tuC', 'C'], ['tuF', 'F'], ['tuK', 'K']]) $(id).addEventListener('click', () => { state.tUnit = u; updateMapControls(); renderMapLegend(); updateMapRead(); scheduleLat(); scheduleMapDraw(); save(); });
+function isoText() { const d = state.isoStep, u = state.tUnit, v = u === 'F' ? d * 9 / 5 : d;
+  return 'every ' + (Number.isInteger(v) ? v : v.toFixed(1)) + (u === 'F' ? ' °F' : u === 'K' ? ' K' : ' °C') + ' from ' + fmtTemp(273.15); }
+$('isoStep').addEventListener('input', e => { state.isoStep = Math.round(+e.target.value); setText('isoOut', isoText()); holdContours(); save(); });
 $('lapse').addEventListener('input', e => { state.lapse = +e.target.value; holdContours(); liteDrag(); mapSettingsChanged(); });
 $('water').addEventListener('input', e => {
   state.waterPct = +e.target.value; waterDragging = true; liteDrag(); holdContours();
