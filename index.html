@@ -137,7 +137,13 @@ button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-v
 .ph-season[hidden] { display: none; }
 .ci-pair { display: inline-flex; align-items: center; gap: 10px; white-space: nowrap; }
 .ci-out { font-family: var(--f-mono); font-size: 12.5px; min-width: 52px; font-variant-numeric: tabular-nums; }
-.mode-sum { margin: 0; flex: 1 1 300px; min-width: 0; font-size: 12.5px; color: var(--ink-2); }
+.band-seas { display: grid; grid-template-columns: auto repeat(4, minmax(0, 1fr)); gap: 6px 14px; align-items: center; flex: 1 1 100%; max-width: 920px; }
+.band-seas[hidden] { display: none; }
+.band-seas .bs-h { font-size: 11.5px; color: var(--ink-2); }
+.band-seas label { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.modebar .band-seas input[type="range"] { width: auto; flex: 1 1 auto; min-width: 50px; }
+@media (max-width: 640px) { .band-seas { gap: 6px 8px; } .band-seas label { flex-direction: column; align-items: stretch; gap: 0; } .band-seas .ci-out { min-width: 0; width: auto; text-align: center; font-size: 11px; } .modebar .band-seas input[type="range"] { min-width: 0; width: 100%; } .band-seas .flabel { font-size: 10px; } }
+.mode-sum { margin: 0; flex: 1 1 100%; min-width: 0; font-size: 12.5px; color: var(--ink-2); }
 .mode-sum b { font-family: var(--f-mono); font-weight: 500; color: var(--ink); }
 .panel { min-width: 0; }
 .vtitle { display: none; }
@@ -541,6 +547,7 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
   .topctl { align-items: flex-start; }
 }
 @media (max-width: 560px) {
+  .seg.multi { flex-wrap: wrap; } .unitbox { flex-wrap: wrap; max-width: 100%; }
   .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .ctl { gap: 10px; padding: 10px 12px; }
   .ctl.obsrow { grid-template-columns: auto minmax(0, 1fr); }
@@ -617,19 +624,57 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
     </div>
   </div>
   <div class="mode-grp" id="optThree" hidden>
-    <span class="ci-pair"><span class="flabel" id="threeTLbl" title="Both arrays together, as a multiple of the Sun’s own average light at Mars (1.33× brings the total to 101% of Earth’s)">Mirror light</span>
-    <input type="range" id="threeT" min="1" max="2" step="0.01" value="1.47" aria-labelledby="threeTLbl">
-    <output id="threeTOut" class="ci-out">1.47× Sun</output></span>
-    <span class="ci-pair"><span class="flabel" id="f4Lbl" title="How the mirror light is split between the two arrays">L4 share</span>
-    <input type="range" id="threeF4" min="0" max="1" step="0.01" value="0.54" aria-labelledby="f4Lbl">
-    <output id="threeF4Out" class="ci-out">L4 54% · L5 46%</output></span>
+    <span class="ci-pair"><span class="flabel" id="k5Lbl" title="Strength of the L5 array, the second sun, as a multiple of the Sun’s own average light at Mars">L5 light</span>
+    <input type="range" id="threeK5" min="0" max="2" step="0.01" value="1.21" aria-labelledby="k5Lbl">
+    <output id="threeK5Out" class="ci-out">1.21× Sun</output></span>
+    <span class="ci-pair"><span class="flabel" id="k4Lbl" title="Strength of the L4 array, the supplemental sun, at its brightest, as a multiple of the Sun’s own average light at Mars; the Seasons box can dim it over the year">L4 light</span>
+    <input type="range" id="threeK4" min="0" max="1.5" step="0.01" value="0.48" aria-labelledby="k4Lbl">
+    <output id="threeK4Out" class="ci-out">0.48× Sun</output></span>
     <span class="flabel" id="selLbl">Shaping</span>
     <div class="seg" role="group" aria-labelledby="selLbl">
-      <button type="button" id="sel4" aria-pressed="true" title="The controls to the right shape the L4 (morning) array">L4</button>
-      <button type="button" id="sel5" aria-pressed="false" title="The controls to the right shape the L5 (evening) array">L5</button>
+      <button type="button" id="sel4" aria-pressed="true" title="The controls to the right shape the L4 (morning) array, the supplemental sun">L4</button>
+      <button type="button" id="sel5" aria-pressed="false" title="The controls to the right shape the L5 (evening) array, the second sun">L5</button>
     </div>
   </div>
   <div class="mode-grp" id="optShape" hidden>
+    <span class="flabel" id="lightLbl" title="How this array spreads its light: like a lens over the whole disc it sees, or only onto the latitudes beyond its edges">Light</span>
+    <div class="seg" role="group" aria-labelledby="lightLbl" id="lightSeg">
+      <button type="button" id="lightLens" aria-pressed="false" title="Over the whole disc the array sees, shaped by k and the phase">Lens</button>
+      <button type="button" id="lightOuter" aria-pressed="true" title="Only poleward of a north and a south edge, both at 45° or beyond; none falls on the middle latitudes">Outer latitudes</button>
+    </div>
+    <div class="ph-season" id="bandOpts" hidden>
+      <span class="ci-pair"><span class="flabel" id="bSoftLbl" title="Width of the soft edge: the light rises from zero at the edge to full over this many degrees of latitude">Soft edge</span>
+      <input type="range" id="bSoft" min="1" max="20" step="1" value="5" aria-labelledby="bSoftLbl">
+      <output id="bSoftOut" class="ci-out">5°</output></span>
+      <span class="ci-pair"><span class="flabel" id="bLeanLbl" title="Inside each cap the light follows the unshaped light times 1 + g × (|lat| − edge)/(90° − edge): above 0 it leans toward the pole, below 0 toward the edge">Pole lean</span>
+      <input type="range" id="bLean" min="-1" max="3" step="0.1" value="0" aria-labelledby="bLeanLbl">
+      <output id="bLeanOut" class="ci-out">0.0</output></span>
+      <button type="button" class="rst fine" id="seasBtn" aria-expanded="false" aria-controls="bandSeas" title="The edges, the north share and the strength at four points of the year, joined smoothly: in use whether this box is open or not">Seasons ▸</button>
+    <div class="band-seas" id="bandSeas" hidden>
+      <span></span><span class="bs-h">Ls 0°</span><span class="bs-h">Ls 90°</span><span class="bs-h">Ls 180°</span><span class="bs-h">Ls 270°</span>
+      <span class="flabel" title="The array lights only north of this latitude (never closer to the equator than 45°N)">North edge</span>
+      <label title="North edge, Ls 0° · northern spring"><input type="range" id="bHN0" min="45" max="80" step="1" value="45" aria-label="North edge, Ls 0° · northern spring"><output id="bHN0Out" class="ci-out"></output></label>
+      <label title="North edge, Ls 90° · northern summer"><input type="range" id="bHN1" min="45" max="80" step="1" value="45" aria-label="North edge, Ls 90° · northern summer"><output id="bHN1Out" class="ci-out"></output></label>
+      <label title="North edge, Ls 180° · northern autumn"><input type="range" id="bHN2" min="45" max="80" step="1" value="45" aria-label="North edge, Ls 180° · northern autumn"><output id="bHN2Out" class="ci-out"></output></label>
+      <label title="North edge, Ls 270° · northern winter"><input type="range" id="bHN3" min="45" max="80" step="1" value="45" aria-label="North edge, Ls 270° · northern winter"><output id="bHN3Out" class="ci-out"></output></label>
+      <span class="flabel" title="The array lights only south of this latitude (never closer to the equator than 45°S)">South edge</span>
+      <label title="South edge, Ls 0° · northern spring"><input type="range" id="bHS0" min="45" max="80" step="1" value="45" aria-label="South edge, Ls 0° · northern spring"><output id="bHS0Out" class="ci-out"></output></label>
+      <label title="South edge, Ls 90° · northern summer"><input type="range" id="bHS1" min="45" max="80" step="1" value="45" aria-label="South edge, Ls 90° · northern summer"><output id="bHS1Out" class="ci-out"></output></label>
+      <label title="South edge, Ls 180° · northern autumn"><input type="range" id="bHS2" min="45" max="80" step="1" value="45" aria-label="South edge, Ls 180° · northern autumn"><output id="bHS2Out" class="ci-out"></output></label>
+      <label title="South edge, Ls 270° · northern winter"><input type="range" id="bHS3" min="45" max="80" step="1" value="45" aria-label="South edge, Ls 270° · northern winter"><output id="bHS3Out" class="ci-out"></output></label>
+      <span class="flabel" title="The share of the array’s light sent to the northern cap; the rest goes south">North share</span>
+      <label title="North share, Ls 0° · northern spring"><input type="range" id="bSN0" min="0" max="1" step="0.01" value="0.5" aria-label="North share, Ls 0° · northern spring"><output id="bSN0Out" class="ci-out"></output></label>
+      <label title="North share, Ls 90° · northern summer"><input type="range" id="bSN1" min="0" max="1" step="0.01" value="0.5" aria-label="North share, Ls 90° · northern summer"><output id="bSN1Out" class="ci-out"></output></label>
+      <label title="North share, Ls 180° · northern autumn"><input type="range" id="bSN2" min="0" max="1" step="0.01" value="0.5" aria-label="North share, Ls 180° · northern autumn"><output id="bSN2Out" class="ci-out"></output></label>
+      <label title="North share, Ls 270° · northern winter"><input type="range" id="bSN3" min="0" max="1" step="0.01" value="0.5" aria-label="North share, Ls 270° · northern winter"><output id="bSN3Out" class="ci-out"></output></label>
+      <span class="flabel" title="How bright the array is, as a share of the L4 light setting">Strength</span>
+      <label title="Strength, Ls 0° · northern spring"><input type="range" id="bFS0" min="0" max="1" step="0.01" value="1" aria-label="Strength, Ls 0° · northern spring"><output id="bFS0Out" class="ci-out"></output></label>
+      <label title="Strength, Ls 90° · northern summer"><input type="range" id="bFS1" min="0" max="1" step="0.01" value="1" aria-label="Strength, Ls 90° · northern summer"><output id="bFS1Out" class="ci-out"></output></label>
+      <label title="Strength, Ls 180° · northern autumn"><input type="range" id="bFS2" min="0" max="1" step="0.01" value="1" aria-label="Strength, Ls 180° · northern autumn"><output id="bFS2Out" class="ci-out"></output></label>
+      <label title="Strength, Ls 270° · northern winter"><input type="range" id="bFS3" min="0" max="1" step="0.01" value="1" aria-label="Strength, Ls 270° · northern winter"><output id="bFS3Out" class="ci-out"></output></label>
+    </div>
+    </div>
+    <span class="ph-season" id="lensOpts">
     <span class="flabel" id="ciLbl" title="Shapes the mirror light like a concave lens: dimmer near the middle of the disc it lights, brighter toward its north and south edges, same average">Counterirradiance</span>
     <input type="range" id="twoCI" min="0" max="1" step="0.05" value="1" aria-labelledby="ciLbl">
     <output id="twoCIOut" class="ci-out">k = 1.00</output>
@@ -660,6 +705,7 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
       <span class="ci-pair"><span class="flabel" id="kSLbl" title="Timing of the k swing: k is highest at Ls 90° + s">at</span>
       <input type="range" id="twoKS" min="-180" max="180" step="1" value="-99" aria-labelledby="kSLbl">
       <output id="twoKSOut" class="ci-out">Ls −99°</output></span>
+    </span>
     </span>
   </div>
   <p class="mode-sum" id="modeSum"></p>
@@ -1088,7 +1134,7 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
         <div class="spec-row"><span class="flabel">Leave out ground above</span><output id="ltCutOut"></output></div>
         <input type="range" id="ltCut" min="0.5" max="8" step="0.5" value="3" aria-label="Height cut-off in Earth-equivalent kilometres above sea level">
         <p class="mhint">Earth-equivalent km above sea level (Mars km × 0.38).</p>
-        <label class="switch sm" id="ltRefRow" title="Dashed lines: the same sky without counterirradiance (k = 0)"><input type="checkbox" id="ltRef" checked><span class="track"></span>Compare with no shaping (k = 0, dashed)</label>
+        <label class="switch sm" id="ltRefRow" title="Dashed lines: the same sky with the mirror light unshaped (k = 0, each array spread over the whole disc it sees)"><input type="checkbox" id="ltRef" checked><span class="track"></span>Compare with no shaping (k = 0, dashed)</label>
       </div>
       <div class="mread" id="ltRead"></div>
     </div>
@@ -1109,7 +1155,7 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
         <li>Daylight runs from the moment the Sun's centre rises above a flat horizon to the moment it sets. Refraction in the thin atmosphere and local terrain are ignored.</li>
         <li>Insolation is measured at the top of the atmosphere on level ground: 1361 W/m² at 1 AU, scaled by distance squared (713 W/m² at perihelion, 490 W/m² at aphelion). Dust can remove a large share of this before it reaches the surface.</li>
         <li>The circular orbit (shown as a reference or on its own, per chart) keeps the same tilt and the same starting solstice, fixes the distance at 1.5237 AU and advances L<sub>s</sub> at a constant rate, so all four seasons last 167.1 sols.</li>
-        <li>Two and three suns: mirror arrays at the Sun–Mars L4 and L5 points. They sit at Mars's distance from the Sun, so seen from Mars they shine from the orbital plane 60° west (L4) or east (L5) of the Sun, and their light is a fixed multiple of sunlight at Mars's current distance. Daylight counts any sun above the horizon; the peak is the brightest moment of the sol. 1.33× brings the average flux to about Earth's. Three suns shapes each array with its own settings, with a total mirror light (1–2× Sun) and a share for L4; its default (1.47× in all, L4 54%) was chosen in the dynamic setting at 1 atm to keep land between 45°S and 45°N inside 0–30 °C, the ocean north of the equator between 20 and 30 °C, and land south of 45°S inside −20 to 30 °C on as many sols as possible: L5 balances the seasons in the middle latitudes while L4, with k swinging over the year, keeps the northern ocean warm and softens southern winters. Counterirradiance (two suns): the array shapes its beam like a concave lens, with intensity 1 − k·cos 2a across the disc it lights, where a is the angle from the disc's east–west centre line, i.e. the latitude as seen from the array. On the ground that centre line is a great circle through the point under the array, tilted with its declination, so a equals the real latitude when the array is over the equator. The profile is divided by its average over the disc, 1 − k/2, so the array still delivers 1× or 1.33× on average; k = 1 leaves the centre line dark and makes the north and south edges 4× the average. Phase p moves the dimmest line to a = p, 1 − k·cos 2(a − p), held at its maximum once |a − p| passes 90°, again divided by its disc average; the phase can be fixed or follow the seasons (p × sin Ls), putting the dimmest line in the summer hemisphere.</li>
+        <li>Two and three suns: mirror arrays at the Sun–Mars L4 and L5 points. They sit at Mars's distance from the Sun, so seen from Mars they shine from the orbital plane 60° west (L4) or east (L5) of the Sun, and their light is a fixed multiple of sunlight at Mars's current distance. Daylight counts any sun above the horizon; the peak is the brightest moment of the sol. 1.33× brings the average flux to about Earth's. Three suns sets each array's strength and shaping separately. L5, the second sun, keeps the lens profile and moderates the middle latitudes. L4, the supplemental sun, can instead light only the outer latitudes: poleward of a north edge and a south edge that never come closer to the equator than 45°, rising from zero at the edge over a soft ramp (a smoothstep a few degrees wide) and leaning toward or away from the pole. The two edges, the share of its light sent north and its strength (a share of the set value) are given at Ls 0°, 90°, 180° and 270° and joined by a smooth periodic curve (Catmull-Rom). Inside each cap the light follows what the array would give unshaped, and no latitude gets more than 10× that; what one cap cannot take goes to the other. The populated middle band then sees only the Sun and L5, so nights remain. The default (L5 1.21× Sun; L4 up to 0.48×, 0.31× on average) was chosen in the dynamic setting at 1 atm to keep land between 45°S and 45°N inside 0–30 °C, the ocean north of the equator between 20 and 30 °C (aiming a degree inside that range), and land poleward of 45°, north and south, inside −20 to 30 °C on as many sols as possible, with no light left undelivered. Counterirradiance (two suns): the array shapes its beam like a concave lens, with intensity 1 − k·cos 2a across the disc it lights, where a is the angle from the disc's east–west centre line, i.e. the latitude as seen from the array. On the ground that centre line is a great circle through the point under the array, tilted with its declination, so a equals the real latitude when the array is over the equator. The profile is divided by its average over the disc, 1 − k/2, so the array still delivers 1× or 1.33× on average; k = 1 leaves the centre line dark and makes the north and south edges 4× the average. Phase p moves the dimmest line to a = p, 1 − k·cos 2(a − p), held at its maximum once |a − p| passes 90°, again divided by its disc average; the phase can be fixed or follow the seasons (p × sin Ls), putting the dimmest line in the summer hemisphere.</li>
         <li>Earth comparison lines are typical Earth values for the same measure: daily mean 100 and 500 W/m² for mid-latitude winter and summer, 250 and 450 for the tropics; noon peak 350 and 1300 for mid-latitude winter and summer, 700 for tropical winter and 1000 at the equator.</li>
         <li>Seasonal ratio divides each sol’s insolation by the dimmest value of the year at the same latitude, for the chosen measure. Earth references: about 5× (daily mean) and 4× (noon peak) at mid-latitudes, about 2× in the tropics.</li>
         <li>Map: elevation from the Mars Global Surveyor MOLA gridded topography (MEGDR, 4 pixels per degree, about 15 km at the equator; Smith et al. 2003, NASA PDS Geosciences Node), stored to the nearest 5 m relative to the MOLA areoid. The water level is the share of the surface area that lies below sea level, so 30% fills the northern lowlands and the deep basins. With "Fill craters and closed basins" on, every closed depression also holds a lake with a flat surface, set by the basin fill slider as a fraction of the way from the basin's floor to its spill point (100% is full to the brim, as rain would leave it if nothing evaporated); lakes come on top of the ocean share. Earth-equivalent km multiply Mars heights by g<sub>Mars</sub>/g<sub>Earth</sub> = 0.38: with the same air, pressure falls that much more slowly with height on Mars, so Olympus Mons (about 22 km above a 30% sea) thins the air like an 8.6 km climb on Earth. The insolation layer uses the same flat-ground, top-of-atmosphere model as the charts, so it varies with latitude only; slopes and the atmosphere are not included.</li>
@@ -1222,12 +1268,66 @@ const ciK = (src, ls) => src.phMode === 'season' && src.kA ? clamp((src.ci || 0)
 // the profile at disc position y for given k and phase, divided by its disc average n
 const ciProf = (kc, p, n, y) => p === 0 ? ((1 - kc) + 2 * kc * y * y) / n : (1 - kc * Math.cos(2 * clamp(Math.asin(clamp(y, -1, 1)) - p, -Math.PI / 2, Math.PI / 2))) / n;
 // a source's light at a point (latitude sine sp), relative to its average, with the source at declination d and sinEl above the horizon
-const srcTrans = (src, sp, d, sinEl, ls) => { const kc = ciK(src, ls); if (!kc) return 1; const p = ciPhase(src, ls); return ciProf(kc, p, ciNorm(kc, p), (sp - Math.sin(d) * sinEl) / Math.cos(d)); };
+// Outer latitudes (three suns, the supplemental array): it lights only poleward of a north edge and a south edge, both at 45° or
+// beyond, so it never shines on the middle latitudes. Each edge and the share of light sent north are set at Ls 0°, 90°, 180° and
+// 270° and joined by a smooth periodic curve (Catmull-Rom). The light rises from zero at the edge over a soft ramp (smoothstep, width
+// "soft") and leans toward the pole by 1 + g (|lat| − edge)/(90° − edge). For each date the unshaped light the array would give
+// every 2° band is weighted by that profile and scaled so the north cap gets the north share of the array's light and the south cap
+// the rest; no latitude gets more than 10× its unshaped light (the excess is spread over the rest of the cap, and what a cap cannot
+// take, in polar night for instance, goes to the other cap). Its strength can also follow the seasons: the set strength times a
+// factor (0–100%) given at the same four points of the year.
+const BAND_CMAX = 10;
+const smooth01 = x => { x = clamp(x, 0, 1); return x * x * (3 - 2 * x); };
+function cr4(v, ls) {                    // periodic Catmull-Rom through the values at Ls 0°, 90°, 180°, 270°
+  const u = mod(ls, 360) / 90, k = Math.floor(u) % 4, t = u - Math.floor(u);
+  const p0 = v[(k + 3) % 4], p1 = v[k], p2 = v[(k + 1) % 4], p3 = v[(k + 2) % 4];
+  return 0.5 * (2 * p1 + (-p0 + p2) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t + (-p0 + 3 * p1 - 3 * p2 + p3) * t * t * t);
+}
+const bandMask = (src, lat, hN, hS) => lat > 0 ? smooth01((lat - hN) / src.wd) * Math.max(0, 1 + src.lean * (lat - hN) / (90 - hN))
+  : lat < 0 ? smooth01((-lat - hS) / src.wd) * Math.max(0, 1 + src.lean * (-lat - hS) / (90 - hS)) : 0;
+function bandC(src, ls) {                 // edges and per-cap scale for the date, cached per array
+  const key = Math.round(ls * 1e4); let c = src.bc.get(key);
+  if (c) return c;
+  const hN = Math.max(45, cr4(src.hN, ls)), hS = Math.max(45, cr4(src.hS, ls)), sN = clamp(cr4(src.sN, ls), 0, 1), fs = clamp(cr4(src.fS, ls), 0, 1);
+  const g = srcGeom(ls, src.dl), sd = Math.sin(g.d), cd = Math.cos(g.d), Wq = new Float64Array(90), M = new Float64Array(90);
+  let P = 0;
+  for (let i = 0; i < 90; i++) {
+    const lat = -89 + 2 * i, phi = lat * D2R, H0 = sunsetH(phi, g.d);
+    Wq[i] = Math.max(0, Math.sin(phi) * sd * H0 + Math.cos(phi) * cd * Math.sin(H0)) * (Math.sin(phi + D2R) - Math.sin(phi - D2R));
+    M[i] = bandMask(src, lat, hN, hS); P += Wq[i];
+  }
+  const cap = (lo, hi) => { let s = 0; for (let i = lo; i < hi; i++) if (M[i] > 0) s += Wq[i]; return BAND_CMAX * s; };
+  const PmN = cap(45, 90), PmS = cap(0, 45);
+  let tN = sN * P, tS = P - tN, ex = Math.max(tN - PmN, 0); tN -= ex; tS += ex;
+  ex = Math.max(tS - PmS, 0); tS -= ex; tN = Math.min(PmN, tN + ex);
+  const solve = (lo0, hi0, t) => {      // scale c with sum of W min(m c, CMAX) = t, by bisection as in the reference model
+    let mp = Infinity; for (let i = lo0; i < hi0; i++) if (M[i] > 0 && M[i] < mp) mp = M[i];
+    let lo = 0, hi = isFinite(mp) ? BAND_CMAX / mp : 0;
+    for (let it = 0; it < 45; it++) {
+      const cc = 0.5 * (lo + hi); let f = 0;
+      for (let i = lo0; i < hi0; i++) f += Wq[i] * Math.min(M[i] * cc, BAND_CMAX);
+      if (f > t) hi = cc; else lo = cc;
+    }
+    return 0.5 * (lo + hi);
+  };
+  c = { hN, hS, fs, del: P > 0 ? (tN + tS) / P : 1, cN: solve(45, 90, tN), cS: solve(0, 45, tS) };
+  if (src.bc.size > 4000) src.bc.clear();
+  src.bc.set(key, c);
+  return c;
+}
+const bandF = (src, sp, ls) => { const lat = Math.asin(clamp(sp, -1, 1)) * R2D, B = bandC(src, ls), m = bandMask(src, lat, B.hN, B.hS); return m ? Math.min(m * (lat > 0 ? B.cN : B.cS), BAND_CMAX) * B.fs : 0; };
+function srcAvgK(src) {                   // the strength an array delivers on average over the year (× Sun)
+  if (!src.band) return src.k;
+  if (src.kAvg === undefined) { let a = 0; for (let i = 0; i < N; i++) { const B = bandC(src, ORB[i].ls); a += B.fs * B.del; } src.kAvg = src.k * a / N; }
+  return src.kAvg;
+}
+const srcTrans = (src, sp, d, sinEl, ls) => { if (src.band) return bandF(src, sp, ls); const kc = ciK(src, ls); if (!kc) return 1; const p = ciPhase(src, ls); return ciProf(kc, p, ciNorm(kc, p), (sp - Math.sin(d) * sinEl) / Math.cos(d)); };
 // One source over one sol: the integral over hour angle of its elevation sine times the profile (× S/2π gives the daily mean).
 // Without phase y is linear in sin e = a + b cos H and the profile is quadratic in y, so the integral is exact from the moments
 // of sin e; with a phase it is summed over the sol.
 function srcDay(sp, cp, d, H0, src, ls) {
   const sd = Math.sin(d), cd = Math.cos(d), a = sp * sd, b = cp * cd, s1 = Math.sin(H0), I1 = 2 * (a * H0 + b * s1);
+  if (src.band) return I1 * bandF(src, sp, ls);
   const kc = ciK(src, ls);
   if (!kc) return I1;
   const pph = ciPhase(src, ls);
@@ -1260,9 +1360,9 @@ function dayMetrics(lat, st, noPeak) {
     const q = kk * S / (2 * Math.PI) * srcDay(sp, cp, g.d, H0, src, st.ls);
     if (q > 0) mean += q;
     const off = mod(g.ra - sunRa + Math.PI, 2 * Math.PI) - Math.PI;
-    const sdg = Math.sin(g.d), cdg = Math.cos(g.d), kc = ciK(src, st.ls);
-    const pph = kc ? ciPhase(src, st.ls) : 0, nn = kc ? ciNorm(kc, pph) : 1;
-    parts.push({ k: kk, a: sp * sdg, b: cp * cdg, off, tr: kc ? (h => ciProf(kc, pph, nn, (sp - sdg * h) / cdg)) : null });
+    const sdg = Math.sin(g.d), cdg = Math.cos(g.d), kc = src.band ? 0 : ciK(src, st.ls);
+    const pph = kc ? ciPhase(src, st.ls) : 0, nn = kc ? ciNorm(kc, pph) : 1, bf = src.band ? bandF(src, sp, st.ls) : 1;
+    parts.push({ k: kk, a: sp * sdg, b: cp * cdg, off, tr: src.band ? (() => bf) : kc ? (h => ciProf(kc, pph, nn, (sp - sdg * h) / cdg)) : null });
     ivs.push({ c: 12 + off * 12 / Math.PI, w: H0 * 12 / Math.PI });
   }
   const un = unionArcs(ivs);
@@ -1346,7 +1446,7 @@ const STORE = 'mars-daylight-v1';
 const state = {
   t: T_TODAY, tod: 14, obsLat: 45, view: 'orbit', units: 'mars', metric: 'mean', orbit: { dur: 'real', ins: 'real', rat: 'real' },
   lats: PRESETS.north.map((lat, i) => ({ lat, slot: i })), flip: false, dynDur: false, dynIns: false, dynRat: false, earthRef: true, layout: 'full', lineMode: 'chosen', specA: -90, specB: 90, specStep: 5, specOp: 70, show: { view: true, dur: true, ins: true, rat: true, map: true, lat: true }, ltCut: 3, ltRef: true, isoStep: 10, waterPct: 30, fillLakes: true, basinFill: 100, hUnit: 'km', mapLayer: 'elev', palette: 'terrain', hillshade: true, insWhen: 'date', insMetric: 'mean', mapOrbit: 'real', insShow: 'wm', tUnit: 'C', heat: 'dyn', lapse: 6.5, p0: 1, insOp: 65, insDyn: false, mapGrid: true, gridLat: 15, gridLon: 30, mapSites: true, ratioMetric: 'mean', mode: 'natural', twoCI: 1, twoPh: 27.5, twoPhMode: 'season', twoShift: -3, twoBias: 11.5, twoA2: 6.5, twoS2: 18, twoKA: 0.6, twoKS: -99, twoPos: 'L5',
-  three: {"T": 1.47, "f4": 0.54, "L4": {"CI": 0.95, "Ph": 6, "PhMode": "season", "Shift": -71, "Bias": -0.5, "A2": 6, "S2": -77, "KA": 0.8, "KS": 60}, "L5": {"CI": 0.9, "Ph": 16, "PhMode": "season", "Shift": 12, "Bias": 0, "A2": 8.5, "S2": 34, "KA": 0.2, "KS": -90}}, threeSel: 'L4', twoK: 'x133', threeK: 'x067', camOff: 0, playYear: false, playSol: false
+  three: {"K4": 0.48, "K5": 1.21, "L4": {"Light": "outer", "HN": [46, 45, 46, 47], "HS": [49, 45, 68, 70], "SN": [0.24, 0.27, 0.47, 0.14], "FS": [0.76, 0.98, 0.65, 0], "Soft": 9, "Lean": -0.3, "CI": 0.95, "Ph": 6, "PhMode": "season", "Shift": -71, "Bias": -0.5, "A2": 6, "S2": -77, "KA": 0.8, "KS": 60}, "L5": {"Light": "lens", "CI": 0.7, "Ph": 27, "PhMode": "season", "Shift": 5, "Bias": 8.5, "A2": 6.5, "S2": 46, "KA": 0.05, "KS": 169}}, threeSel: 'L4', twoK: 'x133', threeK: 'x067', camOff: 0, playYear: false, playSol: false
 };
 const DEFAULTS = JSON.parse(JSON.stringify(state));   // for the reset buttons
 try {
@@ -1406,14 +1506,17 @@ try {
       if (num(sv.twoKA, 0, 1)) state.twoKA = Math.round(sv.twoKA * 20) / 20;
       if (num(sv.twoKS, -180, 180)) state.twoKS = Math.round(sv.twoKS);
       const t3 = sv.three;
-      if (t3 && typeof t3 === 'object') {
-        if (num(t3.f4, 0, 1)) state.three.f4 = Math.round(t3.f4 * 100) / 100;
-        if (num(t3.T, 1, 2)) state.three.T = Math.round(t3.T * 100) / 100;
+      if (sv.v >= 9 && t3 && typeof t3 === 'object') {      // three-sun saves from before the supplemental L4 take the new default
+        if (num(t3.K4, 0, 2)) state.three.K4 = Math.round(t3.K4 * 100) / 100;
+        if (num(t3.K5, 0, 2)) state.three.K5 = Math.round(t3.K5 * 100) / 100;
         for (const m of ['L4', 'L5']) { const o = t3[m], d = state.three[m]; if (!o || typeof o !== 'object') continue;
           for (const [k, lo, hi] of [['CI', 0, 1], ['Ph', -45, 45], ['Shift', -180, 180], ['Bias', -30, 30], ['A2', 0, 30], ['S2', -90, 90], ['KA', 0, 1], ['KS', -180, 180]]) if (num(o[k], lo, hi)) d[k] = o[k];
-          if (o.PhMode === 'fixed' || o.PhMode === 'season') d.PhMode = o.PhMode; }
+          if (o.PhMode === 'fixed' || o.PhMode === 'season') d.PhMode = o.PhMode;
+          for (const [k, lo, hi] of [['Soft', 1, 20], ['Lean', -1, 3]]) if (num(o[k], lo, hi)) d[k] = o[k];
+          for (const [k, lo, hi] of [['HN', 45, 80], ['HS', 45, 80], ['SN', 0, 1], ['FS', 0, 1]]) if (Array.isArray(o[k]) && o[k].length === 4 && o[k].every(v => num(v, lo, hi))) d[k] = o[k].slice();
+          if (o.Light === 'lens' || o.Light === 'outer') d.Light = o.Light; }
       }
-      if (sv.threeSel === 'L4' || sv.threeSel === 'L5') state.threeSel = sv.threeSel;
+      if (sv.v >= 9 && (sv.threeSel === 'L4' || sv.threeSel === 'L5')) state.threeSel = sv.threeSel;
     }
     if (sv.twoK === 'x1' || sv.twoK === 'x133') state.twoK = sv.twoK;
     if (sv.threeK === 'x05' || sv.threeK === 'x067') state.threeK = sv.threeK;
@@ -1430,12 +1533,13 @@ function applyMode() {
   if (state.mode === 'two') SRC = [{ dl: 0, k: 1, name: 'Sun' }, { dl: state.twoPos === 'L4' ? -60 : 60, k: KVAL[state.twoK], name: state.twoPos, ci: state.twoCI || 0, ph: (state.twoPh || 0) * D2R, phMode: state.twoPhMode, sh: (state.twoShift || 0) * D2R, bi: (state.twoBias || 0) * D2R, a2: (state.twoA2 || 0) * D2R, s2: (state.twoS2 || 0) * D2R, kA: state.twoKA || 0, ks: (state.twoKS || 0) * D2R,
     label: kLabel(KVAL[state.twoK]) + (state.twoCI ? ' avg · k = ' + state.twoCI.toFixed(2) : '') }];
   else if (state.mode === 'three') {
-    const T = state.three.T, f4 = state.three.f4;
+    const K4 = state.three.K4, K5 = state.three.K5;
     const mk = (o, dl, k, name) => ({ dl, k, name, ci: o.CI || 0, ph: (o.Ph || 0) * D2R, phMode: o.PhMode, sh: (o.Shift || 0) * D2R, bi: (o.Bias || 0) * D2R,
-      a2: (o.A2 || 0) * D2R, s2: (o.S2 || 0) * D2R, kA: o.KA || 0, ks: (o.KS || 0) * D2R, label: kLabel(k) + (o.CI ? ' · k = ' + (+o.CI).toFixed(2) : '') });
+      a2: (o.A2 || 0) * D2R, s2: (o.S2 || 0) * D2R, kA: o.KA || 0, ks: (o.KS || 0) * D2R, label: kLabel(k) + (o.Light === 'outer' ? ' · outer latitudes' : o.CI ? ' · k = ' + (+o.CI).toFixed(2) : ''),
+      ...(o.Light === 'outer' ? { band: true, hN: o.HN.map(Number), hS: o.HS.map(Number), sN: o.SN.map(Number), fS: (o.FS || [1, 1, 1, 1]).map(Number), wd: +o.Soft || 1, lean: +o.Lean || 0, bc: new Map() } : {}) });
     SRC = [{ dl: 0, k: 1, name: 'Sun' }];
-    if (f4 > 0) SRC.push(mk(state.three.L4, -60, T * f4, 'L4'));
-    if (f4 < 1) SRC.push(mk(state.three.L5, 60, T * (1 - f4), 'L5'));
+    if (K4 > 0) SRC.push(mk(state.three.L4, -60, K4, 'L4'));
+    if (K5 > 0) SRC.push(mk(state.three.L5, 60, K5, 'L5'));
   }
   else SRC = [{ dl: 0, k: 1, name: 'Sun' }];
   MODE_KEY = state.mode === 'two' ? 'two|' + state.twoPos + '|' + state.twoK + '|' + (state.twoCI || 0).toFixed(2) + '|' + (state.twoCI || state.twoKA ? state.twoPh + state.twoPhMode + (state.twoPhMode === 'season' ? '|' + [state.twoShift, state.twoBias, state.twoA2, state.twoS2, state.twoKA, state.twoKS].map(v => v || 0).join('|') : '') : '') : state.mode === 'three' ? 'three|' + JSON.stringify(state.three) : 'natural';
@@ -1444,7 +1548,7 @@ const kLabel = k => (Math.abs(k - 4 / 3) < 1e-9 ? '1.33' : Math.abs(k - 2 / 3) <
 applyMode();
 const MULTI = () => SRC.length > 1;
 function save() {
-  try { localStorage.setItem(STORE, JSON.stringify({ v: 8, three: state.three, threeSel: state.threeSel, isoStep: state.isoStep, ltCut: state.ltCut, ltRef: state.ltRef, units: state.units, metric: state.metric, orbit: state.orbit, flip: state.flip, dynDur: state.dynDur, dynIns: state.dynIns, dynRat: state.dynRat, earthRef: state.earthRef, layout: state.layout, lineMode: state.lineMode, specA: state.specA, specB: state.specB, specStep: state.specStep, specOp: state.specOp, show: state.show, ratioMetric: state.ratioMetric, waterPct: state.waterPct, fillLakes: state.fillLakes, basinFill: state.basinFill, hUnit: state.hUnit, mapLayer: state.mapLayer, palette: state.palette, hillshade: state.hillshade, insWhen: state.insWhen, insMetric: state.insMetric, mapOrbit: state.mapOrbit, insShow: state.insShow, tUnit: state.tUnit, heat: state.heat, lapse: state.lapse, p0: state.p0, insOp: state.insOp, insDyn: state.insDyn, mapGrid: state.mapGrid, gridLat: state.gridLat, gridLon: state.gridLon, mapSites: state.mapSites, mode: state.mode, twoCI: state.twoCI, twoPh: state.twoPh, twoPhMode: state.twoPhMode, twoShift: state.twoShift, twoBias: state.twoBias, twoA2: state.twoA2, twoS2: state.twoS2, twoKA: state.twoKA, twoKS: state.twoKS, twoPos: state.twoPos, twoK: state.twoK, threeK: state.threeK, lats: state.lats })); } catch (e) {}
+  try { localStorage.setItem(STORE, JSON.stringify({ v: 9, three: state.three, threeSel: state.threeSel, isoStep: state.isoStep, ltCut: state.ltCut, ltRef: state.ltRef, units: state.units, metric: state.metric, orbit: state.orbit, flip: state.flip, dynDur: state.dynDur, dynIns: state.dynIns, dynRat: state.dynRat, earthRef: state.earthRef, layout: state.layout, lineMode: state.lineMode, specA: state.specA, specB: state.specB, specStep: state.specStep, specOp: state.specOp, show: state.show, ratioMetric: state.ratioMetric, waterPct: state.waterPct, fillLakes: state.fillLakes, basinFill: state.basinFill, hUnit: state.hUnit, mapLayer: state.mapLayer, palette: state.palette, hillshade: state.hillshade, insWhen: state.insWhen, insMetric: state.insMetric, mapOrbit: state.mapOrbit, insShow: state.insShow, tUnit: state.tUnit, heat: state.heat, lapse: state.lapse, p0: state.p0, insOp: state.insOp, insDyn: state.insDyn, mapGrid: state.mapGrid, gridLat: state.gridLat, gridLon: state.gridLon, mapSites: state.mapSites, mode: state.mode, twoCI: state.twoCI, twoPh: state.twoPh, twoPhMode: state.twoPhMode, twoShift: state.twoShift, twoBias: state.twoBias, twoA2: state.twoA2, twoS2: state.twoS2, twoKA: state.twoKA, twoKS: state.twoKS, twoPos: state.twoPos, twoK: state.twoK, threeK: state.threeK, lats: state.lats })); } catch (e) {}
 }
 
 /* ================= formatting ================= */
@@ -2634,16 +2738,20 @@ $('lyCompact').addEventListener('click', () => setLayout('compact'));
 const MEAN_FLUX = MARS.S1 / (MARS.a * MARS.a * Math.sqrt(1 - MARS.e * MARS.e));   // annual-mean sunlight at Mars
 const TWO_SH = new Proxy({}, { get: (_, k) => state['two' + k], set: (_, k, v) => { state['two' + k] = v; return true; } });
 const shp = () => state.mode === 'three' ? state.three[state.threeSel] : TWO_SH;   // the shaping the controls show and edit
-let fineOpen = false;      // the fine-tuning box starts closed on every visit; its values apply either way
+let fineOpen = false, seasOpen = false;      // the fine-tuning box starts closed on every visit; its values apply either way
 const lsText = v => 'Ls ' + ((+v || 0) < 0 ? '−' : '+') + Math.abs(+v || 0) + '°';
 const a2Text = () => '±' + (+shp().A2 || 0) + '°';
 const kaText = () => '±' + (+shp().KA || 0).toFixed(2);
 const shText = () => { const v = +shp().Shift || 0; return 'Ls ' + (v < 0 ? '−' : '+') + Math.abs(v) + '°'; };
 const biText = () => { const v = +shp().Bias || 0; return (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v) + '°'; };
 const phText = () => { const v = +shp().Ph; return shp().PhMode === 'season' ? '±' + Math.abs(v) + '°' + (v < 0 ? ' (reversed)' : '') : (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v) + '°'; };
-const f4Text = () => 'L4 ' + Math.round(state.three.f4 * 100) + '% · L5 ' + Math.round((1 - state.three.f4) * 100) + '%';
 function shapeShort(o) {               // one line per array in the three-sun summary
   const sg = v => (v < 0 ? '− ' : '+ ') + Math.abs(v), arg = (v, two) => (two ? '2(' : '(') + 'Ls' + (v ? (v > 0 ? ' − ' : ' + ') + Math.abs(v) + '°' : '') + ')';
+  if (o.Light === 'outer') {
+    const rg = (a, f) => { const lo = Math.min(...a), hi = Math.max(...a); return lo === hi ? f(lo) : f(lo) + '–' + f(hi); };
+    return 'outer latitudes only, lighting north of ' + rg(o.HN, v => v + '°N') + ' and south of ' + rg(o.HS, v => v + '°S') + ' over the year with a ' + o.Soft + '° soft edge, the northern cap taking '
+      + rg(o.SN, v => Math.round(v * 100) + '%') + ' of its light' + (o.FS.some(v => v !== 1) ? ', its strength ' + rg(o.FS, v => Math.round(v * 100) + '%') + ' of the set value over the year' : '') + (+o.Lean ? ', leaning ' + (o.Lean > 0 ? 'toward the poles' : 'toward the edges') + ' (g = ' + (+o.Lean).toFixed(1) + ')' : '');
+  }
   if (!o.CI && !o.KA) return 'unshaped';
   const season = o.PhMode === 'season';
   const p = season ? (o.Bias ? (o.Bias > 0 ? '+' : '−') + Math.abs(o.Bias) + '° ' + sg(o.Ph) : (o.Ph < 0 ? '−' : '') + Math.abs(o.Ph)) + '° × sin ' + arg(o.Shift) + (o.A2 ? ' ' + sg(o.A2) + '° × sin ' + arg(o.S2, true) : '') : (o.Ph > 0 ? '+' : o.Ph < 0 ? '−' : '') + Math.abs(o.Ph) + '°';
@@ -2655,11 +2763,17 @@ function updateModeBar() {
   pr('mdNatural', state.mode === 'natural'); pr('mdTwo', state.mode === 'two'); pr('mdThree', state.mode === 'three');
   pr('posL4', state.twoPos === 'L4'); pr('posL5', state.twoPos === 'L5');
   pr('twoK1', state.twoK === 'x1'); pr('twoK133', state.twoK === 'x133');
-  $('threeT').value = state.three.T; setText('threeTOut', state.three.T.toFixed(2) + '× Sun');
+  $('threeK5').value = state.three.K5; setText('threeK5Out', state.three.K5.toFixed(2) + '× Sun'); $('threeK4').value = state.three.K4; setText('threeK4Out', state.three.K4.toFixed(2) + '× Sun');
   $('optTwo').hidden = state.mode !== 'two'; $('optThree').hidden = state.mode !== 'three'; $('skyReset').hidden = state.mode === 'natural';
   $('optShape').hidden = state.mode === 'natural';
+  const outer = state.mode === 'three' && shp().Light === 'outer';
+  $('lightLbl').hidden = $('lightSeg').hidden = state.mode !== 'three'; pr('lightLens', !outer); pr('lightOuter', outer);
+  $('lensOpts').hidden = outer; $('bandOpts').hidden = !outer;
+  if (outer) { const o = shp(); $('bSoft').value = o.Soft; setText('bSoftOut', o.Soft + '°'); $('bLean').value = o.Lean; setText('bLeanOut', (+o.Lean).toFixed(1));
+    $('bandSeas').hidden = !seasOpen; $('seasBtn').setAttribute('aria-expanded', String(seasOpen)); setText('seasBtn', seasOpen ? 'Seasons ▾' : 'Seasons ▸');
+    for (let j = 0; j < 4; j++) { $('bHN' + j).value = o.HN[j]; setText('bHN' + j + 'Out', o.HN[j] + '°N'); $('bHS' + j).value = o.HS[j]; setText('bHS' + j + 'Out', o.HS[j] + '°S');
+      $('bSN' + j).value = o.SN[j]; setText('bSN' + j + 'Out', Math.round(o.SN[j] * 100) + '%'); $('bFS' + j).value = o.FS[j]; setText('bFS' + j + 'Out', Math.round(o.FS[j] * 100) + '%'); } }
   pr('sel4', state.threeSel === 'L4'); pr('sel5', state.threeSel === 'L5');
-  $('threeF4').value = state.three.f4; setText('threeF4Out', f4Text());
   const S = shp();
   $('twoCI').value = S.CI; setText('twoCIOut', 'k = ' + (+S.CI).toFixed(2));
   $('twoPh').value = S.Ph; setText('twoPhOut', phText());
@@ -2670,7 +2784,7 @@ function updateModeBar() {
   $('twoBias').value = S.Bias; setText('twoBiasOut', biText());
   $('twoA2').value = S.A2; setText('twoA2Out', a2Text()); $('twoS2').value = S.S2; setText('twoS2Out', lsText(S.S2));
   $('twoKA').value = S.KA; setText('twoKAOut', kaText()); $('twoKS').value = S.KS; setText('twoKSOut', lsText(S.KS));
-  const F = SRC.reduce((a, b) => a + b.k, 0), mean = MEAN_FLUX * F;
+  const F = SRC.reduce((a, b) => a + srcAvgK(b), 0), mean = MEAN_FLUX * F;
   const sum = $('modeSum'); sum.replaceChildren();
   const b = t => { const e = document.createElement('b'); e.textContent = t; return e; };
   let lead;
@@ -2681,9 +2795,10 @@ function updateModeBar() {
   else lead = 'Mirror arrays at L4 and L5: a morning sun 60° west and an evening sun 60° east of the real one. ';
   let ciText = '';
   if (state.mode === 'three') {
-    const T = state.three.T, f4 = state.three.f4;
-    ciText = ' Mirror light ' + kLabel(T) + ' in all: L4 ' + Math.round(f4 * 100) + '%, L5 ' + Math.round((1 - f4) * 100) + '%.';
-    for (const [m, share] of [['L4', f4], ['L5', 1 - f4]]) if (share > 0) ciText += ' ' + m + ' (' + kLabel(T * share) + '): ' + shapeShort(state.three[m]) + '.';
+    const K4 = state.three.K4, K5 = state.three.K5;
+    ciText = ' Mirror light ' + kLabel(+SRC.reduce((a, x) => a + (x.dl ? srcAvgK(x) : 0), 0).toFixed(2)) + ' on average in all.';
+    for (const [m, k, role] of [['L5', K5, 'second sun'], ['L4', K4, 'supplemental']]) { if (!(k > 0)) continue; const sr = SRC.find(x => x.name === m), avg = sr ? srcAvgK(sr) : k;
+      ciText += ' ' + m + ', ' + role + ' (' + (Math.abs(avg - k) > 0.005 ? kLabel(k) + ' at most, ' + avg.toFixed(2) + '× on average' : kLabel(k)) + '): ' + shapeShort(state.three[m]) + '.'; }
   }
   if (state.mode === 'two' && state.twoCI > 0) {      // two suns: the full description
     const kc = state.twoCI, K = KVAL[state.twoK], f = x => (K * x / ciNorm(kc, 0)).toFixed(2) + '× Sun';
@@ -2730,14 +2845,30 @@ for (const [id, key, q, txt] of [['twoShift', 'Shift', v => Math.round(v), shTex
   $(id).addEventListener('change', () => { clearTimeout(ciTimer); setMode({}); });
 }
 $('fineBtn').addEventListener('click', () => { fineOpen = !fineOpen; updateModeBar(); });
+$('seasBtn').addEventListener('click', () => { seasOpen = !seasOpen; updateModeBar(); });
+$('lightLens').addEventListener('click', () => { shp().Light = 'lens'; setMode({}); });
+$('lightOuter').addEventListener('click', () => { const o = shp(); o.Light = 'outer';
+  for (const [k, v] of [['Soft', 5], ['Lean', 0], ['HN', [45, 45, 45, 45]], ['HS', [45, 45, 45, 45]], ['SN', [0.5, 0.5, 0.5, 0.5]], ['FS', [1, 1, 1, 1]]]) if (o[k] === undefined) o[k] = v; setMode({}); });
+const bandInput = (id, set, txt) => {
+  $(id).addEventListener('input', e => { set(+e.target.value); setText(id + 'Out', txt()); clearTimeout(ciTimer); ciTimer = setTimeout(() => setMode({}), 350); });
+  $(id).addEventListener('change', () => { clearTimeout(ciTimer); setMode({}); });
+};
+bandInput('bSoft', v => { shp().Soft = Math.round(v); }, () => shp().Soft + '°');
+bandInput('bLean', v => { shp().Lean = Math.round(v * 10) / 10; }, () => (+shp().Lean).toFixed(1));
+for (let j = 0; j < 4; j++) {
+  bandInput('bHN' + j, v => { shp().HN[j] = Math.round(v); }, () => shp().HN[j] + '°N');
+  bandInput('bHS' + j, v => { shp().HS[j] = Math.round(v); }, () => shp().HS[j] + '°S');
+  bandInput('bSN' + j, v => { shp().SN[j] = Math.round(v * 100) / 100; }, () => Math.round(shp().SN[j] * 100) + '%');
+  bandInput('bFS' + j, v => { shp().FS[j] = Math.round(v * 100) / 100; }, () => Math.round(shp().FS[j] * 100) + '%');
+}
 $('phFixed').addEventListener('click', () => { shp().PhMode = 'fixed'; setMode({}); });
 $('phSeason').addEventListener('click', () => { shp().PhMode = 'season'; setMode({}); });
 $('sel4').addEventListener('click', () => { state.threeSel = 'L4'; updateModeBar(); save(); });
 $('sel5').addEventListener('click', () => { state.threeSel = 'L5'; updateModeBar(); save(); });
-$('threeF4').addEventListener('input', e => { state.three.f4 = Math.round(+e.target.value * 100) / 100; setText('threeF4Out', f4Text()); clearTimeout(ciTimer); ciTimer = setTimeout(() => setMode({}), 350); });
-$('threeF4').addEventListener('change', () => { clearTimeout(ciTimer); setMode({}); });
-$('threeT').addEventListener('input', e => { state.three.T = Math.round(+e.target.value * 100) / 100; setText('threeTOut', state.three.T.toFixed(2) + '× Sun'); clearTimeout(ciTimer); ciTimer = setTimeout(() => setMode({}), 350); });
-$('threeT').addEventListener('change', () => { clearTimeout(ciTimer); setMode({}); });
+for (const m of ['K4', 'K5']) {
+  $('three' + m).addEventListener('input', e => { state.three[m] = Math.round(+e.target.value * 100) / 100; setText('three' + m + 'Out', state.three[m].toFixed(2) + '× Sun'); clearTimeout(ciTimer); ciTimer = setTimeout(() => setMode({}), 350); });
+  $('three' + m).addEventListener('change', () => { clearTimeout(ciTimer); setMode({}); });
+}
 document.querySelectorAll('.js-earth').forEach(inp => inp.addEventListener('change', e => {
   state.earthRef = e.target.checked;
   document.querySelectorAll('.js-earth').forEach(i => { i.checked = state.earthRef; });
@@ -3354,7 +3485,7 @@ function dynSolve(circ) {              // harmonics of the periodic temperature 
   for (let i = 0; i < NL; i++) {
     const lat = -90 + (i + 0.5) * 180 / NL, u = Math.abs(lat) / 10, k = Math.min(8, Math.floor(u)), alb = lerp(DYN_AL[k], DYN_AL[k + 1], u - k);
     for (let j = 0; j < N; j++) {
-      const F = (dayMetrics(lat, src[j], true).mean * (1 - alb) - EBM_A) / N;
+      const F = (0.5 * (dayMetrics(lat - 1, src[j], true).mean + dayMetrics(lat + 1, src[j], true).mean) * (1 - alb) - EBM_A) / N;
       for (let h = 0; h < H1; h++) { cr[h * NL + i] += F * DYN_COS[h][j]; ci[h * NL + i] -= F * DYN_SIN[h][j]; }
     }
   }
@@ -3984,7 +4115,7 @@ mapCvs.addEventListener('keydown', ev => {
 // than the cut-off above sea level in Earth-equivalent km. The swing does not depend on height: the lapse rate shifts a whole
 // band by the same amount all year.
 let latQueued = false;
-const LT_BW = 10, LT_COLD = 0, LT_HOT = 30, LT_COLD_S = -20;   // the south of 45°S is judged on −20 to 30 °C    // histogram bin (m) and the comfort range (°C) counted in sols
+const LT_BW = 10, LT_COLD = 0, LT_HOT = 30, LT_COLD_S = -20;   // land poleward of 45° is judged on −20 to 30 °C    // histogram bin (m) and the comfort range (°C) counted in sols
 const latLandCache = { key: '', v: null };
 function scheduleLat() { if (!latQueued) { latQueued = true; requestAnimationFrame(() => { latQueued = false; renderLat(); }); } }
 function latLand() {
@@ -4056,7 +4187,7 @@ function latTempsDyn(circ, land) {     // as latTemps, from the 2-D model: each 
         cj += 1 - (C[base + i] + (C[base + i + 1] - C[base + i]) * (u - i));
         u = ((v - LT_HOT) / g + off) * ibw; u = u < 0 ? 0 : u > nbin ? nbin : u; i = Math.floor(u); if (i > nbin - 1) i = nbin - 1;
         hj += C[base + i] + (C[base + i + 1] - C[base + i]) * (u - i);
-        if (EBM_LAT[b] < -45) { u = ((v - LT_COLD_S) / g + off) * ibw; u = u < 0 ? 0 : u > nbin ? nbin : u; i = Math.floor(u); if (i > nbin - 1) i = nbin - 1; c2 += 1 - (C[base + i] + (C[base + i + 1] - C[base + i]) * (u - i)); }
+        if (Math.abs(EBM_LAT[b]) > 45) { u = ((v - LT_COLD_S) / g + off) * ibw; u = u < 0 ? 0 : u > nbin ? nbin : u; i = Math.floor(u); if (i > nbin - 1) i = nbin - 1; c2 += 1 - (C[base + i] + (C[base + i + 1] - C[base + i]) * (u - i)); }
       }
       wsum += wgt; cold += wgt * cj; hot += wgt * hj; swc += wgt * (mx - mn); c20 += wgt * c2;
     }
@@ -4092,7 +4223,7 @@ function latTemps(circ, heat, land) {
     const base = b * (nbin + 1), below = h => { const u = clamp((h + off) / LT_BW, 0, nbin), i = Math.min(nbin - 1, Math.floor(u)); return lerp(C[base + i], C[base + i + 1], u - i); };
     for (let j = 1; j <= N; j++) {
       const v = TL[b * W + j]; sum += v; if (v < lo) lo = v; if (v > hi) hi = v;
-      if (land.share[b] > 0) { cold += 1 - below((v - LT_COLD) / g); hot += below((v - LT_HOT) / g); if (EBM_LAT[b] < -45) c20 += 1 - below((v - LT_COLD_S) / g); }   // land higher than (T − 0)/Γ is below 0 °C
+      if (land.share[b] > 0) { cold += 1 - below((v - LT_COLD) / g); hot += below((v - LT_HOT) / g); if (Math.abs(EBM_LAT[b]) > 45) c20 += 1 - below((v - LT_COLD_S) / g); }   // land higher than (T − 0)/Γ is below 0 °C
     }
     o.avg[b] = sum / N; o.lo[b] = lo; o.hi[b] = hi; o.cold[b] = cold * DT; o.hot[b] = hot * DT; o.swc[b] = hi - lo; o.c20[b] = c20 * DT;
   }
@@ -4113,11 +4244,11 @@ function renderLat() {
   const W = Math.max(300, Math.floor(wrap.clientWidth)), H = full ? Math.max(320, Math.floor(wrap.clientHeight)) : Math.round(W * 0.72);
   const NS = 'http://www.w3.org/2000/svg';
   $('ltCut').value = state.ltCut; setText('ltCutOut', state.ltCut.toFixed(1) + ' km (Earth-eq.)'); $('ltRef').checked = state.ltRef;
-  const t3 = state.three, shaped = o => o.CI > 0 || (o.PhMode === 'season' && o.KA > 0);
+  const t3 = state.three, shaped = o => o.Light === 'outer' || o.CI > 0 || (o.PhMode === 'season' && o.KA > 0);
   const refAvail = (state.mode === 'two' && shaped(TWO_SH)) || (state.mode === 'three' && (shaped(t3.L4) || shaped(t3.L5))); $('ltRefRow').hidden = !refAvail;
   if (!mapReady) { wrap.innerHTML = '<svg width="' + W + '" height="' + H + '"><text class="empty" x="20" y="30">Waiting for the elevation data…</text></svg>'; return; }
   const circ = state.mapOrbit === 'circ', land = latLand(), gK = state.lapse * H_EARTH / 1000, nb = EBM_NB;
-  const cur = latTemps(circ, state.heat, land), ref = refAvail && state.ltRef ? withSky(state.mode === 'three' ? { three: { T: t3.T, f4: t3.f4, L4: { ...t3.L4, CI: 0, KA: 0 }, L5: { ...t3.L5, CI: 0, KA: 0 } } } : { twoCI: 0, twoKA: 0 }, () => latTemps(circ, state.heat, land)) : null;
+  const cur = latTemps(circ, state.heat, land), ref = refAvail && state.ltRef ? withSky(state.mode === 'three' ? { three: { K4: t3.K4, K5: t3.K5, L4: { ...t3.L4, CI: 0, KA: 0, Light: 'lens' }, L5: { ...t3.L5, CI: 0, KA: 0, Light: 'lens' } } } : { twoCI: 0, twoKA: 0 }, () => latTemps(circ, state.heat, land)) : null;
   const ser = (o) => { const a = { avg: [], lo: [], hi: [], sw: [], cold: [], hot: [], swc: [], c20: [] }; for (let b = 0; b < nb; b++) { const ok = land.share[b] > 0, off = ok ? gK * land.dh[b] : 0;
     a.avg.push(ok ? o.avg[b] - off : NaN); a.lo.push(ok ? o.lo[b] - off : NaN); a.hi.push(ok ? o.hi[b] - off : NaN); a.sw.push(ok ? o.hi[b] - o.lo[b] : NaN);
     a.cold.push(ok ? o.cold[b] : NaN); a.hot.push(ok ? o.hot[b] : NaN); a.swc.push(ok ? o.swc[b] : NaN); a.c20.push(ok ? o.c20[b] : NaN); } return a; };
@@ -4184,8 +4315,8 @@ function latRead(b) {
       const o = outside(A, lim), r = R ? outside(R, lim) : null;
       if (o) line(dim('\u2003'), 'Sols a year below ' + fmtTC(LT_COLD) + ' ', bb(o[0].toFixed(0)), ', above ' + fmtTC(LT_HOT) + ' ', bb(o[1].toFixed(0)), dim(' · outside: ' + (o[0] + o[1]).toFixed(0) + (r ? ' (no shaping ' + (r[0] + r[1]).toFixed(0) + ')' : '')));
     }
-    { let w = 0, sw = 0, c2 = 0, ht = 0; for (let i = 0; i < EBM_NB; i++) { if (EBM_LAT[i] >= -45 || !isFinite(A.swc[i])) continue; const wi = land.share[i] * Math.cos(EBM_LAT[i] * D2R); w += wi; sw += wi * A.swc[i]; c2 += wi * A.c20[i]; ht += wi * A.hot[i]; }
-      if (w > 0) { line(bb('South of 45°S: '), 'land swing ', bb(fmtDT(sw / w)), dim(' on average, warmest minus coldest sol'));
+    for (const [lab, inside] of [['South of 45°S: ', l => l < -45], ['North of 45°N: ', l => l > 45]]) { let w = 0, sw = 0, c2 = 0, ht = 0; for (let i = 0; i < EBM_NB; i++) { if (!inside(EBM_LAT[i]) || !isFinite(A.swc[i])) continue; const wi = land.share[i] * Math.cos(EBM_LAT[i] * D2R); w += wi; sw += wi * A.swc[i]; c2 += wi * A.c20[i]; ht += wi * A.hot[i]; }
+      if (w > 0) { line(bb(lab), 'land swing ', bb(fmtDT(sw / w)), dim(' on average, warmest minus coldest sol'));
         line(dim(' '), 'Sols a year below ' + fmtTC(LT_COLD_S) + ' ', bb((c2 / w).toFixed(0)), ', above ' + fmtTC(LT_HOT) + ' ', bb((ht / w).toFixed(0)), dim(' · outside: ' + ((c2 + ht) / w).toFixed(0))); } }
     if (LATD.ocean) line(bb('Ocean north of the equator: '), 'yearly average ', bb(fmtTC(LATD.ocean.avg)), ', between ' + fmtTC(20) + ' and ' + fmtTC(30) + ' on ', bb(LATD.ocean.inb.toFixed(0)), ' sols', dim(' · coldest sol ' + fmtTC(LATD.ocean.lo) + ', warmest ' + fmtTC(LATD.ocean.hi)));
     line(dim('Land-weighted; each patch of land cooled with its own height. Hover the chart for one latitude.'));
