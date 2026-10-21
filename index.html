@@ -127,6 +127,11 @@ button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-v
 }
 .mode-grp { display: inline-flex; align-items: center; gap: 8px 10px; flex-wrap: wrap; }
 .modebar input[type="range"] { width: 150px; margin: 0; accent-color: var(--accent); height: 20px; }
+.h-row { display: flex; align-items: center; justify-content: space-between; gap: 8px 12px; }
+.rst { border: 1px solid var(--line); background: transparent; color: var(--ink-2); border-radius: 7px; padding: 4px 9px; font-size: 12px; cursor: pointer; white-space: nowrap; flex: none; }
+.rst:hover { border-color: var(--accent); color: var(--ink); }
+.viewer .rst { border-color: var(--space-line); color: var(--space-muted); }
+.viewer .rst:hover { border-color: var(--space-accent); color: var(--space-ink); }
 .ph-season { display: contents; }
 .ph-season[hidden] { display: none; }
 .ci-pair { display: inline-flex; align-items: center; gap: 10px; white-space: nowrap; }
@@ -135,6 +140,8 @@ button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-v
 .mode-sum b { font-family: var(--f-mono); font-weight: 500; color: var(--ink); }
 .panel { min-width: 0; }
 .vtitle { display: none; }
+body[data-layout="full"] .vhead { position: relative; }
+body[data-layout="full"] .vrst { position: absolute; top: 20px; right: 14px; }
 
 /* ---------- full-screen layout: three screens, each full width and 90% of the viewport tall ---------- */
 body[data-layout="full"] .layout { display: grid; gap: 18px; }
@@ -594,6 +601,7 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
       <button type="button" id="mdTwo" aria-pressed="false">Two suns</button>
       <button type="button" id="mdThree" aria-pressed="false">Three suns</button>
     </div>
+    <button type="button" class="rst" id="skyReset" data-reset="sky" title="Reset the mirror settings to the defaults" hidden>Reset</button>
   </div>
   <div class="mode-grp" id="optTwo" hidden>
     <span class="flabel" id="posLbl">Mirrors at</span>
@@ -656,6 +664,7 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
         <button type="button" id="vOrbit" aria-pressed="true">Orbit</button>
         <button type="button" id="vGround" aria-pressed="false">Ground</button>
       </div>
+      <button type="button" class="rst vrst" data-reset="view" title="Back to today, the orbit view, 45°N and 14:00">Reset</button>
       <p class="vhint" id="vhint">Drag Mars around its orbit to change the date</p>
       </div>
       <div class="ctl datectl">
@@ -723,7 +732,7 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
 
   <section class="panel card cpanel" id="pDur" aria-label="Daylight duration">
     <div class="side">
-      <div class="side-h"><h2>Daylight duration</h2><p class="sub" id="durSub"></p></div>
+      <div class="side-h"><div class="h-row"><h2>Daylight duration</h2><button type="button" class="rst" data-reset="dur" title="Reset this chart’s settings, including the latitude lines all three charts share">Reset</button></div><p class="sub" id="durSub"></p></div>
       <div class="filters">
         <div class="fgrp">
           <span class="flabel">Lines</span>
@@ -784,7 +793,7 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
 
   <section class="panel card cpanel" id="pIns" aria-label="Insolation">
     <div class="side">
-      <div class="side-h"><h2>Insolation</h2><p class="sub" id="insSub"></p></div>
+      <div class="side-h"><div class="h-row"><h2>Insolation</h2><button type="button" class="rst" data-reset="ins" title="Reset this chart’s settings, including the latitude lines all three charts share">Reset</button></div><p class="sub" id="insSub"></p></div>
       <div class="filters">
         <div class="fgrp">
           <span class="flabel">Lines</span>
@@ -850,7 +859,7 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
 
   <section class="panel card cpanel" id="pRat" aria-label="Seasonal ratio">
     <div class="side">
-      <div class="side-h"><h2>Seasonal ratio</h2><p class="sub" id="ratSub"></p></div>
+      <div class="side-h"><div class="h-row"><h2>Seasonal ratio</h2><button type="button" class="rst" data-reset="rat" title="Reset this chart’s settings, including the latitude lines all three charts share">Reset</button></div><p class="sub" id="ratSub"></p></div>
       <div class="filters">
         <div class="fgrp">
           <span class="flabel">Lines</span>
@@ -916,7 +925,7 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
 
   <section class="panel card cpanel" id="pMap" aria-label="Mars map">
     <div class="side">
-      <div class="side-h"><h2>Mars map</h2><p class="sub" id="mapSub">Equirectangular projection of MOLA laser-altimeter topography at 4 pixels per degree. Drag to pan, scroll or pinch to zoom, click to set the observer latitude.</p></div>
+      <div class="side-h"><div class="h-row"><h2>Mars map</h2><button type="button" class="rst" data-reset="map" title="Reset the map’s settings and zoom (the date stays)">Reset</button></div><p class="sub" id="mapSub">Equirectangular projection of MOLA laser-altimeter topography at 4 pixels per degree. Drag to pan, scroll or pinch to zoom, click to set the observer latitude.</p></div>
       <div class="mgrp">
         <div class="spec-row"><span class="flabel">Water level</span><output id="waterOut"></output></div>
         <input type="range" id="water" min="0" max="100" step="1" value="30" aria-label="Share of the surface below sea level, percent">
@@ -986,12 +995,13 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
         <div id="isoRow" hidden>
           <div class="spec-row"><span class="flabel" id="isoLbl">Isotherms</span><output id="isoOut"></output></div>
           <input type="range" id="isoStep" min="1" max="30" step="1" value="10" aria-labelledby="isoLbl">
-          <p class="mhint">Counted up and down from 0 °C; the 0 °C line is drawn thick.</p>
+          <p class="mhint" id="isoHint">Counted up and down from 0 °C; the 0 °C line is drawn thick.</p>
         </div>
         <div class="fgrp"><span class="flabel">When</span>
           <div class="seg small" role="group" aria-label="Insolation period">
             <button type="button" id="iwDate" aria-pressed="true">Chosen date</button>
             <button type="button" id="iwYear" aria-pressed="false">Yearly average</button>
+            <button type="button" id="iwSwing" aria-pressed="false" title="Warmest minus coldest sol of the year">Seasonal swing</button>
           </div>
         </div>
         <div id="mapDateRow" class="mdial">
@@ -1063,7 +1073,7 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
 
   <section class="panel card cpanel" id="pLat" aria-label="Temperature by latitude">
     <div class="side">
-      <div class="side-h"><h2>Temperature by latitude</h2><p class="sub">Insolation-based temperature over each latitude’s land, leaving out the ocean, lakes and ground above the cut-off, in Earth-equivalent height above sea level. It follows the sky, the map’s water, setting, lapse rate and orbit. Top: yearly average, with the band from the coldest to the warmest sol. Bottom: the seasonal swing, warmest minus coldest. The readout also counts the sols a year below 0 °C and above 30 °C.</p></div>
+      <div class="side-h"><div class="h-row"><h2>Temperature by latitude</h2><button type="button" class="rst" data-reset="lat" title="Reset the cut-off and the comparison">Reset</button></div><p class="sub">Insolation-based temperature over each latitude’s land, leaving out the ocean, lakes and ground above the cut-off, in Earth-equivalent height above sea level. It follows the sky, the map’s water, setting, lapse rate and orbit. Top: yearly average, with the band from the coldest to the warmest sol. Bottom: the seasonal swing, warmest minus coldest. The readout also counts the sols a year below 0 °C and above 30 °C.</p></div>
       <div class="mgrp">
         <div class="spec-row"><span class="flabel">Leave out ground above</span><output id="ltCutOut"></output></div>
         <input type="range" id="ltCut" min="0.5" max="8" step="0.5" value="3" aria-label="Height cut-off in Earth-equivalent kilometres above sea level">
@@ -1327,6 +1337,7 @@ const state = {
   t: T_TODAY, tod: 14, obsLat: 45, view: 'orbit', units: 'mars', metric: 'mean', orbit: { dur: 'real', ins: 'real', rat: 'real' },
   lats: PRESETS.north.map((lat, i) => ({ lat, slot: i })), flip: false, dynDur: false, dynIns: false, dynRat: false, earthRef: true, layout: 'full', lineMode: 'chosen', specA: -90, specB: 90, specStep: 5, specOp: 70, show: { view: true, dur: true, ins: true, rat: true, map: true, lat: true }, ltCut: 3, ltRef: true, isoStep: 10, waterPct: 30, fillLakes: true, basinFill: 100, hUnit: 'km', mapLayer: 'elev', palette: 'terrain', hillshade: true, insWhen: 'date', insMetric: 'mean', mapOrbit: 'real', insShow: 'wm', tUnit: 'C', heat: 'cont', lapse: 6.5, p0: 1, insOp: 65, insDyn: false, mapGrid: true, gridLat: 15, gridLon: 30, mapSites: true, ratioMetric: 'mean', mode: 'natural', twoCI: 1, twoPh: 27.5, twoPhMode: 'season', twoShift: -3, twoBias: 11.5, twoA2: 6.5, twoS2: 18, twoKA: 0.6, twoKS: -99, twoPos: 'L5', twoK: 'x133', threeK: 'x067', camOff: 0, playYear: false, playSol: false
 };
+const DEFAULTS = JSON.parse(JSON.stringify(state));   // for the reset buttons
 try {
   const sv = JSON.parse(localStorage.getItem(STORE) || 'null');
   if (sv && typeof sv === 'object') {
@@ -1356,13 +1367,14 @@ try {
     if (sv.mapLayer === 'elev' || sv.mapLayer === 'ins') state.mapLayer = sv.mapLayer;
     if (['terrain', 'rainbow', 'mars'].includes(sv.palette)) state.palette = sv.palette;
     if (sv.hUnit === 'km' || sv.hUnit === 'earth') state.hUnit = sv.hUnit;
-    if (sv.insWhen === 'date' || sv.insWhen === 'year') state.insWhen = sv.insWhen;
+    if (['date', 'year', 'swing'].includes(sv.insWhen)) state.insWhen = sv.insWhen;
     if (sv.insMetric === 'mean' || sv.insMetric === 'noon') state.insMetric = sv.insMetric;
     if (sv.mapOrbit === 'real' || sv.mapOrbit === 'circ') state.mapOrbit = sv.mapOrbit;
     if (num(sv.insOp, 0, 100)) state.insOp = sv.insOp;
     if (num(sv.lapse, 0, 10)) state.lapse = sv.lapse;
     if (num(sv.isoStep, 1, 30)) state.isoStep = Math.round(sv.isoStep);
     if (sv.insShow === 'wm' || sv.insShow === 'temp') state.insShow = sv.insShow;
+    if (state.insWhen === 'swing' && state.insShow !== 'temp') state.insWhen = 'date';
     if (['C', 'F', 'K'].includes(sv.tUnit)) state.tUnit = sv.tUnit;
     if (sv.v >= 2 && ['cont', 'mixed', 'mari', 'dyn'].includes(sv.heat)) state.heat = sv.heat;
     if (num(sv.p0, 0.3, 2)) state.p0 = Math.round(sv.p0 * 20) / 20;
@@ -2605,7 +2617,7 @@ function updateModeBar() {
   pr('posL4', state.twoPos === 'L4'); pr('posL5', state.twoPos === 'L5');
   pr('twoK1', state.twoK === 'x1'); pr('twoK133', state.twoK === 'x133');
   pr('threeK05', state.threeK === 'x05'); pr('threeK067', state.threeK === 'x067');
-  $('optTwo').hidden = state.mode !== 'two'; $('optThree').hidden = state.mode !== 'three';
+  $('optTwo').hidden = state.mode !== 'two'; $('optThree').hidden = state.mode !== 'three'; $('skyReset').hidden = state.mode === 'natural';
   $('twoCI').value = state.twoCI; setText('twoCIOut', 'k = ' + (+state.twoCI).toFixed(2));
   $('twoPh').value = state.twoPh; setText('twoPhOut', phText());
   pr('phFixed', state.twoPhMode === 'fixed'); pr('phSeason', state.twoPhMode === 'season');
@@ -2838,7 +2850,8 @@ function renderDetail() {
           const f = (s0 + (s1 - s0) * fr) / 100; R *= f; G *= f; B *= f;
         }
         if (P.insOn) {
-          if (P.tempOn) [ir, ig, ib] = tempRGB((Math.max(0, (P.DF ? dynAt(P.DF, r0, c0) : tb) - P.gK * (hh - P.hRef)) - P.lo) / (P.hi - P.lo));
+          if (P.swingOn) [ir, ig, ib] = swingRGB(((P.DF ? dynAt(P.DF, r0, c0) : tb) - P.lo) / (P.hi - P.lo));
+          else if (P.tempOn) [ir, ig, ib] = tempRGB((Math.max(0, (P.DF ? dynAt(P.DF, r0, c0) : tb) - P.gK * (hh - P.hRef)) - P.lo) / (P.hi - P.lo));
           R = R * (1 - P.op) + ir * P.op; G = G * (1 - P.op) + ig * P.op; B = B * (1 - P.op) + ib * P.op;
         }
         d[o] = R; d[o + 1] = G; d[o + 2] = B;
@@ -2912,6 +2925,17 @@ const LUT_TEMP = new Uint8ClampedArray(1001 * 3);
   }
 })();
 const tempRGB = t => { const k = Math.round(clamp(t, 0, 1) * 1000) * 3; return [LUT_TEMP[k], LUT_TEMP[k + 1], LUT_TEMP[k + 2]]; };
+const SWING_STOPS = [[0, '#2c7bb6'], [10, '#00a6ca'], [20, '#00ccbc'], [30, '#90eb9d'], [40, '#ffff8c'], [50, '#f9d057'], [60, '#f29e2e'], [70, '#e76818'], [80, '#d7191c']];
+const LUT_SWING = new Uint8ClampedArray(1001 * 3);
+(() => {
+  const rgb = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+  for (let k = 0; k <= 1000; k++) {
+    const T = 80 * k / 1000, i = Math.min(SWING_STOPS.length - 2, Math.floor(T / 10)), f = (T - SWING_STOPS[i][0]) / 10, a = rgb(SWING_STOPS[i][1]), b = rgb(SWING_STOPS[i + 1][1]);
+    for (let j = 0; j < 3; j++) LUT_SWING[k * 3 + j] = Math.round(a[j] + (b[j] - a[j]) * f);
+  }
+})();
+const swingRGB = t => { const k = Math.round(clamp(t, 0, 1) * 1000) * 3; return [LUT_SWING[k], LUT_SWING[k + 1], LUT_SWING[k + 2]]; };
+const swingGrad = () => 'linear-gradient(90deg,' + SWING_STOPS.map(([v, c]) => c + ' ' + (v / 0.8).toFixed(1) + '%').join(',') + ')';
 const tempGrad = () => 'linear-gradient(90deg,' + TEMP_STOPS.map(([v, c]) => c + ' ' + ((v + 60) / 1.2).toFixed(1) + '%').join(',') + ')';
 const insGrad = () => 'linear-gradient(90deg,' + Array.from({ length: 11 }, (_, i) => { const c = insRGB(i / 10); return 'rgb(' + c.join(',') + ') ' + (i * 10) + '%'; }).join(',') + ')';
 // Height units. With the same air on both planets, pressure falls with height g_Mars/g_Earth as fast on Mars,
@@ -3043,7 +3067,7 @@ function insProfile(metric = state.insMetric) {
   let prof = insCache.get(key);
   if (prof) return prof;
   prof = new Float32Array(MAP_H);
-  if (state.insWhen === 'date') {
+  if (state.insWhen !== 'year') {
     const st = circ ? idealAt(state.t) : orbitAt(state.t);
     for (let r = 0; r < MAP_H; r++) { const m = dayMetrics(90 - (r + 0.5) / MAP_PPD, st, !peak); prof[r] = peak ? m.noon : m.mean; }
   } else {
@@ -3334,6 +3358,32 @@ function dynMapField() {               // the field the map shows (K), or null w
   for (let p = 0; p < F.length; p++) F[p] += 273.15;
   return F;
 }
+function swingProfile() {            // seasonal swing (K) and coldest / warmest sol (K, sea level): per map row, or per cell in Dynamic
+  const circ = state.mapOrbit === 'circ', dyn = state.heat === 'dyn' && mapReady;
+  const key = 'W|' + MODE_KEY + '|' + (circ ? 'c' : 'r') + '|' + state.p0 + '|' + state.heat + (dyn ? '|' + dynGeo().key : '');
+  let o = insCache.get(key);
+  if (o) return o;
+  o = { sw: new Float32Array(MAP_H), mn: new Float32Array(MAP_H), mx: new Float32Array(MAP_H), DF: null, DMN: null, DMX: null };
+  const bmn = new Float64Array(EBM_NB), bmx = new Float64Array(EBM_NB);
+  if (dyn) {
+    const T = dynSeries(dynSolve(circ)), n = DYN_NL * DYN_NO, NO = DYN_NO;
+    o.DF = new Float64Array(n); o.DMN = new Float64Array(n); o.DMX = new Float64Array(n);
+    for (let p = 0; p < n; p++) { let lo = Infinity, hi = -Infinity; for (let j = 0; j < N; j++) { const v = T[p * N + j]; if (v < lo) lo = v; if (v > hi) hi = v; } o.DMN[p] = lo + 273.15; o.DMX[p] = hi + 273.15; o.DF[p] = hi - lo; }
+    for (let b = 0; b < EBM_NB; b++) { const y = clamp((EBM_LAT[b] + 90) / 4 - 0.5, 0, DYN_NL - 1), i0 = Math.min(DYN_NL - 2, Math.floor(y)), wy = y - i0; let a = 0, c = 0;
+      for (let j = 0; j < NO; j++) { a += (1 - wy) * o.DMN[i0 * NO + j] + wy * o.DMN[(i0 + 1) * NO + j]; c += (1 - wy) * o.DMX[i0 * NO + j] + wy * o.DMX[(i0 + 1) * NO + j]; }
+      bmn[b] = a / NO - 273.15; bmx[b] = c / NO - 273.15; }
+  } else {
+    const TL = ebmSeasonal(circ, state.heat), W = N + 1;
+    for (let b = 0; b < EBM_NB; b++) { let lo = Infinity, hi = -Infinity; for (let j = 1; j <= N; j++) { const v = TL[b * W + j]; if (v < lo) lo = v; if (v > hi) hi = v; } bmn[b] = lo; bmx[b] = hi; }
+  }
+  for (let r = 0; r < MAP_H; r++) {
+    const u = clamp((90 - (r + 0.5) / MAP_PPD + 90) * EBM_NB / 180 - 0.5, 0, EBM_NB - 1), b = Math.min(EBM_NB - 2, Math.floor(u)), f = u - b;
+    o.mn[r] = lerp(bmn[b], bmn[b + 1], f) + 273.15; o.mx[r] = lerp(bmx[b], bmx[b + 1], f) + 273.15; o.sw[r] = o.mx[r] - o.mn[r];
+  }
+  if (insCache.size > 40) insCache.clear();
+  insCache.set(key, o);
+  return o;
+}
 function tempProfile() {             // sea-level insolation-based temperature (K) for every map row
   const circ = state.mapOrbit === 'circ', year = state.insWhen === 'year';
   const key = 'T|' + MODE_KEY + '|' + (circ ? 'c' : 'r') + '|' + state.p0 + '|' + (year ? 'year' : state.heat + '|' + state.t.toFixed(2));
@@ -3384,8 +3434,10 @@ function buildMap() {
   const FL = !state.fillLakes ? null : (waterDragging && FILL && fillSea !== sea) ? FILL : fillDepressions(sea);
   const bf = state.basinFill / 100;
   const hRef = isFinite(sea) ? sea : 0, gK = state.lapse * H_EARTH / 1000;   // K per Mars metre
-  let TB = null, DF = null;
-  if (tempOn) { TB = tempProfile(); DF = dynMapField(); }
+  const swingOn = tempOn && state.insWhen === 'swing';
+  let TB = null, DF = null, SWP = null;
+  if (swingOn) { SWP = swingProfile(); TB = SWP.sw; DF = SWP.DF; }
+  else if (tempOn) { TB = tempProfile(); DF = dynMapField(); }
   const n = MAP_W * MAP_H;
   if (!VGRID) { VGRID = new Float32Array(n); DGRID = new Float32Array(n); }
   const V = VGRID, D = DGRID;
@@ -3403,7 +3455,8 @@ function buildMap() {
       if (depth >= 0) { V[k] = NaN; continue; }
       landW += cw;
       if (insOn) {
-        const v = tempOn ? Math.max(0, (DF ? dynAt(DF, r, c < 720 ? c + 720 : c - 720) : TB[r]) - gK * (h - hRef)) : pr;
+        const tv = tempOn ? (DF ? dynAt(DF, r, c < 720 ? c + 720 : c - 720) : TB[r]) : 0;
+        const v = swingOn ? tv : tempOn ? Math.max(0, tv - gK * (h - hRef)) : pr;    // height shifts the whole year alike, so not the swing
         V[k] = v; landIns += cw * v;
         if (v < vmin) vmin = v; if (v > vmax) vmax = v;
       }
@@ -3411,7 +3464,8 @@ function buildMap() {
   }
   let lo = 0, hi = 1;
   if (insOn) {
-    if (tempOn) { lo = T_FIXED[0]; hi = T_FIXED[1]; }
+    if (swingOn) { lo = 0; hi = 80; }
+    else if (tempOn) { lo = T_FIXED[0]; hi = T_FIXED[1]; }
     else if (state.insDyn) {
       lo = isFinite(vmin) ? vmin : 0; hi = isFinite(vmax) ? vmax : 1;
       if (hi - lo < 1) { lo = Math.max(0, lo - 0.5); hi = lo + 1; }
@@ -3419,7 +3473,7 @@ function buildMap() {
     else { lo = 0; hi = insFixedMax(); }
   }
   // pass 2: colours
-  const span = hi - lo, LI = tempOn ? LUT_TEMP : LUT_INS;
+  const span = hi - lo, LI = swingOn ? LUT_SWING : tempOn ? LUT_TEMP : LUT_INS;
   for (let rr = 0; rr < BH; rr++) {
     const r = rr * st;
     for (let cc = 0; cc < BW; cc++) {
@@ -3443,7 +3497,7 @@ function buildMap() {
   (st > 1 ? mcompLo : mcomp).putImageData(img, 0, 0);
   mapSrc = st > 1 ? mapCompLo : mapComp; mapSrcStep = st;
   mapStats = { sea, land: landW / allW, lake: lakeW / allW, insLand: landW > 0 ? landIns / landW : NaN, lo, hi, insOn };
-  mapParams = { sea, pal, wl, LMAX, WMAX, shadeOn, insOn, prof, op, lo, hi, FL, bf, tempOn, TB, DF, hRef, gK };
+  mapParams = { sea, pal, wl, LMAX, WMAX, shadeOn, insOn, prof, op, lo, hi, FL, bf, tempOn, swingOn, SWP, TB, DF, hRef, gK };
   // iso-insolation contours (daily mean only); skipped while the water slider is moving
   if (insOn && (tempOn || state.insMetric === 'mean')) {
     const ckey = [sea, state.fillLakes ? fillSea : 'dry', bf, MODE_KEY, state.mapOrbit, state.insWhen, state.insWhen === 'date' ? state.t.toFixed(2) : '', tempOn, tempOn ? state.lapse + '|' + state.heat + '|' + state.isoStep + '|' + state.p0 : ''].join('|');
@@ -3451,7 +3505,7 @@ function buildMap() {
     else if (contourHide) { mapContours = null; contourKey = ''; }
     else if (waterDragging && mapContours) { /* keep the previous lines until the water slider settles */ }
     else if (st > 1) { /* half-resolution preview: keep the current lines */ }
-    else { mapContours = tempOn ? computeContours(V, 273.15, state.isoStep, 273.15 - Math.floor(60 / state.isoStep + 1e-9) * state.isoStep - 0.01, v => Math.abs(v - 273.15) < 0.01) : computeContours(V, 0, 100, 100, v => v === 100 || v === 500); contourKey = ckey; }
+    else { mapContours = swingOn ? computeContours(V, 0, state.isoStep, state.isoStep - 0.01, () => false) : tempOn ? computeContours(V, 273.15, state.isoStep, 273.15 - Math.floor(60 / state.isoStep + 1e-9) * state.isoStep - 0.01, v => Math.abs(v - 273.15) < 0.01) : computeContours(V, 0, 100, 100, v => v === 100 || v === 500); contourKey = ckey; }
   } else { mapContours = null; contourKey = ''; }
   mapBuildId++;
   renderMapLegend(); updateMapRead();
@@ -3590,7 +3644,7 @@ function drawMap() {
         if (x < xl + 30 || x > xr - 30 || y < yt + 10 || y > yb - 10 || (x > MW - 60 && y < 120)) continue;
         if (placed.some(p => (p.v === L.v ? Math.hypot(p.x - x, p.y - y) < 240 : Math.hypot(p.x - x, p.y - y) < 64))) continue;
         placed.push({ v: L.v, x, y });
-        const t = mapParams && mapParams.tempOn ? fmtTemp(L.v) : String(L.v);
+        const t = mapParams && mapParams.swingOn ? fmtDT(L.v) : mapParams && mapParams.tempOn ? fmtTemp(L.v) : String(L.v);
         g.strokeText(t, x, y - 7); g.fillText(t, x, y - 7);
         if (placed.length >= 30) break;
       }
@@ -3646,7 +3700,8 @@ function renderMapLegend() {
   add('Height above sea level, ' + hUnitName(), 'linear-gradient(90deg,' + legStops.map((v, i) => colorAt(v) + ' ' + (100 * i / (legStops.length - 1)).toFixed(1) + '%').join(',') + ')', legStops.map(km));
   if (mapStats.insOn) {
     const { lo, hi } = mapStats, qs = [lo, lo + (hi - lo) / 4, (lo + hi) / 2, lo + 3 * (hi - lo) / 4, hi];
-    if (mapParams && mapParams.tempOn) add('Insolation-based temperature', tempGrad(), [-60, -40, -20, 0, 20, 40, 60].map(v => fmtTemp(v + 273.15)));
+    if (mapParams && mapParams.swingOn) add('Seasonal swing: warmest minus coldest sol', swingGrad(), [0, 20, 40, 60, 80].map(fmtDT));
+    else if (mapParams && mapParams.tempOn) add('Insolation-based temperature', tempGrad(), [-60, -40, -20, 0, 20, 40, 60].map(v => fmtTemp(v + 273.15)));
     else add((state.insMetric === 'mean' ? 'Daily-mean' : 'Peak') + ' insolation, W/m²' + (state.insDyn ? '' : ' (fixed scale)'), insGrad(), qs.map(fmtInt));
   }
 }
@@ -3668,9 +3723,12 @@ function updateMapRead() {
     else line(isFinite(sea) ? 'Land, ' : 'Land', isFinite(sea) ? b(fmtH(h - sea)) : '', isFinite(sea) ? ' above sea level' : '');
     if (mapStats.insOn) {
       const P = mapParams, v = P.prof[r];
-      line(state.insMetric === 'mean' || P.tempOn ? 'Daily-mean insolation ' : 'Peak insolation ', b(fmtInt(v) + ' W/m²'));
+      if (!P.swingOn) line(state.insMetric === 'mean' || P.tempOn ? 'Daily-mean insolation ' : 'Peak insolation ', b(fmtInt(v) + ' W/m²'));
       const isLand = !(h <= sea) && !(FL && FL[i] > h && h < lakeLevel(i, P.bf));
-      if (P.tempOn && isLand) {
+      if (P.swingOn && isLand) {
+        const S = P.SWP, dT = P.gK * (h - P.hRef), mn = (S.DMN ? dynAt(S.DMN, r, c) : S.mn[r]) - dT, mx = (S.DMX ? dynAt(S.DMX, r, c) : S.mx[r]) - dT;
+        line('Seasonal swing ', b(fmtDT(mx - mn)), dim(' · coldest sol ' + fmtTemp(Math.max(0, mn)) + ', warmest ' + fmtTemp(Math.max(0, mx))));
+      } else if (P.tempOn && isLand) {
         const dT = P.gK * (h - P.hRef), T = Math.max(0, (P.DF ? dynAt(P.DF, r, c) : P.TB[r]) - dT);
         line('Insolation-based temp. ', b(fmtTemp(T)), dim(' (' + (dT >= 0 ? '−' : '+') + Math.abs(dT).toFixed(1) + ' K from height)'));
       }
@@ -3679,7 +3737,7 @@ function updateMapRead() {
   const lakePct = state.fillLakes && isFinite(mapStats.lake) ? mapStats.lake * 100 : 0;
   line(dim('Ocean ' + state.waterPct + '%' + (state.fillLakes ? ' · lakes ' + lakePct.toFixed(1) + '%' : '') + ' · land ' + Math.max(0, 100 - state.waterPct - lakePct).toFixed(state.fillLakes ? 1 : 0) + '% of the surface'));
   if (state.hUnit === 'earth') line(dim('Heights in Earth-equivalent km: Mars km × 0.38'));
-  if (mapStats.insOn && isFinite(mapStats.insLand)) line(dim('Average over land: '), b(mapParams && mapParams.tempOn ? fmtTemp(mapStats.insLand) : fmtInt(mapStats.insLand) + ' W/m²'));
+  if (mapStats.insOn && isFinite(mapStats.insLand)) line(dim(mapParams && mapParams.swingOn ? 'Average swing over land: ' : 'Average over land: '), b(mapParams && mapParams.swingOn ? fmtDT(mapStats.insLand) : mapParams && mapParams.tempOn ? fmtTemp(mapStats.insLand) : fmtInt(mapStats.insLand) + ' W/m²'));
   if (mapStats.insOn && mapParams && mapParams.tempOn) line(dim('Insolation-based: Earth’s climate response to this sunlight, not a forecast'));
 }
 function updateMapControls() {
@@ -3690,7 +3748,7 @@ function updateMapControls() {
   $('fillLakes').checked = state.fillLakes;
   $('basinRow').hidden = !state.fillLakes; $('basinFill').value = state.basinFill;
   setText('basinOut', state.basinFill === 100 ? '100% · full to the brim' : state.basinFill === 0 ? '0% · dry' : state.basinFill + '% of the depth');
-  pr('iwDate', state.insWhen === 'date'); pr('iwYear', state.insWhen === 'year');
+  pr('iwDate', state.insWhen === 'date'); pr('iwYear', state.insWhen === 'year'); pr('iwSwing', state.insWhen === 'swing'); $('iwSwing').hidden = state.insShow !== 'temp';
   pr('mmMean', state.insMetric === 'mean'); pr('mmNoon', state.insMetric === 'noon');
   pr('moReal', state.mapOrbit === 'real'); pr('moCirc', state.mapOrbit === 'circ');
   const tempOn = state.insShow === 'temp';
@@ -3699,6 +3757,7 @@ function updateMapControls() {
   $('tUnitRow').hidden = !tempOn; $('measRow').hidden = tempOn;
   $('lapseRow').hidden = !tempOn; $('lapse').value = state.lapse;
   $('isoRow').hidden = !tempOn; $('isoStep').value = state.isoStep; setText('isoOut', isoText());
+  setText('isoHint', state.insWhen === 'swing' ? 'Lines of equal seasonal swing at this spacing.' : 'Counted up and down from 0 °C; the 0 °C line is drawn thick.');
   $('heatRow').hidden = !tempOn || state.insWhen === 'year';
   $('insDyn').closest('label').hidden = tempOn;
   pr('hsCont', state.heat === 'cont'); pr('hsMixed', state.heat === 'mixed'); pr('hsMari', state.heat === 'mari'); pr('hsDyn', state.heat === 'dyn');
@@ -3747,11 +3806,12 @@ $('fillLakes').addEventListener('change', e => { state.fillLakes = e.target.chec
 $('basinFill').addEventListener('input', e => { state.basinFill = +e.target.value; liteDrag(); holdContours(); mapSettingsChanged(); });
 $('iwDate').addEventListener('click', mapSet({ insWhen: 'date' }));
 $('iwYear').addEventListener('click', mapSet({ insWhen: 'year' }));
+$('iwSwing').addEventListener('click', mapSet({ insWhen: 'swing' }));
 $('mmMean').addEventListener('click', mapSet({ insMetric: 'mean' }));
 $('mmNoon').addEventListener('click', mapSet({ insMetric: 'noon' }));
 $('moReal').addEventListener('click', mapSet({ mapOrbit: 'real' }));
 $('moCirc').addEventListener('click', mapSet({ mapOrbit: 'circ' }));
-$('isWm').addEventListener('click', mapSet({ insShow: 'wm' }));
+$('isWm').addEventListener('click', () => { state.insShow = 'wm'; if (state.insWhen === 'swing') state.insWhen = 'date'; mapSettingsChanged(); });
 $('isTemp').addEventListener('click', mapSet({ insShow: 'temp' }));
 $('hsCont').addEventListener('click', mapSet({ heat: 'cont' }));
 $('hsMixed').addEventListener('click', mapSet({ heat: 'mixed' }));
@@ -3762,7 +3822,7 @@ $('p0').addEventListener('input', e => { state.p0 = Math.round(+e.target.value *
 $('p0').addEventListener('change', e => { state.p0 = Math.round(+e.target.value * 20) / 20; clearTimeout(p0Timer); mapSettingsChanged(); });
 for (const [id, u] of [['tuC', 'C'], ['tuF', 'F'], ['tuK', 'K']]) $(id).addEventListener('click', () => { state.tUnit = u; updateMapControls(); renderMapLegend(); updateMapRead(); scheduleLat(); scheduleMapDraw(); save(); });
 function isoText() { const d = state.isoStep, u = state.tUnit, v = u === 'F' ? d * 9 / 5 : d;
-  return 'every ' + (Number.isInteger(v) ? v : v.toFixed(1)) + (u === 'F' ? ' °F' : u === 'K' ? ' K' : ' °C') + ' from ' + fmtTemp(273.15); }
+  return 'every ' + (Number.isInteger(v) ? v : v.toFixed(1)) + (u === 'F' ? ' °F' : u === 'K' ? ' K' : ' °C') + (state.insWhen === 'swing' ? ' of swing' : ' from ' + fmtTemp(273.15)); }
 $('isoStep').addEventListener('input', e => { state.isoStep = Math.round(+e.target.value); setText('isoOut', isoText()); holdContours(); save(); });
 $('lapse').addEventListener('input', e => { state.lapse = +e.target.value; holdContours(); liteDrag(); mapSettingsChanged(); });
 $('water').addEventListener('input', e => {
@@ -4065,6 +4125,32 @@ function latRead(b) {
 $('ltCut').addEventListener('input', e => { state.ltCut = +e.target.value; scheduleLat(); save(); });
 $('ltRef').addEventListener('change', e => { state.ltRef = e.target.checked; scheduleLat(); save(); });
 new ResizeObserver(() => scheduleLat()).observe($('ltWrap'));
+
+/* ================= reset buttons ================= */
+const RESET_KEYS = {
+  sky: ['twoPos', 'twoK', 'twoCI', 'twoPh', 'twoPhMode', 'twoShift', 'twoBias', 'twoA2', 'twoS2', 'twoKA', 'twoKS', 'threeK'],
+  view: ['view', 'tod', 'obsLat', 'camOff'],
+  lines: ['lineMode', 'specA', 'specB', 'specStep', 'specOp', 'lats', 'flip'],
+  dur: ['dynDur'], ins: ['dynIns', 'metric', 'earthRef'], rat: ['dynRat', 'ratioMetric', 'earthRef'],
+  map: ['waterPct', 'fillLakes', 'basinFill', 'hUnit', 'mapLayer', 'palette', 'hillshade', 'insWhen', 'insMetric', 'mapOrbit', 'insShow', 'tUnit', 'heat', 'lapse', 'p0', 'isoStep', 'insOp', 'insDyn', 'mapGrid', 'gridLat', 'gridLon', 'mapSites'],
+  lat: ['ltCut', 'ltRef'],
+};
+const copyDefaults = keys => { for (const k of keys) state[k] = JSON.parse(JSON.stringify(DEFAULTS[k])); };
+function resetPanel(p) {
+  if (p === 'sky') { copyDefaults(RESET_KEYS.sky); setMode({}); return; }
+  if (p === 'view') {
+    stopYear(); stopSol(); copyDefaults(RESET_KEYS.view);
+    setView(state.view); $('tod').value = state.tod; setObs(state.obsLat); setT(T_TODAY); save(); return;
+  }
+  if (p === 'map') { copyDefaults(RESET_KEYS.map); Object.assign(mapView, { z: 1, cx: 0, cy: 0 }); mapSettingsChanged(); renderMapLegend(); updateMapRead(); scheduleMapDraw(); return; }
+  if (p === 'lat') { copyDefaults(RESET_KEYS.lat); scheduleLat(); save(); return; }
+  copyDefaults(RESET_KEYS.lines.concat(RESET_KEYS[p])); state.orbit[p] = DEFAULTS.orbit[p];
+  syncToggles(); $('dynDur').checked = state.dynDur; $('dynIns').checked = state.dynIns; $('dynRat').checked = state.dynRat;
+  document.querySelectorAll('.js-earth').forEach(i => { i.checked = state.earthRef; });
+  setMetric(state.metric); setRatioMetric(state.ratioMetric); updateSpecUI(); renderChips(); msg('');
+  clearHover(); updateSubs(); renderCharts(); renderTable(); save();
+}
+document.querySelectorAll('.rst').forEach(b => b.addEventListener('click', () => resetPanel(b.dataset.reset)));
 
 /* ================= boot ================= */
 syncToggles(); $('dynDur').checked = state.dynDur; $('dynIns').checked = state.dynIns; $('dynRat').checked = state.dynRat; document.querySelectorAll('.js-earth').forEach(i => { i.checked = state.earthRef; });
