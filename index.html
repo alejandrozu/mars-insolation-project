@@ -607,22 +607,34 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
       <button type="button" id="twoK133" aria-pressed="true">1.33× Sun</button>
     </div>
     <span class="flabel" id="ciLbl" title="Shapes the mirror light like a concave lens: dimmer near the middle of the disc it lights, brighter toward its north and south edges, same average">Counterirradiance</span>
-    <input type="range" id="twoCI" min="0" max="1" step="0.05" value="0.85" aria-labelledby="ciLbl">
-    <output id="twoCIOut" class="ci-out">k = 0.85</output>
+    <input type="range" id="twoCI" min="0" max="1" step="0.05" value="1" aria-labelledby="ciLbl">
+    <output id="twoCIOut" class="ci-out">k = 1.00</output>
     <span class="flabel" id="phLbl" title="Moves the dimmest line of the mirror light north (+) or south (−) of the middle of the disc it sees; past the brightest point the light stays at its maximum">Phase</span>
-    <input type="range" id="twoPh" min="-45" max="45" step="2.5" value="25" aria-labelledby="phLbl">
-    <output id="twoPhOut" class="ci-out">±25°</output>
+    <input type="range" id="twoPh" min="-45" max="45" step="0.5" value="27.5" aria-labelledby="phLbl">
+    <output id="twoPhOut" class="ci-out">±27.5°</output>
     <div class="seg" role="group" aria-label="Phase fixed or following the seasons">
       <button type="button" id="phFixed" aria-pressed="false">Fixed</button>
       <button type="button" id="phSeason" aria-pressed="true" title="The dimmest line swings with the seasons, p × sin Ls: into the summer hemisphere, north in northern summer and south in southern summer">Follows seasons</button>
     </div>
     <span class="ph-season" id="phSeasonOpts">
       <span class="ci-pair"><span class="flabel" id="phShiftLbl" title="Moves the swing along the year: with a shift s the dimmest line is furthest north at Ls 90° + s instead of at the northern summer solstice">Shift</span>
-      <input type="range" id="twoShift" min="-180" max="180" step="5" value="0" aria-labelledby="phShiftLbl">
-      <output id="twoShiftOut" class="ci-out">Ls +0°</output></span>
+      <input type="range" id="twoShift" min="-180" max="180" step="1" value="-3" aria-labelledby="phShiftLbl">
+      <output id="twoShiftOut" class="ci-out">Ls −3°</output></span>
       <span class="ci-pair"><span class="flabel" id="phBiasLbl" title="Adds the same offset to the phase all year: the dimmest line sits this far north (+) or south (−) on average, so the other side gets more light">Bias</span>
-      <input type="range" id="twoBias" min="-30" max="30" step="2.5" value="12.5" aria-labelledby="phBiasLbl">
-      <output id="twoBiasOut" class="ci-out">+12.5°</output></span>
+      <input type="range" id="twoBias" min="-30" max="30" step="0.5" value="11.5" aria-labelledby="phBiasLbl">
+      <output id="twoBiasOut" class="ci-out">+11.5°</output></span>
+      <span class="ci-pair"><span class="flabel" id="phA2Lbl" title="Adds a twice-a-year swing to the phase, A₂ × sin 2(Ls − s₂), so the two halves of the year can differ, as Mars’s eccentric orbit makes them">Semiannual</span>
+      <input type="range" id="twoA2" min="0" max="30" step="0.5" value="6.5" aria-labelledby="phA2Lbl">
+      <output id="twoA2Out" class="ci-out">±6.5°</output></span>
+      <span class="ci-pair"><span class="flabel" id="phS2Lbl" title="Timing of the semiannual swing: furthest north at Ls 45° + s₂ and 225° + s₂">at</span>
+      <input type="range" id="twoS2" min="-90" max="90" step="1" value="18" aria-labelledby="phS2Lbl">
+      <output id="twoS2Out" class="ci-out">Ls +18°</output></span>
+      <span class="ci-pair"><span class="flabel" id="kALbl" title="Lets k itself swing over the year, k + a × sin(Ls − s), kept within 0–1">k swing</span>
+      <input type="range" id="twoKA" min="0" max="1" step="0.05" value="0.6" aria-labelledby="kALbl">
+      <output id="twoKAOut" class="ci-out">±0.60</output></span>
+      <span class="ci-pair"><span class="flabel" id="kSLbl" title="Timing of the k swing: k is highest at Ls 90° + s">at</span>
+      <input type="range" id="twoKS" min="-180" max="180" step="1" value="-99" aria-labelledby="kSLbl">
+      <output id="twoKSOut" class="ci-out">Ls −99°</output></span>
     </span>
   </div>
   <div class="mode-grp" id="optThree" hidden>
@@ -956,9 +968,15 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
               <button type="button" id="hsCont" aria-pressed="false" title="Land covers 85% of each latitude: hot summers, cold winters">Continental</button>
               <button type="button" id="hsMixed" aria-pressed="true" title="Half land, half sea at each latitude, like Earth's northern mid-latitudes">Mixed</button>
               <button type="button" id="hsMari" aria-pressed="false" title="Land covers 15% of each latitude: mild seasons">Maritime</button>
+              <button type="button" id="hsDyn" aria-pressed="false" title="Land and water where the map has them: seasons damped near the sea, Hellas, Argyre and the lakes and downwind of them, stronger far inland and on high ground">Dynamic</button>
             </div>
           </div>
           <p class="mhint" id="heatHint"></p>
+        </div>
+        <div id="p0Row" hidden>
+          <div class="spec-row"><span class="flabel" id="p0Lbl">Sea-level pressure</span><output id="p0Out"></output></div>
+          <input type="range" id="p0" min="0.3" max="2" step="0.05" value="1" aria-labelledby="p0Lbl">
+          <p class="mhint" id="p0Hint"></p>
         </div>
         <div id="lapseRow" hidden>
           <div class="spec-row"><span class="flabel">Lapse rate</span><output id="lapseOut"></output></div>
@@ -1075,7 +1093,9 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
         <li>Earth comparison lines are typical Earth values for the same measure: daily mean 100 and 500 W/m² for mid-latitude winter and summer, 250 and 450 for the tropics; noon peak 350 and 1300 for mid-latitude winter and summer, 700 for tropical winter and 1000 at the equator.</li>
         <li>Seasonal ratio divides each sol’s insolation by the dimmest value of the year at the same latitude, for the chosen measure. Earth references: about 5× (daily mean) and 4× (noon peak) at mid-latitudes, about 2× in the tropics.</li>
         <li>Map: elevation from the Mars Global Surveyor MOLA gridded topography (MEGDR, 4 pixels per degree, about 15 km at the equator; Smith et al. 2003, NASA PDS Geosciences Node), stored to the nearest 5 m relative to the MOLA areoid. The water level is the share of the surface area that lies below sea level, so 30% fills the northern lowlands and the deep basins. With "Fill craters and closed basins" on, every closed depression also holds a lake with a flat surface, set by the basin fill slider as a fraction of the way from the basin's floor to its spill point (100% is full to the brim, as rain would leave it if nothing evaporated); lakes come on top of the ocean share. Earth-equivalent km multiply Mars heights by g<sub>Mars</sub>/g<sub>Earth</sub> = 0.38: with the same air, pressure falls that much more slowly with height on Mars, so Olympus Mons (about 22 km above a 30% sea) thins the air like an 8.6 km climb on Earth. The insolation layer uses the same flat-ground, top-of-atmosphere model as the charts, so it varies with latitude only; slopes and the atmosphere are not included.</li>
-        <li>Insolation-based temperature: what an Earth-like planet would reach with this sunlight, from a seasonal energy-balance model calibrated on Earth (Budyko–Sellers type, after North &amp; Coakley 1979). Each 2° latitude band has a land and a sea box that absorb sunlight with Earth's cloud albedo but no snow or sea ice (top-of-atmosphere albedo 0.24–0.27 in the tropics, rising only to about 0.44 toward the poles, like the ice-free Southern Ocean, where Earth reaches 0.65), radiate 203.3 + 2.09·T W/m² (Earth's satellite fit, T in °C), store heat (land and air 1.0×10⁷ J/m²/K, a 24 m ocean mixed layer 1.0×10⁸), swap heat with each other (2.0 W/m²/K) and pass it poleward by diffusion (0.649 W/m²/K). The heat capacities and exchange were fitted to Earth's seasons (with Earth's real albedo, ice included): on Earth's orbit the model gives a 15 °C global mean, 29 °C at the equator and −7 / 23 °C (January / July) on land at 45°N in the mixed setting. Continental, mixed and maritime set land to 85%, 50% or 15% of each band. The map shows the land temperature, cooled with height above sea level at the lapse rate (default 6.5 K per Earth-equivalent km, 2.5 K per Mars km). It ignores Mars's own oceans and lakes as drawn, mountains blocking winds, deserts, clouds that change with climate, and ice that grows when it is cold, so read it as how warm the sunlight makes places, not a forecast. Mars's year is 1.9 Earth years long, so its seasons have more time to heat and cool than Earth's.</li>
+        <li>Insolation-based temperature: what an Earth-like planet would reach with this sunlight, from a seasonal energy-balance model calibrated on Earth (Budyko–Sellers type, after North &amp; Coakley 1979). Each 2° latitude band has a land and a sea box that absorb sunlight with Earth's cloud albedo but no snow or sea ice (top-of-atmosphere albedo 0.24–0.27 in the tropics, rising only to about 0.44 toward the poles, like the ice-free Southern Ocean, where Earth reaches 0.65), radiate 203.3 + 2.09·T W/m² (Earth's satellite fit, T in °C), store heat (on Earth: land and air 1.0×10⁷ J/m²/K, a 24 m ocean mixed layer 1.0×10⁸), swap heat with each other (2.0 W/m²/K) and pass it poleward by diffusion (0.649 W/m²/K). The heat capacities and exchange were fitted to Earth's seasons (with Earth's real albedo, ice included): on Earth's orbit the model gives a 15 °C global mean, 29 °C at the equator and −7 / 23 °C (January / July) on land at 45°N in the mixed setting. Continental, mixed and maritime set land to 85%, 50% or 15% of each band; Dynamic uses the map’s own land and water instead (below). The map shows the land temperature, cooled with height above sea level at the lapse rate (default 6.5 K per Earth-equivalent km, 2.5 K per Mars km). Outside Dynamic it ignores Mars's own oceans and lakes as drawn; it always ignores mountains blocking winds, deserts, clouds that change with climate, and ice that grows when it is cold, so read it as how warm the sunlight makes places, not a forecast. Mars's year is 1.9 Earth years long, so its seasons have more time to heat and cool than Earth's.</li>
+        <li>Sea-level pressure (default 1 atm): under Mars gravity (3.72 m/s²) 1 atm means 2.64× Earth’s air per m²; Earth’s air mass would give 0.38 atm. Land heat capacity is soil (3.0×10⁶ J/m²/K on Earth, ×1.37 for the deeper seasonal layer of Mars’s longer year) plus the air taking part in the seasons (7.0×10⁶ for Earth’s air, scaled with the air above, so less over high ground in Dynamic); the ocean box gains the extra air too. Heat transport (diffusion, land–sea exchange, winds) scales with pressure × (Earth’s spin rate / Mars’s)², as in Williams &amp; Kasting (1997): about Earth’s at 1 atm. Greenhouse warming is held at Earth’s; with 2.6× the air at Earth’s composition it would be stronger, so this assumes a composition tuned to Earth-like warming. On Earth the formulas give back the calibrated model exactly.</li>
+        <li>Dynamic: the same energy balance on a 4° × 6° latitude–longitude grid with the map’s water level and lakes. A cell’s heat capacity mixes its water and land shares; heat diffuses north–south as in the zonal model and along latitude circles at a tenth of that, and Earth-like prevailing low-level winds carry it east or west (trade winds to 30°, westerlies from 30° to 60°, weak polar easterlies). The wind strength and the zonal mixing were fitted on Earth’s land and sea to the January–July range of 23 mid-latitude cities: within 4.6 K RMS (r = 0.87), against 6.8 K with diffusion alone. Cities next to Earth’s winter sea ice (Yakutsk, Fairbanks) are far more extreme than the model, which has no ice. The periodic cycle is solved harmonic by harmonic (yearly mean plus five), exact to well under 0.1 K. The temperature-by-latitude panel reads each band’s land cell by cell, each patch cooled with its own height.</li>
         <li>Temperature by latitude: the land box of the temperature model for each 2° band, cooled with the average height above sea level of that band’s counted land: land outside the ocean and lakes and no higher than the cut-off (default 3 km in Earth-equivalent height). The band shows the coldest and warmest sol of the year; the swing is their difference, which height does not change. Summaries weight each band by its counted land area.</li>
         <li>Clock times are local true solar time (LTST): 12:00 is when the Sun crosses the meridian. Today's position uses the Allison &amp; McEwen (2000) formula for L<sub>s</sub>.</li>
       </ul>
@@ -1177,24 +1197,26 @@ function ciNorm(kc, p) {
   if (p > 0) I += kc * C2I(-h, p - h); else if (p < 0) I += kc * C2I(p + h, h);
   return I / (Math.PI / 2);   // ∫ cos²a over the whole range is π/2, so a flat profile averages 1
 }
-const ciPhase = (src, ls) => src.phMode === 'season' ? (src.bi || 0) + src.ph * Math.sin(ls * D2R - (src.sh || 0)) : src.ph;
+const ciPhase = (src, ls) => src.phMode === 'season' ? (src.bi || 0) + src.ph * Math.sin(ls * D2R - (src.sh || 0)) + (src.a2 ? src.a2 * Math.sin(2 * (ls * D2R - src.s2)) : 0) : src.ph;
+const ciK = (src, ls) => src.phMode === 'season' && src.kA ? clamp((src.ci || 0) + src.kA * Math.sin(ls * D2R - src.ks), 0, 1) : (src.ci || 0);   // k for the date
 // the profile at disc position y for given k and phase, divided by its disc average n
 const ciProf = (kc, p, n, y) => p === 0 ? ((1 - kc) + 2 * kc * y * y) / n : (1 - kc * Math.cos(2 * clamp(Math.asin(clamp(y, -1, 1)) - p, -Math.PI / 2, Math.PI / 2))) / n;
 // a source's light at a point (latitude sine sp), relative to its average, with the source at declination d and sinEl above the horizon
-const srcTrans = (src, sp, d, sinEl, ls) => { if (!src.ci) return 1; const p = ciPhase(src, ls); return ciProf(src.ci, p, ciNorm(src.ci, p), (sp - Math.sin(d) * sinEl) / Math.cos(d)); };
+const srcTrans = (src, sp, d, sinEl, ls) => { const kc = ciK(src, ls); if (!kc) return 1; const p = ciPhase(src, ls); return ciProf(kc, p, ciNorm(kc, p), (sp - Math.sin(d) * sinEl) / Math.cos(d)); };
 // One source over one sol: the integral over hour angle of its elevation sine times the profile (× S/2π gives the daily mean).
 // Without phase y is linear in sin e = a + b cos H and the profile is quadratic in y, so the integral is exact from the moments
 // of sin e; with a phase it is summed over the sol.
 function srcDay(sp, cp, d, H0, src, ls) {
   const sd = Math.sin(d), cd = Math.cos(d), a = sp * sd, b = cp * cd, s1 = Math.sin(H0), I1 = 2 * (a * H0 + b * s1);
-  if (!src.ci) return I1;
+  const kc = ciK(src, ls);
+  if (!kc) return I1;
   const pph = ciPhase(src, ls);
   if (pph !== 0) {
-    const kc = src.ci, nn = ciNorm(kc, pph), n = 96, dh = H0 / n; let sum = 0;
+    const nn = ciNorm(kc, pph), n = 96, dh = H0 / n; let sum = 0;
     for (let i = 0; i < n; i++) { const mu = a + b * Math.cos((i + 0.5) * dh); if (mu > 0) sum += mu * ciProf(kc, pph, nn, (sp - sd * mu) / cd); }
     return 2 * sum * dh;
   }
-  const c2 = H0 / 2 + Math.sin(2 * H0) / 4, kc = src.ci;
+  const c2 = H0 / 2 + Math.sin(2 * H0) / 4;
   const I2 = 2 * (a * a * H0 + 2 * a * b * s1 + b * b * c2);
   const I3 = 2 * (a * a * a * H0 + 3 * a * a * b * s1 + 3 * a * b * b * c2 + b * b * b * (s1 - s1 * s1 * s1 / 3));
   return ((1 - kc) * I1 + (2 * kc / (cd * cd)) * (sp * sp * I1 - 2 * sp * sd * I2 + sd * sd * I3)) / (1 - kc / 2);
@@ -1218,7 +1240,7 @@ function dayMetrics(lat, st, noPeak) {
     const q = kk * S / (2 * Math.PI) * srcDay(sp, cp, g.d, H0, src, st.ls);
     if (q > 0) mean += q;
     const off = mod(g.ra - sunRa + Math.PI, 2 * Math.PI) - Math.PI;
-    const sdg = Math.sin(g.d), cdg = Math.cos(g.d), kc = src.ci || 0;
+    const sdg = Math.sin(g.d), cdg = Math.cos(g.d), kc = ciK(src, st.ls);
     const pph = kc ? ciPhase(src, st.ls) : 0, nn = kc ? ciNorm(kc, pph) : 1;
     parts.push({ k: kk, a: sp * sdg, b: cp * cdg, off, tr: kc ? (h => ciProf(kc, pph, nn, (sp - sdg * h) / cdg)) : null });
     ivs.push({ c: 12 + off * 12 / Math.PI, w: H0 * 12 / Math.PI });
@@ -1303,7 +1325,7 @@ const PRESETS = { north: [0, 15, 30, 45, 60, 85], south: [0, -15, -30, -45, -60,
 const STORE = 'mars-daylight-v1';
 const state = {
   t: T_TODAY, tod: 14, obsLat: 45, view: 'orbit', units: 'mars', metric: 'mean', orbit: { dur: 'real', ins: 'real', rat: 'real' },
-  lats: PRESETS.north.map((lat, i) => ({ lat, slot: i })), flip: false, dynDur: false, dynIns: false, dynRat: false, earthRef: true, layout: 'full', lineMode: 'chosen', specA: -90, specB: 90, specStep: 5, specOp: 70, show: { view: true, dur: true, ins: true, rat: true, map: true, lat: true }, ltCut: 3, ltRef: true, isoStep: 10, waterPct: 30, fillLakes: true, basinFill: 100, hUnit: 'km', mapLayer: 'elev', palette: 'terrain', hillshade: true, insWhen: 'date', insMetric: 'mean', mapOrbit: 'real', insShow: 'wm', tUnit: 'C', heat: 'cont', lapse: 6.5, insOp: 65, insDyn: false, mapGrid: true, gridLat: 15, gridLon: 30, mapSites: true, ratioMetric: 'mean', mode: 'natural', twoCI: 0.85, twoPh: 25, twoPhMode: 'season', twoShift: 0, twoBias: 12.5, twoPos: 'L5', twoK: 'x133', threeK: 'x067', camOff: 0, playYear: false, playSol: false
+  lats: PRESETS.north.map((lat, i) => ({ lat, slot: i })), flip: false, dynDur: false, dynIns: false, dynRat: false, earthRef: true, layout: 'full', lineMode: 'chosen', specA: -90, specB: 90, specStep: 5, specOp: 70, show: { view: true, dur: true, ins: true, rat: true, map: true, lat: true }, ltCut: 3, ltRef: true, isoStep: 10, waterPct: 30, fillLakes: true, basinFill: 100, hUnit: 'km', mapLayer: 'elev', palette: 'terrain', hillshade: true, insWhen: 'date', insMetric: 'mean', mapOrbit: 'real', insShow: 'wm', tUnit: 'C', heat: 'cont', lapse: 6.5, p0: 1, insOp: 65, insDyn: false, mapGrid: true, gridLat: 15, gridLon: 30, mapSites: true, ratioMetric: 'mean', mode: 'natural', twoCI: 1, twoPh: 27.5, twoPhMode: 'season', twoShift: -3, twoBias: 11.5, twoA2: 6.5, twoS2: 18, twoKA: 0.6, twoKS: -99, twoPos: 'L5', twoK: 'x133', threeK: 'x067', camOff: 0, playYear: false, playSol: false
 };
 try {
   const sv = JSON.parse(localStorage.getItem(STORE) || 'null');
@@ -1342,19 +1364,24 @@ try {
     if (num(sv.isoStep, 1, 30)) state.isoStep = Math.round(sv.isoStep);
     if (sv.insShow === 'wm' || sv.insShow === 'temp') state.insShow = sv.insShow;
     if (['C', 'F', 'K'].includes(sv.tUnit)) state.tUnit = sv.tUnit;
-    if (sv.v >= 2 && ['cont', 'mixed', 'mari'].includes(sv.heat)) state.heat = sv.heat;
+    if (sv.v >= 2 && ['cont', 'mixed', 'mari', 'dyn'].includes(sv.heat)) state.heat = sv.heat;
+    if (num(sv.p0, 0.3, 2)) state.p0 = Math.round(sv.p0 * 20) / 20;
     for (const k of ['hillshade', 'insDyn', 'mapGrid', 'mapSites', 'fillLakes']) if (typeof sv[k] === 'boolean') state[k] = sv[k];
     if (num(sv.gridLat, 1, 30)) state.gridLat = Math.round(sv.gridLat);
     if (num(sv.gridLon, 1, 30)) state.gridLon = Math.round(sv.gridLon);
     if (sv.ratioMetric === 'mean' || sv.ratioMetric === 'noon') state.ratioMetric = sv.ratioMetric;
     if (['natural', 'two', 'three'].includes(sv.mode)) state.mode = sv.mode;
-    if (sv.v >= 4) {      // saves from before the L5, k = 0.85, ±25°, +12.5° default take the new default shaping and position
+    if (sv.v >= 5) {      // saves from before the 1 atm re-optimised default take the new default shaping and position
       if (num(sv.twoCI, 0, 1)) state.twoCI = Math.round(sv.twoCI * 20) / 20;
       if (num(sv.twoPh, -45, 45)) state.twoPh = Math.round(sv.twoPh * 2) / 2;
       if (sv.twoPhMode === 'fixed' || sv.twoPhMode === 'season') state.twoPhMode = sv.twoPhMode;
-      if (num(sv.twoShift, -180, 180)) state.twoShift = Math.round(sv.twoShift / 5) * 5;
+      if (num(sv.twoShift, -180, 180)) state.twoShift = Math.round(sv.twoShift);
       if (num(sv.twoBias, -30, 30)) state.twoBias = Math.round(sv.twoBias * 2) / 2;
       if (sv.twoPos === 'L4' || sv.twoPos === 'L5') state.twoPos = sv.twoPos;
+      if (num(sv.twoA2, 0, 30)) state.twoA2 = Math.round(sv.twoA2 * 2) / 2;
+      if (num(sv.twoS2, -90, 90)) state.twoS2 = Math.round(sv.twoS2);
+      if (num(sv.twoKA, 0, 1)) state.twoKA = Math.round(sv.twoKA * 20) / 20;
+      if (num(sv.twoKS, -180, 180)) state.twoKS = Math.round(sv.twoKS);
     }
     if (sv.twoK === 'x1' || sv.twoK === 'x133') state.twoK = sv.twoK;
     if (sv.threeK === 'x05' || sv.threeK === 'x067') state.threeK = sv.threeK;
@@ -1368,17 +1395,17 @@ try {
 } catch (e) { /* storage unavailable: defaults */ }
 const KVAL = { x1: 1, x133: 4 / 3, x05: 0.5, x067: 2 / 3 };
 function applyMode() {
-  if (state.mode === 'two') SRC = [{ dl: 0, k: 1, name: 'Sun' }, { dl: state.twoPos === 'L4' ? -60 : 60, k: KVAL[state.twoK], name: state.twoPos, ci: state.twoCI || 0, ph: (state.twoPh || 0) * D2R, phMode: state.twoPhMode, sh: (state.twoShift || 0) * D2R, bi: (state.twoBias || 0) * D2R,
+  if (state.mode === 'two') SRC = [{ dl: 0, k: 1, name: 'Sun' }, { dl: state.twoPos === 'L4' ? -60 : 60, k: KVAL[state.twoK], name: state.twoPos, ci: state.twoCI || 0, ph: (state.twoPh || 0) * D2R, phMode: state.twoPhMode, sh: (state.twoShift || 0) * D2R, bi: (state.twoBias || 0) * D2R, a2: (state.twoA2 || 0) * D2R, s2: (state.twoS2 || 0) * D2R, kA: state.twoKA || 0, ks: (state.twoKS || 0) * D2R,
     label: kLabel(KVAL[state.twoK]) + (state.twoCI ? ' avg · k = ' + state.twoCI.toFixed(2) : '') }];
   else if (state.mode === 'three') SRC = [{ dl: 0, k: 1, name: 'Sun' }, { dl: -60, k: KVAL[state.threeK], name: 'L4' }, { dl: 60, k: KVAL[state.threeK], name: 'L5' }];
   else SRC = [{ dl: 0, k: 1, name: 'Sun' }];
-  MODE_KEY = state.mode === 'two' ? 'two|' + state.twoPos + '|' + state.twoK + '|' + (state.twoCI || 0).toFixed(2) + '|' + (state.twoCI ? state.twoPh + state.twoPhMode + (state.twoPhMode === 'season' ? '|' + (state.twoShift || 0) + '|' + (state.twoBias || 0) : '') : '') : state.mode === 'three' ? 'three|' + state.threeK : 'natural';
+  MODE_KEY = state.mode === 'two' ? 'two|' + state.twoPos + '|' + state.twoK + '|' + (state.twoCI || 0).toFixed(2) + '|' + (state.twoCI || state.twoKA ? state.twoPh + state.twoPhMode + (state.twoPhMode === 'season' ? '|' + [state.twoShift, state.twoBias, state.twoA2, state.twoS2, state.twoKA, state.twoKS].map(v => v || 0).join('|') : '') : '') : state.mode === 'three' ? 'three|' + state.threeK : 'natural';
 }
 const kLabel = k => (Math.abs(k - 4 / 3) < 1e-9 ? '1.33' : Math.abs(k - 2 / 3) < 1e-9 ? '0.67' : String(k)) + '× Sun';
 applyMode();
 const MULTI = () => SRC.length > 1;
 function save() {
-  try { localStorage.setItem(STORE, JSON.stringify({ v: 4, isoStep: state.isoStep, ltCut: state.ltCut, ltRef: state.ltRef, units: state.units, metric: state.metric, orbit: state.orbit, flip: state.flip, dynDur: state.dynDur, dynIns: state.dynIns, dynRat: state.dynRat, earthRef: state.earthRef, layout: state.layout, lineMode: state.lineMode, specA: state.specA, specB: state.specB, specStep: state.specStep, specOp: state.specOp, show: state.show, ratioMetric: state.ratioMetric, waterPct: state.waterPct, fillLakes: state.fillLakes, basinFill: state.basinFill, hUnit: state.hUnit, mapLayer: state.mapLayer, palette: state.palette, hillshade: state.hillshade, insWhen: state.insWhen, insMetric: state.insMetric, mapOrbit: state.mapOrbit, insShow: state.insShow, tUnit: state.tUnit, heat: state.heat, lapse: state.lapse, insOp: state.insOp, insDyn: state.insDyn, mapGrid: state.mapGrid, gridLat: state.gridLat, gridLon: state.gridLon, mapSites: state.mapSites, mode: state.mode, twoCI: state.twoCI, twoPh: state.twoPh, twoPhMode: state.twoPhMode, twoShift: state.twoShift, twoBias: state.twoBias, twoPos: state.twoPos, twoK: state.twoK, threeK: state.threeK, lats: state.lats })); } catch (e) {}
+  try { localStorage.setItem(STORE, JSON.stringify({ v: 5, isoStep: state.isoStep, ltCut: state.ltCut, ltRef: state.ltRef, units: state.units, metric: state.metric, orbit: state.orbit, flip: state.flip, dynDur: state.dynDur, dynIns: state.dynIns, dynRat: state.dynRat, earthRef: state.earthRef, layout: state.layout, lineMode: state.lineMode, specA: state.specA, specB: state.specB, specStep: state.specStep, specOp: state.specOp, show: state.show, ratioMetric: state.ratioMetric, waterPct: state.waterPct, fillLakes: state.fillLakes, basinFill: state.basinFill, hUnit: state.hUnit, mapLayer: state.mapLayer, palette: state.palette, hillshade: state.hillshade, insWhen: state.insWhen, insMetric: state.insMetric, mapOrbit: state.mapOrbit, insShow: state.insShow, tUnit: state.tUnit, heat: state.heat, lapse: state.lapse, p0: state.p0, insOp: state.insOp, insDyn: state.insDyn, mapGrid: state.mapGrid, gridLat: state.gridLat, gridLon: state.gridLon, mapSites: state.mapSites, mode: state.mode, twoCI: state.twoCI, twoPh: state.twoPh, twoPhMode: state.twoPhMode, twoShift: state.twoShift, twoBias: state.twoBias, twoA2: state.twoA2, twoS2: state.twoS2, twoKA: state.twoKA, twoKS: state.twoKS, twoPos: state.twoPos, twoK: state.twoK, threeK: state.threeK, lats: state.lats })); } catch (e) {}
 }
 
 /* ================= formatting ================= */
@@ -2566,6 +2593,9 @@ $('lyCompact').addEventListener('click', () => setLayout('compact'));
 
 /* ================= sky modes ================= */
 const MEAN_FLUX = MARS.S1 / (MARS.a * MARS.a * Math.sqrt(1 - MARS.e * MARS.e));   // annual-mean sunlight at Mars
+const lsText = v => 'Ls ' + ((+v || 0) < 0 ? '−' : '+') + Math.abs(+v || 0) + '°';
+const a2Text = () => '±' + (+state.twoA2 || 0) + '°';
+const kaText = () => '±' + (+state.twoKA || 0).toFixed(2);
 const shText = () => { const v = +state.twoShift || 0; return 'Ls ' + (v < 0 ? '−' : '+') + Math.abs(v) + '°'; };
 const biText = () => { const v = +state.twoBias || 0; return (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v) + '°'; };
 const phText = () => { const v = +state.twoPh; return state.twoPhMode === 'season' ? '±' + Math.abs(v) + '°' + (v < 0 ? ' (reversed)' : '') : (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v) + '°'; };
@@ -2582,6 +2612,8 @@ function updateModeBar() {
   $('phSeasonOpts').hidden = state.twoPhMode !== 'season';
   $('twoShift').value = state.twoShift; setText('twoShiftOut', shText());
   $('twoBias').value = state.twoBias; setText('twoBiasOut', biText());
+  $('twoA2').value = state.twoA2; setText('twoA2Out', a2Text()); $('twoS2').value = state.twoS2; setText('twoS2Out', lsText(state.twoS2));
+  $('twoKA').value = state.twoKA; setText('twoKAOut', kaText()); $('twoKS').value = state.twoKS; setText('twoKSOut', lsText(state.twoKS));
   const F = SRC.reduce((a, b) => a + b.k, 0), mean = MEAN_FLUX * F;
   const sum = $('modeSum'); sum.replaceChildren();
   const b = t => { const e = document.createElement('b'); e.textContent = t; return e; };
@@ -2595,11 +2627,14 @@ function updateModeBar() {
   if (state.mode === 'two' && state.twoCI > 0) {
     const kc = state.twoCI, K = KVAL[state.twoK], f = x => (K * x / ciNorm(kc, 0)).toFixed(2) + '× Sun';
     const ph = +state.twoPh, phS = state.twoPhMode === 'season', sh = +state.twoShift || 0, bi = +state.twoBias || 0;
-    const pf = (bi ? biText() + ' + ' : '') + ph + '° × sin ' + (sh ? '(Ls ' + (sh > 0 ? '− ' : '+ ') + Math.abs(sh) + '°)' : 'Ls');
+    const a2 = +state.twoA2 || 0, s2 = +state.twoS2 || 0, ka = +state.twoKA || 0, ks = +state.twoKS || 0;
+    const arg = (v, two) => (two ? '2(' : '(') + 'Ls' + (v ? (v > 0 ? ' − ' : ' + ') + Math.abs(v) + '°' : '') + ')';
+    const pf = (bi ? biText() + ' + ' : '') + ph + '° × sin ' + (sh ? '(Ls ' + (sh > 0 ? '− ' : '+ ') + Math.abs(sh) + '°)' : 'Ls') + (a2 ? ' + ' + a2 + '° × sin ' + arg(s2, true) : '');
+    const kTxt = ka ? ' k itself swings over the year, ' + kc.toFixed(2) + ' + ' + ka.toFixed(2) + ' × sin ' + arg(ks) + ', kept within 0–1.' : '';
     const swing = ph === 0 ? 'held still' : sh === 0 ? Math.abs(ph) + '° ' + (ph > 0 ? 'into the summer hemisphere' : 'into the winter hemisphere') + ' with the seasons'
       : '±' + Math.abs(ph) + '° over the year, furthest ' + (ph >= 0 ? 'north' : 'south') + ' at Ls ' + mod(90 + sh, 360) + '°';
     const biasTxt = bi ? ', around a line ' + Math.abs(bi) + '° ' + (bi > 0 ? 'north' : 'south') + ' of the centre (more light to the ' + (bi > 0 ? 'south' : 'north') + ')' : '';
-    ciText = ' Counterirradiance k = ' + kc.toFixed(2) + ': the array spreads its light like a concave lens, 1 − k·cos 2(a − p) across the disc it lights, with a measured from the disc’s east–west centre line (the latitude seen from the array, equal to the real latitude when the array is over the equator)' + (ph === 0 && !(phS && bi) ? ': ' + f(1 - kc) + ' along the centre line, ' + f(1) + ' at a = ±45°, ' + f(1 + kc) + ' at the north and south edges' : phS ? ' and the dimmest line swinging ' + swing + biasTxt + ' (p = ' + pf + '), held at the maximum beyond 90° from it' : ' and the dimmest line moved to a = ' + phText() + ', held at the maximum beyond 90° from it') + ', scaled so the average stays ' + kLabel(K) + '.';
+    ciText = ' Counterirradiance k = ' + kc.toFixed(2) + ': the array spreads its light like a concave lens, 1 − k·cos 2(a − p) across the disc it lights, with a measured from the disc’s east–west centre line (the latitude seen from the array, equal to the real latitude when the array is over the equator)' + (ph === 0 && !(phS && bi) ? ': ' + f(1 - kc) + ' along the centre line, ' + f(1) + ' at a = ±45°, ' + f(1 + kc) + ' at the north and south edges' : phS ? ' and the dimmest line swinging ' + swing + biasTxt + (a2 ? ', with a semiannual part' : '') + ' (p = ' + pf + '), held at the maximum beyond 90° from it' : ' and the dimmest line moved to a = ' + phText() + ', held at the maximum beyond 90° from it') + ', scaled so the average stays ' + kLabel(K) + '.' + (phS ? kTxt : '');
   }
   sum.append(lead, 'Average flux at Mars ', b(Math.round(mean) + ' W/m²'), ', ' + Math.round(100 * mean / MARS.S1) + '% of Earth’s 1361 W/m².' + ciText);
 }
@@ -2627,7 +2662,9 @@ $('twoPh').addEventListener('input', e => {
   clearTimeout(ciTimer); ciTimer = setTimeout(() => setMode({}), 350);
 });
 $('twoPh').addEventListener('change', () => { clearTimeout(ciTimer); setMode({}); });
-for (const [id, key, q, txt] of [['twoShift', 'twoShift', v => Math.round(v / 5) * 5, shText], ['twoBias', 'twoBias', v => Math.round(v * 2) / 2, biText]]) {
+for (const [id, key, q, txt] of [['twoShift', 'twoShift', v => Math.round(v), shText], ['twoBias', 'twoBias', v => Math.round(v * 2) / 2, biText],
+  ['twoA2', 'twoA2', v => Math.round(v * 2) / 2, a2Text], ['twoS2', 'twoS2', v => Math.round(v), () => lsText(state.twoS2)],
+  ['twoKA', 'twoKA', v => Math.round(v * 20) / 20, kaText], ['twoKS', 'twoKS', v => Math.round(v), () => lsText(state.twoKS)]]) {
   $(id).addEventListener('input', e => { state[key] = q(+e.target.value); setText(id + 'Out', txt()); clearTimeout(ciTimer); ciTimer = setTimeout(() => setMode({}), 350); });
   $(id).addEventListener('change', () => { clearTimeout(ciTimer); setMode({}); });
 }
@@ -2801,7 +2838,7 @@ function renderDetail() {
           const f = (s0 + (s1 - s0) * fr) / 100; R *= f; G *= f; B *= f;
         }
         if (P.insOn) {
-          if (P.tempOn) [ir, ig, ib] = tempRGB((Math.max(0, tb - P.gK * (hh - P.hRef)) - P.lo) / (P.hi - P.lo));
+          if (P.tempOn) [ir, ig, ib] = tempRGB((Math.max(0, (P.DF ? dynAt(P.DF, r0, c0) : tb) - P.gK * (hh - P.hRef)) - P.lo) / (P.hi - P.lo));
           R = R * (1 - P.op) + ir * P.op; G = G * (1 - P.op) + ig * P.op; B = B * (1 - P.op) + ib * P.op;
         }
         d[o] = R; d[o + 1] = G; d[o + 2] = B;
@@ -3028,7 +3065,7 @@ function insFixedMax() {           // the yearly maximum anywhere on the planet 
   const circ = state.mapOrbit === 'circ', key = MODE_KEY + '|' + (circ ? 'c' : 'r') + '|' + state.insMetric;
   if (insMaxCache.has(key)) return insMaxCache.get(key);
   let v = 0;
-  if (state.insMetric === 'noon' && SRC.some(x => x.ci)) {
+  if (state.insMetric === 'noon' && SRC.some(x => x.ci || x.kA)) {
     const src = circ ? IDE : ORB;
     for (let lat = -90; lat <= 90; lat += 2) for (let i = 0; i < N; i += 4) { const m = dayMetrics(lat, src[i]).noon; if (m > v) v = m; }
   } else if (state.insMetric === 'noon') {
@@ -3055,6 +3092,13 @@ function insFixedMax() {           // the yearly maximum anywhere on the planet 
 // cooled with height at the lapse rate. Linear in T, so the yearly average is the steady state of the yearly-mean sunlight.
 const EBM_NB = 90, EBM_A = 203.3, EBM_B = 2.09, EBM_D = 0.649, EBM_CL = 1.0e7, EBM_CO = 1.0e8, EBM_NU = 2.0;
 const HEAT_F = { cont: 0.85, mixed: 0.5, mari: 0.15 };
+// Sea-level pressure (state.p0, atm). Under Mars gravity 1 atm is 2.64× Earth's air per m². Land heat capacity = soil (3.0e6 J/m²/K
+// on Earth, a deeper seasonal layer for Mars's longer year) + the air taking part in the seasons (7.0e6 J/m²/K for Earth's air,
+// scaled with the air above); ocean = the fitted 1.0e8 J/m²/K box plus the extra air. Heat transport (diffusion, land–sea exchange,
+// winds) scales with pressure × (Earth's spin / Mars's spin)², as in Williams & Kasting (1997). On Earth (1 atm, Earth's gravity
+// and year) this is exactly the calibrated model.
+const EBM_CS = 3.0e6 * Math.sqrt(YEAR * MARS.solSec / (365.2422 * 86400)), EBM_CA = 7.0e6, EBM_ROT = (88642.66 / 86164.1) ** 2;
+function ebmP() { const p0 = state.p0, m0 = p0 / H_EARTH, sT = p0 * EBM_ROT; return { p0, m0, sT, CL: EBM_CS + EBM_CA * m0, CO: EBM_CO + EBM_CA * (m0 - 1), NU: EBM_NU * sT }; }
 const HEAT_EARTH = { cont: [-11.6, 26.8], mixed: [-7.3, 22.6], mari: [-0.7, 16.3] };   // model on Earth: land at 45°N, Jan / Jul
 const EBM_LAT = new Float64Array(EBM_NB), EBM_ALB = new Float64Array(EBM_NB), EBM_LO = new Float64Array(EBM_NB), EBM_UP = new Float64Array(EBM_NB);
 (() => {
@@ -3085,33 +3129,35 @@ function ebmForcing(circ) {          // absorbed sunlight minus A, per band and 
   return F;
 }
 function ebmSteady(circ) {           // yearly-mean temperature (°C): (B + L) T = mean forcing, a tridiagonal solve
-  const key = 'S|' + MODE_KEY + '|' + (circ ? 'c' : 'r');
+  const key = 'S|' + MODE_KEY + '|' + (circ ? 'c' : 'r') + '|' + state.p0;
   let T = ebmCache.get(key);
   if (T) return T;
-  const F = ebmForcing(circ).mean, n = EBM_NB, c = new Float64Array(n), d = new Float64Array(n);
+  const F = ebmForcing(circ).mean, n = EBM_NB, c = new Float64Array(n), d = new Float64Array(n), sT = ebmP().sT;
   T = new Float64Array(n);
   for (let i = 0; i < n; i++) {
-    const a = EBM_LO[i], dg = EBM_B - EBM_LO[i] - EBM_UP[i] - (i > 0 ? a * c[i - 1] : 0);
-    c[i] = EBM_UP[i] / dg; d[i] = (F[i] - (i > 0 ? a * d[i - 1] : 0)) / dg;
+    const a = EBM_LO[i] * sT, dg = EBM_B - (EBM_LO[i] + EBM_UP[i]) * sT - (i > 0 ? a * c[i - 1] : 0);
+    c[i] = EBM_UP[i] * sT / dg; d[i] = (F[i] - (i > 0 ? a * d[i - 1] : 0)) / dg;
   }
   for (let i = n - 1; i >= 0; i--) T[i] = d[i] - (i < n - 1 ? c[i] * T[i + 1] : 0);
   ebmCache.set(key, T);
   return T;
 }
 function ebmSeasonal(circ, heat) {   // land temperature (°C) per band and date, the periodic solution
-  const key = 'L|' + MODE_KEY + '|' + (circ ? 'c' : 'r') + '|' + heat;
+  if (!HEAT_F[heat]) heat = 'cont';
+  const key = 'L|' + MODE_KEY + '|' + (circ ? 'c' : 'r') + '|' + heat + '|' + state.p0;
   let out = ebmCache.get(key);
   if (out) return out;
   const f = HEAT_F[heat], nb = EBM_NB, n = 2 * nb, W = N + 1, dt = DT * MARS.solSec, FF = ebmForcing(circ).F, Tbar = ebmSteady(circ);
+  const PP = ebmP(), sT = PP.sT;
   // banded matrix (half-width 2), unknowns interleaved: land of band i at 2i, sea at 2i + 1; diagonally dominant, so no pivoting
   const M = new Float64Array(n * 5), at = (i, j) => i * 5 + j - i + 2, Cv = new Float64Array(n);
   for (let i = 0; i < nb; i++) {
-    const Lii = -EBM_LO[i] - EBM_UP[i], rl = 2 * i, ro = rl + 1;
-    Cv[rl] = EBM_CL / dt; Cv[ro] = EBM_CO / dt;
-    M[at(rl, rl)] = Cv[rl] + EBM_B + Lii + EBM_NU / f; M[at(rl, ro)] = -EBM_NU / f;
-    M[at(ro, ro)] = Cv[ro] + EBM_B + Lii + EBM_NU / (1 - f); M[at(ro, rl)] = -EBM_NU / (1 - f);
-    if (i > 0) { M[at(rl, rl - 2)] = EBM_LO[i]; M[at(ro, ro - 2)] = EBM_LO[i]; }
-    if (i < nb - 1) { M[at(rl, rl + 2)] = EBM_UP[i]; M[at(ro, ro + 2)] = EBM_UP[i]; }
+    const Lii = (-EBM_LO[i] - EBM_UP[i]) * sT, rl = 2 * i, ro = rl + 1;
+    Cv[rl] = PP.CL / dt; Cv[ro] = PP.CO / dt;
+    M[at(rl, rl)] = Cv[rl] + EBM_B + Lii + PP.NU / f; M[at(rl, ro)] = -PP.NU / f;
+    M[at(ro, ro)] = Cv[ro] + EBM_B + Lii + PP.NU / (1 - f); M[at(ro, rl)] = -PP.NU / (1 - f);
+    if (i > 0) { M[at(rl, rl - 2)] = EBM_LO[i] * sT; M[at(ro, ro - 2)] = EBM_LO[i] * sT; }
+    if (i < nb - 1) { M[at(rl, rl + 2)] = EBM_UP[i] * sT; M[at(ro, ro + 2)] = EBM_UP[i] * sT; }
   }
   for (let k = 0; k < n; k++) {
     const pv = M[at(k, k)], top = Math.min(n - 1, k + 2);
@@ -3139,16 +3185,171 @@ function ebmSeasonal(circ, heat) {   // land temperature (°C) per band and date
   ebmCache.set(key, TL);
   return TL;
 }
+/* ================= dynamic setting: the energy balance on the map's own land and water ================= */
+// The same energy balance on a 4° × 6° latitude–longitude grid. Each cell's heat capacity mixes its water share (ocean box) and
+// its land (soil + the air above it, less over high ground), so the seasons are damped near the sea, Hellas, Argyre and the
+// lakes and stronger far inland and on high ground. Heat spreads by diffusion (as in the zonal model; along latitude circles at
+// a tenth of that) and is carried by Earth-like prevailing winds (trade winds, westerlies, polar easterlies). The winds and the
+// weaker zonal mixing were fitted to Earth: with Earth's land and sea and this model's settings, the January–July range of 23
+// mid-latitude cities comes out within about 4.6 K (r = 0.87). The periodic solution is found harmonic by harmonic (yearly mean
+// and the first five), exact to well under 0.1 K here. Banded LU (bandwidth = one row of the grid) cached per land/water and pressure.
+const DYN_NL = 45, DYN_NO = 60, DYN_NH = 5, DYN_DLON = 0.1, DYN_A0 = 3.0;
+const DYN_AL = [0.26, 0.25, 0.24, 0.27, 0.32, 0.38, 0.42, 0.44, 0.44, 0.44];   // the zonal model's cloud albedo
+const dynGeoCache = { key: '', v: null }, dynLU = { key: '', f: null }, dynCache = new Map();
+const DYN_RI = new Int32Array(MAP_H), DYN_RW = new Float32Array(MAP_H), DYN_CJ0 = new Int32Array(MAP_W), DYN_CJ1 = new Int32Array(MAP_W), DYN_CW = new Float32Array(MAP_W);
+for (let r = 0; r < MAP_H; r++) { const y = clamp((90 - (r + 0.5) / MAP_PPD + 90) / 4 - 0.5, 0, DYN_NL - 1), i0 = Math.min(DYN_NL - 2, Math.floor(y)); DYN_RI[r] = i0; DYN_RW[r] = y - i0; }
+for (let c = 0; c < MAP_W; c++) { const x = (c + 0.5) / MAP_PPD / 6 - 0.5, f = Math.floor(x); DYN_CJ0[c] = mod(f, DYN_NO); DYN_CJ1[c] = mod(f + 1, DYN_NO); DYN_CW[c] = x - f; }
+const DYN_COS = [], DYN_SIN = [];
+for (let h = 0; h <= DYN_NH; h++) { const c = new Float64Array(N), sn = new Float64Array(N); for (let j = 0; j < N; j++) { c[j] = Math.cos(2 * Math.PI * h * j / N); sn[j] = Math.sin(2 * Math.PI * h * j / N); } DYN_COS.push(c); DYN_SIN.push(sn); }
+function dynGeo() {                    // per cell: water share, and the mean air-pressure ratio over its land
+  if (waterDragging && dynGeoCache.v) return dynGeoCache.v;
+  const sea = seaLevelOf(state.waterPct), bf = state.basinFill / 100, FL = state.fillLakes ? fillDepressions(sea) : null;
+  const key = [sea, state.fillLakes ? fillSea : 'dry', bf].join('|');
+  if (dynGeoCache.key === key) return dynGeoCache.v;
+  const NL = DYN_NL, NO = DYN_NO, n = NL * NO, hRef = isFinite(sea) ? sea : 0;
+  const cnt = new Float64Array(n), wat = new Float64Array(n), lnd = new Float64Array(n), spr = new Float64Array(n);
+  for (let r = 0; r < MAP_H; r++) {
+    const i = Math.min(NL - 1, Math.floor((MAP_H - 1 - r) * NL / MAP_H));
+    for (let c = 0; c < MAP_W; c++) {
+      const k = i * NO + Math.min(NO - 1, Math.floor(c * NO / MAP_W)), p = r * MAP_W + c, h = ELEV[p];
+      cnt[k]++;
+      if (h <= sea || (FL && FL[p] > h && h < lakeLevel(p, bf))) { wat[k]++; continue; }
+      lnd[k]++; spr[k] += Math.pow(Math.max(0.05, 1 - 0.0065 * (h - hRef) * H_EARTH / 288.15), 5.256);
+    }
+  }
+  const v = { key, fw: new Float64Array(n), pr: new Float64Array(n) };
+  for (let k = 0; k < n; k++) { v.fw[k] = wat[k] / cnt[k]; v.pr[k] = lnd[k] ? spr[k] / lnd[k] : 1; }
+  dynGeoCache.key = key; dynGeoCache.v = v;
+  return v;
+}
+function dynFactor() {                 // LU factors of (B + transport + iωC) for the yearly mean and each harmonic
+  const geo = dynGeo(), P = ebmP(), key = geo.key + '|' + P.p0;
+  if (dynLU.key === key) return dynLU.f;
+  const NL = DYN_NL, NO = DYN_NO, n = NL * NO, bw = NO, W2 = 2 * bw + 1, dt = DT * MARS.solSec;
+  const xe = new Float64Array(NL + 1), xc = new Float64Array(NL), dx = new Float64Array(NL), lat = new Float64Array(NL);
+  for (let i = 0; i <= NL; i++) xe[i] = Math.sin((-90 + 180 * i / NL) * D2R);
+  for (let i = 0; i < NL; i++) { xc[i] = (xe[i] + xe[i + 1]) / 2; dx[i] = xe[i + 1] - xe[i]; lat[i] = -90 + (i + 0.5) * 180 / NL; }
+  const D = EBM_D * P.sT, Dl = DYN_DLON * D, dl = 2 * Math.PI / NO, km = new Float64Array(NL);
+  for (let i = 0; i < NL - 1; i++) km[i] = D * (1 - xe[i + 1] * xe[i + 1]) / (xc[i + 1] - xc[i]);
+  // prevailing low-level wind shape: trade winds (easterly) to 30°, westerlies to 60°, weak polar easterlies
+  const ush = a => { a = Math.abs(a); return a < 30 ? -0.5 * Math.sin(Math.PI * a / 30) : a < 60 ? Math.sin(Math.PI * (a - 30) / 30) : -0.3 * Math.sin(Math.PI * (a - 60) / 30); };
+  const C = new Float64Array(n);
+  for (let k = 0; k < n; k++) C[k] = geo.fw[k] * P.CO + (1 - geo.fw[k]) * (EBM_CS + EBM_CA * P.m0 * geo.pr[k]);
+  const at = (p, q) => p * W2 + q - p + bw, f = [];
+  for (let h = 0; h <= DYN_NH; h++) {
+    const th = 2 * Math.PI * h / N, zr = (1 - Math.cos(th)) / dt, zi = Math.sin(th) / dt;     // implicit-Euler step, as the zonal model
+    const re = new Float64Array(n * W2), im = new Float64Array(n * W2);
+    for (let i = 0; i < NL; i++) {
+      const q = 1 - xc[i] * xc[i], cz = Dl / q / (dl * dl), a = DYN_A0 * P.sT * ush(lat[i]) / Math.sqrt(q) / dl;
+      const cs = i > 0 ? km[i - 1] / dx[i] : 0, cn = i < NL - 1 ? km[i] / dx[i] : 0;
+      for (let j = 0; j < NO; j++) {
+        const p = i * NO + j, wst = i * NO + (j + NO - 1) % NO, est = i * NO + (j + 1) % NO;
+        re[at(p, p)] += EBM_B + cs + cn + 2 * cz + Math.abs(a) + C[p] * zr; im[at(p, p)] += C[p] * zi;
+        if (i > 0) re[at(p, p - NO)] -= cs;
+        if (i < NL - 1) re[at(p, p + NO)] -= cn;
+        re[at(p, wst)] -= cz + (a > 0 ? a : 0); re[at(p, est)] -= cz + (a < 0 ? -a : 0);
+      }
+    }
+    for (let k = 0; k < n; k++) {      // no pivoting: the matrix is diagonally dominant
+      const dk = at(k, k), pr = re[dk], pi = im[dk], den = pr * pr + pi * pi, ir = pr / den, ii = -pi / den, top = Math.min(n - 1, k + bw), bk = dk + 1;
+      for (let i = k + 1; i <= top; i++) {
+        const ai = at(i, k), xr = re[ai], xi = im[ai];
+        if (xr === 0 && xi === 0) continue;
+        const lr = xr * ir - xi * ii, li = xr * ii + xi * ir, bi = ai + 1;
+        re[ai] = lr; im[ai] = li;
+        for (let o = 0, m = top - k; o < m; o++) { const ur = re[bk + o], ui = im[bk + o]; if (ur === 0 && ui === 0) continue; re[bi + o] -= lr * ur - li * ui; im[bi + o] -= lr * ui + li * ur; }
+      }
+    }
+    f.push({ re, im });
+  }
+  dynLU.key = key; dynLU.f = f;
+  return f;
+}
+function dynSolve(circ) {              // harmonics of the periodic temperature in every cell (°C at sea level)
+  const geo = dynGeo(), key = MODE_KEY + '|' + (circ ? 'c' : 'r') + '|' + state.p0 + '|' + geo.key;
+  let S = dynCache.get(key);
+  if (S) return S;
+  const f = dynFactor(), NL = DYN_NL, NO = DYN_NO, n = NL * NO, bw = NO, W2 = 2 * bw + 1, H1 = DYN_NH + 1, src = circ ? IDE : ORB;
+  const cr = new Float64Array(H1 * NL), ci = new Float64Array(H1 * NL);
+  for (let i = 0; i < NL; i++) {
+    const lat = -90 + (i + 0.5) * 180 / NL, u = Math.abs(lat) / 10, k = Math.min(8, Math.floor(u)), alb = lerp(DYN_AL[k], DYN_AL[k + 1], u - k);
+    for (let j = 0; j < N; j++) {
+      const F = (dayMetrics(lat, src[j], true).mean * (1 - alb) - EBM_A) / N;
+      for (let h = 0; h < H1; h++) { cr[h * NL + i] += F * DYN_COS[h][j]; ci[h * NL + i] -= F * DYN_SIN[h][j]; }
+    }
+  }
+  const Tr = new Float64Array(H1 * n), Ti = new Float64Array(H1 * n);
+  for (let h = 0; h < H1; h++) {
+    const { re, im } = f[h], xr = Tr.subarray(h * n, (h + 1) * n), xi = Ti.subarray(h * n, (h + 1) * n);
+    for (let p = 0; p < n; p++) { const i = (p / NO) | 0; xr[p] = cr[h * NL + i]; xi[p] = ci[h * NL + i]; }
+    for (let p = 1; p < n; p++) {
+      let sr = xr[p], si = xi[p];
+      for (let k = Math.max(0, p - bw); k < p; k++) { const o = p * W2 + k - p + bw, lr = re[o], li = im[o]; sr -= lr * xr[k] - li * xi[k]; si -= lr * xi[k] + li * xr[k]; }
+      xr[p] = sr; xi[p] = si;
+    }
+    for (let p = n - 1; p >= 0; p--) {
+      let sr = xr[p], si = xi[p];
+      const top = Math.min(n - 1, p + bw);
+      for (let k = p + 1; k <= top; k++) { const o = p * W2 + k - p + bw, ur = re[o], ui = im[o]; sr -= ur * xr[k] - ui * xi[k]; si -= ur * xi[k] + ui * xr[k]; }
+      const o = p * W2 + bw, dr = re[o], di = im[o], den = dr * dr + di * di;
+      xr[p] = (sr * dr + si * di) / den; xi[p] = (si * dr - sr * di) / den;
+    }
+  }
+  S = { Tr, Ti };
+  if (dynCache.size > 12) dynCache.clear();
+  dynCache.set(key, S);
+  return S;
+}
+function dynField(S, u) {              // temperature (°C, sea level) in every cell at step u (fractional, 0…N)
+  const n = DYN_NL * DYN_NO, F = new Float64Array(n);
+  F.set(S.Tr.subarray(0, n));
+  for (let h = 1; h <= DYN_NH; h++) {
+    const c = 2 * Math.cos(2 * Math.PI * h * u / N), sn = 2 * Math.sin(2 * Math.PI * h * u / N), o = h * n;
+    for (let p = 0; p < n; p++) F[p] += S.Tr[o + p] * c - S.Ti[o + p] * sn;
+  }
+  return F;
+}
+function dynSeries(S) {                // every cell, every step: Float32Array (cell × N), kept for the last two skies
+  if (S.ser) return S.ser;
+  const n = DYN_NL * DYN_NO, out = new Float32Array(n * N);
+  for (let p = 0; p < n; p++) {
+    const o = p * N;
+    for (let j = 0; j < N; j++) {
+      let v = S.Tr[p];
+      for (let h = 1; h <= DYN_NH; h++) v += 2 * (S.Tr[h * n + p] * DYN_COS[h][j] - S.Ti[h * n + p] * DYN_SIN[h][j]);
+      out[o + j] = v;
+    }
+  }
+  dynSerKeep.push(S); if (dynSerKeep.length > 2) delete dynSerKeep.shift().ser;
+  S.ser = out;
+  return out;
+}
+const dynSerKeep = [];
+// bilinear read of a field (K) at map row r and source column c (column 0 = 0°E)
+const dynAt = (F, r, c) => { const a = DYN_RI[r] * DYN_NO, b = a + DYN_NO, wy = DYN_RW[r], j0 = DYN_CJ0[c], j1 = DYN_CJ1[c], wx = DYN_CW[c];
+  return (1 - wy) * (F[a + j0] + (F[a + j1] - F[a + j0]) * wx) + wy * (F[b + j0] + (F[b + j1] - F[b + j0]) * wx); };
+function dynMapField() {               // the field the map shows (K), or null when the zonal model is used
+  if (state.heat !== 'dyn' || state.insWhen !== 'date' || !mapReady) return null;
+  const F = dynField(dynSolve(state.mapOrbit === 'circ'), mod(state.t, YEAR) / DT);
+  for (let p = 0; p < F.length; p++) F[p] += 273.15;
+  return F;
+}
 function tempProfile() {             // sea-level insolation-based temperature (K) for every map row
   const circ = state.mapOrbit === 'circ', year = state.insWhen === 'year';
-  const key = 'T|' + MODE_KEY + '|' + (circ ? 'c' : 'r') + '|' + (year ? 'year' : state.heat + '|' + state.t.toFixed(2));
+  const key = 'T|' + MODE_KEY + '|' + (circ ? 'c' : 'r') + '|' + state.p0 + '|' + (year ? 'year' : state.heat + '|' + state.t.toFixed(2));
   let prof = insCache.get(key);
   if (prof) return prof;
   const band = new Float64Array(EBM_NB);
   if (year) band.set(ebmSteady(circ));
   else {
+    if (state.heat === 'dyn' && mapReady) {        // zonal mean of the 2-D field (the map itself reads the field cell by cell)
+      const F = dynField(dynSolve(circ), mod(state.t, YEAR) / DT), NO = DYN_NO;
+      for (let b = 0; b < EBM_NB; b++) { const y = clamp((EBM_LAT[b] + 90) / 4 - 0.5, 0, DYN_NL - 1), i0 = Math.min(DYN_NL - 2, Math.floor(y)), wy = y - i0;
+        let s0 = 0, s1 = 0; for (let j = 0; j < NO; j++) { s0 += F[i0 * NO + j]; s1 += F[(i0 + 1) * NO + j]; } band[b] = ((1 - wy) * s0 + wy * s1) / NO; }
+    } else {
     const TL = ebmSeasonal(circ, state.heat), W = N + 1, u = mod(state.t, YEAR) / DT, j0 = Math.min(N - 1, Math.floor(u)), fr = u - j0;
     for (let b = 0; b < EBM_NB; b++) band[b] = lerp(TL[b * W + j0], TL[b * W + j0 + 1], fr);
+    }
   }
   prof = new Float32Array(MAP_H);
   for (let r = 0; r < MAP_H; r++) {
@@ -3183,8 +3384,8 @@ function buildMap() {
   const FL = !state.fillLakes ? null : (waterDragging && FILL && fillSea !== sea) ? FILL : fillDepressions(sea);
   const bf = state.basinFill / 100;
   const hRef = isFinite(sea) ? sea : 0, gK = state.lapse * H_EARTH / 1000;   // K per Mars metre
-  let TB = null;
-  if (tempOn) TB = tempProfile();
+  let TB = null, DF = null;
+  if (tempOn) { TB = tempProfile(); DF = dynMapField(); }
   const n = MAP_W * MAP_H;
   if (!VGRID) { VGRID = new Float32Array(n); DGRID = new Float32Array(n); }
   const V = VGRID, D = DGRID;
@@ -3202,7 +3403,7 @@ function buildMap() {
       if (depth >= 0) { V[k] = NaN; continue; }
       landW += cw;
       if (insOn) {
-        const v = tempOn ? Math.max(0, TB[r] - gK * (h - hRef)) : pr;
+        const v = tempOn ? Math.max(0, (DF ? dynAt(DF, r, c < 720 ? c + 720 : c - 720) : TB[r]) - gK * (h - hRef)) : pr;
         V[k] = v; landIns += cw * v;
         if (v < vmin) vmin = v; if (v > vmax) vmax = v;
       }
@@ -3242,10 +3443,10 @@ function buildMap() {
   (st > 1 ? mcompLo : mcomp).putImageData(img, 0, 0);
   mapSrc = st > 1 ? mapCompLo : mapComp; mapSrcStep = st;
   mapStats = { sea, land: landW / allW, lake: lakeW / allW, insLand: landW > 0 ? landIns / landW : NaN, lo, hi, insOn };
-  mapParams = { sea, pal, wl, LMAX, WMAX, shadeOn, insOn, prof, op, lo, hi, FL, bf, tempOn, TB, hRef, gK };
+  mapParams = { sea, pal, wl, LMAX, WMAX, shadeOn, insOn, prof, op, lo, hi, FL, bf, tempOn, TB, DF, hRef, gK };
   // iso-insolation contours (daily mean only); skipped while the water slider is moving
   if (insOn && (tempOn || state.insMetric === 'mean')) {
-    const ckey = [sea, state.fillLakes ? fillSea : 'dry', bf, MODE_KEY, state.mapOrbit, state.insWhen, state.insWhen === 'date' ? state.t.toFixed(2) : '', tempOn, tempOn ? state.lapse + '|' + state.heat + '|' + state.isoStep : ''].join('|');
+    const ckey = [sea, state.fillLakes ? fillSea : 'dry', bf, MODE_KEY, state.mapOrbit, state.insWhen, state.insWhen === 'date' ? state.t.toFixed(2) : '', tempOn, tempOn ? state.lapse + '|' + state.heat + '|' + state.isoStep + '|' + state.p0 : ''].join('|');
     if (ckey === contourKey && mapContours) { /* unchanged: reuse */ }
     else if (contourHide) { mapContours = null; contourKey = ''; }
     else if (waterDragging && mapContours) { /* keep the previous lines until the water slider settles */ }
@@ -3470,7 +3671,7 @@ function updateMapRead() {
       line(state.insMetric === 'mean' || P.tempOn ? 'Daily-mean insolation ' : 'Peak insolation ', b(fmtInt(v) + ' W/m²'));
       const isLand = !(h <= sea) && !(FL && FL[i] > h && h < lakeLevel(i, P.bf));
       if (P.tempOn && isLand) {
-        const dT = P.gK * (h - P.hRef), T = Math.max(0, P.TB[r] - dT);
+        const dT = P.gK * (h - P.hRef), T = Math.max(0, (P.DF ? dynAt(P.DF, r, c) : P.TB[r]) - dT);
         line('Insolation-based temp. ', b(fmtTemp(T)), dim(' (' + (dT >= 0 ? '−' : '+') + Math.abs(dT).toFixed(1) + ' K from height)'));
       }
     }
@@ -3500,10 +3701,14 @@ function updateMapControls() {
   $('isoRow').hidden = !tempOn; $('isoStep').value = state.isoStep; setText('isoOut', isoText());
   $('heatRow').hidden = !tempOn || state.insWhen === 'year';
   $('insDyn').closest('label').hidden = tempOn;
-  pr('hsCont', state.heat === 'cont'); pr('hsMixed', state.heat === 'mixed'); pr('hsMari', state.heat === 'mari');
-  const he = HEAT_EARTH[state.heat];
+  pr('hsCont', state.heat === 'cont'); pr('hsMixed', state.heat === 'mixed'); pr('hsMari', state.heat === 'mari'); pr('hsDyn', state.heat === 'dyn');
+  if (state.heat === 'dyn') setText('heatHint', 'Land and water from the map on a 4° × 6° grid: the sea, Hellas, Argyre and the lakes damp the seasons nearby and downwind (Earth-like trade winds and westerlies); high ground, with less air above it, swings more. Fitted to Earth: with Earth’s land and sea it gets the January–July range of 23 mid-latitude cities within about 4.6 K.');
+  else { const he = HEAT_EARTH[state.heat];
   setText('heatHint', 'Land is ' + Math.round(HEAT_F[state.heat] * 100) + '% of each latitude band. The same model on Earth gives '
-    + fmtTemp(he[0] + 273.15) + ' in January and ' + fmtTemp(he[1] + 273.15) + ' in July on land at 45°N.');
+    + fmtTemp(he[0] + 273.15) + ' in January and ' + fmtTemp(he[1] + 273.15) + ' in July on land at 45°N.'); }
+  $('p0Row').hidden = !tempOn; $('p0').value = state.p0;
+  setText('p0Out', state.p0.toFixed(2) + ' atm');
+  setText('p0Hint', 'Under Mars gravity that is ' + (state.p0 / H_EARTH).toFixed(1) + '× Earth’s air per m² (0.38 atm is Earth’s). More air holds more heat, so land swings less; heat transport grows with pressure. Composition is assumed tuned to Earth-like greenhouse warming.');
   setText('lapseOut', state.lapse.toFixed(1) + ' K per Earth-eq. km');
   setText('lapseHint', 'Air cools ' + (state.lapse * H_EARTH).toFixed(2) + ' K per Mars km above sea level' + (state.lapse === 6.5 ? ' (Earth’s standard atmosphere)' : ''));
   setText('mmNoon', MULTI() ? 'Daily peak' : 'Noon peak');
@@ -3551,6 +3756,10 @@ $('isTemp').addEventListener('click', mapSet({ insShow: 'temp' }));
 $('hsCont').addEventListener('click', mapSet({ heat: 'cont' }));
 $('hsMixed').addEventListener('click', mapSet({ heat: 'mixed' }));
 $('hsMari').addEventListener('click', mapSet({ heat: 'mari' }));
+$('hsDyn').addEventListener('click', mapSet({ heat: 'dyn' }));
+let p0Timer = 0;
+$('p0').addEventListener('input', e => { state.p0 = Math.round(+e.target.value * 20) / 20; setText('p0Out', state.p0.toFixed(2) + ' atm'); clearTimeout(p0Timer); p0Timer = setTimeout(mapSettingsChanged, 300); });
+$('p0').addEventListener('change', e => { state.p0 = Math.round(+e.target.value * 20) / 20; clearTimeout(p0Timer); mapSettingsChanged(); });
 for (const [id, u] of [['tuC', 'C'], ['tuF', 'F'], ['tuK', 'K']]) $(id).addEventListener('click', () => { state.tUnit = u; updateMapControls(); renderMapLegend(); updateMapRead(); scheduleLat(); scheduleMapDraw(); save(); });
 function isoText() { const d = state.isoStep, u = state.tUnit, v = u === 'F' ? d * 9 / 5 : d;
   return 'every ' + (Number.isInteger(v) ? v : v.toFixed(1)) + (u === 'F' ? ' °F' : u === 'K' ? ' K' : ' °C') + ' from ' + fmtTemp(273.15); }
@@ -3689,7 +3898,61 @@ function latLand() {
   latLandCache.key = key; latLandCache.v = v;
   return v;
 }
-function latTemps(circ, heat, land) {  // land box per band (°C): yearly mean, coldest and warmest sol; sols below 0 °C / above 30 °C
+const latDynCache = { key: '', v: null };
+function latLandDyn() {                // per 2° band and 6° cell of longitude: counted land and its height histogram (100 m bins)
+  const sea = seaLevelOf(state.waterPct), hRef = isFinite(sea) ? sea : 0, bf = state.basinFill / 100;
+  const FL = state.fillLakes ? fillDepressions(sea) : null, cut = state.ltCut * 1000 / H_EARTH;
+  const key = [sea, state.fillLakes ? fillSea : 'dry', bf, state.ltCut].join('|');
+  if (latDynCache.key === key) return latDynCache.v;
+  const nb = EBM_NB, NO = DYN_NO, per = MAP_H / nb, BW2 = 100, off = isFinite(sea) ? 0 : 9000, nbin = Math.ceil((cut + off) / BW2) + 1;
+  const cnt = new Float64Array(nb * NO), C = new Float32Array(nb * NO * (nbin + 1));
+  for (let r = 0; r < MAP_H; r++) {
+    const b = nb - 1 - Math.floor(r / per);
+    for (let c = 0; c < MAP_W; c++) {
+      const i = r * MAP_W + c, h = ELEV[i];
+      if (h <= sea) continue;
+      if (FL && FL[i] > h && h < lakeLevel(i, bf)) continue;
+      const dh = h - hRef; if (dh > cut) continue;
+      const bj = b * NO + Math.min(NO - 1, Math.floor(c * NO / MAP_W));
+      cnt[bj]++; C[bj * (nbin + 1) + 1 + Math.min(nbin - 1, Math.max(0, Math.floor((dh + off) / BW2)))]++;
+    }
+  }
+  for (let bj = 0; bj < nb * NO; bj++) { const o = bj * (nbin + 1); for (let i = 1; i <= nbin; i++) C[o + i] += C[o + i - 1]; if (cnt[bj]) for (let i = 0; i <= nbin; i++) C[o + i] /= cnt[bj]; }
+  latDynCache.key = key; latDynCache.v = { cnt, C, nbin, off, BW: BW2 };
+  return latDynCache.v;
+}
+function latTempsDyn(circ, land) {     // as latTemps, from the 2-D model: each band's land weighted cell by cell
+  const S = dynSolve(circ), LD = latLandDyn(), ck = latDynCache.key + '|' + state.lapse;
+  if (S.lt && S.lt.key === ck) return S.lt.o;
+  const T = dynSeries(S), nb = EBM_NB, NO = DYN_NO, NL = DYN_NL, nbin = LD.nbin, off = LD.off, C = LD.C, ibw = 1 / LD.BW;
+  const g = Math.max(1e-9, state.lapse * H_EARTH / 1000), o = { avg: new Float64Array(nb), lo: new Float64Array(nb), hi: new Float64Array(nb), cold: new Float64Array(nb), hot: new Float64Array(nb) };
+  const ser = new Float64Array(N);
+  for (let b = 0; b < nb; b++) {
+    const y = clamp((EBM_LAT[b] + 90) / 4 - 0.5, 0, NL - 1), i0 = Math.min(NL - 2, Math.floor(y)), wy = y - i0;
+    ser.fill(0); let wsum = 0, cold = 0, hot = 0;
+    for (let j = 0; j < NO; j++) {
+      const bj = b * NO + j, wgt = LD.cnt[bj]; if (!wgt) continue;
+      const p0 = (i0 * NO + j) * N, p1 = ((i0 + 1) * NO + j) * N, base = bj * (nbin + 1);
+      let cj = 0, hj = 0;
+      for (let t = 0; t < N; t++) {
+        const v = (1 - wy) * T[p0 + t] + wy * T[p1 + t]; ser[t] += wgt * v;
+        let u = ((v - LT_COLD) / g + off) * ibw; u = u < 0 ? 0 : u > nbin ? nbin : u; let i = Math.floor(u); if (i > nbin - 1) i = nbin - 1;
+        cj += 1 - (C[base + i] + (C[base + i + 1] - C[base + i]) * (u - i));
+        u = ((v - LT_HOT) / g + off) * ibw; u = u < 0 ? 0 : u > nbin ? nbin : u; i = Math.floor(u); if (i > nbin - 1) i = nbin - 1;
+        hj += C[base + i] + (C[base + i + 1] - C[base + i]) * (u - i);
+      }
+      wsum += wgt; cold += wgt * cj; hot += wgt * hj;
+    }
+    if (!wsum) { o.avg[b] = o.lo[b] = o.hi[b] = NaN; continue; }
+    let sum = 0, lo = Infinity, hi = -Infinity;
+    for (let t = 0; t < N; t++) { const v = ser[t] / wsum; sum += v; if (v < lo) lo = v; if (v > hi) hi = v; }
+    o.avg[b] = sum / N; o.lo[b] = lo; o.hi[b] = hi; o.cold[b] = cold / wsum * DT; o.hot[b] = hot / wsum * DT;
+  }
+  S.lt = { key: ck, o };
+  return o;
+}
+function latTemps(circ, heat, land) {
+  if (heat === 'dyn') return latTempsDyn(circ, land);  // land box per band (°C): yearly mean, coldest and warmest sol; sols below 0 °C / above 30 °C
   const TL = ebmSeasonal(circ, heat), W = N + 1, nb = EBM_NB, o = { avg: new Float64Array(nb), lo: new Float64Array(nb), hi: new Float64Array(nb), cold: new Float64Array(nb), hot: new Float64Array(nb) };
   const g = Math.max(1e-9, state.lapse * H_EARTH / 1000), nbin = land.nbin, off = land.off, C = land.cdf;
   for (let b = 0; b < nb; b++) {
@@ -3718,10 +3981,10 @@ function renderLat() {
   const W = Math.max(300, Math.floor(wrap.clientWidth)), H = full ? Math.max(320, Math.floor(wrap.clientHeight)) : Math.round(W * 0.72);
   const NS = 'http://www.w3.org/2000/svg';
   $('ltCut').value = state.ltCut; setText('ltCutOut', state.ltCut.toFixed(1) + ' km (Earth-eq.)'); $('ltRef').checked = state.ltRef;
-  const refAvail = state.mode === 'two' && state.twoCI > 0; $('ltRefRow').hidden = !refAvail;
+  const refAvail = state.mode === 'two' && (state.twoCI > 0 || (state.twoPhMode === 'season' && state.twoKA > 0)); $('ltRefRow').hidden = !refAvail;
   if (!mapReady) { wrap.innerHTML = '<svg width="' + W + '" height="' + H + '"><text class="empty" x="20" y="30">Waiting for the elevation data…</text></svg>'; return; }
   const circ = state.mapOrbit === 'circ', land = latLand(), gK = state.lapse * H_EARTH / 1000, nb = EBM_NB;
-  const cur = latTemps(circ, state.heat, land), ref = refAvail && state.ltRef ? withSky({ twoCI: 0 }, () => latTemps(circ, state.heat, land)) : null;
+  const cur = latTemps(circ, state.heat, land), ref = refAvail && state.ltRef ? withSky({ twoCI: 0, twoKA: 0 }, () => latTemps(circ, state.heat, land)) : null;
   const ser = (o) => { const a = { avg: [], lo: [], hi: [], sw: [], cold: [], hot: [] }; for (let b = 0; b < nb; b++) { const ok = land.share[b] > 0, off = ok ? gK * land.dh[b] : 0;
     a.avg.push(ok ? o.avg[b] - off : NaN); a.lo.push(ok ? o.lo[b] - off : NaN); a.hi.push(ok ? o.hi[b] - off : NaN); a.sw.push(ok ? o.hi[b] - o.lo[b] : NaN);
     a.cold.push(ok ? o.cold[b] : NaN); a.hot.push(ok ? o.hot[b] : NaN); } return a; };
