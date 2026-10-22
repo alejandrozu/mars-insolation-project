@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Mars Insolation Project</title>
-<meta name="description" content="Interactive simulator of daylight and sunlight on Mars across its eccentric year: orbit, sky and map views, daylight and insolation by latitude, seasonal ratios, and two- and three-sun skies with mirrors at L4 and L5.">
+<meta name="description" content="Interactive simulator of daylight and sunlight on Mars across its eccentric year: orbit, sky and map views, daylight and insolation by latitude, seasonal ratios, and two- and three-sun skies with mirrors at L4 and L5, and a terraformed Mars map with oceans, temperatures, rain and rivers.">
 <meta property="og:title" content="Mars Insolation Project">
-<meta property="og:description" content="Interactive simulator of daylight and sunlight on Mars across its eccentric year: orbit, sky and map views, daylight and insolation by latitude, seasonal ratios, and two- and three-sun skies with mirrors at L4 and L5.">
+<meta property="og:description" content="Interactive simulator of daylight and sunlight on Mars across its eccentric year: orbit, sky and map views, daylight and insolation by latitude, seasonal ratios, and two- and three-sun skies with mirrors at L4 and L5, and a terraformed Mars map with oceans, temperatures, rain and rivers.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#0F141E">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='%23C4643D'/%3E%3Cpath d='M16 3a13 13 0 0 1 0 26z' fill='%23140b0a' opacity='.55'/%3E%3C/svg%3E">
@@ -267,6 +267,14 @@ body[data-layout="compact"].no-charts .viewer { position: static; grid-row: auto
 .mhint { margin: 2px 0 0; font-size: 11.5px; color: var(--muted); }
 .mread .dim { color: var(--muted); }
 body[data-layout="full"] #pMap .plot { padding: 10px; }
+body[data-layout="full"] #pMap { grid-template-columns: minmax(0, 1fr); height: auto; min-height: 0; overflow: visible; }
+body[data-layout="full"] #pMap .side { flex-direction: row; flex-wrap: wrap; align-items: flex-start; gap: 16px 28px; border-right: 0; border-bottom: 1px solid var(--line); overflow: visible; }
+body[data-layout="full"] #pMap .side > * { flex: 1 1 250px; min-width: 0; }
+body[data-layout="full"] #pMap .side > .side-h { flex: 1 1 100%; }
+body[data-layout="full"] #pMap .side > .mlegend, body[data-layout="full"] #pMap .side > .mread { flex: 1 1 320px; }
+body[data-layout="full"] #pMap .plot { height: auto; }
+body[data-layout="full"] #pMap .mapbox { height: auto; aspect-ratio: 2 / 1; }
+#pMap .seg { flex-wrap: wrap; max-width: 100%; } #pMap .fgrp { flex-wrap: wrap; min-width: 0; }
 body[data-layout="compact"] #pMap, body[data-layout="compact"] #pLat { grid-column: 2; }
 body[data-layout="compact"] #pMap .mapbox { height: auto; aspect-ratio: 2 / 1.05; }
 body[data-layout="compact"] #pMap .side { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); align-items: start; gap: 14px 22px; }
@@ -625,11 +633,11 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
   </div>
   <div class="mode-grp" id="optThree" hidden>
     <span class="ci-pair"><span class="flabel" id="k5Lbl" title="Strength of the L5 array, the second sun, as a multiple of the Sun’s own average light at Mars">L5 light</span>
-    <input type="range" id="threeK5" min="0" max="2" step="0.01" value="1.21" aria-labelledby="k5Lbl">
-    <output id="threeK5Out" class="ci-out">1.21× Sun</output></span>
+    <input type="range" id="threeK5" min="0" max="2" step="0.01" value="1.17" aria-labelledby="k5Lbl">
+    <output id="threeK5Out" class="ci-out">1.17× Sun</output></span>
     <span class="ci-pair"><span class="flabel" id="k4Lbl" title="Strength of the L4 array, the supplemental sun, at its brightest, as a multiple of the Sun’s own average light at Mars; the Seasons box can dim it over the year">L4 light</span>
-    <input type="range" id="threeK4" min="0" max="1.5" step="0.01" value="0.48" aria-labelledby="k4Lbl">
-    <output id="threeK4Out" class="ci-out">0.48× Sun</output></span>
+    <input type="range" id="threeK4" min="0" max="1.5" step="0.01" value="0.51" aria-labelledby="k4Lbl">
+    <output id="threeK4Out" class="ci-out">0.51× Sun</output></span>
     <span class="flabel" id="selLbl">Shaping</span>
     <div class="seg" role="group" aria-labelledby="selLbl">
       <button type="button" id="sel4" aria-pressed="true" title="The controls to the right shape the L4 (morning) array, the supplemental sun">L4</button>
@@ -988,7 +996,20 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
         <label class="switch sm" title="Fill every crater and closed basin with water, as rain would"><input type="checkbox" id="fillLakes" checked><span class="track"></span>Fill craters and closed basins with water</label>
         <div id="basinRow">
           <div class="spec-row"><span class="flabel">Basin fill</span><output id="basinOut"></output></div>
-          <input type="range" id="basinFill" min="0" max="100" step="5" value="100" aria-label="How full each crater and basin is, from its floor (0%) to its brim (100%)">
+          <input type="range" id="basinFill" min="0" max="100" step="1" value="67" aria-label="How full each crater and basin is, from its floor (0%) to its brim (100%)">
+        </div>
+        <div class="fgrp"><span class="flabel" id="csLbl" title="Hellas and Argyre are not connected to the northern ocean, so their surfaces need not sit at sea level: each settles where rain and runoff into it balance its evaporation">Hellas, Argyre</span>
+          <div class="seg small" role="group" aria-labelledby="csLbl">
+            <button type="button" id="csOwn" aria-pressed="true" title="Closed seas with their own surface, like the Caspian">Own level</button>
+            <button type="button" id="csSea" aria-pressed="false" title="Held at sea level as if joined to the ocean">At sea level</button>
+          </div>
+        </div>
+        <div id="seasRows">
+          <div class="spec-row"><span class="flabel">Hellas surface</span><output id="hellasOut"></output></div>
+          <input type="range" id="hellasLvl" min="-8060" max="1260" step="10" value="-6470" aria-label="Surface of the Hellas sea, metres on the MOLA datum">
+          <div class="spec-row"><span class="flabel">Argyre surface</span><output id="argyreOut"></output></div>
+          <input type="range" id="argyreLvl" min="-4970" max="140" step="10" value="-3230" aria-label="Surface of the Argyre sea, metres on the MOLA datum">
+          <p class="mhint" id="seasHint">Defaults from a water-balance run of the default sky: rain and runoff into each basin against evaporation from its surface.</p>
         </div>
         <div class="fgrp"><span class="flabel">Heights</span>
           <div class="seg small" role="group" aria-label="Height units">
@@ -1011,6 +1032,7 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
             <button type="button" id="palMars" aria-pressed="false">Mars</button>
           </div>
           <label class="switch sm"><input type="checkbox" id="hillshade" checked><span class="track"></span>Hillshade</label>
+          <label class="switch sm" title="Yearly runoff routed downhill and through the basins that spill, from the rain model; flows above about 80 m³/s, drawn much wider than real"><input type="checkbox" id="mapRivers"><span class="track"></span>Rivers (exaggerated)</label>
         </div>
       </div>
       <div class="mgrp" id="insOpts" hidden>
@@ -1018,6 +1040,7 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
           <div class="seg small" role="group" aria-label="Insolation, or the temperature that much sunlight would give">
             <button type="button" id="isWm" aria-pressed="true">Insolation, W/m²</button>
             <button type="button" id="isTemp" aria-pressed="false" title="The temperature an Earth-like planet would reach with this sunlight, from an energy-balance model calibrated on Earth's climate, cooled with height. Not a forecast of Mars's real weather.">Insolation-based temperature</button>
+            <button type="button" id="isRain" aria-pressed="false" title="Rain from a moisture-budget model on a 2° grid: evaporation from the ocean, lakes and land, winds from the temperature contrasts, rain-out and lift over slopes. Takes a few seconds to compute.">Rain</button>
           </div>
         </div>
         <div class="fgrp" id="tUnitRow" hidden><span class="flabel">Units</span>
@@ -1040,12 +1063,12 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
         </div>
         <div id="p0Row" hidden>
           <div class="spec-row"><span class="flabel" id="p0Lbl">Sea-level pressure</span><output id="p0Out"></output></div>
-          <input type="range" id="p0" min="0.3" max="2" step="0.05" value="1" aria-labelledby="p0Lbl">
+          <input type="range" id="p0" min="0.3" max="2" step="0.05" value="1.05" aria-labelledby="p0Lbl">
           <p class="mhint" id="p0Hint"></p>
         </div>
         <div id="lapseRow" hidden>
           <div class="spec-row"><span class="flabel">Lapse rate</span><output id="lapseOut"></output></div>
-          <input type="range" id="lapse" min="0" max="10" step="0.5" value="6.5" aria-label="Lapse rate in kelvin per Earth-equivalent kilometre">
+          <input type="range" id="lapse" min="0" max="10" step="0.5" value="5" aria-label="Lapse rate in kelvin per Earth-equivalent kilometre">
           <p class="mhint" id="lapseHint"></p>
         </div>
         <div id="isoRow" hidden>
@@ -1058,6 +1081,8 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
             <button type="button" id="iwDate" aria-pressed="true">Chosen date</button>
             <button type="button" id="iwYear" aria-pressed="false">Yearly average</button>
             <button type="button" id="iwSwing" aria-pressed="false" title="Warmest minus coldest sol of the year">Seasonal swing</button>
+            <button type="button" id="iwW10" aria-pressed="false" title="Each place's 10th warmest sol of the year: a hot spell that comes round every year, not a one-off extreme">10th warmest sol</button>
+            <button type="button" id="iwC10" aria-pressed="false" title="Each place's 10th coldest sol of the year">10th coldest sol</button>
           </div>
         </div>
         <div id="mapDateRow" class="mdial">
@@ -1155,13 +1180,16 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
         <li>Daylight runs from the moment the Sun's centre rises above a flat horizon to the moment it sets. Refraction in the thin atmosphere and local terrain are ignored.</li>
         <li>Insolation is measured at the top of the atmosphere on level ground: 1361 W/m² at 1 AU, scaled by distance squared (713 W/m² at perihelion, 490 W/m² at aphelion). Dust can remove a large share of this before it reaches the surface.</li>
         <li>The circular orbit (shown as a reference or on its own, per chart) keeps the same tilt and the same starting solstice, fixes the distance at 1.5237 AU and advances L<sub>s</sub> at a constant rate, so all four seasons last 167.1 sols.</li>
-        <li>Two and three suns: mirror arrays at the Sun–Mars L4 and L5 points. They sit at Mars's distance from the Sun, so seen from Mars they shine from the orbital plane 60° west (L4) or east (L5) of the Sun, and their light is a fixed multiple of sunlight at Mars's current distance. Daylight counts any sun above the horizon; the peak is the brightest moment of the sol. 1.33× brings the average flux to about Earth's. Three suns sets each array's strength and shaping separately. L5, the second sun, keeps the lens profile and moderates the middle latitudes. L4, the supplemental sun, can instead light only the outer latitudes: poleward of a north edge and a south edge that never come closer to the equator than 45°, rising from zero at the edge over a soft ramp (a smoothstep a few degrees wide) and leaning toward or away from the pole. The two edges, the share of its light sent north and its strength (a share of the set value) are given at Ls 0°, 90°, 180° and 270° and joined by a smooth periodic curve (Catmull-Rom). Inside each cap the light follows what the array would give unshaped, and no latitude gets more than 10× that; what one cap cannot take goes to the other. The populated middle band then sees only the Sun and L5, so nights remain. The default (L5 1.21× Sun; L4 up to 0.48×, 0.31× on average) was chosen in the dynamic setting at 1 atm to keep land between 45°S and 45°N inside 0–30 °C, the ocean north of the equator between 20 and 30 °C (aiming a degree inside that range), and land poleward of 45°, north and south, inside −20 to 30 °C on as many sols as possible, with no light left undelivered. Counterirradiance (two suns): the array shapes its beam like a concave lens, with intensity 1 − k·cos 2a across the disc it lights, where a is the angle from the disc's east–west centre line, i.e. the latitude as seen from the array. On the ground that centre line is a great circle through the point under the array, tilted with its declination, so a equals the real latitude when the array is over the equator. The profile is divided by its average over the disc, 1 − k/2, so the array still delivers 1× or 1.33× on average; k = 1 leaves the centre line dark and makes the north and south edges 4× the average. Phase p moves the dimmest line to a = p, 1 − k·cos 2(a − p), held at its maximum once |a − p| passes 90°, again divided by its disc average; the phase can be fixed or follow the seasons (p × sin Ls), putting the dimmest line in the summer hemisphere.</li>
+        <li>Two and three suns: mirror arrays at the Sun–Mars L4 and L5 points. They sit at Mars's distance from the Sun, so seen from Mars they shine from the orbital plane 60° west (L4) or east (L5) of the Sun, and their light is a fixed multiple of sunlight at Mars's current distance. Daylight counts any sun above the horizon; the peak is the brightest moment of the sol. 1.33× brings the average flux to about Earth's. Three suns sets each array's strength and shaping separately. L5, the second sun, keeps the lens profile and moderates the middle latitudes. L4, the supplemental sun, can instead light only the outer latitudes: poleward of a north edge and a south edge that never come closer to the equator than 45°, rising from zero at the edge over a soft ramp (a smoothstep a few degrees wide) and leaning toward or away from the pole. The two edges, the share of its light sent north and its strength (a share of the set value) are given at Ls 0°, 90°, 180° and 270° and joined by a smooth periodic curve (Catmull-Rom). Inside each cap the light follows what the array would give unshaped, and no latitude gets more than 10× that; what one cap cannot take goes to the other. The populated middle band then sees only the Sun and L5, so nights remain. The default (L5 1.17× Sun; L4 up to 0.51×, 0.32× on average) was chosen in the dynamic setting with the wet-climate defaults (1.05 atm, 5 K per Earth-equivalent km, Hellas and Argyre as closed seas, craters 67% full) to keep land between 45°S and 45°N inside 0–30 °C, the ocean north of the equator between 20 and 30 °C (aiming a degree inside that range), and land poleward of 45°, north and south, inside −20 to 30 °C on as many sols as possible, with no light left undelivered. Counterirradiance (two suns): the array shapes its beam like a concave lens, with intensity 1 − k·cos 2a across the disc it lights, where a is the angle from the disc's east–west centre line, i.e. the latitude as seen from the array. On the ground that centre line is a great circle through the point under the array, tilted with its declination, so a equals the real latitude when the array is over the equator. The profile is divided by its average over the disc, 1 − k/2, so the array still delivers 1× or 1.33× on average; k = 1 leaves the centre line dark and makes the north and south edges 4× the average. Phase p moves the dimmest line to a = p, 1 − k·cos 2(a − p), held at its maximum once |a − p| passes 90°, again divided by its disc average; the phase can be fixed or follow the seasons (p × sin Ls), putting the dimmest line in the summer hemisphere.</li>
         <li>Earth comparison lines are typical Earth values for the same measure: daily mean 100 and 500 W/m² for mid-latitude winter and summer, 250 and 450 for the tropics; noon peak 350 and 1300 for mid-latitude winter and summer, 700 for tropical winter and 1000 at the equator.</li>
         <li>Seasonal ratio divides each sol’s insolation by the dimmest value of the year at the same latitude, for the chosen measure. Earth references: about 5× (daily mean) and 4× (noon peak) at mid-latitudes, about 2× in the tropics.</li>
-        <li>Map: elevation from the Mars Global Surveyor MOLA gridded topography (MEGDR, 4 pixels per degree, about 15 km at the equator; Smith et al. 2003, NASA PDS Geosciences Node), stored to the nearest 5 m relative to the MOLA areoid. The water level is the share of the surface area that lies below sea level, so 30% fills the northern lowlands and the deep basins. With "Fill craters and closed basins" on, every closed depression also holds a lake with a flat surface, set by the basin fill slider as a fraction of the way from the basin's floor to its spill point (100% is full to the brim, as rain would leave it if nothing evaporated); lakes come on top of the ocean share. Earth-equivalent km multiply Mars heights by g<sub>Mars</sub>/g<sub>Earth</sub> = 0.38: with the same air, pressure falls that much more slowly with height on Mars, so Olympus Mons (about 22 km above a 30% sea) thins the air like an 8.6 km climb on Earth. The insolation layer uses the same flat-ground, top-of-atmosphere model as the charts, so it varies with latitude only; slopes and the atmosphere are not included.</li>
-        <li>Insolation-based temperature: what an Earth-like planet would reach with this sunlight, from a seasonal energy-balance model calibrated on Earth (Budyko–Sellers type, after North &amp; Coakley 1979). Each 2° latitude band has a land and a sea box that absorb sunlight with Earth's cloud albedo but no snow or sea ice (top-of-atmosphere albedo 0.24–0.27 in the tropics, rising only to about 0.44 toward the poles, like the ice-free Southern Ocean, where Earth reaches 0.65), radiate 203.3 + 2.09·T W/m² (Earth's satellite fit, T in °C), store heat (on Earth: land and air 1.0×10⁷ J/m²/K, a 24 m ocean mixed layer 1.0×10⁸), swap heat with each other (2.0 W/m²/K) and pass it poleward by diffusion (0.649 W/m²/K). The heat capacities and exchange were fitted to Earth's seasons (with Earth's real albedo, ice included): on Earth's orbit the model gives a 15 °C global mean, 29 °C at the equator and −7 / 23 °C (January / July) on land at 45°N in the mixed setting. Continental, mixed and maritime set land to 85%, 50% or 15% of each band; Dynamic uses the map’s own land and water instead (below). The map shows the land temperature, cooled with height above sea level at the lapse rate (default 6.5 K per Earth-equivalent km, 2.5 K per Mars km). Outside Dynamic it ignores Mars's own oceans and lakes as drawn; it always ignores mountains blocking winds, deserts, clouds that change with climate, and ice that grows when it is cold, so read it as how warm the sunlight makes places, not a forecast. Mars's year is 1.9 Earth years long, so its seasons have more time to heat and cool than Earth's.</li>
-        <li>Sea-level pressure (default 1 atm): under Mars gravity (3.72 m/s²) 1 atm means 2.64× Earth’s air per m²; Earth’s air mass would give 0.38 atm. Land heat capacity is soil (3.0×10⁶ J/m²/K on Earth, ×1.37 for the deeper seasonal layer of Mars’s longer year) plus the air taking part in the seasons (7.0×10⁶ for Earth’s air, scaled with the air above, so less over high ground in Dynamic); the ocean box gains the extra air too. Heat transport (diffusion, land–sea exchange, winds) scales with pressure × (Earth’s spin rate / Mars’s)², as in Williams &amp; Kasting (1997): about Earth’s at 1 atm. Greenhouse warming is held at Earth’s; with 2.6× the air at Earth’s composition it would be stronger, so this assumes a composition tuned to Earth-like warming. On Earth the formulas give back the calibrated model exactly.</li>
+        <li>Map: elevation from the Mars Global Surveyor MOLA gridded topography (MEGDR, 4 pixels per degree, about 15 km at the equator; Smith et al. 2003, NASA PDS Geosciences Node), stored to the nearest 5 m relative to the MOLA areoid. The water level is the share of the surface area that lies below sea level; at 30% the sea stands 2.68 km below the MOLA datum. Only the water joined to the northern ocean stands at that level (27.4% of the surface). Hellas and Argyre lie below it but are enclosed, so by default they are closed seas with their own surfaces, like the Caspian: in a water-balance run of the default sky, where rain and runoff into each basin balance evaporation from its surface (rain from the moisture model below), Hellas settles about 3.8 km below sea level, covering 0.7% of the surface instead of 2.0%, and Argyre about 0.5 km below; neither comes near spilling. With "Fill craters and closed basins" on, every other closed depression holds a lake with a flat surface, set by the basin fill slider as a fraction of the way from its floor to its spill point; the default, 67%, matches both the total lake area and the volume of that water balance, in which about a third of the craters (by area) end up full and spilling, most of them in the north. The default sky was optimised on these lakes and the water balance rerun with it, because each depends on the other: a dimmer sky brings less rain, smaller lakes and so bigger seasonal swings. At these defaults the ocean holds a global layer of 344 m of water, Hellas and Argyre 2 m and the crater lakes 18 m: 365 m in all, covering 34.7% of Mars. Earth-equivalent km multiply Mars heights by g<sub>Mars</sub>/g<sub>Earth</sub> = 0.38: with the same air, pressure falls that much more slowly with height on Mars, so Olympus Mons (about 22 km above a 30% sea) thins the air like an 8.6 km climb on Earth. The insolation layer uses the same flat-ground, top-of-atmosphere model as the charts, so it varies with latitude only; slopes and the atmosphere are not included.</li>
+        <li>Insolation-based temperature: what an Earth-like planet would reach with this sunlight, from a seasonal energy-balance model calibrated on Earth (Budyko–Sellers type, after North &amp; Coakley 1979). Each 2° latitude band has a land and a sea box that absorb sunlight with Earth's cloud albedo but no snow or sea ice (top-of-atmosphere albedo 0.24–0.27 in the tropics, rising only to about 0.44 toward the poles, like the ice-free Southern Ocean, where Earth reaches 0.65), radiate 203.3 + 2.09·T W/m² (Earth's satellite fit, T in °C), store heat (on Earth: land and air 1.0×10⁷ J/m²/K, a 24 m ocean mixed layer 1.0×10⁸), swap heat with each other (2.0 W/m²/K) and pass it poleward by diffusion (0.649 W/m²/K). The heat capacities and exchange were fitted to Earth's seasons (with Earth's real albedo, ice included): on Earth's orbit the model gives a 15 °C global mean, 29 °C at the equator and −7 / 23 °C (January / July) on land at 45°N in the mixed setting. Continental, mixed and maritime set land to 85%, 50% or 15% of each band; Dynamic uses the map’s own land and water instead (below). The map shows the land temperature, cooled with height above sea level at the lapse rate (default 5 K per Earth-equivalent km, 1.9 K per Mars km: the moist lapse rate of a rainy climate, the single value that best reproduces the frost and heat counts of air at 85% humidity cooling along the moist adiabat; Earth's standard atmosphere is 6.5). Outside Dynamic it ignores Mars's own oceans and lakes as drawn; it always ignores mountains blocking winds, deserts, clouds that change with climate, and ice that grows when it is cold, so read it as how warm the sunlight makes places, not a forecast. Mars's year is 1.9 Earth years long, so its seasons have more time to heat and cool than Earth's.</li>
+        <li>Sea-level pressure (default 1.05 atm, so the highlands, on average 3.7 km above sea level, still have about 0.89 atm): under Mars gravity (3.72 m/s²) 1 atm means 2.64× Earth’s air per m²; Earth’s air mass would give 0.38 atm. Land heat capacity is soil (3.0×10⁶ J/m²/K on Earth, ×1.37 for the deeper seasonal layer of Mars’s longer year) plus the air taking part in the seasons (7.0×10⁶ for Earth’s air, scaled with the air above, so less over high ground in Dynamic); the ocean box gains the extra air too. Heat transport (diffusion, land–sea exchange, winds) scales with pressure × (Earth’s spin rate / Mars’s)², as in Williams &amp; Kasting (1997): about Earth’s at 1 atm. Greenhouse warming is held at Earth’s; with 2.6× the air at Earth’s composition it would be stronger, so this assumes a composition tuned to Earth-like warming. On Earth the formulas give back the calibrated model exactly.</li>
         <li>Dynamic: the same energy balance on a 4° × 6° latitude–longitude grid with the map’s water level and lakes. A cell’s heat capacity mixes its water and land shares; heat diffuses north–south as in the zonal model and along latitude circles at a tenth of that, and Earth-like prevailing low-level winds carry it east or west (trade winds to 30°, westerlies from 30° to 60°, weak polar easterlies). The wind strength and the zonal mixing were fitted on Earth’s land and sea to the January–July range of 23 mid-latitude cities (approximate climate normals): within 4.3 K RMS (r = 0.89), against 6.8 K with diffusion alone. Cities next to Earth’s winter sea ice (Yakutsk, Fairbanks) are far more extreme than the model, which has no ice. The periodic cycle is solved harmonic by harmonic (yearly mean plus five), exact to well under 0.1 K. The temperature-by-latitude panel reads each band’s land cell by cell, each patch cooled with its own height.</li>
+        <li>10th warmest and 10th coldest sol: each place's temperature on the 10th warmest (coldest) sol of its year in the temperature model, cooled with height: a hot or cold spell that comes round every year rather than a one-off extreme.</li>
+        <li>Rain: a seasonal moisture budget on a 2° grid, solved as a steady state for 12 slices of the year and run in the background (a few seconds). Column water vapour is carried by low-level winds and mixed by eddies; the winds come from the temperature model's own contrasts (warm air means low pressure at the surface; boundary-layer friction and Coriolis turn the flow), with storm-track westerlies and stronger mixing only where the zonal-mean temperature falls toward the pole. Water evaporates from the ocean and lakes by a bulk formula capped by the surface's net radiation (none while frozen) and from land at a Priestley–Taylor rate limited by the rain that falls there. Rain falls once the column passes 50% of saturation (on a 1.5-day timescale) and where the wind blows up slopes. The saturation column is ρ<sub>v,sat</sub> × R<sub>v</sub>T²/(LΓ) per metre, about 2.6× Earth's at the same temperature because Mars's air column is deeper, so vapour stays aloft for about four weeks (Earth: nine days) and spreads further. Chosen date interpolates between the slices. Read it as the pattern this sunlight would drive, not a forecast: clouds, real wind systems and their feedbacks are left out.</li>
+        <li>Rivers: the yearly runoff from the rain model (rain minus land evaporation; on lakes, rain minus lake evaporation) is routed downhill along the steepest descent; each lake gathers its inflow and passes water on through its spill point only if its yearly balance is positive. Flows above about 80 m³/s are drawn, far wider than real so they show at planetary scale.</li>
         <li>Temperature by latitude: the land box of the temperature model for each 2° band, cooled with the average height above sea level of that band’s counted land: land outside the ocean and lakes and no higher than the cut-off (default 3 km in Earth-equivalent height). The band shows the coldest and warmest sol of the year; the swing is their difference, which height does not change. Summaries weight each band by its counted land area.</li>
         <li>Clock times are local true solar time (LTST): 12:00 is when the Sun crosses the meridian. Today's position uses the Allison &amp; McEwen (2000) formula for L<sub>s</sub>.</li>
       </ul>
@@ -1445,8 +1473,8 @@ const PRESETS = { north: [0, 15, 30, 45, 60, 85], south: [0, -15, -30, -45, -60,
 const STORE = 'mars-daylight-v1';
 const state = {
   t: T_TODAY, tod: 14, obsLat: 45, view: 'orbit', units: 'mars', metric: 'mean', orbit: { dur: 'real', ins: 'real', rat: 'real' },
-  lats: PRESETS.north.map((lat, i) => ({ lat, slot: i })), flip: false, dynDur: false, dynIns: false, dynRat: false, earthRef: true, layout: 'full', lineMode: 'chosen', specA: -90, specB: 90, specStep: 5, specOp: 70, show: { view: true, dur: true, ins: true, rat: true, map: true, lat: true }, ltCut: 3, ltRef: true, isoStep: 10, waterPct: 30, fillLakes: true, basinFill: 100, hUnit: 'km', mapLayer: 'elev', palette: 'terrain', hillshade: true, insWhen: 'date', insMetric: 'mean', mapOrbit: 'real', insShow: 'wm', tUnit: 'C', heat: 'dyn', lapse: 6.5, p0: 1, insOp: 65, insDyn: false, mapGrid: true, gridLat: 15, gridLon: 30, mapSites: true, ratioMetric: 'mean', mode: 'natural', twoCI: 1, twoPh: 27.5, twoPhMode: 'season', twoShift: -3, twoBias: 11.5, twoA2: 6.5, twoS2: 18, twoKA: 0.6, twoKS: -99, twoPos: 'L5',
-  three: {"K4": 0.48, "K5": 1.21, "L4": {"Light": "outer", "HN": [46, 45, 46, 47], "HS": [49, 45, 68, 70], "SN": [0.24, 0.27, 0.47, 0.14], "FS": [0.76, 0.98, 0.65, 0], "Soft": 9, "Lean": -0.3, "CI": 0.95, "Ph": 6, "PhMode": "season", "Shift": -71, "Bias": -0.5, "A2": 6, "S2": -77, "KA": 0.8, "KS": 60}, "L5": {"Light": "lens", "CI": 0.7, "Ph": 27, "PhMode": "season", "Shift": 5, "Bias": 8.5, "A2": 6.5, "S2": 46, "KA": 0.05, "KS": 169}}, threeSel: 'L4', twoK: 'x133', threeK: 'x067', camOff: 0, playYear: false, playSol: false
+  lats: PRESETS.north.map((lat, i) => ({ lat, slot: i })), flip: false, dynDur: false, dynIns: false, dynRat: false, earthRef: true, layout: 'full', lineMode: 'chosen', specA: -90, specB: 90, specStep: 5, specOp: 70, show: { view: true, dur: true, ins: true, rat: true, map: true, lat: true }, ltCut: 3, ltRef: true, isoStep: 10, waterPct: 30, fillLakes: true, mapRivers: false, basinFill: 67, closedSeas: 'own', hellasLvl: -6470, argyreLvl: -3230, hUnit: 'km', mapLayer: 'elev', palette: 'terrain', hillshade: true, insWhen: 'date', insMetric: 'mean', mapOrbit: 'real', insShow: 'wm', tUnit: 'C', heat: 'dyn', lapse: 5, p0: 1.05, insOp: 65, insDyn: false, mapGrid: true, gridLat: 15, gridLon: 30, mapSites: true, ratioMetric: 'mean', mode: 'natural', twoCI: 1, twoPh: 27.5, twoPhMode: 'season', twoShift: -3, twoBias: 11.5, twoA2: 6.5, twoS2: 18, twoKA: 0.6, twoKS: -99, twoPos: 'L5',
+  three: {"K4": 0.51, "K5": 1.17, "L4": {"Light": "outer", "HN": [46, 46, 52, 45], "HS": [51, 48, 70, 72], "SN": [0.65, 0.27, 0.66, 0.15], "FS": [0.74, 0.98, 0.61, 0.01], "Soft": 8, "Lean": -0.9, "CI": 0.95, "Ph": 6, "PhMode": "season", "Shift": -71, "Bias": -0.5, "A2": 6, "S2": -77, "KA": 0.8, "KS": 60}, "L5": {"Light": "lens", "CI": 0.8, "Ph": 29, "PhMode": "season", "Shift": 8, "Bias": 5.5, "A2": 7, "S2": 52, "KA": 0.05, "KS": 10}}, threeSel: 'L4', twoK: 'x133', threeK: 'x067', camOff: 0, playYear: false, playSol: false
 };
 const DEFAULTS = JSON.parse(JSON.stringify(state));   // for the reset buttons
 try {
@@ -1474,21 +1502,27 @@ try {
     if (num(sv.ltCut, 0.5, 8)) state.ltCut = Math.round(sv.ltCut * 2) / 2;
     if (typeof sv.ltRef === 'boolean') state.ltRef = sv.ltRef;
     if (num(sv.waterPct, 0, 100)) state.waterPct = Math.round(sv.waterPct);
-    if (num(sv.basinFill, 0, 100)) state.basinFill = Math.round(sv.basinFill);
+    if (sv.v >= 10) {      // saves from before the wet-climate defaults take them
+      if (num(sv.basinFill, 0, 100)) state.basinFill = Math.round(sv.basinFill);
+      if (num(sv.lapse, 0, 10)) state.lapse = sv.lapse;
+      if (num(sv.p0, 0.3, 2)) state.p0 = Math.round(sv.p0 * 20) / 20;
+      if (sv.closedSeas === 'own' || sv.closedSeas === 'sea') state.closedSeas = sv.closedSeas;
+      if (num(sv.hellasLvl, -8100, 1300)) state.hellasLvl = Math.round(sv.hellasLvl / 10) * 10;
+      if (num(sv.argyreLvl, -5000, 200)) state.argyreLvl = Math.round(sv.argyreLvl / 10) * 10;
+    }
     if (sv.mapLayer === 'elev' || sv.mapLayer === 'ins') state.mapLayer = sv.mapLayer;
     if (['terrain', 'rainbow', 'mars'].includes(sv.palette)) state.palette = sv.palette;
     if (sv.hUnit === 'km' || sv.hUnit === 'earth') state.hUnit = sv.hUnit;
-    if (['date', 'year', 'swing'].includes(sv.insWhen)) state.insWhen = sv.insWhen;
+    if (['date', 'year', 'swing', 'warm10', 'cold10'].includes(sv.insWhen)) state.insWhen = sv.insWhen;
     if (sv.insMetric === 'mean' || sv.insMetric === 'noon') state.insMetric = sv.insMetric;
     if (sv.mapOrbit === 'real' || sv.mapOrbit === 'circ') state.mapOrbit = sv.mapOrbit;
     if (num(sv.insOp, 0, 100)) state.insOp = sv.insOp;
-    if (num(sv.lapse, 0, 10)) state.lapse = sv.lapse;
     if (num(sv.isoStep, 1, 30)) state.isoStep = Math.round(sv.isoStep);
-    if (sv.insShow === 'wm' || sv.insShow === 'temp') state.insShow = sv.insShow;
-    if (state.insWhen === 'swing' && state.insShow !== 'temp') state.insWhen = 'date';
+    if (['wm', 'temp', 'rain'].includes(sv.insShow)) state.insShow = sv.insShow;
+    if (['swing', 'warm10', 'cold10'].includes(state.insWhen) && state.insShow !== 'temp') state.insWhen = 'date';
+    if (typeof sv.mapRivers === 'boolean') state.mapRivers = sv.mapRivers;
     if (['C', 'F', 'K'].includes(sv.tUnit)) state.tUnit = sv.tUnit;
     if (sv.v >= 6 && ['cont', 'mixed', 'mari', 'dyn'].includes(sv.heat)) state.heat = sv.heat;   // saves from before Dynamic became the default take it
-    if (num(sv.p0, 0.3, 2)) state.p0 = Math.round(sv.p0 * 20) / 20;
     for (const k of ['hillshade', 'insDyn', 'mapGrid', 'mapSites', 'fillLakes']) if (typeof sv[k] === 'boolean') state[k] = sv[k];
     if (num(sv.gridLat, 1, 30)) state.gridLat = Math.round(sv.gridLat);
     if (num(sv.gridLon, 1, 30)) state.gridLon = Math.round(sv.gridLon);
@@ -1506,7 +1540,7 @@ try {
       if (num(sv.twoKA, 0, 1)) state.twoKA = Math.round(sv.twoKA * 20) / 20;
       if (num(sv.twoKS, -180, 180)) state.twoKS = Math.round(sv.twoKS);
       const t3 = sv.three;
-      if (sv.v >= 9 && t3 && typeof t3 === 'object') {      // three-sun saves from before the supplemental L4 take the new default
+      if (sv.v >= 10 && t3 && typeof t3 === 'object') {      // three-sun saves from before the wet-climate retune take the new default
         if (num(t3.K4, 0, 2)) state.three.K4 = Math.round(t3.K4 * 100) / 100;
         if (num(t3.K5, 0, 2)) state.three.K5 = Math.round(t3.K5 * 100) / 100;
         for (const m of ['L4', 'L5']) { const o = t3[m], d = state.three[m]; if (!o || typeof o !== 'object') continue;
@@ -1548,7 +1582,7 @@ const kLabel = k => (Math.abs(k - 4 / 3) < 1e-9 ? '1.33' : Math.abs(k - 2 / 3) <
 applyMode();
 const MULTI = () => SRC.length > 1;
 function save() {
-  try { localStorage.setItem(STORE, JSON.stringify({ v: 9, three: state.three, threeSel: state.threeSel, isoStep: state.isoStep, ltCut: state.ltCut, ltRef: state.ltRef, units: state.units, metric: state.metric, orbit: state.orbit, flip: state.flip, dynDur: state.dynDur, dynIns: state.dynIns, dynRat: state.dynRat, earthRef: state.earthRef, layout: state.layout, lineMode: state.lineMode, specA: state.specA, specB: state.specB, specStep: state.specStep, specOp: state.specOp, show: state.show, ratioMetric: state.ratioMetric, waterPct: state.waterPct, fillLakes: state.fillLakes, basinFill: state.basinFill, hUnit: state.hUnit, mapLayer: state.mapLayer, palette: state.palette, hillshade: state.hillshade, insWhen: state.insWhen, insMetric: state.insMetric, mapOrbit: state.mapOrbit, insShow: state.insShow, tUnit: state.tUnit, heat: state.heat, lapse: state.lapse, p0: state.p0, insOp: state.insOp, insDyn: state.insDyn, mapGrid: state.mapGrid, gridLat: state.gridLat, gridLon: state.gridLon, mapSites: state.mapSites, mode: state.mode, twoCI: state.twoCI, twoPh: state.twoPh, twoPhMode: state.twoPhMode, twoShift: state.twoShift, twoBias: state.twoBias, twoA2: state.twoA2, twoS2: state.twoS2, twoKA: state.twoKA, twoKS: state.twoKS, twoPos: state.twoPos, twoK: state.twoK, threeK: state.threeK, lats: state.lats })); } catch (e) {}
+  try { localStorage.setItem(STORE, JSON.stringify({ v: 10, mapRivers: state.mapRivers, closedSeas: state.closedSeas, hellasLvl: state.hellasLvl, argyreLvl: state.argyreLvl, three: state.three, threeSel: state.threeSel, isoStep: state.isoStep, ltCut: state.ltCut, ltRef: state.ltRef, units: state.units, metric: state.metric, orbit: state.orbit, flip: state.flip, dynDur: state.dynDur, dynIns: state.dynIns, dynRat: state.dynRat, earthRef: state.earthRef, layout: state.layout, lineMode: state.lineMode, specA: state.specA, specB: state.specB, specStep: state.specStep, specOp: state.specOp, show: state.show, ratioMetric: state.ratioMetric, waterPct: state.waterPct, fillLakes: state.fillLakes, basinFill: state.basinFill, hUnit: state.hUnit, mapLayer: state.mapLayer, palette: state.palette, hillshade: state.hillshade, insWhen: state.insWhen, insMetric: state.insMetric, mapOrbit: state.mapOrbit, insShow: state.insShow, tUnit: state.tUnit, heat: state.heat, lapse: state.lapse, p0: state.p0, insOp: state.insOp, insDyn: state.insDyn, mapGrid: state.mapGrid, gridLat: state.gridLat, gridLon: state.gridLon, mapSites: state.mapSites, mode: state.mode, twoCI: state.twoCI, twoPh: state.twoPh, twoPhMode: state.twoPhMode, twoShift: state.twoShift, twoBias: state.twoBias, twoA2: state.twoA2, twoS2: state.twoS2, twoKA: state.twoKA, twoKS: state.twoKS, twoPos: state.twoPos, twoK: state.twoK, threeK: state.threeK, lats: state.lats })); } catch (e) {}
 }
 
 /* ================= formatting ================= */
@@ -3014,9 +3048,10 @@ function renderDetail() {
       const c0 = cols0[x], c1 = cols1[x], fc = fcs[x], o = (y * w + x) * 4;
       const e0 = ELEV[b0 + c0] + (ELEV[b0 + c1] - ELEV[b0 + c0]) * fc, e1 = ELEV[b1 + c0] + (ELEV[b1 + c1] - ELEV[b1 + c0]) * fc;
       const hh = e0 + (e1 - e0) * fr;
-      let depth = hh <= P.sea ? P.sea - hh : -1;
+      const q0 = b0 + c0, q1 = b0 + c1, q2 = b1 + c0, q3 = b1 + c1, OC = P.OC;
+      let depth = hh <= P.sea && (OC[q0] || OC[q1] || OC[q2] || OC[q3]) ? P.sea - hh : -1;
       if (depth < 0 && P.FL) {        // a lake has a flat surface, so the shoreline is where the ground rises above it
-        const FL = P.FL, f = P.bf, q0 = b0 + c0, q1 = b0 + c1, q2 = b1 + c0, q3 = b1 + c1;
+        const FL = P.FL, f = P.bf;
         let lv = -1e9, w;
         if (FL[q0] > ELEV[q0] && (w = lakeLevel(q0, f)) > lv) lv = w;
         if (FL[q1] > ELEV[q1] && (w = lakeLevel(q1, f)) > lv) lv = w;
@@ -3028,7 +3063,7 @@ function renderDetail() {
         const kk = Math.min(P.WMAX, (depth / 10) | 0) * 3;
         d[o] = P.wl[kk]; d[o + 1] = P.wl[kk + 1]; d[o + 2] = P.wl[kk + 2];
       } else {
-        const kk = Math.min(P.LMAX, ((hh - P.sea) / 10) | 0) * 3;
+        const kk = Math.min(P.LMAX, Math.max(0, ((hh - P.sea) / 10) | 0)) * 3;
         let R = P.pal[kk], G = P.pal[kk + 1], B = P.pal[kk + 2];
         if (P.shadeOn) {
           const s0 = SHADE[b0 + c0] + (SHADE[b0 + c1] - SHADE[b0 + c0]) * fc, s1 = SHADE[b1 + c0] + (SHADE[b1 + c1] - SHADE[b1 + c0]) * fc;
@@ -3183,17 +3218,57 @@ async function loadMola() {
 // Fill craters and closed basins up to their spill points (priority flood from the ocean, 8-connected, wrapping in longitude).
 // Elevations are multiples of 5 m, so a bucket queue makes this linear in the number of cells.
 let FILL = null, BASIN = null, fillSea = NaN, EMIN = 0, EMAX = 0, waterDragging = false, waterTimer = 0;
+// Basin ids, drainage tree (each cell drains into PARENT; ORDER is the order cells were reached, sea first) and per-basin tables.
+let BID = null, PARENT = null, ORDER = null, BFLOOR = null, BSPILL = null, BENTRY = null, NBAS = 0, HELLAS_B = -1, ARGYRE_B = -1;
+const HELLAS_PX = 528 * 1440 + 280, ARGYRE_PX = 560 * 1440 + 1268;      // deep points of Hellas (42°S, 70°E) and Argyre (50°S, 317°E)
+let OCN = null, ocnKey = '';
+const fkey = sea => sea + '|' + state.closedSeas;
+// The sea held at sea level. With closed seas on their own level, only the region connected to the main (northern) ocean counts;
+// Hellas, Argyre and smaller pockets below sea level become closed basins with their own surface.
+function oceanMask(sea) {
+  const key = fkey(sea);
+  if (OCN && ocnKey === key) return OCN;
+  const n = MAP_W * MAP_H, m = OCN || new Uint8Array(n);
+  m.fill(0);
+  if (state.closedSeas !== 'own' || !isFinite(sea)) { for (let i = 0; i < n; i++) m[i] = ELEV[i] <= sea ? 1 : 0; }
+  else {
+    const lab = new Int32Array(n).fill(-1), qu = new Int32Array(n); let best = -1, bestA = 0, nl = 0;
+    for (let i0 = 0; i0 < n; i0++) {
+      if (lab[i0] >= 0 || ELEV[i0] > sea) continue;
+      let qh = 0, qt = 0, A = 0; qu[qt++] = i0; lab[i0] = nl;
+      while (qh < qt) {
+        const i = qu[qh++], r = (i / MAP_W) | 0, c = i - r * MAP_W; A += ROW_COS[r];
+        for (let dr = -1; dr <= 1; dr++) {
+          const rr = r + dr; if (rr < 0 || rr >= MAP_H) continue;
+          for (let dc = -1; dc <= 1; dc++) {
+            if (!dr && !dc) continue;
+            const cc = c + dc < 0 ? MAP_W - 1 : c + dc >= MAP_W ? 0 : c + dc, j = rr * MAP_W + cc;
+            if (lab[j] >= 0 || ELEV[j] > sea) continue;
+            lab[j] = nl; qu[qt++] = j;
+          }
+        }
+      }
+      if (A > bestA) { bestA = A; best = nl; }
+      nl++;
+    }
+    for (let i = 0; i < n; i++) m[i] = lab[i] === best ? 1 : 0;
+  }
+  OCN = m; ocnKey = key;
+  return m;
+}
 function fillDepressions(sea) {
-  if (FILL && fillSea === sea) return FILL;
-  const n = MAP_W * MAP_H, F = FILL || new Int16Array(n), done = new Uint8Array(n);
+  if (FILL && fillSea === fkey(sea)) return FILL;
+  const n = MAP_W * MAP_H, F = FILL || new Int16Array(n), done = new Uint8Array(n), OC = oceanMask(sea);
+  const par = PARENT || new Int32Array(n), ord = ORDER || new Int32Array(n); let no = 0;
+  par.fill(-1);
   const nb = Math.round((EMAX - EMIN) / MAP_Q) + 1, head = new Int32Array(nb).fill(-1), next = new Int32Array(n);
   const push = (i, lev) => { const b = (lev - EMIN) / MAP_Q | 0; next[i] = head[b]; head[b] = i; };
   let seeds = 0;
-  for (let i = 0; i < n; i++) if (ELEV[i] <= sea) { F[i] = ELEV[i]; done[i] = 1; push(i, ELEV[i]); seeds++; }
+  for (let i = 0; i < n; i++) if (OC[i]) { F[i] = ELEV[i]; done[i] = 1; push(i, ELEV[i]); seeds++; }
   if (!seeds) { let g = 0; for (let i = 1; i < n; i++) if (ELEV[i] < ELEV[g]) g = i; F[g] = ELEV[g]; done[g] = 1; push(g, ELEV[g]); }
   for (let b = 0; b < nb; b++) {
     while (head[b] !== -1) {
-      const i = head[b]; head[b] = next[i];
+      const i = head[b]; head[b] = next[i]; ord[no++] = i;
       const lev = F[i], r = (i / MAP_W) | 0, c = i - r * MAP_W;
       for (let dr = -1; dr <= 1; dr++) {
         const rr = r + dr; if (rr < 0 || rr >= MAP_H) continue;
@@ -3201,7 +3276,7 @@ function fillDepressions(sea) {
           if (!dr && !dc) continue;
           const cc = c + dc < 0 ? MAP_W - 1 : c + dc >= MAP_W ? 0 : c + dc, j = rr * MAP_W + cc;
           if (done[j]) continue;
-          done[j] = 1;
+          done[j] = 1; par[j] = i;
           const e = ELEV[j], f = e > lev ? e : lev;
           F[j] = f; push(j, f);
         }
@@ -3209,9 +3284,10 @@ function fillDepressions(sea) {
     }
   }
   // basin floors: each closed basin is a connected set of filled cells sharing one spill level; its floor is its lowest cell
-  const BF = BASIN || new Int16Array(n), seen = new Uint8Array(n), qu = new Int32Array(n);
+  const BF = BASIN || new Int16Array(n), seen = new Uint8Array(n), qu = new Int32Array(n), bid = BID || new Int32Array(n);
+  bid.fill(-1); const fl = [], sp = [];
   for (let i0 = 0; i0 < n; i0++) {
-    if (seen[i0] || F[i0] <= ELEV[i0] || ELEV[i0] <= sea) continue;
+    if (seen[i0] || F[i0] <= ELEV[i0] || OC[i0]) continue;
     const lev = F[i0]; let qh = 0, qt = 0, mn = ELEV[i0];
     qu[qt++] = i0; seen[i0] = 1;
     while (qh < qt) {
@@ -3227,13 +3303,23 @@ function fillDepressions(sea) {
         }
       }
     }
-    for (let k = 0; k < qt; k++) BF[qu[k]] = mn;
+    for (let k = 0; k < qt; k++) { BF[qu[k]] = mn; bid[qu[k]] = fl.length; }
+    fl.push(mn); sp.push(lev);
   }
-  FILL = F; BASIN = BF; fillSea = sea;
+  NBAS = fl.length; BFLOOR = Float32Array.from(fl); BSPILL = Float32Array.from(sp); BENTRY = new Int32Array(NBAS).fill(-1);
+  for (let k = 0; k < no; k++) { const b = bid[ord[k]]; if (b >= 0 && BENTRY[b] < 0) BENTRY[b] = ord[k]; }   // first cell of each basin reached: its outlet
+  FILL = F; BASIN = BF; BID = bid; PARENT = par; ORDER = ord.length === no ? ord : ord; ORDER.count = no; fillSea = fkey(sea);
+  HELLAS_B = bid[HELLAS_PX]; ARGYRE_B = bid[ARGYRE_PX];
   return F;
 }
 // water surface of the basin holding cell i at the current fill fraction (floor + fraction × depth to the brim)
-const lakeLevel = (i, f) => BASIN[i] + f * (FILL[i] - BASIN[i]);
+const lakeLevel = (i, f) => {
+  const b = BID[i];
+  if (state.closedSeas === 'own' && b >= 0 && (b === HELLAS_B || b === ARGYRE_B)) return clamp(b === HELLAS_B ? state.hellasLvl : state.argyreLvl, BFLOOR[b], BSPILL[b]);
+  return BASIN[i] + f * (FILL[i] - BASIN[i]);
+};
+// everything that decides where water is, for cache keys
+const waterKey = sea => [sea, state.fillLakes ? fillSea : 'dry', state.basinFill, state.closedSeas, state.closedSeas === 'own' ? state.hellasLvl + '|' + state.argyreLvl : ''].join('|');
 function seaLevelOf(pct) {
   if (pct <= 0) return -Infinity;
   if (pct >= 100) return Infinity;
@@ -3414,7 +3500,7 @@ for (let h = 0; h <= DYN_NH; h++) { const c = new Float64Array(N), sn = new Floa
 function dynGeo() {                    // per cell: water share, and the mean air-pressure ratio over its land
   if (waterDragging && dynGeoCache.v) return dynGeoCache.v;
   const sea = seaLevelOf(state.waterPct), bf = state.basinFill / 100, FL = state.fillLakes ? fillDepressions(sea) : null;
-  const key = [sea, state.fillLakes ? fillSea : 'dry', bf].join('|');
+  const OC = oceanMask(sea), key = waterKey(sea);
   if (dynGeoCache.key === key) return dynGeoCache.v;
   const NL = DYN_NL, NO = DYN_NO, n = NL * NO, hRef = isFinite(sea) ? sea : 0;
   const cnt = new Float64Array(n), wat = new Float64Array(n), ocn = new Float64Array(n), lnd = new Float64Array(n), spr = new Float64Array(n);
@@ -3423,7 +3509,7 @@ function dynGeo() {                    // per cell: water share, and the mean ai
     for (let c = 0; c < MAP_W; c++) {
       const k = i * NO + Math.min(NO - 1, Math.floor(c * NO / MAP_W)), p = r * MAP_W + c, h = ELEV[p];
       cnt[k]++;
-      if (h <= sea) { wat[k]++; ocn[k]++; continue; }
+      if (OC[p]) { wat[k]++; ocn[k]++; continue; }
       if (FL && FL[p] > h && h < lakeLevel(p, bf)) { wat[k]++; continue; }
       lnd[k]++; spr[k] += Math.pow(Math.max(0.05, 1 - 0.0065 * (h - hRef) * H_EARTH / 288.15), 5.256);
     }
@@ -3545,27 +3631,326 @@ function dynMapField() {               // the field the map shows (K), or null w
   for (let p = 0; p < F.length; p++) F[p] += 273.15;
   return F;
 }
+/* ================= rain: a seasonal moisture budget on a 2° grid ================= */
+// Column water vapour W (kg/m²) obeys div(V W) − div(K grad W) = E − P, solved as a steady state for each of 12 slices of the year:
+// • temperatures from the dynamic model (sea-level equivalent), cooled with height by the lapse rate for the real surface;
+// • saturation column W_sat = ρ_vs(T) × R_v T²/(L Γ) per Mars metre, 2.6× Earth's for the same temperature (the deeper atmosphere);
+// • low-level wind from temperature contrasts (warm = low pressure; boundary-layer friction and Coriolis), plus storm-track
+//   westerlies and eddy mixing only where the zonal-mean temperature falls toward the pole;
+// • evaporation from the ocean and lakes by a bulk formula capped by the surface's net radiation (none while frozen); from land,
+//   Priestley–Taylor potential evaporation limited by the rain that falls there (recycling);
+// • rain-out above 50% column humidity on a 1.5-day timescale, plus condensation where the wind blows up slopes.
+const RN_NY = 90, RN_NX = 180, RN_N = RN_NY * RN_NX, RN_A = 3389.5e3, RN_OM = 2 * Math.PI / 88775.244, RN_GM = 3.721, RN_GE = 9.807;
+const RN_RV = 461.5, RN_LV = 2.45e6, RN_SECYR = 365.25 * 86400, RN_DPHI = 2 * D2R, RN_NS = 12;
+const RN = { UW: 6.0, rfric: 2.0e-5, flat: 10.0, vmax: 12.0, gHb: 9800.0, K0: 0.7e6, Ks: 1.5e6, tau_p: 1.5 * 86400, RHc: 0.5,
+  eps_o: 0.6, CE: 1.3e-3, gust: 3.0, tau_sw: 0.50, lwn: 50.0, alb_land: 0.18 };
+const RN_LAT = Float64Array.from({ length: RN_NY }, (_, i) => -89 + 2 * i), RN_LON = Float64Array.from({ length: RN_NX }, (_, j) => 1 + 2 * j);
+const RN_COS = RN_LAT.map(l => Math.cos(l * D2R)), RN_AREA = RN_COS.map(c => RN_A * RN_A * c * RN_DPHI * RN_DPHI);
+const rnRhoVs = Tc => 611.2 * Math.exp(17.67 * Tc / (Tc + 243.5)) / (RN_RV * (Tc + 273.15));
+function rnGaussW(sigma) { const r = Math.floor(4 * sigma + 0.5), w = []; let s = 0; for (let k = -r; k <= r; k++) { const v = Math.exp(-0.5 * k * k / (sigma * sigma)); w.push(v); s += v; } return { r, w: w.map(v => v / s) }; }
+function rnGauss2(f, sLat, sLon) {      // separable Gaussian: edge-replicated in latitude, periodic in longitude (as scipy 'nearest' / 'wrap')
+  const a = new Float64Array(RN_N), o = new Float64Array(RN_N), G1 = rnGaussW(sLat), G2 = rnGaussW(sLon);
+  for (let i = 0; i < RN_NY; i++) for (let j = 0; j < RN_NX; j++) { let s = 0; for (let k = -G1.r; k <= G1.r; k++) s += G1.w[k + G1.r] * f[clamp(i + k, 0, RN_NY - 1) * RN_NX + j]; a[i * RN_NX + j] = s; }
+  for (let i = 0; i < RN_NY; i++) for (let j = 0; j < RN_NX; j++) { let s = 0; for (let k = -G2.r; k <= G2.r; k++) s += G2.w[k + G2.r] * a[i * RN_NX + mod(j + k, RN_NX)]; o[i * RN_NX + j] = s; }
+  return o;
+}
+function rnGauss1Reflect(f, sigma) {    // scipy 'reflect': d c b a | a b c d | d c b a
+  const n = f.length, G = rnGaussW(sigma), o = new Float64Array(n), rf = i => i < 0 ? -i - 1 : i >= n ? 2 * n - i - 1 : i;
+  for (let i = 0; i < n; i++) { let s = 0; for (let k = -G.r; k <= G.r; k++) s += G.w[k + G.r] * f[rf(i + k)]; o[i] = s; }
+  return o;
+}
+function rnPolar(f, lat0) {             // blend rows poleward of lat0 toward their zonal mean, so gradients along tiny circles stay physical
+  const o = new Float64Array(RN_N);
+  for (let i = 0; i < RN_NY; i++) {
+    const w = clamp((Math.abs(RN_LAT[i]) - lat0) / (90 - lat0), 0, 1); let m = 0;
+    for (let j = 0; j < RN_NX; j++) m += f[i * RN_NX + j]; m /= RN_NX;
+    for (let j = 0; j < RN_NX; j++) o[i * RN_NX + j] = (1 - w) * f[i * RN_NX + j] + w * m;
+  }
+  return o;
+}
+function rnGrad(f) {
+  const fx = new Float64Array(RN_N), fy = new Float64Array(RN_N);
+  for (let i = 0; i < RN_NY; i++) {
+    const dx = 2 * RN_A * RN_COS[i] * RN_DPHI;
+    for (let j = 0; j < RN_NX; j++) {
+      const k = i * RN_NX + j; fx[k] = (f[i * RN_NX + (j + 1) % RN_NX] - f[i * RN_NX + (j + RN_NX - 1) % RN_NX]) / dx;
+      fy[k] = i === 0 ? (f[k + RN_NX] - f[k]) / (RN_A * RN_DPHI) : i === RN_NY - 1 ? (f[k] - f[k - RN_NX]) / (RN_A * RN_DPHI) : (f[k + RN_NX] - f[k - RN_NX]) / (2 * RN_A * RN_DPHI);
+    }
+  }
+  return [fx, fy];
+}
+function rnWinds(Tsl) {
+  const Tf = rnPolar(rnGauss2(Tsl, 1.0, 1.5), 70), [ax, ay] = rnGrad(Tf), c = RN.gHb / 288.0, U = new Float64Array(RN_N), V = new Float64Array(RN_N), K = new Float64Array(RN_N);
+  const f0 = 2 * RN_OM * Math.sin(RN.flat * D2R), r = RN.rfric;
+  const Tz = new Float64Array(RN_NY); for (let i = 0; i < RN_NY; i++) { let s = 0; for (let j = 0; j < RN_NX; j++) s += Tsl[i * RN_NX + j]; Tz[i] = s / RN_NX; }
+  const Tzs = rnGauss1Reflect(Tz, 2.0), h = RN_A * RN_DPHI;
+  for (let i = 0; i < RN_NY; i++) {
+    const f = 2 * RN_OM * Math.sin(RN_LAT[i] * D2R), fe = Math.abs(f) < f0 ? Math.sign(f + 1e-30) * f0 : f, den = r * r + fe * fe;
+    const dTdy = i === 0 ? (Tzs[1] - Tzs[0]) / h : i === RN_NY - 1 ? (Tzs[i] - Tzs[i - 1]) / h : (Tzs[i + 1] - Tzs[i - 1]) / (2 * h);
+    const baro = Math.max(0, -dTdy * Math.sign(RN_LAT[i])), shp = Math.max(0, Math.sin(Math.PI * (Math.abs(RN_LAT[i]) - 25) / 55)), bk = clamp(baro / 7e-6, 0, 1.5) * shp;
+    for (let j = 0; j < RN_NX; j++) {
+      const k = i * RN_NX + j, gx = ax[k] * c, gy = ay[k] * c;
+      let u = (r * gx + fe * gy) / den + RN.UW * bk, v = (r * gy - fe * gx) / den;
+      const sp = Math.hypot(u, v), cap = Math.min(1, RN.vmax / Math.max(sp, 1e-9)); U[k] = u * cap; V[k] = v * cap; K[k] = RN.K0 + RN.Ks * bk;
+    }
+  }
+  return { U, V, K };
+}
+function rnOperator(U, V, K) {          // steady flux-form advection (upwind) + diffusion: diagonal and the four neighbours
+  const D = new Float64Array(RN_N), E = new Float64Array(RN_N), Wc = new Float64Array(RN_N), Nn = new Float64Array(RN_N), S = new Float64Array(RN_N);
+  for (let i = 0; i < RN_NY; i++) {
+    const Le = RN_A * RN_DPHI, dxe = RN_A * RN_COS[i] * RN_DPHI;
+    for (let j = 0; j < RN_NX; j++) {
+      const k = i * RN_NX + j, e = i * RN_NX + (j + 1) % RN_NX, ue = 0.5 * (U[k] + U[e]), Ke = 0.5 * (K[k] + K[e]);
+      const fp = Math.max(ue, 0) * Le, fm = Math.min(ue, 0) * Le, dc = Ke * Le / dxe;
+      D[k] += fp + dc; E[k] += fm - dc; D[e] += -fm + dc; Wc[e] += -fp - dc;
+    }
+  }
+  for (let i = 0; i < RN_NY - 1; i++) {
+    const Ln = RN_A * Math.cos(0.5 * (RN_LAT[i] + RN_LAT[i + 1]) * D2R) * RN_DPHI;
+    for (let j = 0; j < RN_NX; j++) {
+      const k = i * RN_NX + j, n = k + RN_NX, vn = 0.5 * (V[k] + V[n]), Kn = 0.5 * (K[k] + K[n]);
+      const fp = Math.max(vn, 0) * Ln, fm = Math.min(vn, 0) * Ln, dc = Kn * Ln / (RN_A * RN_DPHI);
+      D[k] += fp + dc; Nn[k] += fm - dc; D[n] += -fm + dc; S[n] += -fp - dc;
+    }
+  }
+  return { D, E, Wc, Nn, S };
+}
+// BiCGSTAB with a line preconditioner: exact solves along each latitude circle (cyclic), then each meridian, then circles again
+function rnSolver(M, Dadd) {
+  const D = new Float64Array(RN_N); for (let k = 0; k < RN_N; k++) D[k] = M.D[k] + Dadd[k];
+  const nx = RN_NX, ny = RN_NY;
+  // zonal cyclic systems: Sherman–Morrison on a Thomas factorisation, per row
+  const zc = new Float64Array(RN_N), zd = new Float64Array(RN_N), zz = new Float64Array(RN_N), zfac = new Float64Array(ny), zg = new Float64Array(ny);
+  const thomasRow = (i, rhs, out, bb) => {     // solve the row's tridiagonal part (diag bb) for rhs, into out (uses zc/zd scratch per row)
+    const o = i * nx;
+    let den = bb[0]; zc[o] = M.E[o] / den; out[o] = rhs[o] / den;
+    for (let j = 1; j < nx; j++) { den = bb[j] - M.Wc[o + j] * zc[o + j - 1]; zc[o + j] = M.E[o + j] / den; out[o + j] = (rhs[o + j] - M.Wc[o + j] * out[o + j - 1]) / den; }
+    for (let j = nx - 2; j >= 0; j--) out[o + j] -= zc[o + j] * out[o + j + 1];
+  };
+  const bbRow = new Array(ny), urow = new Float64Array(nx), tmpR = new Float64Array(RN_N), tmpZ = new Float64Array(RN_N);
+  for (let i = 0; i < ny; i++) {
+    const o = i * nx, g = -D[o], bb = new Float64Array(nx);
+    for (let j = 0; j < nx; j++) bb[j] = D[o + j];
+    bb[0] -= g; bb[nx - 1] -= M.Wc[o] * M.E[o + nx - 1] / g; bbRow[i] = bb; zg[i] = g;
+    urow.fill(0); urow[0] = g; urow[nx - 1] = M.E[o + nx - 1];
+    for (let j = 0; j < nx; j++) tmpR[o + j] = urow[j];
+    thomasRow(i, tmpR, zz, bb);
+    zfac[i] = 1 + zz[o] + M.Wc[o] * zz[o + nx - 1] / g;
+  }
+  const zonal = (r, x) => {
+    for (let i = 0; i < ny; i++) {
+      const o = i * nx; thomasRow(i, r, x, bbRow[i]);
+      const fct = (x[o] + M.Wc[o] * x[o + nx - 1] / zg[i]) / zfac[i];
+      for (let j = 0; j < nx; j++) x[o + j] -= fct * zz[o + j];
+    }
+  };
+  const mc = new Float64Array(RN_N);
+  const merid = (r, x) => {
+    for (let j = 0; j < nx; j++) {
+      let den = D[j]; mc[j] = M.Nn[j] / den; x[j] = r[j] / den;
+      for (let i = 1; i < ny; i++) { const k = i * nx + j; den = D[k] - M.S[k] * mc[k - nx]; mc[k] = M.Nn[k] / den; x[k] = (r[k] - M.S[k] * x[k - nx]) / den; }
+      for (let i = ny - 2; i >= 0; i--) { const k = i * nx + j; x[k] -= mc[k] * x[k + nx]; }
+    }
+  };
+  const mv = (x, y) => {
+    const Ee = M.E, Wc = M.Wc, Nn = M.Nn, Sc = M.S;
+    for (let i = 0; i < ny; i++) {
+      const o = i * nx, last = o + nx - 1;
+      for (let k = o; k <= last; k++) {
+        let v = D[k] * x[k] + Ee[k] * x[k === last ? o : k + 1] + Wc[k] * x[k === o ? last : k - 1];
+        if (i < ny - 1) v += Nn[k] * x[k + nx];
+        if (i > 0) v += Sc[k] * x[k - nx];
+        y[k] = v;
+      }
+    }
+  };
+  const t1 = new Float64Array(RN_N), t2 = new Float64Array(RN_N), t3 = new Float64Array(RN_N);
+  const prec = (r, x) => {               // zonal, meridional, zonal
+    zonal(r, x); mv(x, t1); for (let k = 0; k < RN_N; k++) t1[k] = r[k] - t1[k];
+    merid(t1, t2); for (let k = 0; k < RN_N; k++) x[k] += t2[k];
+    mv(x, t1); for (let k = 0; k < RN_N; k++) t1[k] = r[k] - t1[k];
+    zonal(t1, t3); for (let k = 0; k < RN_N; k++) x[k] += t3[k];
+  };
+  const dot = (a, b) => { let s = 0; for (let k = 0; k < RN_N; k++) s += a[k] * b[k]; return s; };
+  return (b, x, tol = 1e-6, maxit = 400) => {   // x: initial guess, overwritten with the solution
+    const r = new Float64Array(RN_N), rh = new Float64Array(RN_N), p = new Float64Array(RN_N), v = new Float64Array(RN_N), ph = new Float64Array(RN_N), s = new Float64Array(RN_N), sh = new Float64Array(RN_N), t = new Float64Array(RN_N);
+    mv(x, r); for (let k = 0; k < RN_N; k++) { r[k] = b[k] - r[k]; rh[k] = r[k]; }
+    const bn = Math.sqrt(dot(b, b)) || 1; let rho = 1, alpha = 1, om = 1, it = 0;
+    if (Math.sqrt(dot(r, r)) / bn < tol) return 0;
+    for (; it < maxit; it++) {
+      const rho1 = dot(rh, r), beta = (rho1 / rho) * (alpha / om);
+      for (let k = 0; k < RN_N; k++) p[k] = r[k] + beta * (p[k] - om * v[k]);
+      prec(p, ph); mv(ph, v); alpha = rho1 / dot(rh, v);
+      for (let k = 0; k < RN_N; k++) s[k] = r[k] - alpha * v[k];
+      if (Math.sqrt(dot(s, s)) / bn < tol) { for (let k = 0; k < RN_N; k++) x[k] += alpha * ph[k]; return it + 1; }
+      prec(s, sh); mv(sh, t); om = dot(t, s) / dot(t, t);
+      for (let k = 0; k < RN_N; k++) { x[k] += alpha * ph[k] + om * sh[k]; r[k] = s[k] - om * t[k]; }
+      rho = rho1;
+      if (Math.sqrt(dot(r, r)) / bn < tol) return it + 1;
+    }
+    return it;
+  };
+}
+const rnSm = z => z > 0 ? z + 0.05 * Math.log1p(Math.exp(-z / 0.05)) : 0.05 * Math.log1p(Math.exp(z / 0.05));   // smooth max(z, 0)
+const rnSg = z => 0.5 * (1 + Math.tanh(z / 0.1));
+// one slice of the year: Tsl (°C, sea-level equivalent, 2° grid), Q (TOA daily-mean insolation per 2° band). Yields between solves.
+function* rnSeason(geo, Tsl, Q, W0, lapse, p0) {
+  const gam = lapse * RN_GM / RN_GE / 1000, n = RN_N;
+  const Ts = new Float64Array(n), Tl = new Float64Array(n), Wsat = new Float64Array(n), Hw = new Float64Array(n);
+  for (let k = 0; k < n; k++) { Ts[k] = Tsl[k] - gam * geo.h[k]; Tl[k] = Tsl[k] - gam * geo.hland[k]; Hw[k] = RN_RV * (Ts[k] + 273.15) ** 2 / (RN_LV * gam); Wsat[k] = rnRhoVs(Ts[k]) * Hw[k]; }
+  const { U, V, K } = rnWinds(Tsl), M = rnOperator(U, V, K);
+  const hs = rnPolar(rnGauss2(geo.h, 0.7, 0.7), 75), [hx, hy] = rnGrad(hs);
+  const lamO = new Float64Array(n), Rnw = new Float64Array(n), Rnl = new Float64Array(n), spd = new Float64Array(n), Epot = new Float64Array(n), A = new Float64Array(n);
+  const gl0 = 0.000665 * 101.325 * p0;
+  for (let i = 0; i < RN_NY; i++) for (let j = 0; j < RN_NX; j++) {
+    const k = i * RN_NX + j, w = U[k] * hx[k] + V[k] * hy[k];
+    lamO[k] = RN.eps_o * Math.max(w, 0) / Hw[k];
+    Rnw[k] = 0.94 * RN.tau_sw * Q[i] - RN.lwn; Rnl[k] = (1 - RN.alb_land) * RN.tau_sw * Q[i] - RN.lwn; spd[k] = Math.hypot(U[k], V[k]) + RN.gust;
+    const T = Tl[k], es = 0.6108 * Math.exp(17.27 * T / (T + 237.3)), De = 4098 * es / (T + 237.3) ** 2, ga = gl0 * Math.exp(-geo.hland[k] / 22000);
+    Epot[k] = T > 0 && Rnl[k] > 0 ? 1.26 * De / (De + ga) * Rnl[k] / RN_LV : 0; A[k] = RN_AREA[i];
+  }
+  const kk = 1 / (1 - RN.RHc) / RN.tau_p, W = new Float64Array(n), Dd = new Float64Array(n), rhs = new Float64Array(n), Wn = new Float64Array(n);
+  for (let k = 0; k < n; k++) W[k] = W0 ? W0[k] : 0.6 * Wsat[k];
+  const Ewat = (T, Rn, RH, k) => {
+    const RHs = clamp(0.3 + 0.7 * RH, 0, 0.97), e = RN.CE * spd[k] * rnRhoVs(T) * (1 - RHs), cap = 1.2 * Math.max(Rn, 0) / RN_LV;
+    if (!(T > 0)) return [0, 0];
+    return [Math.min(e, cap), e < cap && 0.3 + 0.7 * RH < 0.97 ? -RN.CE * spd[k] * rnRhoVs(T) * 0.7 / Wsat[k] : 0];
+  };
+  let it = 0;
+  for (; it < 30; it++) {
+    for (let k = 0; k < n; k++) {
+      const RH = W[k] / Wsat[k], g = rnSm(RH - RN.RHc) * kk + lamO[k], P = g * W[k], J = g + RH * rnSg(RH - RN.RHc) * kk;
+      const [Eo, dEo] = Ewat(Tsl[k], Rnw[k], RH, k), [El, dEl] = Ewat(Ts[k], Rnw[k], RH, k);
+      const ex = Math.exp(-P / Math.max(Epot[k], 1e-12)), Ela = Epot[k] * (1 - ex), dEla = ex * J;
+      const E = geo.fo[k] * Eo + geo.fl[k] * El + geo.fland[k] * Ela, dE = geo.fo[k] * dEo + geo.fl[k] * dEl + geo.fland[k] * dEla;
+      const Dk = Math.max(J - dE, 1e-12); Dd[k] = Dk * A[k]; rhs[k] = (E - P + Dk * W[k]) * A[k]; Wn[k] = W[k];
+    }
+    rnSolver(M, Dd)(rhs, Wn, it < 2 ? 1e-4 : 2e-6);
+    let dW = 0, wm = 0;
+    for (let k = 0; k < n; k++) { const v = Math.max(Wn[k], 0); dW = Math.max(dW, Math.abs(v - W[k])); wm = Math.max(wm, W[k]); W[k] += 0.8 * (v - W[k]); }
+    yield it;
+    if (dW / Math.max(wm, 1e-9) < 3e-4 && it >= 3) break;
+  }
+  const P = new Float32Array(n), E = new Float32Array(n), El = new Float32Array(n), Ela = new Float32Array(n), Ep = new Float32Array(n);
+  for (let k = 0; k < n; k++) {
+    const RH = W[k] / Wsat[k], p = (rnSm(RH - RN.RHc) * kk + lamO[k]) * W[k], RHs = clamp(0.3 + 0.7 * RH, 0, 0.97);
+    const eo = Tsl[k] > 0 ? Math.min(RN.CE * spd[k] * rnRhoVs(Tsl[k]) * (1 - RHs), 1.2 * Math.max(Rnw[k], 0) / RN_LV) : 0;
+    const el = Ts[k] > 0 ? Math.min(RN.CE * spd[k] * rnRhoVs(Ts[k]) * (1 - RHs), 1.2 * Math.max(Rnw[k], 0) / RN_LV) : 0;
+    const ela = Epot[k] * (1 - Math.exp(-p / Math.max(Epot[k], 1e-12)));
+    P[k] = p; El[k] = el; Ela[k] = ela; Ep[k] = Epot[k]; E[k] = geo.fo[k] * eo + geo.fl[k] * el + geo.fland[k] * ela;
+  }
+  return { W, P, E, El, Ela, Ep, it };
+}
+function rnRegrid(Td) {                 // dynamic-model cells (rows −88…88 step 4, columns 3…357 step 6) → the 2° grid
+  const NO = DYN_NO, A = new Float64Array(RN_NY * NO), o = new Float64Array(RN_N);
+  for (let j = 0; j < NO; j++) for (let i = 0; i < RN_NY; i++) {
+    const y = clamp((RN_LAT[i] + 88) / 4, 0, DYN_NL - 1), i0 = Math.min(DYN_NL - 2, Math.floor(y)), w = y - i0;
+    A[i * NO + j] = (1 - w) * Td[i0 * NO + j] + w * Td[(i0 + 1) * NO + j];
+  }
+  for (let i = 0; i < RN_NY; i++) for (let j = 0; j < RN_NX; j++) {
+    const x = (RN_LON[j] - 3) / 6, j0 = Math.floor(x), w = x - j0;
+    o[i * RN_NX + j] = (1 - w) * A[i * NO + mod(j0, NO)] + w * A[i * NO + mod(j0 + 1, NO)];
+  }
+  return o;
+}
+function rainGeo() {                    // the map's water on the 2° grid: ocean, lake and land shares, surface height above sea level
+  const sea = seaLevelOf(state.waterPct), key = waterKey(sea);
+  if (rainGeo.c && rainGeo.c.key === key) return rainGeo.c;
+  const bf = state.basinFill / 100, FL = state.fillLakes ? fillDepressions(sea) : null, OC = oceanMask(sea), s0 = isFinite(sea) ? sea : 0;
+  const fo = new Float64Array(RN_N), fl = new Float64Array(RN_N), fland = new Float64Array(RN_N), h = new Float64Array(RN_N), hl = new Float64Array(RN_N), ws = new Float64Array(RN_N);
+  for (let r = 0; r < MAP_H; r++) { const i = RN_NY - 1 - (r >> 3), w = ROW_COS[r];
+    for (let c = 0; c < MAP_W; c++) { const k = i * RN_NX + (c >> 3), p = r * MAP_W + c, e = ELEV[p]; ws[k] += w;
+      if (OC[p]) { fo[k] += w; continue; }
+      if (FL && FL[p] > e) { const Wl = lakeLevel(p, bf); if (e < Wl) { fl[k] += w; h[k] += w * (Wl - s0); continue; } }
+      fland[k] += w; h[k] += w * (e - s0); hl[k] += w * (e - s0); } }
+  for (let k = 0; k < RN_N; k++) { hl[k] = fland[k] > 0 ? hl[k] / fland[k] : 0; fo[k] /= ws[k]; fl[k] /= ws[k]; fland[k] /= ws[k]; h[k] /= ws[k]; }
+  rainGeo.c = { key, fo, fl, fland, h, hland: hl };
+  return rainGeo.c;
+}
+const rainCache = new Map(); let rainJob = null;
+const rainKey = () => MODE_KEY + '|' + (state.mapOrbit === 'circ' ? 'c' : 'r') + '|' + state.p0 + '|' + state.lapse + '|' + waterKey(seaLevelOf(state.waterPct));
+const RN_EDGES = Array.from({ length: RN_NS + 1 }, (_, m) => Math.floor(m * N / RN_NS));
+function rainYear() {                   // the year's rain if ready (else null, and the computation is started in the background)
+  if (!mapReady) return null;
+  const key = rainKey(), R = rainCache.get(key);
+  if (R) return R;
+  if (!rainJob || rainJob.key !== key) startRain(key);
+  return null;
+}
+function startRain(key) {
+  const job = { key, done: 0 }; rainJob = job;
+  const circ = state.mapOrbit === 'circ', geo = rainGeo(), S = dynSolve(circ), T = dynSeries(S), src = circ ? IDE : ORB, NO = DYN_NO, nc = DYN_NL * NO;
+  const lapse = state.lapse, p0 = state.p0, out = { key, P: [], El: [], Ela: [], Ep: [], E: [] };
+  let m = 0, gen = null, W0 = null;
+  const step = () => {
+    if (rainJob !== job) return;                        // superseded by newer settings
+    const t0 = performance.now();
+    while (performance.now() - t0 < 40) {
+      if (!gen) {
+        const a = RN_EDGES[m], b = RN_EDGES[m + 1], Td = new Float64Array(nc), Q = new Float64Array(RN_NY);
+        for (let p = 0; p < nc; p++) { let s = 0; for (let j = a; j < b; j++) s += T[p * N + j]; Td[p] = s / (b - a); }
+        for (let i = 0; i < RN_NY; i++) { let s = 0; for (let j = a; j < b; j++) s += dayMetrics(RN_LAT[i], src[j], true).mean; Q[i] = s / (b - a); }
+        gen = rnSeason(geo, rnRegrid(Td), Q, W0, lapse, p0);
+      }
+      const r = gen.next();
+      if (r.done) {
+        const v = r.value; out.P.push(v.P); out.El.push(v.El); out.Ela.push(v.Ela); out.Ep.push(v.Ep); out.E.push(v.E); W0 = v.W; gen = null; m++; job.done = m;
+        if (m === RN_NS) {
+          const Py = new Float32Array(RN_N), Ey = new Float32Array(RN_N), Ely = new Float32Array(RN_N), Elay = new Float32Array(RN_N), Epy = new Float32Array(RN_N);
+          for (let s = 0; s < RN_NS; s++) for (let k = 0; k < RN_N; k++) { Py[k] += out.P[s][k] / RN_NS; Ey[k] += out.E[s][k] / RN_NS; Ely[k] += out.El[s][k] / RN_NS; Elay[k] += out.Ela[s][k] / RN_NS; Epy[k] += out.Ep[s][k] / RN_NS; }
+          Object.assign(out, { Py, Ey, Ely, Elay, Epy, geo });
+          if (rainCache.size > 6) rainCache.clear();
+          rainCache.set(key, out); rainJob = null; rainRivers = null;
+          rainReady();
+          return;
+        }
+        updateMapRead();
+      }
+    }
+    setTimeout(step, 0);
+  };
+  setTimeout(step, 0);
+}
+// rain at the chosen date: between the two nearest slices of the year
+function rainAtDate(R) {
+  const u = mod(state.t, YEAR) / DT, cen = RN_EDGES.slice(0, RN_NS).map((a, m) => (a + RN_EDGES[m + 1]) / 2);
+  let m0 = RN_NS - 1, w = 0;
+  for (let m = 0; m < RN_NS; m++) { const c0 = cen[m], c1 = m + 1 < RN_NS ? cen[m + 1] : cen[0] + N; let uu = u; if (uu < cen[0]) uu += N; if (uu >= c0 && uu < c1) { m0 = m; w = (uu - c0) / (c1 - c0); break; } }
+  const a = R.P[m0], b = R.P[(m0 + 1) % RN_NS], o = new Float32Array(RN_N);
+  for (let k = 0; k < RN_N; k++) o[k] = (1 - w) * a[k] + w * b[k];
+  return o;
+}
+const rnAt = (F, lat, lon) => {         // bilinear read of a 2° field at a latitude and longitude (0…360°E)
+  const y = clamp((lat + 89) / 2, 0, RN_NY - 1), i0 = Math.min(RN_NY - 2, Math.floor(y)), wy = y - i0, x = (mod(lon, 360) - 1) / 2, j0 = Math.floor(x), wx = x - j0;
+  const a = i0 * RN_NX, b = a + RN_NX, ja = mod(j0, RN_NX), jb = mod(j0 + 1, RN_NX);
+  return (1 - wy) * ((1 - wx) * F[a + ja] + wx * F[a + jb]) + wy * ((1 - wx) * F[b + ja] + wx * F[b + jb]);
+};
+
 function swingProfile() {            // seasonal swing (K) and coldest / warmest sol (K, sea level): per map row, or per cell in Dynamic
   const circ = state.mapOrbit === 'circ', dyn = state.heat === 'dyn' && mapReady;
   const key = 'W|' + MODE_KEY + '|' + (circ ? 'c' : 'r') + '|' + state.p0 + '|' + state.heat + (dyn ? '|' + dynGeo().key : '');
   let o = insCache.get(key);
   if (o) return o;
-  o = { sw: new Float32Array(MAP_H), mn: new Float32Array(MAP_H), mx: new Float32Array(MAP_H), DF: null, DMN: null, DMX: null };
-  const bmn = new Float64Array(EBM_NB), bmx = new Float64Array(EBM_NB);
+  o = { sw: new Float32Array(MAP_H), mn: new Float32Array(MAP_H), mx: new Float32Array(MAP_H), w10: new Float32Array(MAP_H), c10: new Float32Array(MAP_H), DF: null, DMN: null, DMX: null, DW10: null, DC10: null };
+  const bmn = new Float64Array(EBM_NB), bmx = new Float64Array(EBM_NB), bw10 = new Float64Array(EBM_NB), bc10 = new Float64Array(EBM_NB), srt = new Float32Array(N);
   if (dyn) {
     const T = dynSeries(dynSolve(circ)), n = DYN_NL * DYN_NO, NO = DYN_NO;
-    o.DF = new Float64Array(n); o.DMN = new Float64Array(n); o.DMX = new Float64Array(n);
-    for (let p = 0; p < n; p++) { let lo = Infinity, hi = -Infinity; for (let j = 0; j < N; j++) { const v = T[p * N + j]; if (v < lo) lo = v; if (v > hi) hi = v; } o.DMN[p] = lo + 273.15; o.DMX[p] = hi + 273.15; o.DF[p] = hi - lo; }
+    o.DF = new Float64Array(n); o.DMN = new Float64Array(n); o.DMX = new Float64Array(n); o.DW10 = new Float64Array(n); o.DC10 = new Float64Array(n);
+    for (let p = 0; p < n; p++) { let lo = Infinity, hi = -Infinity; for (let j = 0; j < N; j++) { const v = T[p * N + j]; srt[j] = v; if (v < lo) lo = v; if (v > hi) hi = v; } o.DMN[p] = lo + 273.15; o.DMX[p] = hi + 273.15; o.DF[p] = hi - lo;
+      srt.sort(); o.DC10[p] = srt[9] + 273.15; o.DW10[p] = srt[N - 10] + 273.15; }
     for (let b = 0; b < EBM_NB; b++) { const y = clamp((EBM_LAT[b] + 90) / 4 - 0.5, 0, DYN_NL - 1), i0 = Math.min(DYN_NL - 2, Math.floor(y)), wy = y - i0; let a = 0, c = 0;
-      for (let j = 0; j < NO; j++) { a += (1 - wy) * o.DMN[i0 * NO + j] + wy * o.DMN[(i0 + 1) * NO + j]; c += (1 - wy) * o.DMX[i0 * NO + j] + wy * o.DMX[(i0 + 1) * NO + j]; }
-      bmn[b] = a / NO - 273.15; bmx[b] = c / NO - 273.15; }
+      let e = 0, f = 0;
+      for (let j = 0; j < NO; j++) { a += (1 - wy) * o.DMN[i0 * NO + j] + wy * o.DMN[(i0 + 1) * NO + j]; c += (1 - wy) * o.DMX[i0 * NO + j] + wy * o.DMX[(i0 + 1) * NO + j]; e += (1 - wy) * o.DW10[i0 * NO + j] + wy * o.DW10[(i0 + 1) * NO + j]; f += (1 - wy) * o.DC10[i0 * NO + j] + wy * o.DC10[(i0 + 1) * NO + j]; }
+      bmn[b] = a / NO - 273.15; bmx[b] = c / NO - 273.15; bw10[b] = e / NO - 273.15; bc10[b] = f / NO - 273.15; }
   } else {
     const TL = ebmSeasonal(circ, state.heat), W = N + 1;
-    for (let b = 0; b < EBM_NB; b++) { let lo = Infinity, hi = -Infinity; for (let j = 1; j <= N; j++) { const v = TL[b * W + j]; if (v < lo) lo = v; if (v > hi) hi = v; } bmn[b] = lo; bmx[b] = hi; }
+    for (let b = 0; b < EBM_NB; b++) { let lo = Infinity, hi = -Infinity; for (let j = 1; j <= N; j++) { const v = TL[b * W + j]; srt[j - 1] = v; if (v < lo) lo = v; if (v > hi) hi = v; } bmn[b] = lo; bmx[b] = hi; srt.sort(); bc10[b] = srt[9]; bw10[b] = srt[N - 10]; }
   }
   for (let r = 0; r < MAP_H; r++) {
     const u = clamp((90 - (r + 0.5) / MAP_PPD + 90) * EBM_NB / 180 - 0.5, 0, EBM_NB - 1), b = Math.min(EBM_NB - 2, Math.floor(u)), f = u - b;
     o.mn[r] = lerp(bmn[b], bmn[b + 1], f) + 273.15; o.mx[r] = lerp(bmx[b], bmx[b + 1], f) + 273.15; o.sw[r] = o.mx[r] - o.mn[r];
+    o.w10[r] = lerp(bw10[b], bw10[b + 1], f) + 273.15; o.c10[r] = lerp(bc10[b], bc10[b + 1], f) + 273.15;
   }
   if (insCache.size > 40) insCache.clear();
   insCache.set(key, o);
@@ -3598,9 +3983,88 @@ function tempProfile() {             // sea-level insolation-based temperature (
   return prof;
 }
 const T_FIXED = [213.15, 333.15];      // colour scale: −60 … +60 °C (darkest colours beyond)
+// rain colours: dry browns to wet blue-greens, stops evenly spaced on the scale
+const RAIN_COL = ['#7a4a1d', '#b07a3c', '#d9b26f', '#efe2a2', '#c4e3a3', '#86c98a', '#3e9e6d', '#1f7a6a', '#155e75', '#0b3d5c'];
+const RAIN_YR = [0, 150, 300, 500, 750, 1000, 1500, 2000, 3000, 5000];                              // mm per Earth year
+const RAIN_SOL = RAIN_YR.map(v => v * MARS.solSec / RN_SECYR);                                          // the same rates per sol
+const rainT = (v, st) => { if (!(v > 0)) return 0; for (let i = 1; i < st.length; i++) if (v < st[i]) return (i - 1 + (v - st[i - 1]) / (st[i] - st[i - 1])) / (st.length - 1); return 1; };
+const LUT_RAIN = (() => { const L = new Uint8ClampedArray(1001 * 3), rgb = h => [1, 3, 5].map(o => parseInt(h.slice(o, o + 2), 16));
+  for (let q = 0; q <= 1000; q++) { const u = q / 1000 * (RAIN_COL.length - 1), i = Math.min(RAIN_COL.length - 2, Math.floor(u)), f = u - i, a = rgb(RAIN_COL[i]), b = rgb(RAIN_COL[i + 1]);
+    for (let ch = 0; ch < 3; ch++) L[q * 3 + ch] = a[ch] + (b[ch] - a[ch]) * f; } return L; })();
+const fmtRain = v => state.insWhen === 'year' ? (v >= 1000 ? (v / 1000).toFixed(v >= 10000 ? 0 : 1).replace(/\.0$/, '') + ' m' : Math.round(v) + ' mm') : (v < 1 ? v.toFixed(2) : v < 10 ? v.toFixed(1) : v.toFixed(0)) + ' mm';
 function fmtTemp(K, digits = 0) {
   const u = state.tUnit, v = u === 'K' ? K : u === 'F' ? (K - 273.15) * 9 / 5 + 32 : K - 273.15;
   return v.toFixed(digits).replace('-', '−') + (u === 'K' ? ' K' : u === 'F' ? ' °F' : ' °C');
+}
+// Rivers: the yearly runoff (rain minus land evaporation; on lakes, rain minus lake evaporation) routed down the drainage tree of
+// the depression fill. A closed basin passes water on only when its net inflow is positive (it spills); flows from about 80 m³/s
+// are drawn, wider than real so they show at planetary scale.
+const RIVER_QMIN = 80; let rainRivers = null, D8 = null;
+function steepest() {                   // each cell's steepest-descent neighbour on the bare ground (−1 where none is lower)
+  if (D8) return D8;
+  const n = MAP_W * MAP_H, d = new Int32Array(n).fill(-1);
+  for (let r = 0; r < MAP_H; r++) {
+    const dx = Math.max(0.05, ROW_COS[r]), dd = Math.hypot(dx, 1);
+    for (let c = 0; c < MAP_W; c++) {
+      const i = r * MAP_W + c, e = ELEV[i]; let best = 0, bj = -1;
+      for (let dr = -1; dr <= 1; dr++) {
+        const rr = r + dr; if (rr < 0 || rr >= MAP_H) continue;
+        for (let dc = -1; dc <= 1; dc++) {
+          if (!dr && !dc) continue;
+          const cc = c + dc < 0 ? MAP_W - 1 : c + dc >= MAP_W ? 0 : c + dc, j = rr * MAP_W + cc;
+          const sl = (e - ELEV[j]) / (dr && dc ? dd : dr ? 1 : dx);
+          if (sl > best) { best = sl; bj = j; }
+        }
+      }
+      d[i] = bj;
+    }
+  }
+  D8 = d; return d;
+}
+function buildRivers(R) {
+  const sea = seaLevelOf(state.waterPct); fillDepressions(sea);
+  const OC = oceanMask(sea), bf = state.basinFill / 100, n = MAP_W * MAP_H, Rm = 3389.5e3, a0 = (Math.PI * Rm / MAP_H) * (2 * Math.PI * Rm / MAP_W) / 1000;
+  const roL = new Float32Array(RN_N), roW = new Float32Array(RN_N);
+  for (let k = 0; k < RN_N; k++) { roL[k] = Math.max(0, R.Py[k] - R.Elay[k]); roW[k] = R.Py[k] - R.Ely[k]; }
+  // where each cell's water goes: lake cells into their basin's lake (a node of its own), the rest downhill (the fill's drainage
+  // tree on flats); a lake passes water on, out through its spill point, only if its yearly balance is positive
+  const d8 = steepest(), NB = NBAS, Q = new Float64Array(n + NB), down = new Int32Array(n + NB).fill(-1), water = new Uint8Array(n);
+  for (let r = 0; r < MAP_H; r++) { const i2 = RN_NY - 1 - (r >> 3), ar = a0 * ROW_COS[r];
+    for (let c = 0; c < MAP_W; c++) { const p = r * MAP_W + c, k = i2 * RN_NX + (c >> 3), e = ELEV[p], b = BID[p];
+      if (OC[p]) { water[p] = 1; continue; }
+      const lake = b >= 0 && state.fillLakes && e < lakeLevel(p, bf);
+      if (lake) { water[p] = 1; Q[p] = roW[k] * ar; down[p] = n + b; continue; }
+      Q[p] = roL[k] * ar;
+      down[p] = b >= 0 ? d8[p] : (d8[p] >= 0 ? d8[p] : PARENT[p]);
+    } }
+  for (let b = 0; b < NB; b++) { const en = BENTRY[b]; down[n + b] = en >= 0 ? PARENT[en] : -1; }
+  // accumulate downstream in topological order
+  const indeg = new Int32Array(n + NB); for (let v = 0; v < n + NB; v++) if (down[v] >= 0) indeg[down[v]]++;
+  const qu = new Int32Array(n + NB); let qh = 0, qt = 0;
+  for (let v = 0; v < n + NB; v++) if (!indeg[v]) qu[qt++] = v;
+  while (qh < qt) {
+    const v = qu[qh++];
+    if (v >= n && Q[v] < 0) Q[v] = 0;
+    const w = down[v]; if (w < 0) continue;
+    if (!water[v] || v >= n) Q[w] += Q[v]; else Q[w] += Q[v];
+    if (--indeg[w] === 0) qu[qt++] = w;
+  }
+  const NCL = 6, paths = Array.from({ length: NCL }, () => new Path2D()); let segs = 0;
+  const Qf = new Float32Array(n);
+  for (let p = 0; p < n; p++) {
+    Qf[p] = Q[p];
+    if (water[p] || Q[p] < RIVER_QMIN) continue;
+    const q = down[p]; if (q < 0 || q >= n) continue;
+    const r0 = (p / MAP_W) | 0, c0 = p - r0 * MAP_W, r1 = (q / MAP_W) | 0, c1 = q - r1 * MAP_W;
+    const x0 = (c0 + 720) % MAP_W + 0.5, x1 = (c1 + 720) % MAP_W + 0.5;
+    if (Math.abs(x1 - x0) > 1.5) continue;                    // across the 180° seam
+    const cl = Math.min(NCL - 1, Math.floor(2 * Math.log10(Q[p] / RIVER_QMIN)));
+    paths[cl].moveTo(x0, r0 + 0.5); paths[cl].lineTo(x1, r1 + 0.5); segs++;
+  }
+  return { key: R.key + '|' + state.fillLakes + '|' + waterKey(sea), Q: Qf, paths, segs };
+}
+function rainReady() {
+  rainRivers = null; scheduleMapBuild(); updateMapRead();
 }
 let VGRID = null, DGRID = null, mapContours = null, contourKey = '', contourHide = false, contourTimer = 0;
 // While the date or lapse-rate slider moves (or the year is playing) contours are hidden, then traced once things settle.
@@ -3618,30 +4082,36 @@ function buildMap() {
   const insOn = state.mapLayer === 'ins', tempOn = insOn && state.insShow === 'temp', op = state.insOp / 100;
   const prof = insOn ? insProfile(tempOn ? 'mean' : state.insMetric) : null;
   // while the water slider is being dragged, reuse the last lake fill and refresh it once the slider settles
-  const FL = !state.fillLakes ? null : (waterDragging && FILL && fillSea !== sea) ? FILL : fillDepressions(sea);
-  const bf = state.basinFill / 100;
+  const FL = !state.fillLakes ? null : (waterDragging && FILL && fillSea !== fkey(sea)) ? FILL : fillDepressions(sea);
+  const bf = state.basinFill / 100, OC = (waterDragging && OCN && ocnKey !== fkey(sea)) ? OCN : oceanMask(sea);
   const hRef = isFinite(sea) ? sea : 0, gK = state.lapse * H_EARTH / 1000;   // K per Mars metre
-  const swingOn = tempOn && state.insWhen === 'swing';
-  let TB = null, DF = null, SWP = null;
+  const swingOn = tempOn && state.insWhen === 'swing', kthOn = tempOn && (state.insWhen === 'warm10' || state.insWhen === 'cold10');
+  const rainOn = insOn && state.insShow === 'rain', RAIN = rainOn ? rainYear() : null;
+  let TB = null, DF = null, SWP = null, RF = null, rscale = 1;
   if (swingOn) { SWP = swingProfile(); TB = SWP.sw; DF = SWP.DF; }
+  else if (kthOn) { SWP = swingProfile(); const w = state.insWhen === 'warm10'; TB = w ? SWP.w10 : SWP.c10; DF = w ? SWP.DW10 : SWP.DC10; }
   else if (tempOn) { TB = tempProfile(); DF = dynMapField(); }
+  if (RAIN) { const yr = state.insWhen === 'year'; RF = yr ? RAIN.Py : rainAtDate(RAIN); rscale = yr ? RN_SECYR : MARS.solSec; }
   const n = MAP_W * MAP_H;
   if (!VGRID) { VGRID = new Float32Array(n); DGRID = new Float32Array(n); }
   const V = VGRID, D = DGRID;
   // pass 1: water depth (or −1 for land) and the insolation value on land, in map (−180…180) order
-  let landW = 0, landIns = 0, allW = 0, lakeW = 0, vmin = Infinity, vmax = -Infinity;
+  let landW = 0, landIns = 0, allW = 0, lakeW = 0, ocW = 0, vmin = Infinity, vmax = -Infinity;
   for (let rr = 0; rr < BH; rr++) {
     const r = rr * st, cw = ROW_COS[r], pr = insOn ? prof[r] : 0;
     allW += BW * cw;
     for (let cc = 0; cc < BW; cc++) {
       const c = cc * st, src = r * MAP_W + (c < 720 ? c + 720 : c - 720), h = ELEV[src], k = rr * BW + cc;
       let depth = -1;
-      if (h <= sea) depth = sea - h;
+      if (OC[src]) { depth = sea - h; ocW += cw; }
       else if (FL && FL[src] > h) { const W = lakeLevel(src, bf); if (h < W) { depth = W - h; lakeW += cw; } }
       D[k] = depth;
       if (depth >= 0) { V[k] = NaN; continue; }
       landW += cw;
-      if (insOn) {
+      if (rainOn) {
+        const v = RF ? Math.max(0, rnAt(RF, 90 - (r + 0.5) / MAP_PPD, ((c < 720 ? c + 720 : c - 720) + 0.5) / MAP_PPD) * rscale) : NaN;
+        V[k] = v; if (RF) { landIns += cw * v; if (v < vmin) vmin = v; if (v > vmax) vmax = v; }
+      } else if (insOn) {
         const tv = tempOn ? (DF ? dynAt(DF, r, c < 720 ? c + 720 : c - 720) : TB[r]) : 0;
         const v = swingOn ? tv : tempOn ? Math.max(0, tv - gK * (h - hRef)) : pr;    // height shifts the whole year alike, so not the swing
         V[k] = v; landIns += cw * v;
@@ -3652,6 +4122,7 @@ function buildMap() {
   let lo = 0, hi = 1;
   if (insOn) {
     if (swingOn) { lo = 0; hi = 80; }
+    else if (rainOn) { lo = 0; hi = 1; }
     else if (tempOn) { lo = T_FIXED[0]; hi = T_FIXED[1]; }
     else if (state.insDyn) {
       lo = isFinite(vmin) ? vmin : 0; hi = isFinite(vmax) ? vmax : 1;
@@ -3660,7 +4131,7 @@ function buildMap() {
     else { lo = 0; hi = insFixedMax(); }
   }
   // pass 2: colours
-  const span = hi - lo, LI = swingOn ? LUT_SWING : tempOn ? LUT_TEMP : LUT_INS;
+  const span = hi - lo, LI = swingOn ? LUT_SWING : rainOn ? LUT_RAIN : tempOn ? LUT_TEMP : LUT_INS, rstops = state.insWhen === 'year' ? RAIN_YR : RAIN_SOL;
   for (let rr = 0; rr < BH; rr++) {
     const r = rr * st;
     for (let cc = 0; cc < BW; cc++) {
@@ -3669,11 +4140,11 @@ function buildMap() {
         const q = Math.min(WMAX, (depth / 10) | 0) * 3;
         d[o] = wl[q]; d[o + 1] = wl[q + 1]; d[o + 2] = wl[q + 2];
       } else {
-        const q = Math.min(LMAX, ((ELEV[src] - sea) / 10) | 0) * 3;
+        const q = Math.min(LMAX, Math.max(0, ((ELEV[src] - sea) / 10) | 0)) * 3;
         let R = pal[q], G = pal[q + 1], B = pal[q + 2];
         if (shadeOn) { const f = SHADE[src] / 100; R *= f; G *= f; B *= f; }
-        if (insOn) {
-          const t = clamp((V[k] - lo) / span, 0, 1), qi = Math.round(t * 1000) * 3;
+        if (insOn && !(rainOn && !(V[k] >= 0))) {
+          const t = rainOn ? rainT(V[k], rstops) : clamp((V[k] - lo) / span, 0, 1), qi = Math.round(t * 1000) * 3;
           R = R * (1 - op) + LI[qi] * op; G = G * (1 - op) + LI[qi + 1] * op; B = B * (1 - op) + LI[qi + 2] * op;
         }
         d[o] = R; d[o + 1] = G; d[o + 2] = B;
@@ -3683,15 +4154,20 @@ function buildMap() {
   }
   (st > 1 ? mcompLo : mcomp).putImageData(img, 0, 0);
   mapSrc = st > 1 ? mapCompLo : mapComp; mapSrcStep = st;
-  mapStats = { sea, land: landW / allW, lake: lakeW / allW, insLand: landW > 0 ? landIns / landW : NaN, lo, hi, insOn };
-  mapParams = { sea, pal, wl, LMAX, WMAX, shadeOn, insOn, prof, op, lo, hi, FL, bf, tempOn, swingOn, SWP, TB, DF, hRef, gK };
+  mapStats = { sea, land: landW / allW, lake: lakeW / allW, ocean: ocW / allW, insLand: landW > 0 && (!rainOn || RF) ? landIns / landW : NaN, lo, hi, insOn };
+  mapParams = { sea, pal, wl, LMAX, WMAX, shadeOn, insOn, prof, op, lo, hi, FL, bf, OC, tempOn, swingOn, kthOn, rainOn, RAIN, RF, rscale, SWP, TB, DF, hRef, gK };
   // iso-insolation contours (daily mean only); skipped while the water slider is moving
-  if (insOn && (tempOn || state.insMetric === 'mean')) {
-    const ckey = [sea, state.fillLakes ? fillSea : 'dry', bf, MODE_KEY, state.mapOrbit, state.insWhen, state.insWhen === 'date' ? state.t.toFixed(2) : '', tempOn, tempOn ? state.lapse + '|' + state.heat + '|' + state.isoStep + '|' + state.p0 : ''].join('|');
+  if (insOn && !rainOn && (tempOn || state.insMetric === 'mean')) {
+    const ckey = [waterKey(sea), state.insShow, RF ? RAIN.key : '', MODE_KEY, state.mapOrbit, state.insWhen, state.insWhen === 'date' ? state.t.toFixed(2) : '', tempOn, tempOn ? state.lapse + '|' + state.heat + '|' + state.isoStep + '|' + state.p0 : ''].join('|');
     if (ckey === contourKey && mapContours) { /* unchanged: reuse */ }
     else if (contourHide) { mapContours = null; contourKey = ''; }
     else if (waterDragging && mapContours) { /* keep the previous lines until the water slider settles */ }
     else if (st > 1) { /* half-resolution preview: keep the current lines */ }
+    else if (rainOn) {
+      const base = state.insWhen === 'year' ? 250 : 0.5, L2 = new Float32Array(V.length);
+      for (let q = 0; q < V.length; q++) L2[q] = V[q] === V[q] ? Math.log2(Math.max(V[q], base / 16) / base) : NaN;
+      mapContours = computeContours(L2, 0, 1, -0.01, v => Math.abs(v - 2) < 0.01); mapContours.rainBase = base; contourKey = ckey;
+    }
     else { mapContours = swingOn ? computeContours(V, 0, state.isoStep, state.isoStep - 0.01, () => false) : tempOn ? computeContours(V, 273.15, state.isoStep, 273.15 - Math.floor(60 / state.isoStep + 1e-9) * state.isoStep - 0.01, v => Math.abs(v - 273.15) < 0.01) : computeContours(V, 0, 100, 100, v => v === 100 || v === 500); contourKey = ckey; }
   } else { mapContours = null; contourKey = ''; }
   mapBuildId++;
@@ -3831,13 +4307,27 @@ function drawMap() {
         if (x < xl + 30 || x > xr - 30 || y < yt + 10 || y > yb - 10 || (x > MW - 60 && y < 120)) continue;
         if (placed.some(p => (p.v === L.v ? Math.hypot(p.x - x, p.y - y) < 240 : Math.hypot(p.x - x, p.y - y) < 64))) continue;
         placed.push({ v: L.v, x, y });
-        const t = mapParams && mapParams.swingOn ? fmtDT(L.v) : mapParams && mapParams.tempOn ? fmtTemp(L.v) : String(L.v);
+        const t = mapParams && mapParams.rainOn ? fmtRain(mapContours.rainBase * Math.pow(2, L.v)) : mapParams && mapParams.swingOn ? fmtDT(L.v) : mapParams && mapParams.tempOn ? fmtTemp(L.v) : String(L.v);
         g.strokeText(t, x, y - 7); g.fillText(t, x, y - 7);
         if (placed.length >= 30) break;
       }
       contourLayerKey = lk;
     }
     g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.drawImage(contourLayer, 0, 0); g.restore();
+  }
+  // rivers, exaggerated in width
+  if (state.mapRivers) {
+    const R = rainYear();
+    if (R) {
+      const sea = seaLevelOf(state.waterPct), rk = R.key + '|' + state.fillLakes + '|' + waterKey(sea);
+      if (!rainRivers || rainRivers.key !== rk) rainRivers = buildRivers(R);
+      const k = s / MAP_PPD, ox = mapX(-180), oy = mapY(90), W = [0.9, 1.4, 2.0, 2.7, 3.5, 4.4];
+      g.save(); g.beginPath(); g.rect(xl, yt, xr - xl, yb - yt); g.clip();
+      g.setTransform(MDPR * k, 0, 0, MDPR * k, MDPR * ox, MDPR * oy); g.lineCap = 'round'; g.lineJoin = 'round';
+      for (let c = 0; c < W.length; c++) { g.strokeStyle = 'rgba(14,52,104,0.55)'; g.lineWidth = (W[c] + 1.2) / k; g.stroke(rainRivers.paths[c]); }
+      for (let c = 0; c < W.length; c++) { g.strokeStyle = '#4FA3F0'; g.lineWidth = W[c] / k; g.stroke(rainRivers.paths[c]); }
+      g.restore();
+    }
   }
   // observer latitude
   {
@@ -3887,8 +4377,10 @@ function renderMapLegend() {
   add('Height above sea level, ' + hUnitName(), 'linear-gradient(90deg,' + legStops.map((v, i) => colorAt(v) + ' ' + (100 * i / (legStops.length - 1)).toFixed(1) + '%').join(',') + ')', legStops.map(km));
   if (mapStats.insOn) {
     const { lo, hi } = mapStats, qs = [lo, lo + (hi - lo) / 4, (lo + hi) / 2, lo + 3 * (hi - lo) / 4, hi];
-    if (mapParams && mapParams.swingOn) add('Seasonal swing: warmest minus coldest sol', swingGrad(), [0, 20, 40, 60, 80].map(fmtDT));
-    else if (mapParams && mapParams.tempOn) add('Insolation-based temperature', tempGrad(), [-60, -40, -20, 0, 20, 40, 60].map(v => fmtTemp(v + 273.15)));
+    if (mapParams && mapParams.rainOn) { if (mapParams.RF) { const st = state.insWhen === 'year' ? RAIN_YR : RAIN_SOL;
+      add(state.insWhen === 'year' ? 'Rain over land, per Earth year' : 'Rain over land on this date, per sol', 'linear-gradient(90deg,' + RAIN_COL.map((c, i) => c + ' ' + (100 * i / (RAIN_COL.length - 1)).toFixed(1) + '%').join(',') + ')', [st[0], st[3], st[5], st[7], st[9]].map(fmtRain)); } }
+    else if (mapParams && mapParams.swingOn) add('Seasonal swing: warmest minus coldest sol', swingGrad(), [0, 20, 40, 60, 80].map(fmtDT));
+    else if (mapParams && mapParams.tempOn) add(state.insWhen === 'warm10' ? 'Insolation-based temperature, 10th warmest sol' : state.insWhen === 'cold10' ? 'Insolation-based temperature, 10th coldest sol' : 'Insolation-based temperature', tempGrad(), [-60, -40, -20, 0, 20, 40, 60].map(v => fmtTemp(v + 273.15)));
     else add((state.insMetric === 'mean' ? 'Daily-mean' : 'Peak') + ' insolation, W/m²' + (state.insDyn ? '' : ' (fixed scale)'), insGrad(), qs.map(fmtInt));
   }
 }
@@ -3905,27 +4397,40 @@ function updateMapRead() {
     const i = r * MAP_W + c, h = ELEV[i], FL = mapParams && mapParams.FL;
     line(b(latLabel(Math.round(lat * 100) / 100) + ', ' + lonLabel(Math.round(lon * 100) / 100)));
     line('Elevation ', b(fmtH(h)), dim(' (MOLA datum)'));
-    if (h <= sea) line('Ocean, ', b(fmtH(sea - h)), ' deep');
+    const OCh = mapParams && mapParams.OC, isOcean = OCh ? OCh[i] === 1 : h <= sea;
+    const closedSea = !isOcean && FL && BID && BID[i] >= 0 && state.closedSeas === 'own' && (BID[i] === HELLAS_B || BID[i] === ARGYRE_B) && FL[i] > h && h < lakeLevel(i, mapParams.bf);
+    if (isOcean) line('Ocean, ', b(fmtH(sea - h)), ' deep');
+    else if (closedSea) { const W = lakeLevel(i, mapParams.bf); line((BID[i] === HELLAS_B ? 'Hellas' : 'Argyre') + ' sea, ', b(fmtH(W - h)), ' deep, surface ', b(fmtH(Math.abs(W - sea))), W < sea ? ' below sea level' : ' above sea level'); }
     else if (FL && FL[i] > h && h < lakeLevel(i, mapParams.bf)) { const W = lakeLevel(i, mapParams.bf); line('Lake, ', b(fmtH(W - h)), ' deep, surface ', b(fmtH(W - (isFinite(sea) ? sea : 0))), isFinite(sea) ? ' above sea level' : ' above the datum'); }
     else line(isFinite(sea) ? 'Land, ' : 'Land', isFinite(sea) ? b(fmtH(h - sea)) : '', isFinite(sea) ? ' above sea level' : '');
+    const isLand0 = !isOcean && !(FL && FL[i] > h && h < lakeLevel(i, mapParams.bf));
     if (mapStats.insOn) {
       const P = mapParams, v = P.prof[r];
-      if (!P.swingOn) line(state.insMetric === 'mean' || P.tempOn ? 'Daily-mean insolation ' : 'Peak insolation ', b(fmtInt(v) + ' W/m²'));
-      const isLand = !(h <= sea) && !(FL && FL[i] > h && h < lakeLevel(i, P.bf));
+      if (P.rainOn) {
+        if (P.RF && isLand0) { const lon0 = mod(lon, 360), pr = rnAt(P.RF, lat, lon0) * P.rscale;
+          if (state.insWhen === 'year') { const pe = rnAt(P.RAIN.Epy, lat, lon0) * RN_SECYR; line('Rain ', b(fmtRain(pr) + ' per Earth year'), dim(pe > 1 ? ' · ' + (pr / pe).toFixed(2) + ' of potential evaporation' : '')); }
+          else line('Rain on this date ', b(fmtRain(pr) + ' per sol'), dim(' (' + Math.round(pr / MARS.solSec * RN_SECYR) + ' mm a year at that rate)')); }
+      } else if (!P.swingOn) line(state.insMetric === 'mean' || P.tempOn ? 'Daily-mean insolation ' : 'Peak insolation ', b(fmtInt(v) + ' W/m²'));
+      const isLand = isLand0;
       if (P.swingOn && isLand) {
         const S = P.SWP, dT = P.gK * (h - P.hRef), mn = (S.DMN ? dynAt(S.DMN, r, c) : S.mn[r]) - dT, mx = (S.DMX ? dynAt(S.DMX, r, c) : S.mx[r]) - dT;
         line('Seasonal swing ', b(fmtDT(mx - mn)), dim(' · coldest sol ' + fmtTemp(Math.max(0, mn)) + ', warmest ' + fmtTemp(Math.max(0, mx))));
       } else if (P.tempOn && isLand) {
         const dT = P.gK * (h - P.hRef), T = Math.max(0, (P.DF ? dynAt(P.DF, r, c) : P.TB[r]) - dT);
-        line('Insolation-based temp. ', b(fmtTemp(T)), dim(' (' + (dT >= 0 ? '−' : '+') + Math.abs(dT).toFixed(1) + ' K from height)'));
+        line(state.insWhen === 'warm10' ? '10th warmest sol ' : state.insWhen === 'cold10' ? '10th coldest sol ' : 'Insolation-based temp. ', b(fmtTemp(T)), dim(' (' + (dT >= 0 ? '−' : '+') + Math.abs(dT).toFixed(1) + ' K from height)'));
       }
     }
+    if (state.mapRivers && rainRivers && rainRivers.Q && isLand0) { const q = rainRivers.Q[i]; if (q >= RIVER_QMIN) line('River, ', b(fmtInt(q) + ' m³/s'), dim(' yearly mean flow')); }
   } else line(dim('Hover over the map to read values'));
+  if ((state.mapLayer === 'ins' && state.insShow === 'rain') || state.mapRivers) { const R = rainCache.get(rainKey());
+    if (!R && rainJob) line(dim('Computing rain: ' + rainJob.done + ' of ' + RN_NS + ' slices of the year…')); }
   const lakePct = state.fillLakes && isFinite(mapStats.lake) ? mapStats.lake * 100 : 0;
-  line(dim('Ocean ' + state.waterPct + '%' + (state.fillLakes ? ' · lakes ' + lakePct.toFixed(1) + '%' : '') + ' · land ' + Math.max(0, 100 - state.waterPct - lakePct).toFixed(state.fillLakes ? 1 : 0) + '% of the surface'));
+  { const oc = isFinite(mapStats.ocean) ? mapStats.ocean * 100 : state.waterPct;
+    line(dim('Ocean ' + oc.toFixed(1) + '%' + (state.fillLakes ? ' · lakes and closed seas ' + lakePct.toFixed(1) + '%' : '') + ' · land ' + Math.max(0, 100 - oc - lakePct).toFixed(1) + '% of the surface')); }
   if (state.hUnit === 'earth') line(dim('Heights in Earth-equivalent km: Mars km × 0.38'));
-  if (mapStats.insOn && isFinite(mapStats.insLand)) line(dim(mapParams && mapParams.swingOn ? 'Average swing over land: ' : 'Average over land: '), b(mapParams && mapParams.swingOn ? fmtDT(mapStats.insLand) : mapParams && mapParams.tempOn ? fmtTemp(mapStats.insLand) : fmtInt(mapStats.insLand) + ' W/m²'));
+  if (mapStats.insOn && isFinite(mapStats.insLand)) line(dim(mapParams && mapParams.swingOn ? 'Average swing over land: ' : 'Average over land: '), b(mapParams && mapParams.rainOn ? fmtRain(mapStats.insLand) + (state.insWhen === 'year' ? ' per Earth year' : ' per sol') : mapParams && mapParams.swingOn ? fmtDT(mapStats.insLand) : mapParams && mapParams.tempOn ? fmtTemp(mapStats.insLand) : fmtInt(mapStats.insLand) + ' W/m²'));
   if (mapStats.insOn && mapParams && mapParams.tempOn) line(dim('Insolation-based: Earth’s climate response to this sunlight, not a forecast'));
+  if (mapStats.insOn && mapParams && mapParams.rainOn) line(dim('Rain from a simple moisture-budget model on a 2° grid, driven by the dynamic temperatures; a guide to the pattern, not a forecast'));
 }
 function updateMapControls() {
   const pr = (id, on) => $(id).setAttribute('aria-pressed', String(on));
@@ -3935,24 +4440,30 @@ function updateMapControls() {
   $('fillLakes').checked = state.fillLakes;
   $('basinRow').hidden = !state.fillLakes; $('basinFill').value = state.basinFill;
   setText('basinOut', state.basinFill === 100 ? '100% · full to the brim' : state.basinFill === 0 ? '0% · dry' : state.basinFill + '% of the depth');
+  pr('csOwn', state.closedSeas === 'own'); pr('csSea', state.closedSeas === 'sea');
+  $('seasRows').hidden = state.closedSeas !== 'own' || !state.fillLakes; $('hellasLvl').value = state.hellasLvl; $('argyreLvl').value = state.argyreLvl;
+  { const sl = mapReady ? seaLevelOf(state.waterPct) : NaN, rel = v => isFinite(sl) ? ' · ' + fmtH(Math.abs(v - sl)) + (v < sl ? ' below' : ' above') + ' sea level' : '';
+    setText('hellasOut', fmtH(state.hellasLvl) + rel(state.hellasLvl)); setText('argyreOut', fmtH(state.argyreLvl) + rel(state.argyreLvl)); }
   pr('iwDate', state.insWhen === 'date'); pr('iwYear', state.insWhen === 'year'); pr('iwSwing', state.insWhen === 'swing'); $('iwSwing').hidden = state.insShow !== 'temp';
+  pr('iwW10', state.insWhen === 'warm10'); pr('iwC10', state.insWhen === 'cold10'); $('iwW10').hidden = $('iwC10').hidden = state.insShow !== 'temp';
+  pr('isRain', state.insShow === 'rain'); $('mapRivers').checked = state.mapRivers;
   pr('mmMean', state.insMetric === 'mean'); pr('mmNoon', state.insMetric === 'noon');
   pr('moReal', state.mapOrbit === 'real'); pr('moCirc', state.mapOrbit === 'circ');
-  const tempOn = state.insShow === 'temp';
-  pr('isWm', !tempOn); pr('isTemp', tempOn);
+  const tempOn = state.insShow === 'temp', rainOn = state.insShow === 'rain';
+  pr('isWm', !tempOn && !rainOn); pr('isTemp', tempOn);
   pr('tuC', state.tUnit === 'C'); pr('tuF', state.tUnit === 'F'); pr('tuK', state.tUnit === 'K');
-  $('tUnitRow').hidden = !tempOn; $('measRow').hidden = tempOn;
-  $('lapseRow').hidden = !tempOn; $('lapse').value = state.lapse;
+  $('tUnitRow').hidden = !tempOn; $('measRow').hidden = tempOn || rainOn;
+  $('lapseRow').hidden = !tempOn && !rainOn; $('lapse').value = state.lapse;
   $('isoRow').hidden = !tempOn; $('isoStep').value = state.isoStep; setText('isoOut', isoText());
   setText('isoHint', state.insWhen === 'swing' ? 'Lines of equal seasonal swing at this spacing.' : 'Counted up and down from 0 °C; the 0 °C line is drawn thick.');
   $('heatRow').hidden = !tempOn || state.insWhen === 'year';
-  $('insDyn').closest('label').hidden = tempOn;
+  $('insDyn').closest('label').hidden = tempOn || rainOn;
   pr('hsCont', state.heat === 'cont'); pr('hsMixed', state.heat === 'mixed'); pr('hsMari', state.heat === 'mari'); pr('hsDyn', state.heat === 'dyn');
   if (state.heat === 'dyn') setText('heatHint', 'Land and water from the map on a 4° × 6° grid: the sea, Hellas, Argyre and the lakes damp the seasons nearby and downwind (Earth-like trade winds and westerlies); high ground, with less air above it, swings more. Fitted to Earth: with Earth’s land and sea it gets the January–July range of 23 mid-latitude cities within about 4.3 K.');
   else { const he = HEAT_EARTH[state.heat];
   setText('heatHint', 'Land is ' + Math.round(HEAT_F[state.heat] * 100) + '% of each latitude band. The same model on Earth gives '
     + fmtTemp(he[0] + 273.15) + ' in January and ' + fmtTemp(he[1] + 273.15) + ' in July on land at 45°N.'); }
-  $('p0Row').hidden = !tempOn; $('p0').value = state.p0;
+  $('p0Row').hidden = !tempOn && !rainOn; $('p0').value = state.p0;
   setText('p0Out', state.p0.toFixed(2) + ' atm');
   setText('p0Hint', 'Under Mars gravity that is ' + (state.p0 / H_EARTH).toFixed(1) + '× Earth’s air per m² (0.38 atm is Earth’s). More air holds more heat, so land swings less; heat transport grows with pressure. Composition is assumed tuned to Earth-like greenhouse warming.');
   setText('lapseOut', state.lapse.toFixed(1) + ' K per Earth-eq. km');
@@ -3967,6 +4478,7 @@ function updateMapControls() {
   $('mapGrid').checked = state.mapGrid; $('mapSites').checked = state.mapSites;
   const sea = mapReady ? seaLevelOf(state.waterPct) : NaN;
   setText('waterOut', state.waterPct + '%' + (mapReady ? (isFinite(sea) ? ' · sea level ' + fmtH(sea) : state.waterPct >= 100 ? ' · all water' : ' · no ocean') : ''));
+  $('water').title = 'Share of the surface below sea level' + (state.closedSeas === 'own' ? '; areas below it that are not joined to the ocean (Hellas, Argyre) keep their own surface' : '');
   setText('insOpOut', state.insOp + '%');
   setText('gridLatOut', state.gridLat + '°'); setText('gridLonOut', state.gridLon + '°');
   updateMapDateOut();
@@ -3991,6 +4503,12 @@ $('huKm').addEventListener('click', () => { state.hUnit = 'km'; updateMapControl
 $('huEarth').addEventListener('click', () => { state.hUnit = 'earth'; updateMapControls(); renderMapLegend(); updateMapRead(); save(); });
 $('fillLakes').addEventListener('change', e => { state.fillLakes = e.target.checked; mapSettingsChanged(); });
 $('basinFill').addEventListener('input', e => { state.basinFill = +e.target.value; liteDrag(); holdContours(); mapSettingsChanged(); });
+$('csOwn').addEventListener('click', mapSet({ closedSeas: 'own' }));
+$('csSea').addEventListener('click', mapSet({ closedSeas: 'sea' }));
+for (const id of ['hellasLvl', 'argyreLvl']) {
+  $(id).addEventListener('input', e => { state[id] = Math.round(+e.target.value / 10) * 10; liteDrag(); holdContours(); mapSettingsChanged(); });
+  $(id).addEventListener('change', endLite);
+}
 $('iwDate').addEventListener('click', mapSet({ insWhen: 'date' }));
 $('iwYear').addEventListener('click', mapSet({ insWhen: 'year' }));
 $('iwSwing').addEventListener('click', mapSet({ insWhen: 'swing' }));
@@ -3998,8 +4516,12 @@ $('mmMean').addEventListener('click', mapSet({ insMetric: 'mean' }));
 $('mmNoon').addEventListener('click', mapSet({ insMetric: 'noon' }));
 $('moReal').addEventListener('click', mapSet({ mapOrbit: 'real' }));
 $('moCirc').addEventListener('click', mapSet({ mapOrbit: 'circ' }));
-$('isWm').addEventListener('click', () => { state.insShow = 'wm'; if (state.insWhen === 'swing') state.insWhen = 'date'; mapSettingsChanged(); });
+$('isWm').addEventListener('click', () => { state.insShow = 'wm'; if (!['date', 'year'].includes(state.insWhen)) state.insWhen = 'date'; mapSettingsChanged(); });
 $('isTemp').addEventListener('click', mapSet({ insShow: 'temp' }));
+$('isRain').addEventListener('click', () => { state.insShow = 'rain'; if (state.insWhen !== 'date' && state.insWhen !== 'year') state.insWhen = 'year'; mapSettingsChanged(); });
+$('iwW10').addEventListener('click', mapSet({ insWhen: 'warm10' }));
+$('iwC10').addEventListener('click', mapSet({ insWhen: 'cold10' }));
+$('mapRivers').addEventListener('change', e => { state.mapRivers = e.target.checked; updateMapRead(); scheduleMapDraw(); save(); });
 $('hsCont').addEventListener('click', mapSet({ heat: 'cont' }));
 $('hsMixed').addEventListener('click', mapSet({ heat: 'mixed' }));
 $('hsMari').addEventListener('click', mapSet({ heat: 'mari' }));
@@ -4120,8 +4642,8 @@ const latLandCache = { key: '', v: null };
 function scheduleLat() { if (!latQueued) { latQueued = true; requestAnimationFrame(() => { latQueued = false; renderLat(); }); } }
 function latLand() {
   const sea = seaLevelOf(state.waterPct), hRef = isFinite(sea) ? sea : 0, bf = state.basinFill / 100;
-  const FL = state.fillLakes ? fillDepressions(sea) : null, cut = state.ltCut * 1000 / H_EARTH;
-  const key = [sea, state.fillLakes ? fillSea : 'dry', bf, state.ltCut].join('|');
+  const FL = state.fillLakes ? fillDepressions(sea) : null, cut = state.ltCut * 1000 / H_EARTH, OC = oceanMask(sea);
+  const key = [waterKey(sea), state.ltCut].join('|');
   if (latLandCache.key === key) return latLandCache.v;
   const nb = EBM_NB, per = MAP_H / nb, n = new Float64Array(nb), sh = new Float64Array(nb), tot = new Float64Array(nb), oc = new Float64Array(nb);
   // height histogram of each band's counted land (10 m bins from LT_OFF below sea level up to the cut-off), for the sols below 0 °C / above 30 °C
@@ -4130,7 +4652,7 @@ function latLand() {
     const b = nb - 1 - Math.floor(r / per);
     for (let c = 0; c < MAP_W; c++) {
       const i = r * MAP_W + c, h = ELEV[i]; tot[b]++;
-      if (h <= sea) { oc[b]++; continue; }
+      if (OC[i]) { oc[b]++; continue; }
       if (FL && FL[i] > h && h < lakeLevel(i, bf)) continue;
       const dh = h - hRef; if (dh > cut) continue;
       n[b]++; sh[b] += dh; hist[b * (nbin + 1) + 1 + Math.min(nbin - 1, Math.max(0, Math.floor((dh + off) / LT_BW)))]++;
@@ -4148,8 +4670,8 @@ function latLand() {
 const latDynCache = { key: '', v: null };
 function latLandDyn() {                // per 2° band and 6° cell of longitude: counted land and its height histogram (100 m bins)
   const sea = seaLevelOf(state.waterPct), hRef = isFinite(sea) ? sea : 0, bf = state.basinFill / 100;
-  const FL = state.fillLakes ? fillDepressions(sea) : null, cut = state.ltCut * 1000 / H_EARTH;
-  const key = [sea, state.fillLakes ? fillSea : 'dry', bf, state.ltCut].join('|');
+  const FL = state.fillLakes ? fillDepressions(sea) : null, cut = state.ltCut * 1000 / H_EARTH, OC = oceanMask(sea);
+  const key = [waterKey(sea), state.ltCut].join('|');
   if (latDynCache.key === key) return latDynCache.v;
   const nb = EBM_NB, NO = DYN_NO, per = MAP_H / nb, BW2 = 100, off = isFinite(sea) ? 0 : 9000, nbin = Math.ceil((cut + off) / BW2) + 1;
   const cnt = new Float64Array(nb * NO), C = new Float32Array(nb * NO * (nbin + 1));
@@ -4157,7 +4679,7 @@ function latLandDyn() {                // per 2° band and 6° cell of longitude
     const b = nb - 1 - Math.floor(r / per);
     for (let c = 0; c < MAP_W; c++) {
       const i = r * MAP_W + c, h = ELEV[i];
-      if (h <= sea) continue;
+      if (OC[i]) continue;
       if (FL && FL[i] > h && h < lakeLevel(i, bf)) continue;
       const dh = h - hRef; if (dh > cut) continue;
       const bj = b * NO + Math.min(NO - 1, Math.floor(c * NO / MAP_W));
@@ -4340,7 +4862,7 @@ const RESET_KEYS = {
   view: ['view', 'tod', 'obsLat', 'camOff'],
   lines: ['lineMode', 'specA', 'specB', 'specStep', 'specOp', 'lats', 'flip'],
   dur: ['dynDur'], ins: ['dynIns', 'metric', 'earthRef'], rat: ['dynRat', 'ratioMetric', 'earthRef'],
-  map: ['waterPct', 'fillLakes', 'basinFill', 'hUnit', 'mapLayer', 'palette', 'hillshade', 'insWhen', 'insMetric', 'mapOrbit', 'insShow', 'tUnit', 'heat', 'lapse', 'p0', 'isoStep', 'insOp', 'insDyn', 'mapGrid', 'gridLat', 'gridLon', 'mapSites'],
+  map: ['waterPct', 'fillLakes', 'mapRivers', 'basinFill', 'closedSeas', 'hellasLvl', 'argyreLvl', 'hUnit', 'mapLayer', 'palette', 'hillshade', 'insWhen', 'insMetric', 'mapOrbit', 'insShow', 'tUnit', 'heat', 'lapse', 'p0', 'isoStep', 'insOp', 'insDyn', 'mapGrid', 'gridLat', 'gridLon', 'mapSites'],
   lat: ['ltCut', 'ltRef'],
 };
 const copyDefaults = keys => { for (const k of keys) state[k] = JSON.parse(JSON.stringify(DEFAULTS[k])); };
