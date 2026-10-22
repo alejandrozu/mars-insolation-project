@@ -995,8 +995,17 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
         <input type="range" id="water" min="0" max="100" step="1" value="30" aria-label="Share of the surface below sea level, percent">
         <label class="switch sm" title="Fill every crater and closed basin with water, as rain would"><input type="checkbox" id="fillLakes" checked><span class="track"></span>Fill craters and closed basins with water</label>
         <div id="basinRow">
-          <div class="spec-row"><span class="flabel">Basin fill</span><output id="basinOut"></output></div>
-          <input type="range" id="basinFill" min="0" max="100" step="1" value="67" aria-label="How full each crater and basin is, from its floor (0%) to its brim (100%)">
+          <div class="fgrp"><span class="flabel" id="lmLbl">Lakes</span>
+            <div class="seg small" role="group" aria-labelledby="lmLbl">
+              <button type="button" id="lmLocal" aria-pressed="true" title="Each crater and basin holds the lake its own rain and runoff can keep">Water balance</button>
+              <button type="button" id="lmUni" aria-pressed="false" title="Every crater and basin filled to the same share of its depth">Same fill everywhere</button>
+            </div>
+          </div>
+          <p class="mhint" id="lakeHint"></p>
+          <div id="uniRow">
+            <div class="spec-row"><span class="flabel">Basin fill</span><output id="basinOut"></output></div>
+            <input type="range" id="basinFill" min="0" max="100" step="1" value="67" aria-label="How full each crater and basin is, from its floor (0%) to its brim (100%)">
+          </div>
         </div>
         <div class="fgrp"><span class="flabel" id="csLbl" title="Hellas and Argyre are not connected to the northern ocean, so their surfaces need not sit at sea level: each settles where rain and runoff into it balance its evaporation">Hellas, Argyre</span>
           <div class="seg small" role="group" aria-labelledby="csLbl">
@@ -1009,7 +1018,7 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
           <input type="range" id="hellasLvl" min="-8060" max="1260" step="10" value="-6470" aria-label="Surface of the Hellas sea, metres on the MOLA datum">
           <div class="spec-row"><span class="flabel">Argyre surface</span><output id="argyreOut"></output></div>
           <input type="range" id="argyreLvl" min="-4970" max="140" step="10" value="-3230" aria-label="Surface of the Argyre sea, metres on the MOLA datum">
-          <p class="mhint" id="seasHint">Defaults from a water-balance run of the default sky: rain and runoff into each basin against evaporation from its surface.</p>
+          <p class="mhint" id="seasHint">Set by hand. With the lakes on Water balance, Hellas and Argyre settle where rain and runoff into each balance evaporation from its surface.</p>
         </div>
         <div class="fgrp"><span class="flabel">Heights</span>
           <div class="seg small" role="group" aria-label="Height units">
@@ -1180,16 +1189,16 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
         <li>Daylight runs from the moment the Sun's centre rises above a flat horizon to the moment it sets. Refraction in the thin atmosphere and local terrain are ignored.</li>
         <li>Insolation is measured at the top of the atmosphere on level ground: 1361 W/m² at 1 AU, scaled by distance squared (713 W/m² at perihelion, 490 W/m² at aphelion). Dust can remove a large share of this before it reaches the surface.</li>
         <li>The circular orbit (shown as a reference or on its own, per chart) keeps the same tilt and the same starting solstice, fixes the distance at 1.5237 AU and advances L<sub>s</sub> at a constant rate, so all four seasons last 167.1 sols.</li>
-        <li>Two and three suns: mirror arrays at the Sun–Mars L4 and L5 points. They sit at Mars's distance from the Sun, so seen from Mars they shine from the orbital plane 60° west (L4) or east (L5) of the Sun, and their light is a fixed multiple of sunlight at Mars's current distance. Daylight counts any sun above the horizon; the peak is the brightest moment of the sol. 1.33× brings the average flux to about Earth's. Three suns sets each array's strength and shaping separately. L5, the second sun, keeps the lens profile and moderates the middle latitudes. L4, the supplemental sun, can instead light only the outer latitudes: poleward of a north edge and a south edge that never come closer to the equator than 45°, rising from zero at the edge over a soft ramp (a smoothstep a few degrees wide) and leaning toward or away from the pole. The two edges, the share of its light sent north and its strength (a share of the set value) are given at Ls 0°, 90°, 180° and 270° and joined by a smooth periodic curve (Catmull-Rom). Inside each cap the light follows what the array would give unshaped, and no latitude gets more than 10× that; what one cap cannot take goes to the other. The populated middle band then sees only the Sun and L5, so nights remain. The default (L5 1.17× Sun; L4 up to 0.51×, 0.32× on average) was chosen in the dynamic setting with the wet-climate defaults (1.05 atm, 5 K per Earth-equivalent km, Hellas and Argyre as closed seas, craters 67% full) to keep land between 45°S and 45°N inside 0–30 °C, the ocean north of the equator between 20 and 30 °C (aiming a degree inside that range), and land poleward of 45°, north and south, inside −20 to 30 °C on as many sols as possible, with no light left undelivered. Counterirradiance (two suns): the array shapes its beam like a concave lens, with intensity 1 − k·cos 2a across the disc it lights, where a is the angle from the disc's east–west centre line, i.e. the latitude as seen from the array. On the ground that centre line is a great circle through the point under the array, tilted with its declination, so a equals the real latitude when the array is over the equator. The profile is divided by its average over the disc, 1 − k/2, so the array still delivers 1× or 1.33× on average; k = 1 leaves the centre line dark and makes the north and south edges 4× the average. Phase p moves the dimmest line to a = p, 1 − k·cos 2(a − p), held at its maximum once |a − p| passes 90°, again divided by its disc average; the phase can be fixed or follow the seasons (p × sin Ls), putting the dimmest line in the summer hemisphere.</li>
+        <li>Two and three suns: mirror arrays at the Sun–Mars L4 and L5 points. They sit at Mars's distance from the Sun, so seen from Mars they shine from the orbital plane 60° west (L4) or east (L5) of the Sun, and their light is a fixed multiple of sunlight at Mars's current distance. Daylight counts any sun above the horizon; the peak is the brightest moment of the sol. 1.33× brings the average flux to about Earth's. Three suns sets each array's strength and shaping separately. L5, the second sun, keeps the lens profile and moderates the middle latitudes. L4, the supplemental sun, can instead light only the outer latitudes: poleward of a north edge and a south edge that never come closer to the equator than 45°, rising from zero at the edge over a soft ramp (a smoothstep a few degrees wide) and leaning toward or away from the pole. The two edges, the share of its light sent north and its strength (a share of the set value) are given at Ls 0°, 90°, 180° and 270° and joined by a smooth periodic curve (Catmull-Rom). Inside each cap the light follows what the array would give unshaped, and no latitude gets more than 10× that; what one cap cannot take goes to the other. The populated middle band then sees only the Sun and L5, so nights remain. The default (L5 1.17× Sun; L4 up to 0.51×, 0.32× on average) was chosen in the dynamic setting with the wet-climate defaults (1.05 atm, 5 K per Earth-equivalent km, Hellas, Argyre and the craters holding the lakes their own water balance gives) to keep land between 45°S and 45°N inside 0–30 °C, the ocean north of the equator between 20 and 30 °C (aiming a degree inside that range), and land poleward of 45°, north and south, inside −20 to 30 °C on as many sols as possible, with no light left undelivered. Counterirradiance (two suns): the array shapes its beam like a concave lens, with intensity 1 − k·cos 2a across the disc it lights, where a is the angle from the disc's east–west centre line, i.e. the latitude as seen from the array. On the ground that centre line is a great circle through the point under the array, tilted with its declination, so a equals the real latitude when the array is over the equator. The profile is divided by its average over the disc, 1 − k/2, so the array still delivers 1× or 1.33× on average; k = 1 leaves the centre line dark and makes the north and south edges 4× the average. Phase p moves the dimmest line to a = p, 1 − k·cos 2(a − p), held at its maximum once |a − p| passes 90°, again divided by its disc average; the phase can be fixed or follow the seasons (p × sin Ls), putting the dimmest line in the summer hemisphere.</li>
         <li>Earth comparison lines are typical Earth values for the same measure: daily mean 100 and 500 W/m² for mid-latitude winter and summer, 250 and 450 for the tropics; noon peak 350 and 1300 for mid-latitude winter and summer, 700 for tropical winter and 1000 at the equator.</li>
         <li>Seasonal ratio divides each sol’s insolation by the dimmest value of the year at the same latitude, for the chosen measure. Earth references: about 5× (daily mean) and 4× (noon peak) at mid-latitudes, about 2× in the tropics.</li>
-        <li>Map: elevation from the Mars Global Surveyor MOLA gridded topography (MEGDR, 4 pixels per degree, about 15 km at the equator; Smith et al. 2003, NASA PDS Geosciences Node), stored to the nearest 5 m relative to the MOLA areoid. The water level is the share of the surface area that lies below sea level; at 30% the sea stands 2.68 km below the MOLA datum. Only the water joined to the northern ocean stands at that level (27.4% of the surface). Hellas and Argyre lie below it but are enclosed, so by default they are closed seas with their own surfaces, like the Caspian: in a water-balance run of the default sky, where rain and runoff into each basin balance evaporation from its surface (rain from the moisture model below), Hellas settles about 3.8 km below sea level, covering 0.7% of the surface instead of 2.0%, and Argyre about 0.5 km below; neither comes near spilling. With "Fill craters and closed basins" on, every other closed depression holds a lake with a flat surface, set by the basin fill slider as a fraction of the way from its floor to its spill point; the default, 67%, matches both the total lake area and the volume of that water balance, in which about a third of the craters (by area) end up full and spilling, most of them in the north. The default sky was optimised on these lakes and the water balance rerun with it, because each depends on the other: a dimmer sky brings less rain, smaller lakes and so bigger seasonal swings. At these defaults the ocean holds a global layer of 344 m of water, Hellas and Argyre 2 m and the crater lakes 18 m: 365 m in all, covering 34.7% of Mars. Earth-equivalent km multiply Mars heights by g<sub>Mars</sub>/g<sub>Earth</sub> = 0.38: with the same air, pressure falls that much more slowly with height on Mars, so Olympus Mons (about 22 km above a 30% sea) thins the air like an 8.6 km climb on Earth. The insolation layer uses the same flat-ground, top-of-atmosphere model as the charts, so it varies with latitude only; slopes and the atmosphere are not included.</li>
+        <li>Map: elevation from the Mars Global Surveyor MOLA gridded topography (MEGDR, 4 pixels per degree, about 15 km at the equator; Smith et al. 2003, NASA PDS Geosciences Node), stored to the nearest 5 m relative to the MOLA areoid. The water level is the share of the surface area that lies below sea level; at 30% the sea stands 2.68 km below the MOLA datum. Only the water joined to the northern ocean stands at that level (27.4% of the surface); Hellas and Argyre lie below it but are enclosed, so by default they are closed seas with their own surfaces, like the Caspian. With "Fill craters and closed basins" on, every closed depression holds a lake with a flat surface. On Water balance (the default) each lake rises until evaporation from its surface balances the runoff from its catchment (rain minus land evaporation), the rain on it and the overflow from basins upstream, all yearly means from the rain model below; a basin that fills spills through its lowest outlet into the next basin or the sea. A basin with several pits under one rim is treated as one lake. The lakes in turn change the rain and the temperatures, so after a change of sky the balance is repeated, up to three times, until the lake area settles; for the default sky it is stored. With the default sky Hellas settles about 3.7 km below sea level, covering 0.8% of the surface instead of 2.0%, and Argyre about 0.5 km below; neither comes near spilling. Their catchments get little rain (Hellas's about 280 mm a year, of which about 95 mm runs off), while the lakes, deep and warm, evaporate about 1.5 m a year; even if no water evaporated from land at all, Hellas would rise only to about 1.5 km below sea level. Snow adds little: their catchments barely freeze under this sky, and only about 2% of the precipitation there falls on frozen ground (the model counts all of it as runoff). Craters are 94% full on average north of 45°N, 87% between the equator and 45°N, 62% between the equator and 45°S and 56% south of 45°S (by brim area); about a third of them end up full and spilling. Same fill everywhere instead fills every basin to one share of its depth with the basin fill slider and sets Hellas and Argyre by hand. The default sky was optimised on the water-balance lakes, because each depends on the other: a dimmer sky brings less rain, smaller lakes and so bigger seasonal swings. At these defaults the ocean holds a global layer of 344 m of water, Hellas and Argyre 3 m and the crater lakes 21 m: 368 m in all, covering 35.7% of Mars. Earth-equivalent km multiply Mars heights by g<sub>Mars</sub>/g<sub>Earth</sub> = 0.38: with the same air, pressure falls that much more slowly with height on Mars, so Olympus Mons (about 22 km above a 30% sea) thins the air like an 8.6 km climb on Earth. The insolation layer uses the same flat-ground, top-of-atmosphere model as the charts, so it varies with latitude only; slopes and the atmosphere are not included.</li>
         <li>Insolation-based temperature: what an Earth-like planet would reach with this sunlight, from a seasonal energy-balance model calibrated on Earth (Budyko–Sellers type, after North &amp; Coakley 1979). Each 2° latitude band has a land and a sea box that absorb sunlight with Earth's cloud albedo but no snow or sea ice (top-of-atmosphere albedo 0.24–0.27 in the tropics, rising only to about 0.44 toward the poles, like the ice-free Southern Ocean, where Earth reaches 0.65), radiate 203.3 + 2.09·T W/m² (Earth's satellite fit, T in °C), store heat (on Earth: land and air 1.0×10⁷ J/m²/K, a 24 m ocean mixed layer 1.0×10⁸), swap heat with each other (2.0 W/m²/K) and pass it poleward by diffusion (0.649 W/m²/K). The heat capacities and exchange were fitted to Earth's seasons (with Earth's real albedo, ice included): on Earth's orbit the model gives a 15 °C global mean, 29 °C at the equator and −7 / 23 °C (January / July) on land at 45°N in the mixed setting. Continental, mixed and maritime set land to 85%, 50% or 15% of each band; Dynamic uses the map’s own land and water instead (below). The map shows the land temperature, cooled with height above sea level at the lapse rate (default 5 K per Earth-equivalent km, 1.9 K per Mars km: the moist lapse rate of a rainy climate, the single value that best reproduces the frost and heat counts of air at 85% humidity cooling along the moist adiabat; Earth's standard atmosphere is 6.5). Outside Dynamic it ignores Mars's own oceans and lakes as drawn; it always ignores mountains blocking winds, deserts, clouds that change with climate, and ice that grows when it is cold, so read it as how warm the sunlight makes places, not a forecast. Mars's year is 1.9 Earth years long, so its seasons have more time to heat and cool than Earth's.</li>
         <li>Sea-level pressure (default 1.05 atm, so the highlands, on average 3.7 km above sea level, still have about 0.89 atm): under Mars gravity (3.72 m/s²) 1 atm means 2.64× Earth’s air per m²; Earth’s air mass would give 0.38 atm. Land heat capacity is soil (3.0×10⁶ J/m²/K on Earth, ×1.37 for the deeper seasonal layer of Mars’s longer year) plus the air taking part in the seasons (7.0×10⁶ for Earth’s air, scaled with the air above, so less over high ground in Dynamic); the ocean box gains the extra air too. Heat transport (diffusion, land–sea exchange, winds) scales with pressure × (Earth’s spin rate / Mars’s)², as in Williams &amp; Kasting (1997): about Earth’s at 1 atm. Greenhouse warming is held at Earth’s; with 2.6× the air at Earth’s composition it would be stronger, so this assumes a composition tuned to Earth-like warming. On Earth the formulas give back the calibrated model exactly.</li>
         <li>Dynamic: the same energy balance on a 4° × 6° latitude–longitude grid with the map’s water level and lakes. A cell’s heat capacity mixes its water and land shares; heat diffuses north–south as in the zonal model and along latitude circles at a tenth of that, and Earth-like prevailing low-level winds carry it east or west (trade winds to 30°, westerlies from 30° to 60°, weak polar easterlies). The wind strength and the zonal mixing were fitted on Earth’s land and sea to the January–July range of 23 mid-latitude cities (approximate climate normals): within 4.3 K RMS (r = 0.89), against 6.8 K with diffusion alone. Cities next to Earth’s winter sea ice (Yakutsk, Fairbanks) are far more extreme than the model, which has no ice. The periodic cycle is solved harmonic by harmonic (yearly mean plus five), exact to well under 0.1 K. The temperature-by-latitude panel reads each band’s land cell by cell, each patch cooled with its own height.</li>
         <li>10th warmest and 10th coldest sol: each place's temperature on the 10th warmest (coldest) sol of its year in the temperature model, cooled with height: a hot or cold spell that comes round every year rather than a one-off extreme.</li>
-        <li>Rain: a seasonal moisture budget on a 2° grid, solved as a steady state for 12 slices of the year and run in the background (a few seconds). Column water vapour is carried by low-level winds and mixed by eddies; the winds come from the temperature model's own contrasts (warm air means low pressure at the surface; boundary-layer friction and Coriolis turn the flow), with storm-track westerlies and stronger mixing only where the zonal-mean temperature falls toward the pole. Water evaporates from the ocean and lakes by a bulk formula capped by the surface's net radiation (none while frozen) and from land at a Priestley–Taylor rate limited by the rain that falls there. Rain falls once the column passes 50% of saturation (on a 1.5-day timescale) and where the wind blows up slopes. The saturation column is ρ<sub>v,sat</sub> × R<sub>v</sub>T²/(LΓ) per metre, about 2.6× Earth's at the same temperature because Mars's air column is deeper, so vapour stays aloft for about four weeks (Earth: nine days) and spreads further. Chosen date interpolates between the slices. Read it as the pattern this sunlight would drive, not a forecast: clouds, real wind systems and their feedbacks are left out.</li>
-        <li>Rivers: the yearly runoff from the rain model (rain minus land evaporation; on lakes, rain minus lake evaporation) is routed downhill along the steepest descent; each lake gathers its inflow and passes water on through its spill point only if its yearly balance is positive. Flows above about 80 m³/s are drawn, far wider than real so they show at planetary scale.</li>
+        <li>Rain: a seasonal moisture budget on a 2° grid, solved as a steady state for 12 slices of the year and run in the background (a few seconds). Column water vapour is carried by low-level winds and mixed by eddies; the winds come from the temperature model's own contrasts (warm air means low pressure at the surface; boundary-layer friction and Coriolis turn the flow), with storm-track westerlies and stronger mixing only where the zonal-mean temperature falls toward the pole. Water evaporates from the ocean and lakes by a bulk formula capped by the surface's net radiation (none while frozen) and from land at a Priestley–Taylor rate limited by the rain that falls there. Rain falls once the column passes 50% of saturation (on a 1.5-day timescale) and where the wind blows up slopes. The saturation column is ρ<sub>v,sat</sub> × R<sub>v</sub>T²/(LΓ) per metre, about 2.6× Earth's at the same temperature because Mars's air column is deeper, so vapour stays aloft for about four weeks (Earth: nine days) and spreads further. Chosen date interpolates between the slices. Land evaporation has no soil storage: each slice's evaporation is limited by that slice's rain, so land dries out completely in the dry season; with soil and plants carrying the wet season's water into the dry season the same temperatures give about 12% more rain on land. Most rain falls where onshore air is lifted or cooled: air off the 21–24 °C ocean holds about 45% of the water it could and warms over hot land in the wet season, so low, gentle coasts such as northern Arabia stay fairly dry (about 250–350 mm a year) while the rising ground behind them gets 1–2 m. Read it as the pattern this sunlight would drive, not a forecast: clouds, real wind systems and their feedbacks are left out.</li>
+        <li>Rivers: the yearly runoff from the rain model (rain minus land evaporation; on lakes, rain minus lake evaporation) is routed downhill along the steepest descent; each lake gathers its inflow and passes water on through its outlet only if it is full; past the outlet the water follows the first ground that drains away from the lake. Flows above about 80 m³/s are drawn, far wider than real so they show at planetary scale.</li>
         <li>Temperature by latitude: the land box of the temperature model for each 2° band, cooled with the average height above sea level of that band’s counted land: land outside the ocean and lakes and no higher than the cut-off (default 3 km in Earth-equivalent height). The band shows the coldest and warmest sol of the year; the swing is their difference, which height does not change. Summaries weight each band by its counted land area.</li>
         <li>Clock times are local true solar time (LTST): 12:00 is when the Sun crosses the meridian. Today's position uses the Allison &amp; McEwen (2000) formula for L<sub>s</sub>.</li>
       </ul>
@@ -1473,8 +1482,8 @@ const PRESETS = { north: [0, 15, 30, 45, 60, 85], south: [0, -15, -30, -45, -60,
 const STORE = 'mars-daylight-v1';
 const state = {
   t: T_TODAY, tod: 14, obsLat: 45, view: 'orbit', units: 'mars', metric: 'mean', orbit: { dur: 'real', ins: 'real', rat: 'real' },
-  lats: PRESETS.north.map((lat, i) => ({ lat, slot: i })), flip: false, dynDur: false, dynIns: false, dynRat: false, earthRef: true, layout: 'full', lineMode: 'chosen', specA: -90, specB: 90, specStep: 5, specOp: 70, show: { view: true, dur: true, ins: true, rat: true, map: true, lat: true }, ltCut: 3, ltRef: true, isoStep: 10, waterPct: 30, fillLakes: true, mapRivers: false, basinFill: 67, closedSeas: 'own', hellasLvl: -6470, argyreLvl: -3230, hUnit: 'km', mapLayer: 'elev', palette: 'terrain', hillshade: true, insWhen: 'date', insMetric: 'mean', mapOrbit: 'real', insShow: 'wm', tUnit: 'C', heat: 'dyn', lapse: 5, p0: 1.05, insOp: 65, insDyn: false, mapGrid: true, gridLat: 15, gridLon: 30, mapSites: true, ratioMetric: 'mean', mode: 'natural', twoCI: 1, twoPh: 27.5, twoPhMode: 'season', twoShift: -3, twoBias: 11.5, twoA2: 6.5, twoS2: 18, twoKA: 0.6, twoKS: -99, twoPos: 'L5',
-  three: {"K4": 0.51, "K5": 1.17, "L4": {"Light": "outer", "HN": [46, 46, 52, 45], "HS": [51, 48, 70, 72], "SN": [0.65, 0.27, 0.66, 0.15], "FS": [0.74, 0.98, 0.61, 0.01], "Soft": 8, "Lean": -0.9, "CI": 0.95, "Ph": 6, "PhMode": "season", "Shift": -71, "Bias": -0.5, "A2": 6, "S2": -77, "KA": 0.8, "KS": 60}, "L5": {"Light": "lens", "CI": 0.8, "Ph": 29, "PhMode": "season", "Shift": 8, "Bias": 5.5, "A2": 7, "S2": 52, "KA": 0.05, "KS": 10}}, threeSel: 'L4', twoK: 'x133', threeK: 'x067', camOff: 0, playYear: false, playSol: false
+  lats: PRESETS.north.map((lat, i) => ({ lat, slot: i })), flip: false, dynDur: false, dynIns: false, dynRat: false, earthRef: true, layout: 'full', lineMode: 'chosen', specA: -90, specB: 90, specStep: 5, specOp: 70, show: { view: true, dur: true, ins: true, rat: true, map: true, lat: true }, ltCut: 3, ltRef: true, isoStep: 10, waterPct: 30, fillLakes: true, lakeMode: 'local', mapRivers: false, basinFill: 67, closedSeas: 'own', hellasLvl: -6470, argyreLvl: -3230, hUnit: 'km', mapLayer: 'elev', palette: 'terrain', hillshade: true, insWhen: 'date', insMetric: 'mean', mapOrbit: 'real', insShow: 'wm', tUnit: 'C', heat: 'dyn', lapse: 5, p0: 1.05, insOp: 65, insDyn: false, mapGrid: true, gridLat: 15, gridLon: 30, mapSites: true, ratioMetric: 'mean', mode: 'natural', twoCI: 1, twoPh: 27.5, twoPhMode: 'season', twoShift: -3, twoBias: 11.5, twoA2: 6.5, twoS2: 18, twoKA: 0.6, twoKS: -99, twoPos: 'L5',
+  three: {"K4": 0.51, "K5": 1.17, "L4": {"Light": "outer", "HN": [46, 46, 52, 45], "HS": [49, 48, 69, 72], "SN": [0.63, 0.26, 0.66, 0.15], "FS": [0.75, 1, 0.57, 0], "Soft": 9, "Lean": -0.9, "CI": 0.95, "Ph": 6, "PhMode": "season", "Shift": -71, "Bias": -0.5, "A2": 6, "S2": -77, "KA": 0.8, "KS": 60}, "L5": {"Light": "lens", "CI": 0.85, "Ph": 29, "PhMode": "season", "Shift": 8, "Bias": 5, "A2": 8, "S2": 52, "KA": 0.05, "KS": 6}}, threeSel: 'L4', twoK: 'x133', threeK: 'x067', camOff: 0, playYear: false, playSol: false
 };
 const DEFAULTS = JSON.parse(JSON.stringify(state));   // for the reset buttons
 try {
@@ -1521,6 +1530,7 @@ try {
     if (['wm', 'temp', 'rain'].includes(sv.insShow)) state.insShow = sv.insShow;
     if (['swing', 'warm10', 'cold10'].includes(state.insWhen) && state.insShow !== 'temp') state.insWhen = 'date';
     if (typeof sv.mapRivers === 'boolean') state.mapRivers = sv.mapRivers;
+    if (sv.lakeMode === 'local' || sv.lakeMode === 'uniform') state.lakeMode = sv.lakeMode;
     if (['C', 'F', 'K'].includes(sv.tUnit)) state.tUnit = sv.tUnit;
     if (sv.v >= 6 && ['cont', 'mixed', 'mari', 'dyn'].includes(sv.heat)) state.heat = sv.heat;   // saves from before Dynamic became the default take it
     for (const k of ['hillshade', 'insDyn', 'mapGrid', 'mapSites', 'fillLakes']) if (typeof sv[k] === 'boolean') state[k] = sv[k];
@@ -1540,7 +1550,7 @@ try {
       if (num(sv.twoKA, 0, 1)) state.twoKA = Math.round(sv.twoKA * 20) / 20;
       if (num(sv.twoKS, -180, 180)) state.twoKS = Math.round(sv.twoKS);
       const t3 = sv.three;
-      if (sv.v >= 10 && t3 && typeof t3 === 'object') {      // three-sun saves from before the wet-climate retune take the new default
+      if (sv.v >= 11 && t3 && typeof t3 === 'object') {      // three-sun saves from before the water-balance lakes take the new default
         if (num(t3.K4, 0, 2)) state.three.K4 = Math.round(t3.K4 * 100) / 100;
         if (num(t3.K5, 0, 2)) state.three.K5 = Math.round(t3.K5 * 100) / 100;
         for (const m of ['L4', 'L5']) { const o = t3[m], d = state.three[m]; if (!o || typeof o !== 'object') continue;
@@ -1582,7 +1592,7 @@ const kLabel = k => (Math.abs(k - 4 / 3) < 1e-9 ? '1.33' : Math.abs(k - 2 / 3) <
 applyMode();
 const MULTI = () => SRC.length > 1;
 function save() {
-  try { localStorage.setItem(STORE, JSON.stringify({ v: 10, mapRivers: state.mapRivers, closedSeas: state.closedSeas, hellasLvl: state.hellasLvl, argyreLvl: state.argyreLvl, three: state.three, threeSel: state.threeSel, isoStep: state.isoStep, ltCut: state.ltCut, ltRef: state.ltRef, units: state.units, metric: state.metric, orbit: state.orbit, flip: state.flip, dynDur: state.dynDur, dynIns: state.dynIns, dynRat: state.dynRat, earthRef: state.earthRef, layout: state.layout, lineMode: state.lineMode, specA: state.specA, specB: state.specB, specStep: state.specStep, specOp: state.specOp, show: state.show, ratioMetric: state.ratioMetric, waterPct: state.waterPct, fillLakes: state.fillLakes, basinFill: state.basinFill, hUnit: state.hUnit, mapLayer: state.mapLayer, palette: state.palette, hillshade: state.hillshade, insWhen: state.insWhen, insMetric: state.insMetric, mapOrbit: state.mapOrbit, insShow: state.insShow, tUnit: state.tUnit, heat: state.heat, lapse: state.lapse, p0: state.p0, insOp: state.insOp, insDyn: state.insDyn, mapGrid: state.mapGrid, gridLat: state.gridLat, gridLon: state.gridLon, mapSites: state.mapSites, mode: state.mode, twoCI: state.twoCI, twoPh: state.twoPh, twoPhMode: state.twoPhMode, twoShift: state.twoShift, twoBias: state.twoBias, twoA2: state.twoA2, twoS2: state.twoS2, twoKA: state.twoKA, twoKS: state.twoKS, twoPos: state.twoPos, twoK: state.twoK, threeK: state.threeK, lats: state.lats })); } catch (e) {}
+  try { localStorage.setItem(STORE, JSON.stringify({ v: 11, lakeMode: state.lakeMode, mapRivers: state.mapRivers, closedSeas: state.closedSeas, hellasLvl: state.hellasLvl, argyreLvl: state.argyreLvl, three: state.three, threeSel: state.threeSel, isoStep: state.isoStep, ltCut: state.ltCut, ltRef: state.ltRef, units: state.units, metric: state.metric, orbit: state.orbit, flip: state.flip, dynDur: state.dynDur, dynIns: state.dynIns, dynRat: state.dynRat, earthRef: state.earthRef, layout: state.layout, lineMode: state.lineMode, specA: state.specA, specB: state.specB, specStep: state.specStep, specOp: state.specOp, show: state.show, ratioMetric: state.ratioMetric, waterPct: state.waterPct, fillLakes: state.fillLakes, basinFill: state.basinFill, hUnit: state.hUnit, mapLayer: state.mapLayer, palette: state.palette, hillshade: state.hillshade, insWhen: state.insWhen, insMetric: state.insMetric, mapOrbit: state.mapOrbit, insShow: state.insShow, tUnit: state.tUnit, heat: state.heat, lapse: state.lapse, p0: state.p0, insOp: state.insOp, insDyn: state.insDyn, mapGrid: state.mapGrid, gridLat: state.gridLat, gridLon: state.gridLon, mapSites: state.mapSites, mode: state.mode, twoCI: state.twoCI, twoPh: state.twoPh, twoPhMode: state.twoPhMode, twoShift: state.twoShift, twoBias: state.twoBias, twoA2: state.twoA2, twoS2: state.twoS2, twoKA: state.twoKA, twoKS: state.twoKS, twoPos: state.twoPos, twoK: state.twoK, threeK: state.threeK, lats: state.lats })); } catch (e) {}
 }
 
 /* ================= formatting ================= */
@@ -3029,10 +3039,12 @@ function renderDetail() {
   const w = Math.max(1, Math.round(MW * k)), h = Math.max(1, Math.round(MH * k));
   mapDetail.width = w; mapDetail.height = h;
   const dctx = mapDetail.getContext('2d'), img = dctx.createImageData(w, h), d = img.data;
-  const cols0 = new Int32Array(w), cols1 = new Int32Array(w), fcs = new Float32Array(w), colOk = new Uint8Array(w);
+  const cols0 = new Int32Array(w), cols1 = new Int32Array(w), fcs = new Float32Array(w), colOk = new Uint8Array(w), lons = new Float32Array(w);
+  const rstops = state.insWhen === 'year' ? RAIN_YR : RAIN_SOL;
   for (let x = 0; x < w; x++) {
     const lon = mapLon((x + 0.5) / k);
     if (lon < -180 || lon > 180) continue;
+    lons[x] = mod(lon, 360);
     const u = mod(lon, 360) * MAP_PPD - 0.5, c0 = Math.floor(u);
     cols0[x] = mod(c0, MAP_W); cols1[x] = mod(c0 + 1, MAP_W); fcs[x] = u - c0; colOk[x] = 1;
   }
@@ -3069,8 +3081,9 @@ function renderDetail() {
           const s0 = SHADE[b0 + c0] + (SHADE[b0 + c1] - SHADE[b0 + c0]) * fc, s1 = SHADE[b1 + c0] + (SHADE[b1 + c1] - SHADE[b1 + c0]) * fc;
           const f = (s0 + (s1 - s0) * fr) / 100; R *= f; G *= f; B *= f;
         }
-        if (P.insOn) {
-          if (P.swingOn) [ir, ig, ib] = swingRGB(((P.DF ? dynAt(P.DF, r0, c0) : tb) - P.lo) / (P.hi - P.lo));
+        if (P.insOn && !(P.rainOn && !P.RF)) {
+          if (P.rainOn) { const qi = Math.round(rainT(Math.max(0, rnAt(P.RF, lat, lons[x]) * P.rscale), rstops) * 1000) * 3; ir = LUT_RAIN[qi]; ig = LUT_RAIN[qi + 1]; ib = LUT_RAIN[qi + 2]; }
+          else if (P.swingOn) [ir, ig, ib] = swingRGB(((P.DF ? dynAt(P.DF, r0, c0) : tb) - P.lo) / (P.hi - P.lo));
           else if (P.tempOn) [ir, ig, ib] = tempRGB((Math.max(0, (P.DF ? dynAt(P.DF, r0, c0) : tb) - P.gK * (hh - P.hRef)) - P.lo) / (P.hi - P.lo));
           R = R * (1 - P.op) + ir * P.op; G = G * (1 - P.op) + ig * P.op; B = B * (1 - P.op) + ib * P.op;
         }
@@ -3310,16 +3323,160 @@ function fillDepressions(sea) {
   for (let k = 0; k < no; k++) { const b = bid[ord[k]]; if (b >= 0 && BENTRY[b] < 0) BENTRY[b] = ord[k]; }   // first cell of each basin reached: its outlet
   FILL = F; BASIN = BF; BID = bid; PARENT = par; ORDER = ord.length === no ? ord : ord; ORDER.count = no; fillSea = fkey(sea);
   HELLAS_B = bid[HELLAS_PX]; ARGYRE_B = bid[ARGYRE_PX];
+  if (state.lakeMode === 'local' && (!LOCAL || LOCAL.fk !== fillSea)) { const T = tableLocal(fillSea); if (T && (state.mode === 'natural' || climKey() === T.ck)) LOCAL = T; }
   return F;
+}
+// ---- Lakes from the water balance ----
+// Each closed basin's lake rises until evaporation from its surface balances the runoff from its catchment, the rain on it and the
+// overflow of the basins upstream (all yearly means from the rain model); a basin that fills spills through its outlet into the
+// next one or the sea. The lakes feed back on the rain and temperatures, so after a change of sky the balance is repeated a few times.
+// The balance for the default three-sun sky is stored, so it shows at once.
+let LOCAL = null, LOCAL_GEN = 0, BCELLS = null, LAKE_MAXPASS = 3, LAKE_TOL = 0.01;
+const DEFAULT_LOCAL = {"fk": "-2679.2130459105847|own", "nb": 11698, "ck": "three|{\"K4\":0.51,\"K5\":1.17,\"L4\":{\"Light\":\"outer\",\"HN\":[46,46,52,45],\"HS\":[49,48,69,72],\"SN\":[0.63,0.26,0.66,0.15],\"FS\":[0.75,1,0.57,0],\"Soft\":9,\"Lean\":-0.9,\"CI\":0.95,\"Ph\":6,\"PhMode\":\"season\",\"Shift\":-71,\"Bias\":-0.5,\"A2\":6,\"S2\":-77,\"KA\":0.8,\"KS\":60},\"L5\":{\"Light\":\"lens\",\"CI\":0.85,\"Ph\":29,\"PhMode\":\"season\",\"Shift\":8,\"Bias\":5,\"A2\":8,\"S2\":52,\"KA\":0.05,\"KS\":6}}|real|1.05|5", "q": "/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////wD/VQD/AMb//3j//////wAp///////////LAP+Y////////AP//RP///////wCO//8A////AAD/////AP//AP8A/wD///////////////////////////////////9/////////AP8A//8A/6NV//8A//////8A////KP///zH//////1X/AP///wD//////////////3cMAAD//////wBy////AP//////ALgAAP8A/////wD/////AP///wAA////////AG4A/8b/8v//AA3//zz/////AP///wD/AP/////////////////nF///////////AP9+////AAD/wv///////////////////////0D///////+L////////MwD/////////////////////9ADlAP///////78N//////9//////////wD/////tf//2///////AP//SP//////////Z///ABL/cRf/AP////////z///8A1E0AAP//////2gD//////8H/////////QP///wB8/////////wAA///////0//n/h///AP//////////AP//////1wD///////8Ab///////////////G/8A//////+9////////2f//AP///////wD/ANaF////////////////aRwAAP8A/////////x+i//9C/wAA/////8j/////AP9i/////////wD/AIL///8A////Lf//////////AP//f0z/AP//////////AAD/3P//////AHkOof////////8AAEcjYLta///L//////+pf4PiAI///////wD/////////////YsP///////8AAP//AKP/////////AAD//////wAAAP/IYf//////////AP//AP8A/wCYAP///7z//////wAA////AP8JAP///////////wD/APf///////////8A////AP8AABX//8AA//////////////8AAAD/AP//////////////AAD//0LUAABQ1P//AFP//////////zMAAAAAAP////////8A/wD/EgD/A///////////AAD//xEAAAAA//9m/////////////wAA////qQD///////////9wAAD//wAA/6kA//////////8A////AAAAAAD///////+6//////////8A/wAA//8Ayf//Ev///wD///8AADX/tf+p////////mQAAAP8A//+vmE05bP////////////+pAAC17gD/////////AAD/ABG//////wAAAAD/////AP//////AAAtAP///////////wD/AP///wMA////AP////9jAAAA/////2D/ACz///////8p///////u5f///3L//////wAAAAAACLel//+//////////wAAAF7/Kj/pJP////9HAP8A////uf/t9P/////pABf//////////////wAA/////////1X//4H/D//a/////wD///9//////wD//wD///8a//////////////8AAP8AAP8r////////////AP8AAP+l////////////ADEA//X/////////////////AACY/wD/QHr//3////////////8AAP////////8AHP////////////////////8ANHn/////////AP+L//////////8A////AP////////8A/23//////////1b///8AAAD/////b/8A//8A/////////////////////////wB3////////////ACX/AP//////////////////AAAS/9n/////////////AP//KP//////////////AAD///////////////8A/wBH////////////oP///wD///////////////////8A/zgl////////////////////////AOxT///t////////////////////AFUAfwAAAP///////////wD/AAAA////////////////////AP//wrb/////////////////////////////////AAAAAAD5/////////////////yQA/////////////////////wAA//////////////////8AAAAA/////////////////////////3///wAAqf//AP///////////////////wD//wAAAP///////////////wD///8AwP//////////AAAAAP///////////////////////wAA/////////////////wAAAP////////////////////8AAAD/Sf////////8AAP////////////////8A/xAA//////////////////////////8AJNwg/////////////wAA////////////////////////AAD//////////////////////wD//////////////wD/AAAA////////////////AP9P3v////////////////+RAP///wD//////////wAAQP8A/wD///////////////////////8A/////wAA1Lz//////z8A/wD/AP///////////////////////////zQAAJMAAP//////////////////////AAADKf///////////////////wAAAKkAAAAA/////////////////wAU//////////////////////////8AKAD//////////////////wCz/wD/////////////////////Fv8AQAAApv8A////////////////AAD//wD///////////////////8AAP////////////////8AAP+M/////wD/////AP//AP9I/wD///////////////////////8AAP+s/////////////////////////wD/AP//AP//AP//////////////AP///wBo//////////8A/wD/AAD/iQAA////////////G8X/////////////7v////////8A//////////////////8aAP8AJDPUQgAA/////////////////////wD/AAD//////////////////////wD/////AP//////////////AP///wD///////////8AAP////////////8N/wAA/wD/////AP//6v9j/wD/////f///WgD////WAP9S/////xz/AP/U//8A0P////////+l////2gD///////////9S/z///wAA////6f//AAD//////zj///////////////////8A////Icn/AP///////wD/////B///////3o1AAP//////////AL//////////AAD/////lAD///8g//////////8A//////////////f/AAAA////////AP8A/wD///8AAP//ZgD//////////wA2////AP//////////HwD/AEAA//8q/////wAA////Ff//////AP8AAABV/////wD///////8A///qjf8AAADS/////wQAAP//////////Sf+LAAAAAP///z0A////////AP///8gA//////8AAP9//////wD///////////8A//8A/wbAAJEAv///////////////////////AP8AAIL///////8A//////////8A//8AAAAAMQAA//////////////8A////AAD/v1X///////////8AAAD//////////9YAAP8AAP+R////////AAD///////8A/wAAAP///////////7r//3T//////////yDpJCH/AI7/f////////////w3//////+r///8AAP//////////////////////AAAAABT/AAAA/////////////wD///////////8A//8A////////GQC8////ADD///////////////8AAP//////AAAAAP8Y/wnf//////////////////+GDv//////AAD//////////////wDL//8A////////I////yL///////////////8A//////////////j//wAAvQD///////87/wD/////////fwD///+p///z//////////////+T////////qP///wDrpP/////////////////e/////////////20AFP8Auf//////////////AMCn/////wD/////////////////qv///////////wAA////k/////8A//8AAAD//////////////////////////////2T///////9/AAAAAP8A////////////Zv/////////YAP///wBA4P/N//////////////8ANv8AAP//////////////qv///////////////////////////////6IAAAD/z/8c//////////////////9M/////7D//////////wD/////////////////////////AGj///////8A///2/wD///8A//////////////////////////////////8AAAAJ/wD/////////////////////////////////E////////wAAAPL/AP//////////AP///wAA////GikoAP//8////////////////////////////3oAQwD/AOr/////////////+v//AP///wAA//////8AAAAAAP//9////////////////wD//wD///////8+AAAAAP+p///////////////H///CAP///////wAAAPn/KwAvAP////////////8A//8A///x////////////ALgAAAD/////////////////////////AAD///8AAAAA///////////////////////////i//////8AyQD/////RBEPAK3/////////////////AHX//wAA//////9M/////////wgACUsAHP8ASgAAAP//////////////////////////Vf8AAP//////////AAD/AP//////////////////////////////AAD///////8D//////8AALj//////////////y7/////////////////////////////AAD//////////wAAAADD/////////////////////wD///////8A//8A8v////////////////////////8A////AAAz////MwBAAADiAP//////////////////////////////////AAD///+xAACTAAAA/////////////////////07///////8AAAAA//////////8AAADO1Br/////////////////////////2gD//////wAAuQD///////////////////////8AAAAAAP////////8ARgD//wBE/////2P/////////////////////AAAAAAD///8wAAAADf//////////////AAD///////8B////////////////////////////////EAAAAAD///////////8AAADP/wDx7P//////////////////////////////////AAAAAP////8RAAAP//////////////////////////+pCAAA//8tAP///////////////////////////2EAAAAA//////////9CALcO////////////////////////////////////AP////////8ABf//////////////////AAAAAAAA/wD///////8A////////////////////////////////////AAD/////////AP////////////8AAAAA//////9MAAAA/17///////////////////////8A//////9NAADcABCx/////////////////////////wAKPv///wAAAAAAB////////////////////////////wAAAP///wAAoP//////////////////////////////AAD//////wAAAADY/////+r/////////////////////////AAAAAP//////AAAAwkD/////////////////////////AAAAAAD//0Dm/7n//wAAAAAAAPH///////////////////////////////////////8AAAAA////////AAAAKwD/////////////////////////////AOP///8AAAYAAP9d///////////////////////z//////8AAAD/AAD/////AAD///////////////////////////8AAAD///8HAAoARf//////////////////FQAAAP//////AAADACD//////////////////////6H/////////////////AAD///////8AAAD//+f///////////////////////8AAP//AAAn/y//YP//////AP//////xv///////////wD/AAAAAAD///8AAAAAAAAA//////+6//////////////////////////8A//////8AAAAAAAD//////////////6P//////////wAAAAAA////////AAAAjQAABf8A/////////////////////////wAAAAAAAP8A/wAAAAD///8A6AD/////////////////X////////////////wAA////////AAD/5P///////////////////+H///8g/wD/tgAAAAB/////Zv//////////AP/nb////////wcAABL///+zAIQAAACHD///Ff/////l////////////////////AAD///////8ADwT//+///////////////////yUAAP////////8AAAAMAAD/ITIA////////////////AL//////AAAA//////8GAP////9//////////////////////////wD///////8AABIAAAAA////yv8AAAAK/////////////wD//wAAAP////8AAL8AACj///////////////+yPv/G//8AAAD///+GpwAA//8AXgD/////AP////////////8AAAD//////wD/AAAAAAApBWar////cf////////////8AAAAA/////wAAAA4A//8A/wr//////wD/////5ucAT////wD///////8AAP//AP//////AAsAAQAAAP//////////////AP////////8AAAAAAP////8AAAAMbv////////////9M//8e////////AAAA//8AALUA2v///1r/////AP/k/7j//wAAAP8A/wAAcwAAZgO5/////////////////////wD///99AAIA//////8A/wAAAAIAAAAB/8P///////+3/7IA/////wD//////wAAAP//D/////+1/////////////////wAAAP///////xMJAAAABgD///9t/////////////wAAAAD///////8AAAAAAAAAAAb/////////AAD/////7/8A/9H//////wAAAP////////f/AAAA/wAAkf8A//////////8AAP////8EAP//////CACTAAAA//////////////9s////////////AP///wAAAAAAFA8e/////////wD//wD//////wD/kf////8AAEEA/wCb/9H//////83//wD//////wAA/wn//wDvHwD/1gz//1X///8AAP///////////////wAAAAAAAF//y7T//////////3r///////////8AcfT//79/////p/8A/59N/7//////qQD//////wAA////////////////AAD///8AAAAAAST/6v//7P////8AHv/7////////AAD/RwgZAOn//+b//////wBsAAAAAKHiE/H///9mAAD/AAARhf//f///IS7//////////wAR/////wAA/wD/////9GbxeP8AAADb/////////yj/////jQAAXP////8AEv96/wD/AP/D/4Um/////yoA/////wAAAAAA/8j//1Hc/////////0UAAAD////5AAD/0jb/zf///5D/////////Hf///xIAIe//AAAAbf8Am///Vf8ACUMS//////+0AAD/////AP////8D////AP8AACMSTwAj/wT//f//////AAAO//8N//8AAP//AIH//zMAAAD/AAD/////5BH/0////7r/AI3/////IADD////QgB/fwD/HP8AZv8A/wAA//+5AABcF9r///+A/wAPwP8A/1cA////ABkAAP8ACBVR/wAA+v8AOQD/A0H/////SQDK////////o/8CAADE//8AAAD///////+c////AAAA//9A///3AP+A/wDwLP96Uv//Ev//1P8pACr//wwAAABx////////PP8A/////zyIAAAXAAAAAP//EP//ZlUA//8l/wf/////AAAnAP//AP//AAAA/0VAKLlA/////yoOHf///wAAAAAApP8A/////wAAAACi/wAA//////8d/////DMAAP//AAD/AAb/AP/NAP///wAQAP////+XAAAAAFwAlf//AP8X/4f//wDc9P//ABQAj2YAAAAW/wD///////8AAAAAwwChAP//H9SF/23lM/8Az/////8AAAcAPAD///8A//8cAAD/AP8AUQAAAAAAAAAAAKkAAFX/EP+y/8n/////8QAAAAAAAIwA/80AAAAAAP///9IA////AB7/////AFAA/wAApwD/H/8A1wDVAAD///////////8A////AAAAAAt2AP///////wBj/////wBmAAAAAAAAA+v///8AAP////8AAP//4wAA/wAA////bv/QCwD//wAAAAAAJABb/////x7/9QD/iwAAAAAAAAAAGAAuAAAZO/9FR/9aAMsA//////8AAAAEAAAA1AD//6mR//8A/wD/AA0AAAAGAAAAAAIA/wCwAP8AAP8a/38AAAAABKkAAKkAAADVAAAA//////8YAAAT////AAAA/0f/EP8A/wAAAAD/DQAAvwD/AA4DAAAAAAD//wD/AAAAAAAAVQAAABlA////////AP//////AAD//wAAAAAAAAD/AHgAAAD/////AP8AFP8AAIsA//8A/wAAAAAAAP8AfwAAAP//y/8AAAAC/02I////AAAAAP8AABEAAAA4XQwK/wAAAP8A//98/wAAAAAAAAAAAAAGRhv/AP//AACR////AOQAAAD/6P8AAP/NAAAAAAAKQKIAVQAS5mPiAJoAABv/+7oAAP//AAARAAAAAC1wAQAf///xEwAAlwD///8AAP8AE///////EQAAAAAAf6L/AAAAAP8A//8AAAAAAAAAAAAAAAAAAAAAdRkLAAAA//8Acf8ACv//AAAAAAEAAAAAQgD/E1xJ/wDKAAAAk/8AAAD//wAAAAB/CQAAugIAAAAA/wAA//8A////AAAAAAAAAAAAAAAArwgyAAD//9IAAAAAAAAAAAAAAAwA1MIq/wAAAAD/AP//OwD/AAD/AAAAAAAAACkAAAMAAAAA//8AAAD/AFEAAAAAAAAAABoAVgAAAACLIhT/AEsAAAAAAAD/AAD/AAD///8AAAAAAAAAHgAAAA0AAABKAAD/////AAD///////8AAAAAAAAAANHfJwAAAAAA/5j/AP8AAAAAAAAAAA8A////EAD//wBNAABwAAAAAABH/wUAAAAAAACjAAD2AP///wAAAP8AAAAAAFgAAAAAAAAAAP8JAAAALQD/AP//fwAAAAAAAADf/wAAAAAAAAAA////ACP/AAAAmAAAAP8A/1219Qn/AP8AAAAAAAAAKxUAAAChAP//AADd//8AAAAAAAAAAAAA/wA4AP8sAAAAB7f///8AX/8AAAAAXAIAAAB/BwEA////AAANAP//EgAAAAAAAAAAAAAAAADwFCEAAP8AAAAAAAAA//8AAP//AAAAAAAAtwD/APIAAAD///8AjDD//wCTAAAAAAAAAAD/FQAAAAAAAAAAzwCulABr////AACp//+4BgAAArAAAAAAMwAA///nAAAAAAAAAAAAHAYNAAD/aQAAAAAOAP//////AAAAAAADAAD/xqkA/wD//wAAAAAAAAAAAADGAAAUrQAAABgHAAAA/wAAGQAAIk4A/9T/AP8pAABRAP8AAAAAAAAAAAAACABiNQAACAAAAAB5///m/wAPBDMAAAAAAAD///8ATwAAAAAB/wADCgAAAP8AfwAAAABXAAAAAP8GAAAOAAAAAAD/AP//AAFKAAAAAAAA//8AAAOQAACb9wQFAH8AAAB/AAAA/wD/AAAA////AAAAAAAAABxC/3oAAAAAAAAAAAAAKhv/AAAAAAEAAAD/AIn/AP8AAAAARv8AJzcAAP8CcH8AAP8AABQAAAAAAIYkAAAVAAAAAAAADAAX/wBLAFUAAAAJ//8AAP8AAAAAoDjuSQYWAAARACz//wAAAAAAAH8KCAAA/wAO/wAACwMAvwAAAP//DgAX/38AAFAA/wAAAAD/rf8AAAAAAAAAAAAA/wAAAAAAOMB4QAXL/wAAGccOAAD//wAAAAAA/wtmKAAAAAAAAAw3GAAAkQAAAAD//wD/AAcAAAAAADMKAAAAAwDDKB4AAAAAHhv/AAAAZgAAAAAAHAAAAAAAAAAA/y6iAAD/ABUAAAAAAAAAogAAAAD/AP8A/6kAAAByAAAdDv8QCkAAAMj/AAAAVAD/iQAAAAAAAgAAAAADKgMAAP8AAAAAAKx3AAAAJwAAAACuGRIAAP8ACQ4AAP//AAAJACON/+SG/wAA///mI/8AAAAE/wBAAAAMAAAAAMe3EAAAywAERP8PcQD/pQCQ/xsAAAAAI///AFEA6gAAKNJaAC7/AP//SQBAAAAACP8Ar0kAAAAAAJEAAAAAAP8AVwAAAAB//x8AAKAAAwAACf/sALcUAP8AANT/AAAA////DlMdAFwAAACCmAD/AAAAAP8AAFVVAAAAAAWU6gCO/wD/AACNAAAm/+AA/3UAMgD/AHEA///yDgD///8AAADvAP8FAP8AAAD/AAT/AP9t/5F6YSkAawAAAAD/LAD/AEoAAP//AAD/AAD/////AAdPAAAA////QwD/DwAA////Ag4AAAAAAOAAqvD/////jwD/AP/yAAD/AP8A//+tAAAAACSN/wD//wlZDACx/x0aAP8A0QP//yAAxhD/AAcQ/w4A/wAAALH/xUn/Ev93AP8LAP////8AAAcAAAAA//u0AP8AADAA/wBVAAAA//8AAID/Ev//AAAAIwAAAAD//wAABv//GAAXJwAAAO8F/wAAAAP/////+wAAAAAFEf//XP8AACYAAAoAAAAA/wAtXwD/AP//AP+YAAAA//8AEP/wywAA/wD0AAAA7P8A//8AAABVAAj/AA8AAP8AAAAAABkC/88AAAAQAAAA/wAGAAIAAAAA//8A/xnwPABHBQAAAAD/AP8AAAAYAAAAAA0A/wdDAP9IAAAA/w8AAP8A/wAAAAAANQAA/wAA/793AP////L/ALcAEgAAAHMGAAAA/zwAAMwA/wAAAP8CAP8PAE8ABP/R/wAAAP//AAAAAP8rAGL//wAA//8AAAAA/wAROABVAP8h/wAAIwD/AET/AAD/AAArAAAA////AAAADAALAAAAkf9w/wD/AADDAP//TwAA//8FACT/ZQAAAP8AAFgS/wAAbAUAAJL/AAAAAP8AAAAA/38t//9iH/8A2QUAAAAIKgA1/wAA//9/AAAA/wAAAP8Ao23//2b/AAYAAAAAAAAOAAAA//8A/+IAAAA7AAA2AElWAP//LABm/9QA//8A/wD/AP8AAAAA//8AAP8AADAgAP8BAAAAAABr9AD/QP8A/w8PANgAAAAAAAAAAAAAAAAQAAYAAACaUkD//wAAAgAA/wAA/wAAf0sA////AAD/AFwNAAAAnQAA//8DMwP/GMgAAAAIAAAj//8ADwASvwAAHwD/AAAAzuz/AAAEVf//SAAAAAAA////fwAAvwAAAJz/AP//AAr/AP///wAcAAAA////KNX/AAC7nAABAZYAAB//AACh/wYAAAAAAAAA/wAAABgATAD/AwAAAAAAAAD//wUAGgkANQAA/wB//+f/AHL///+bEtsAVQAAAAAAAAL//wAAAAAtAKwANf8AAAAA/5j/AAAAAP8AAGUW/wAATgAAAAAAjh0AbVX//wD/AAApAAAABv8AHgAa////ADv///9/4wAAAAAAZgAAAAAA/2b//xEA/xz/CwAAAAAAAAAACwAAVf///wAAAP8FAv8AAAAAAAAA/wBk8QD/FQAzAADSAAVJAAAAAAAAAAYAAAD//w7//zYAAAAAAAAAAAAAkQAA/wAAAN7/AAD/AAP//wAAAAAAAAAAAGkS/xD//////wAAQP8MAA0AAAAAAAAAAAD/AP838gUAAP8AAAcAmA9A/2H/f///AAsAAAAAAABV/wAAAG0AAAAA/////1WrcwAAAIIAAAD/AP8AH+36/wAAAAAAAAAAAP8n/wzs////WgD//0n/ABkAALsAAP8AAP8v////AABxGin/vz3//wcAAAAAAAA7AP8zAACFAAD//wD//78FAAAA/wAABwD/AAD/////c016D97/AAAA8wC1AAAAAAD//wD///8Avxz///8AAAAAAAAAAAAAAACe/4cAIDP//////w9M//8lAP9QAFUAAP/9/zMACgD/BwAAAAAAAAAAAAD//w5pAP///////395////AP8xAAAAAP8RmE///9sAAAAAAAAAAP8kY6r/////+P//AAAAACoAqWZY0////wAAAB4A////AP/////RAAAAPAAIxp3b/yoAAAAAAP/Q/1UAAAD//zEL//+HRQAAAAAA/wAAXgAA7/93AKUI6QAA/wAI////zf////9/AAB/AAAAAACH/zD//wD///8AANCpKgAAAAAAAP9//+7///8AVd3/AwAiIAB1wgA7////AEwALAAAACQU///l//8A/+oAEQAAAFD/AAAAAP//gU4ABakkZJgAAH///wf//7u/zwAAAP+Y////Bf8qAP/////m9ABLVffLnwD////n//8AOAAA/wAg//8A/wBV8I//AAAA/wD//30A6QAAAHP/Vf//AP//ACX/Wv//egD/AAAAAE///8b/AAB/ACEAVSRV///i////////X/8ATgD/t/9D/wD/////Mf/PMwAzmAAAAHH//3L2//v/////fxAA5gAAmwA4AP8A//////8IAAwAIABAAP8e/////////////0D///+YAP8A////Lf//AP///0L/AH//ABD//////wAAADFB////ABsA//8AAAD/AP8AAIKK////Xv8A/////+AAAAAAAAAAy/9Y/////////////////4D/jv/SspG/AP/////8AP/T////////////////n/8A//8AAP//1FUA4OL/+/////8G//8AqQAAFf9A////AP//////f/////8q//9kXC8AHQD/Uf+F/////wD//wAAAP8AAAAA/3+Y2v8AS//78P//////4wD/AElVAP8A////ABD/AP///////////2r//0U8AAAAAP8AVQDsf/////////+wAI//3f+FnP8A/wCNAP///////////////2+p7P+JW78AAAB//yT/////X+yYAAD///8UAP//////MiJ/Vf//////////////AP8AOh8AAAD/AAC8//////////kqADf///+rAMfMegAAAP8A/0AAAAAAAABq////////////////////AACeAP8zAP//////OP////8A//9oAOr/OaMAAAAA/5j//9oA/wD/////////////////5AAmIZIA/////yX/////////////assA////XGwAAP///3FnxgD///////////9V//9g//IALv//AP///zP/////3AD//+IAqf8A/wD/AADt///////////pRP//iG8AACX//wAATAAA/////////wAY/////////xMA//93AABT////////////////AFUA////AOkAAP9V8PL/////////////VQAA/////////////////////////9t/C/8A/////4ltAP8AAP////////////8AVUN/AAD//////+X///8A/wD//wD/AP//AP////////////////////////8A////////AP//1///hgDU//9VAAAA//8A/////9r//////////wD/v/X//////////2txyP8AAP//////////////y/8A////ADD/bab/AED///////////////////////9u/1VV///vAP///1/////////GAP9YAP///////////////////5H//wD////////////lAP///////////////////////////+kA////////yP//////TP///8D//////////5z//3////////////9/vQD//wAZVf////////////9t/////wD////////////////////////////////////////////////////////////////2//////////////////8A///////////////////////////////////////////////////Y////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////qZHL/////w=="};
+const climKey = () => MODE_KEY + '|' + state.mapOrbit + '|' + state.p0 + '|' + state.lapse;
+const localOn = () => state.lakeMode === 'local' && state.fillLakes && LOCAL !== null && LOCAL.fk === fillSea;
+function basinCells() {                // each basin's cells sorted by height, with their cumulative (cos-weighted) area
+  if (BCELLS && BCELLS.fk === fillSea && BCELLS.nb === NBAS) return BCELLS;
+  const n = MAP_W * MAP_H, NB = NBAS, start = new Int32Array(NB + 1);
+  for (let i = 0; i < n; i++) { const b = BID[i]; if (b >= 0) start[b + 1]++; }
+  for (let b = 0; b < NB; b++) start[b + 1] += start[b];
+  const cells = new Int32Array(start[NB]), pos = start.slice(0, NB);
+  for (let i = 0; i < n; i++) { const b = BID[i]; if (b >= 0) cells[pos[b]++] = i; }
+  for (let b = 0; b < NB; b++) if (start[b + 1] - start[b] > 1) cells.subarray(start[b], start[b + 1]).sort((x, y) => ELEV[x] - ELEV[y]);
+  const cum = new Float64Array(start[NB]);
+  for (let b = 0; b < NB; b++) { let a = 0; for (let k = start[b]; k < start[b + 1]; k++) { a += ROW_COS[(cells[k] / MAP_W) | 0]; cum[k] = a; } }
+  BCELLS = { fk: fillSea, nb: NB, start, cells, cum };
+  return BCELLS;
+}
+let LOUT = null;
+function lakeOutlets() {                // where each basin's overflow goes: past its spill point, the first cell that does not drain back into it
+  if (LOUT && LOUT.fk === fillSea && LOUT.nb === NBAS) return LOUT.out;
+  const n = MAP_W * MAP_H, NB = NBAS, d8 = steepest(), OC = OCN, term = new Int32Array(n).fill(-2), stack = new Int32Array(n);
+  for (let p0 = 0; p0 < n; p0++) {      // the basin (n + id) or sea (-1) that each cell's runoff ends in
+    if (term[p0] !== -2) continue;
+    let p = p0, sp = 0, t = -1;
+    for (;;) {
+      const tp = term[p];
+      if (tp !== -2) { t = tp === -3 ? -1 : tp; break; }
+      if (OC[p]) { term[p] = -1; t = -1; break; }
+      if (BID[p] >= 0) { t = n + BID[p]; term[p] = t; break; }
+      term[p] = -3; stack[sp++] = p;
+      const q = d8[p] >= 0 ? d8[p] : PARENT[p];
+      if (q < 0) { t = -1; break; }
+      p = q;
+    }
+    while (sp > 0) term[stack[--sp]] = t;
+  }
+  const out = new Int32Array(NB).fill(-1);
+  for (let b = 0; b < NB; b++) {
+    let x = BENTRY[b] >= 0 ? PARENT[BENTRY[b]] : -1, guard = 0;
+    while (x >= 0 && !OC[x] && guard++ < 200000) {
+      if (BID[x] >= 0) { if (BID[x] !== b) break; }
+      else if (term[x] !== n + b) break;
+      x = PARENT[x];
+    }
+    out[b] = x < 0 || OC[x] ? -1 : BID[x] >= 0 ? n + BID[x] : x;
+  }
+  LOUT = { fk: fillSea, nb: NB, out };
+  return out;
+}
+function lakeAreaOf(B, b, lvl) {        // area of basin b under water at level lvl
+  let lo = B.start[b], hi = B.start[b + 1];
+  while (lo < hi) { const m = (lo + hi) >> 1; if (ELEV[B.cells[m]] < lvl) lo = m + 1; else hi = m; }
+  return lo > B.start[b] ? B.cum[lo - 1] : 0;
+}
+function lakeArea(L) {
+  if (L.area === undefined) { const B = basinCells(); let A = 0; for (let b = 0; b < NBAS; b++) A += lakeAreaOf(B, b, L.lvl[b]); L.area = A; }
+  return L.area;
+}
+function tableLocal(fk) {               // the stored balance for the default three-sun sky, if it fits the current basins
+  const D = DEFAULT_LOCAL;
+  if (!D || D.fk !== fk || D.nb !== NBAS) return null;
+  if (!D.lvl || D.lvlFor !== BFLOOR) { const raw = atob(D.q); D.lvl = new Float32Array(NBAS); D.full = new Uint8Array(NBAS);
+    for (let b = 0; b < NBAS; b++) { const q = raw.charCodeAt(b); D.lvl[b] = q === 255 ? BSPILL[b] : BFLOOR[b] + q / 254 * (BSPILL[b] - BFLOOR[b]); D.full[b] = q === 255 ? 1 : 0; }
+    D.lvlFor = BFLOOR; }
+  return { fk, ck: D.ck, lvl: D.lvl, full: D.full, gen: 'D', pass: 0, settled: true, table: true };
+}
+function localLevels(R) {
+  const sea = seaLevelOf(state.waterPct); fillDepressions(sea);
+  const OC = oceanMask(sea), n = MAP_W * MAP_H, NB = NBAS, d8 = steepest(), B = basinCells(), bf = state.basinFill / 100;
+  const ro = new Float32Array(RN_N), nt = new Float32Array(RN_N);
+  for (let k = 0; k < RN_N; k++) { ro[k] = Math.max(0, R.Py[k] - R.Elay[k]); nt[k] = R.Py[k] - R.Ely[k]; }
+  // runoff from every cell outside the sea, routed downhill (the fill's drainage tree on flats); cells of a basin feed its lake node
+  const Q = new Float64Array(n + NB), down = new Int32Array(n + NB).fill(-1);
+  for (let r = 0; r < MAP_H; r++) { const i2 = RN_NY - 1 - (r >> 3), w = ROW_COS[r];
+    for (let c = 0; c < MAP_W; c++) { const p = r * MAP_W + c; if (OC[p]) continue; const b = BID[p];
+      Q[p] = ro[i2 * RN_NX + (c >> 3)] * w; down[p] = b >= 0 ? n + b : (d8[p] >= 0 ? d8[p] : PARENT[p]); } }
+  const LO = lakeOutlets(); for (let b = 0; b < NB; b++) down[n + b] = LO[b];
+  const indeg = new Int32Array(n + NB); for (let v = 0; v < n + NB; v++) if (down[v] >= 0) indeg[down[v]]++;
+  const qu = new Int32Array(n + NB); let qh = 0, qt = 0;
+  for (let v = 0; v < n + NB; v++) if (!indeg[v]) qu[qt++] = v;
+  const lvl = new Float32Array(NB), full = new Uint8Array(NB); let solved = 0;
+  for (let b = 0; b < NB; b++) lvl[b] = BFLOOR[b] + bf * (BSPILL[b] - BFLOOR[b]);       // for any basin the routing cannot reach
+  while (qh < qt) {
+    const v = qu[qh++];
+    if (v >= n) {            // a basin: flood its cells from the lowest up while the inflow still exceeds the net evaporation
+      const b = v - n, z = B.start[b + 1]; let net = Q[v], flux = Math.abs(net), k = B.start[b];
+      for (; k < z; k++) { const c = B.cells[k], r = (c / MAP_W) | 0, kk = (RN_NY - 1 - (r >> 3)) * RN_NX + ((c - r * MAP_W) >> 3), dl = (ro[kk] - nt[kk]) * ROW_COS[r];
+        flux += Math.abs(dl); if (net - dl < 0) break; net -= dl; }
+      if (flux < 1e-14) { Q[v] = 0; }                                  // no water moving here (frozen): keep the plain fill
+      else if (k >= z) { lvl[b] = BSPILL[b]; full[b] = 1; Q[v] = net; } // full: the surplus spills on downstream
+      else { lvl[b] = k > B.start[b] ? ELEV[B.cells[k]] : BFLOOR[b]; Q[v] = 0; }
+      solved++;
+    }
+    const w = down[v]; if (w < 0) continue;
+    Q[w] += Q[v];
+    if (--indeg[w] === 0) qu[qt++] = w;
+  }
+  return { lvl, full, solved };
+}
+function maybeBalance() {
+  if (state.lakeMode !== 'local' || !state.fillLakes || !mapReady) return;
+  const sea = seaLevelOf(state.waterPct); fillDepressions(sea);
+  const fk = fillSea, ck = climKey(), T = tableLocal(fk);
+  if (T && (ck === T.ck || state.mode === 'natural')) { if (!LOCAL || !LOCAL.table || LOCAL.fk !== fk) applyLocal(T); return; }
+  if (state.mode === 'natural') return;                                // no rain on frozen Mars: the lakes stay as they are
+  if (LOCAL && LOCAL.fk === fk && LOCAL.ck === ck && LOCAL.settled) return;
+  const R = rainYear(); if (!R) { updateLakeHint(); return; }
+  if (LOCAL && LOCAL.fk === fk && LOCAL.rk === R.key) return;
+  const prev = LOCAL && LOCAL.fk === fk ? LOCAL : null, res = localLevels(R);
+  const L = { fk, ck, lvl: res.lvl, full: res.full, solved: res.solved, gen: ++LOCAL_GEN, rk: R.key, pass: prev && prev.ck === ck && !prev.table ? prev.pass + 1 : 1 };
+  const ch = prev ? Math.abs(lakeArea(L) - lakeArea(prev)) / Math.max(1, lakeArea(prev)) : 1;
+  L.settled = ch < LAKE_TOL || L.pass >= LAKE_MAXPASS;
+  applyLocal(L);
+}
+function applyLocal(L) {
+  LOCAL = L; rainRivers = null; contourKey = '';
+  updateMapControls(); scheduleMapBuild(); scheduleLat();
+}
+function lakeFull(i, W) {             // ' · full, spilling' or ' · 43% of its depth', for the hover readout
+  const b = BID[i]; if (b < 0) return '';
+  if (localOn() && LOCAL.full[b]) return ' · full, spilling';
+  const d = BSPILL[b] - BFLOOR[b]; return d > 0 ? ' · ' + Math.round(100 * (W - BFLOOR[b]) / d) + '% of its depth' : '';
+}
+function updateLakeHint() {
+  const el = $('lakeHint'); if (!el) return;
+  if (state.lakeMode !== 'local') { el.hidden = true; return; }
+  el.hidden = false;
+  let t = 'Each crater and basin holds the lake its own rain and runoff can keep: it rises until evaporation from its surface balances what flows in, and spills into the next basin when full.';
+  if (localOn()) {
+    const L = LOCAL, sl = mapReady ? seaLevelOf(state.waterPct) : NaN, rel = v => isFinite(sl) ? ', ' + fmtH(Math.abs(v - sl)) + (v < sl ? ' below' : ' above') + ' sea level' : '';
+    const sea1 = (nm, b) => b >= 0 ? nm + ' ' + fmtH(L.lvl[b]) + rel(L.lvl[b]) + (L.full[b] ? ', spilling' : '') : '';
+    if (state.closedSeas === 'own') { const a = sea1('Hellas', HELLAS_B), b = sea1('Argyre', ARGYRE_B); if (a || b) t += ' ' + [a, b].filter(Boolean).join('; ') + '.'; }
+    t += L.table ? (climKey() === L.ck ? ' Balanced for the default three-sun sky.' : state.mode === 'natural' ? ' This sky is too cold for rain, so the lakes are shown as balanced for the default three-sun sky.' : ' Balancing the lakes for this sky…')
+      : L.settled ? ' Balanced for this sky.' : ' Balancing the lakes for this sky (pass ' + (L.pass + 1) + ')…';
+  } else t += state.mode === 'natural' ? ' This sky is too cold for rain, so the lakes use the plain fill below until a warmer sky is chosen.' : ' Balancing the lakes for this sky…';
+  el.textContent = t;
 }
 // water surface of the basin holding cell i at the current fill fraction (floor + fraction × depth to the brim)
 const lakeLevel = (i, f) => {
   const b = BID[i];
+  if (b >= 0 && localOn()) return LOCAL.lvl[b];
   if (state.closedSeas === 'own' && b >= 0 && (b === HELLAS_B || b === ARGYRE_B)) return clamp(b === HELLAS_B ? state.hellasLvl : state.argyreLvl, BFLOOR[b], BSPILL[b]);
   return BASIN[i] + f * (FILL[i] - BASIN[i]);
 };
 // everything that decides where water is, for cache keys
-const waterKey = sea => [sea, state.fillLakes ? fillSea : 'dry', state.basinFill, state.closedSeas, state.closedSeas === 'own' ? state.hellasLvl + '|' + state.argyreLvl : ''].join('|');
+const waterKey = sea => { const loc = localOn(); return [sea, state.fillLakes ? fillSea : 'dry', loc ? 'L' + LOCAL.gen : state.basinFill, state.closedSeas, state.closedSeas === 'own' && !loc ? state.hellasLvl + '|' + state.argyreLvl : ''].join('|'); };
 function seaLevelOf(pct) {
   if (pct <= 0) return -Infinity;
   if (pct >= 100) return Infinity;
@@ -4037,7 +4194,7 @@ function buildRivers(R) {
       Q[p] = roL[k] * ar;
       down[p] = b >= 0 ? d8[p] : (d8[p] >= 0 ? d8[p] : PARENT[p]);
     } }
-  for (let b = 0; b < NB; b++) { const en = BENTRY[b]; down[n + b] = en >= 0 ? PARENT[en] : -1; }
+  { const LO = lakeOutlets(); for (let b = 0; b < NB; b++) down[n + b] = LO[b]; }
   // accumulate downstream in topological order
   const indeg = new Int32Array(n + NB); for (let v = 0; v < n + NB; v++) if (down[v] >= 0) indeg[down[v]]++;
   const qu = new Int32Array(n + NB); let qh = 0, qt = 0;
@@ -4155,6 +4312,7 @@ function buildMap() {
   (st > 1 ? mcompLo : mcomp).putImageData(img, 0, 0);
   mapSrc = st > 1 ? mapCompLo : mapComp; mapSrcStep = st;
   mapStats = { sea, land: landW / allW, lake: lakeW / allW, ocean: ocW / allW, insLand: landW > 0 && (!rainOn || RF) ? landIns / landW : NaN, lo, hi, insOn };
+  setTimeout(maybeBalance, 0);
   mapParams = { sea, pal, wl, LMAX, WMAX, shadeOn, insOn, prof, op, lo, hi, FL, bf, OC, tempOn, swingOn, kthOn, rainOn, RAIN, RF, rscale, SWP, TB, DF, hRef, gK };
   // iso-insolation contours (daily mean only); skipped while the water slider is moving
   if (insOn && !rainOn && (tempOn || state.insMetric === 'mean')) {
@@ -4400,9 +4558,9 @@ function updateMapRead() {
     const OCh = mapParams && mapParams.OC, isOcean = OCh ? OCh[i] === 1 : h <= sea;
     const closedSea = !isOcean && FL && BID && BID[i] >= 0 && state.closedSeas === 'own' && (BID[i] === HELLAS_B || BID[i] === ARGYRE_B) && FL[i] > h && h < lakeLevel(i, mapParams.bf);
     if (isOcean) line('Ocean, ', b(fmtH(sea - h)), ' deep');
-    else if (closedSea) { const W = lakeLevel(i, mapParams.bf); line((BID[i] === HELLAS_B ? 'Hellas' : 'Argyre') + ' sea, ', b(fmtH(W - h)), ' deep, surface ', b(fmtH(Math.abs(W - sea))), W < sea ? ' below sea level' : ' above sea level'); }
-    else if (FL && FL[i] > h && h < lakeLevel(i, mapParams.bf)) { const W = lakeLevel(i, mapParams.bf); line('Lake, ', b(fmtH(W - h)), ' deep, surface ', b(fmtH(W - (isFinite(sea) ? sea : 0))), isFinite(sea) ? ' above sea level' : ' above the datum'); }
-    else line(isFinite(sea) ? 'Land, ' : 'Land', isFinite(sea) ? b(fmtH(h - sea)) : '', isFinite(sea) ? ' above sea level' : '');
+    else if (closedSea) { const W = lakeLevel(i, mapParams.bf); line((BID[i] === HELLAS_B ? 'Hellas' : 'Argyre') + ' sea, ', b(fmtH(W - h)), ' deep, surface ', b(fmtH(Math.abs(W - sea))), W < sea ? ' below sea level' : ' above sea level', dim(lakeFull(i, W))); }
+    else if (FL && FL[i] > h && h < lakeLevel(i, mapParams.bf)) { const W = lakeLevel(i, mapParams.bf); line('Lake, ', b(fmtH(W - h)), ' deep, surface ', b(fmtH(W - (isFinite(sea) ? sea : 0))), isFinite(sea) ? ' above sea level' : ' above the datum', dim(lakeFull(i, W))); }
+    else line(isFinite(sea) ? 'Land, ' : 'Land', isFinite(sea) ? b(fmtH(Math.abs(h - sea))) : '', isFinite(sea) ? (h < sea ? ' below sea level' : ' above sea level') : '');
     const isLand0 = !isOcean && !(FL && FL[i] > h && h < lakeLevel(i, mapParams.bf));
     if (mapStats.insOn) {
       const P = mapParams, v = P.prof[r];
@@ -4439,9 +4597,10 @@ function updateMapControls() {
   pr('huKm', state.hUnit === 'km'); pr('huEarth', state.hUnit === 'earth');
   $('fillLakes').checked = state.fillLakes;
   $('basinRow').hidden = !state.fillLakes; $('basinFill').value = state.basinFill;
+  { const loc = state.lakeMode === 'local'; pr('lmLocal', loc); pr('lmUni', !loc); $('uniRow').hidden = loc; updateLakeHint(); }
   setText('basinOut', state.basinFill === 100 ? '100% · full to the brim' : state.basinFill === 0 ? '0% · dry' : state.basinFill + '% of the depth');
   pr('csOwn', state.closedSeas === 'own'); pr('csSea', state.closedSeas === 'sea');
-  $('seasRows').hidden = state.closedSeas !== 'own' || !state.fillLakes; $('hellasLvl').value = state.hellasLvl; $('argyreLvl').value = state.argyreLvl;
+  $('seasRows').hidden = state.closedSeas !== 'own' || !state.fillLakes || state.lakeMode === 'local'; $('hellasLvl').value = state.hellasLvl; $('argyreLvl').value = state.argyreLvl;
   { const sl = mapReady ? seaLevelOf(state.waterPct) : NaN, rel = v => isFinite(sl) ? ' · ' + fmtH(Math.abs(v - sl)) + (v < sl ? ' below' : ' above') + ' sea level' : '';
     setText('hellasOut', fmtH(state.hellasLvl) + rel(state.hellasLvl)); setText('argyreOut', fmtH(state.argyreLvl) + rel(state.argyreLvl)); }
   pr('iwDate', state.insWhen === 'date'); pr('iwYear', state.insWhen === 'year'); pr('iwSwing', state.insWhen === 'swing'); $('iwSwing').hidden = state.insShow !== 'temp';
@@ -4503,6 +4662,8 @@ $('huKm').addEventListener('click', () => { state.hUnit = 'km'; updateMapControl
 $('huEarth').addEventListener('click', () => { state.hUnit = 'earth'; updateMapControls(); renderMapLegend(); updateMapRead(); save(); });
 $('fillLakes').addEventListener('change', e => { state.fillLakes = e.target.checked; mapSettingsChanged(); });
 $('basinFill').addEventListener('input', e => { state.basinFill = +e.target.value; liteDrag(); holdContours(); mapSettingsChanged(); });
+$('lmLocal').addEventListener('click', mapSet({ lakeMode: 'local' }));
+$('lmUni').addEventListener('click', mapSet({ lakeMode: 'uniform' }));
 $('csOwn').addEventListener('click', mapSet({ closedSeas: 'own' }));
 $('csSea').addEventListener('click', mapSet({ closedSeas: 'sea' }));
 for (const id of ['hellasLvl', 'argyreLvl']) {
@@ -4862,7 +5023,7 @@ const RESET_KEYS = {
   view: ['view', 'tod', 'obsLat', 'camOff'],
   lines: ['lineMode', 'specA', 'specB', 'specStep', 'specOp', 'lats', 'flip'],
   dur: ['dynDur'], ins: ['dynIns', 'metric', 'earthRef'], rat: ['dynRat', 'ratioMetric', 'earthRef'],
-  map: ['waterPct', 'fillLakes', 'mapRivers', 'basinFill', 'closedSeas', 'hellasLvl', 'argyreLvl', 'hUnit', 'mapLayer', 'palette', 'hillshade', 'insWhen', 'insMetric', 'mapOrbit', 'insShow', 'tUnit', 'heat', 'lapse', 'p0', 'isoStep', 'insOp', 'insDyn', 'mapGrid', 'gridLat', 'gridLon', 'mapSites'],
+  map: ['waterPct', 'fillLakes', 'lakeMode', 'mapRivers', 'basinFill', 'closedSeas', 'hellasLvl', 'argyreLvl', 'hUnit', 'mapLayer', 'palette', 'hillshade', 'insWhen', 'insMetric', 'mapOrbit', 'insShow', 'tUnit', 'heat', 'lapse', 'p0', 'isoStep', 'insOp', 'insDyn', 'mapGrid', 'gridLat', 'gridLon', 'mapSites'],
   lat: ['ltCut', 'ltRef'],
 };
 const copyDefaults = keys => { for (const k of keys) state[k] = JSON.parse(JSON.stringify(DEFAULTS[k])); };
