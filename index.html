@@ -1009,7 +1009,7 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
 
   <section class="panel card cpanel" id="pMap" aria-label="Mars map">
     <div class="side">
-      <div class="side-h"><div class="h-row"><h2>Mars map</h2><button type="button" class="rst" data-reset="map" title="Reset the map’s settings and zoom (the date stays)">Reset</button></div><p class="sub" id="mapSub">Equirectangular projection of MOLA laser-altimeter topography at 4 pixels per degree. Drag to pan, scroll or pinch to zoom, click to set the observer latitude.</p></div>
+      <div class="side-h"><div class="h-row"><h2>Mars map</h2><button type="button" class="rst" data-reset="map" title="Reset the map’s settings and zoom (the date stays)">Reset</button></div><p class="sub" id="mapSub">Equirectangular projection of MOLA laser-altimeter topography at 4 pixels per degree. Drag to pan (the map wraps round east–west), scroll or pinch to zoom, click to set the observer latitude.</p></div>
       <div class="mgrp">
         <div class="spec-row"><span class="flabel">Water level</span><output id="waterOut"></output></div>
         <input type="range" id="water" min="0" max="100" step="1" value="26" aria-label="Share of the surface below sea level, percent">
@@ -1264,7 +1264,7 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
         <li>Daily high and low (Each sol: Average, High, Low; for every temperature view, so also the seasonal swing of the highs or lows and the 10th warmest or coldest high or low). The energy-balance model gives each sol's average. The rise to the afternoon high and the fall to the dawn low come from a linear balance for the ground and the air near it, C dT′/dt = η F(t) − λ T′. It is driven by the light of all the suns over the sol, so mirrors that rise before the Sun or set after it stretch the warm part of the day and narrow the range, and it is solved harmonic by harmonic over the sol. It was fitted to typical ranges on Earth's land: desert summer 16 K, continental mid-latitude summer 13 K and winter 9 K, humid tropics 9.5 K, maritime summer 8 K and winter 5.5 K, with the high near 14:30. That gives η = 0.59 of the light warming the ground, C = 5.2 × 10⁵ J/m²/K (the soil and the air mixed by day), λ = 49 W/m²/K in dry country and 115 W/m²/K in moist country, and 6.0 K from passing weather added in quadrature, all within about 1 K of those values. For Mars, the sol is 2.7% longer, and the range scales with the air column overhead as m<sup>−0.4</sup>. That exponent gives both the wider ranges of Earth's high plateaus and the 50–70 K range of today's thin Martian air. Under Mars gravity 1.05 atm is 2.77× Earth's air, so the range is 0.67× Earth's for the same sunlight and humidity. Moist means near water (the share of ocean, seas and lakes in each 4° × 6° cell and its neighbours, full at 35%) or, once the rain has been computed, rain close to the potential evaporation (full at P/Ep = 1, none below 0.3). Water surfaces swing 6% as much as moist land. At the defaults the range is mostly 4–7 K with three suns, which spread the light over the sol, and up to about 11 K in the dry interiors with two suns. The latitude panel still counts daily averages.</li>
         <li>Rain: a seasonal moisture budget on a 2° grid, solved as a steady state for 12 slices of the year, twice (the second time with the soil water the first pass leaves), in the background (about 15 seconds). Column water vapour is carried by low-level, moisture-weighted winds and mixed by eddies. The winds come from the temperature model. In the Hadley regime the low-level air flows toward the latitudes of highest near-surface moist static energy: warm, moist air means low surface pressure, and friction and the Coriolis force turn the flow, as in Lindzen and Nigam's tropical boundary-layer model applied to the zonal mean. So the rising branch sits wherever that energy peaks (on Earth over the warmest seas rather than the hottest deserts), even near a pole, and the cells cross the equator into the summer hemisphere, as climate models of planets with warm poles show. Flow toward the equator turns into trade winds, flow toward a pole into westerlies. Each cell reaches as far as the eddy-regime scaling allows: the thermal Rossby number to the ¼ power, about 1.4× Earth's width on Mars. Beyond it come eddy-driven westerlies, the Ferrel cell and stronger eddy mixing, growing with the size of the temperature gradient, and monsoon flow follows the land–sea temperature contrasts. Terrain holds moisture back: across each step in surface height only the vapour above the higher ground is exchanged, less the height the wind can lift air by (wind speed ÷ buoyancy frequency, after Sheppard), so moist low air rains out on the windward side and high plateaus stay dry. Rain falls once the column passes 50% of saturation, on a 4.7-day timescale, more where the low-level flow converges (rising air) and much less where it diverges (sinking air, as over Earth's subtropical deserts); storm tracks add rain where it cools poleward, and air blown up slopes condenses. The ocean and lakes evaporate by a bulk formula capped by the year's mean net radiation (water stores heat), none while frozen; land at a Priestley–Taylor rate, its yearly share set by the Budyko curve in Fu's form (w = 2.6, the global calibration on river runoff of Zhang et al. 2004) from the year's rain and demand. The saturation column is ρ<sub>v,sat</sub> × R<sub>v</sub>T²/(LΓ) per metre, about 2.6× Earth's at the same temperature because Mars's air column is deeper. Chosen date interpolates between the slices.
           <br><b>Tested on Earth.</b> The same code was run with Earth's radius, rotation, gravity and topography (ETOPO, 20′). Its constants were fitted with Earth's observed temperatures, winds, vertical motion and sea temperatures (NCEP and OISST long-term means) against observed rain (GPCP) and the natural sizes of Earth's closed-basin lakes. With that observed forcing, its rain over land correlates 0.85 with the observed, typically within a factor of 1.6, and it gives 1,020 mm a year globally (observed 983). The circulation part was fitted separately to the observed low-level winds and their convergence. Run as it runs here, from the energy-balance temperatures and its own winds, it does worse: correlation 0.63, typically within a factor of 2.1, 870 mm a year globally. Western Europe gets 980 mm (observed about 1,010), the Sahara 100 (100), the Congo 1,480 (1,700), the Amazon 1,670 (2,490) and Tibet 240 (430). But the summer monsoons come out far too weak: India gets 290 mm against 1,120, eastern China 260 against 1,340 and the eastern US 450 against 1,320. Arabia comes out too wet: 380 mm against 120. It also fills Earth's large closed basins too much. The Caspian, Aral, Balkhash and Tarim basins and the Makgadikgadi pans all come out full, whereas in reality the Caspian covers 371 thousand km², the Aral 68 thousand before 1960, and the others are small or dry. Lake Chad comes out about right (28 thousand km², against 20). So read big closed seas as the wet end of what is possible. In neither default sky are the tropics the warmest latitudes for most of the year. With three suns, the light sent to the outer latitudes makes 50–60°N or the south pole the warmest; with two suns, the lens profile heats the summer hemisphere's high latitudes. The air rises there, and the tropics get their rain from cells crossing the equator rather than from an Earth-like rain belt; Earth cannot test that regime directly. Because the monsoons are weak on Earth, rain on Mars's southern highlands, which depends on monsoon air from the northern ocean, is probably underestimated. At the defaults (a 26% sea, UV-free mirrors), land gets about 650 mm a year on average with three suns (10% of it under 250 mm, almost none under 100 mm) and about 250 mm with two suns (68% under 250 mm, 39% under 100 mm). With a 30% sea, whose larger surface evaporates more, it was about 690 mm and 300 mm. Two suns leave the northern ocean cool (about 10 °C on average), so it evaporates little, and the southern highlands are a high continent far from it. Searching the two-sun settings for more rain gave the present two-sun default (k swinging by ±0.2 instead of ±0.6, its timing and the semiannual part moved), which cut the land under 100 mm from 43% to 26% (with full-spectrum mirrors). Wetter two-sun skies exist, but only with tens more sols below 0 °C in the populated band and harsher seasons in the far south. Rain lines can be drawn every 10 mm to 1 m a year (on a chosen date, at that day's rate over a year); the 300 mm line, roughly the edge of dry country, is always drawn thick. Colours double with each step: 300 mm a year is yellow, 600 mm green, 1.2 m cyan, 2.4 m purple and 4.8 m magenta. Read it as the pattern this sunlight would drive, not a forecast: clouds and their feedbacks are left out.</li>
-        <li>Rivers: the yearly runoff from the rain model (rain minus land evaporation; on lakes, rain minus lake evaporation) is routed downhill along the steepest descent; each lake gathers its inflow and passes water on through its outlet only if it is full; past the outlet the water follows the first ground that drains away from the lake. Flows above about 25 m³/s (a sizeable river) are drawn; they appear once the rain has been computed, far wider than real so they show at planetary scale.</li>
+        <li>Rivers: the yearly runoff from the rain model (rain minus land evaporation; on lakes, rain minus lake evaporation) is routed downhill along the steepest descent; each lake gathers its inflow and passes water on through its outlet only if it is full; past the outlet the water follows the first ground that drains away from the lake. Flows above about 25 m³/s (a sizeable river) are drawn; they appear once the rain has been computed, far wider than real so they show at planetary scale. Where a river runs into a lake that spills, it carries on across the lake as a straight line from where it enters to the spill point and then along the overflow, so a chain of lakes reads as one river. That is drawn for the main inflows (at least 30% of what leaves the lake) where the line stays on the water, and not across Hellas, Argyre or the largest lakes; smaller streams end at the shore.</li>
         <li>Lines and colours: each set of lines has its own switch. Height lines on land (above sea level) and depth lines under the ocean, seas and lakes (below their own surface) are off by default and can be drawn every 0.1–5 km in the chosen units, every fifth line thicker; the layer's own lines (isotherms, rain lines, insolation or UV index lines) are on by default and can be switched off. “Solid colour between lines” fills each band between two neighbouring lines (height or depth lines, isotherms, rain lines, insolation lines or UV index lines) with one colour, that of the value midway between them, to exaggerate the steps. “Land &amp; water” colours show only where the water is.</li>
         <li>Water needed: the readout gives the water the map holds as a global equivalent layer, the depth it would have if spread evenly over Mars, split into the ocean, Hellas and Argyre, and the other lakes; with water-balance lakes it appears once they are balanced for the sky. At the defaults (a 26% sea) that is 473 m with three suns and 249 m with two suns; with a 30% sea it is 588 m and 362 m.</li>
         <li>Over water too: the ocean, Hellas, Argyre and the lakes are coloured by the layer as well. On the rain layer that is the rain falling on them; on the temperature layer it is their surface temperature from the same model: the cell's sea-level temperature for the ocean and, for a lake, that temperature moved by the lapse rate to the lake's own surface height, so a lake's water is cooler than the open ocean at the same place by about 1.9 K for each km its surface stands above sea level, and warmer below it: Hellas at its brim, about 3.9 km above the ocean, by about 7 K. The temperature model has one value per 4° × 6° cell for land and water together, so coastal water carries some of the land's seasons. The land averages leave the water out. Their coasts are then drawn as a dark line, thick around the ocean and lakes of some size and thin around small crater lakes, so water and land can still be told apart.</li>
@@ -3224,7 +3224,6 @@ function renderDetail() {
   const rstops = state.insWhen === 'year' ? RAIN_YR : RAIN_SOL;
   for (let x = 0; x < w; x++) {
     const lon = mapLon((x + 0.5) / k);
-    if (lon < -180 || lon > 180) continue;
     lons[x] = mod(lon, 360);
     const u = mod(lon, 360) * MAP_PPD - 0.5, c0 = Math.floor(u);
     cols0[x] = mod(c0, MAP_W); cols1[x] = mod(c0 + 1, MAP_W); fcs[x] = u - c0; colOk[x] = 1;
@@ -4542,7 +4541,7 @@ function fmtTemp(K, digits = 0) {
 // Rivers: the yearly runoff (rain minus land evaporation; on lakes, rain minus lake evaporation) routed down the drainage tree of
 // the depression fill. A closed basin passes water on only when its net inflow is positive (it spills); flows from about 25 m³/s
 // are drawn, wider than real so they show at planetary scale.
-const RIVER_QMIN = 25; let rainRivers = null, D8 = null;
+const LAKE_LINK_MAX = 600, RIVER_QMIN = 25; let rainRivers = null, D8 = null;
 function steepest() {                   // each cell's steepest-descent neighbour on the bare ground (−1 where none is lower)
   if (D8) return D8;
   const n = MAP_W * MAP_H, d = new Int32Array(n).fill(-1);
@@ -4603,6 +4602,33 @@ function buildRivers(R) {
     if (Math.abs(x1 - x0) > 1.5) continue;                    // across the 180° seam
     const cl = Math.min(NCL - 1, Math.floor(2 * Math.log10(Q[p] / RIVER_QMIN)));
     segL[cl].push(x0, r0 + 0.5, x1, r1 + 0.5); segs++;
+  }
+  // A lake that passes water on: its main inflowing rivers (those carrying at least 30% of what leaves, the largest two) carry
+  // on as a straight line from where they enter to the lake's spill point, then along the overflow path to where the outflowing
+  // river starts, so a chain of lakes reads as one river. Only where that line stays on the lake, and not across seas larger than
+  // LAKE_LINK_MAX map cells (Hellas, Argyre and the biggest lakes); smaller streams end at the shore as before.
+  { const LCNT = new Int32Array(NB); for (let p = 0; p < n; p++) if (water[p] && down[p] >= n) LCNT[down[p] - n]++;
+    const LO = lakeOutlets(), xy = p => { const r = (p / MAP_W) | 0, c = p - r * MAP_W; return [(c + 720) % MAP_W + 0.5, r + 0.5]; };
+    const cls = q => Math.max(0, Math.min(NCL - 1, Math.floor(2 * Math.log10(q / RIVER_QMIN))));
+    const add = (a, b, cl) => { const A = xy(a), B = xy(b); if (Math.abs(A[0] - B[0]) <= MAP_W / 2) segL[cl].push(A[0], A[1], B[0], B[1]); };
+    const onLake = (a, b, lk) => { const ra = (a / MAP_W) | 0, ca = a - ra * MAP_W, rb = (b / MAP_W) | 0, cb = b - rb * MAP_W; if (Math.abs(ca - cb) > MAP_W / 2) return false;
+      const m = Math.max(2, Math.ceil(Math.hypot(ra - rb, ca - cb))); let wet = 0;
+      for (let i = 0; i <= m; i++) { const r = Math.round(ra + (rb - ra) * i / m), c = Math.round(ca + (cb - ca) * i / m), q = r * MAP_W + c; if (water[q] && down[q] === lk) wet++; }
+      return wet >= 0.8 * (m + 1); };
+    const best = new Map();                 // per lake: its inflows, largest first
+    for (let p = 0; p < n; p++) {
+      if (water[p] || Q[p] < RIVER_QMIN) continue;
+      const q = down[p]; if (q < 0 || q >= n || !water[q] || down[q] < n) continue;
+      const b = down[q] - n; if (Q[n + b] < RIVER_QMIN || LCNT[b] > LAKE_LINK_MAX || BENTRY[b] < 0) continue;
+      let a = best.get(b); if (!a) best.set(b, a = []); a.push([Q[p], q]);
+    }
+    for (const [b, a] of best) {
+      a.sort((x, y) => y[0] - x[0]); const e = BENTRY[b], qo = Q[n + b]; let drawn = 0;
+      for (const [qi, q] of a.slice(0, 2)) if (qi >= 0.3 * qo && onLake(q, e, n + b)) { add(q, e, cls(Math.min(qi, qo))); drawn++; }
+      if (!drawn) continue;
+      let x = e, k = 0; const end = LO[b], co = cls(qo);     // the overflow path from the spill point to where the outflowing river starts
+      while (k++ < 400) { const y = PARENT[x]; if (y < 0) break; add(x, y, co); x = y; if (x === end || OCN[x] || (water[x] && down[x] !== n + b)) break; }
+    }
   }
   const paths = segL.map(chainPath);
   return { key: R.key + '|' + state.fillLakes + '|' + waterKey(sea), Q: Qf, paths, segs };
@@ -4825,8 +4851,8 @@ function sizeMap() {
 const mapScale = () => Math.min(MW / 360, MH / 180) * mapView.z;
 function clampView() {
   mapView.z = clamp(mapView.z, 1, 40);
-  const s = mapScale(), hw = MW / (2 * s), hh = MH / (2 * s);
-  mapView.cx = hw >= 180 ? 0 : clamp(mapView.cx, -180 + hw, 180 - hw);
+  const s = mapScale(), hh = MH / (2 * s);
+  mapView.cx = mod(mapView.cx + 180, 360) - 180;            // east–west the map wraps round: no edge at 180°
   mapView.cy = hh >= 90 ? 0 : clamp(mapView.cy, -90 + hh, 90 - hh);
 }
 const mapX = L => MW / 2 + (L - mapView.cx) * mapScale();
@@ -4843,10 +4869,13 @@ function drawMap() {
   if (!mapReady) return;
   clampView();
   const s = mapScale();
-  const L0 = Math.max(-180, mapLon(0)), L1 = Math.min(180, mapLon(MW)), B1 = Math.min(90, mapLat(0)), B0 = Math.max(-90, mapLat(MH));
+  // the copies of the map (one degree of longitude per 360° shift) that show on screen: the map wraps round east–west
+  const COPIES = [-360, 0, 360].filter(o => mapX(-180 + o) < MW && mapX(180 + o) > 0);
+  const L0 = Math.max(-180 + COPIES[0], mapLon(0)), L1 = Math.min(180 + COPIES[COPIES.length - 1], mapLon(MW)), B1 = Math.min(90, mapLat(0)), B0 = Math.max(-90, mapLat(MH));
   g.imageSmoothingEnabled = true; g.imageSmoothingQuality = mapLite || sliderHeld ? 'low' : 'high';
   const ks = MAP_PPD / mapSrcStep;
-  g.drawImage(mapSrc, (L0 + 180) * ks, (90 - B1) * ks, (L1 - L0) * ks, (B1 - B0) * ks, mapX(L0), mapY(B1), (L1 - L0) * s, (B1 - B0) * s);
+  for (const o of COPIES) { const a = Math.max(-180 + o, L0), b = Math.min(180 + o, L1); if (b <= a) continue;
+    g.drawImage(mapSrc, (a - o + 180) * ks, (90 - B1) * ks, (b - a) * ks, (B1 - B0) * ks, mapX(a), mapY(B1), (b - a) * s, (B1 - B0) * s); }
   if (mapView.z >= 2) {
     if (detailKey === mapViewKey()) g.drawImage(mapDetail, 0, 0, MW, MH);
     else { clearTimeout(detailTimer); detailTimer = setTimeout(renderDetail, 160); }
@@ -4866,7 +4895,7 @@ function drawMap() {
     }
     for (let L = Math.ceil(L0 / dLon) * dLon; L <= L1 + 1e-9; L += dLon) {
       const x = Math.round(mapX(L)) + 0.5;
-      g.strokeStyle = L === 0 ? 'rgba(255,255,255,0.75)' : 'rgba(255,255,255,' + (pxLon < 6 ? 0.18 : 0.38) + ')';
+      g.strokeStyle = mod(L, 360) === 0 ? 'rgba(255,255,255,0.75)' : 'rgba(255,255,255,' + (pxLon < 6 ? 0.18 : 0.38) + ')';
       g.beginPath(); g.moveTo(x, yt); g.lineTo(x, yb); g.stroke();
     }
     // labels, thinned so they never collide
@@ -4885,7 +4914,7 @@ function drawMap() {
       if (Math.round(L / dLon) % kLon !== 0) continue;
       const x = mapX(L), y = Math.min(yb, MH) - 9;
       if (x < xl + 14 || x > xr - 14) continue;
-      g.strokeText(lonLabel(L), x, y); g.fillText(lonLabel(L), x, y);
+      const Lw = mod(L + 180, 360) - 180; g.strokeText(lonLabel(Lw), x, y); g.fillText(lonLabel(Lw), x, y);
     }
     g.restore();
   }
@@ -4897,17 +4926,18 @@ function drawMap() {
       lineLayer.width = Math.round(MW * MDPR); lineLayer.height = Math.round(MH * MDPR);
       const c2 = lineLayer.getContext('2d'), k = s / MAP_PPD, ox = mapX(-180), oy = mapY(90);
       c2.setTransform(MDPR, 0, 0, MDPR, 0, 0); c2.save(); c2.beginPath(); c2.rect(xl, yt, xr - xl, yb - yt); c2.clip();
-      c2.setTransform(MDPR * k, 0, 0, MDPR * k, MDPR * ox, MDPR * oy); c2.lineCap = 'round'; c2.lineJoin = 'round';
+      for (const o of COPIES) { c2.setTransform(MDPR * k, 0, 0, MDPR * k, MDPR * (ox + o * s), MDPR * oy); c2.lineCap = 'round'; c2.lineJoin = 'round';
       if (elevLines && elevLines.land) { c2.strokeStyle = 'rgba(40,26,16,0.55)'; c2.lineWidth = 0.8 / k; c2.stroke(elevLines.land.thin); c2.lineWidth = 1.7 / k; c2.stroke(elevLines.land.thick); }
       if (elevLines && elevLines.water) { c2.strokeStyle = 'rgba(214,236,255,0.6)'; c2.lineWidth = 0.8 / k; c2.stroke(elevLines.water.thin); c2.lineWidth = 1.7 / k; c2.stroke(elevLines.water.thick); }
       if (coastOn) { c2.strokeStyle = 'rgba(8,11,18,0.55)'; c2.lineWidth = 0.9 / k; c2.stroke(mapCoast.thin); c2.strokeStyle = 'rgba(8,11,18,0.92)'; c2.lineWidth = 2.6 / k; c2.stroke(mapCoast.thick); }
+      }
       c2.restore();
       // labels on the thicker height / depth lines
       if (elevLines) { c2.setTransform(MDPR, 0, 0, MDPR, 0, 0); c2.font = font(600, MW < 560 ? 9 : 10, 'm'); c2.textAlign = 'center'; c2.textBaseline = 'middle'; c2.lineJoin = 'round'; c2.lineWidth = 3;
         const placed = [];
         for (const [set, fg, bg, sign] of [[elevLines.land, '#2a1a10', 'rgba(255,248,236,0.85)', 1], [elevLines.water, '#EAF4FF', 'rgba(8,24,48,0.85)', -1]]) { if (!set) continue;
           const st5 = set === elevLines.land ? mapParams.stepL * 5 : mapParams.stepW * 5;
-          for (const L of set.labels) { if (Math.abs(L.v / st5 - Math.round(L.v / st5)) > 1e-6 || Math.abs(L.v) < 1e-6) continue; const x = ox + L.x * k, y = oy + L.y * k;
+          for (const o of COPIES) for (const L of set.labels) { if (Math.abs(L.v / st5 - Math.round(L.v / st5)) > 1e-6 || Math.abs(L.v) < 1e-6) continue; const x = ox + o * s + L.x * k, y = oy + L.y * k;
             if (x < xl + 30 || x > xr - 30 || y < yt + 10 || y > yb - 10) continue;
             if (placed.some(p => Math.hypot(p.x - x, p.y - y) < 120)) continue; placed.push({ x, y });
             const t = (sign < 0 ? '−' : '') + (hConv(Math.abs(L.v)) / 1000).toFixed(hConv(st5) < 1000 ? 1 : 0) + ' km';
@@ -4927,17 +4957,19 @@ function drawMap() {
       const k = s / MAP_PPD, ox = mapX(-180), oy = mapY(90);
       g.save();
       g.beginPath(); g.rect(xl, yt, xr - xl, yb - yt); g.clip();
-      g.setTransform(MDPR * k, 0, 0, MDPR * k, MDPR * ox, MDPR * oy);
-      g.strokeStyle = 'rgba(255,255,255,0.95)'; g.lineCap = 'round'; g.lineJoin = 'round';
-      g.lineWidth = 1.1 / k; g.stroke(mapContours.thin);
-      g.lineWidth = 2.8 / k; g.stroke(mapContours.thick);
+      for (const o of COPIES) {
+        g.setTransform(MDPR * k, 0, 0, MDPR * k, MDPR * (ox + o * s), MDPR * oy);
+        g.strokeStyle = 'rgba(255,255,255,0.95)'; g.lineCap = 'round'; g.lineJoin = 'round';
+        g.lineWidth = 1.1 / k; g.stroke(mapContours.thin);
+        g.lineWidth = 2.8 / k; g.stroke(mapContours.thick);
+      }
       g.restore();
       g.setTransform(MDPR, 0, 0, MDPR, 0, 0);
       g.font = font(600, MW < 560 ? 9.5 : 10.5, 'm'); g.textAlign = 'center'; g.textBaseline = 'middle';
       g.lineJoin = 'round'; g.lineWidth = 3; g.strokeStyle = 'rgba(8,11,18,0.85)'; g.fillStyle = '#FFFFFF';
       const placed = [];
-      for (const L of mapContours.labels) {
-        const x = ox + L.x * k, y = oy + L.y * k;
+      for (const o of COPIES) for (const L of mapContours.labels) {
+        const x = ox + o * s + L.x * k, y = oy + L.y * k;
         if (x < xl + 30 || x > xr - 30 || y < yt + 10 || y > yb - 10 || (x > MW - 60 && y < 120)) continue;
         if (placed.some(p => (p.v === L.v ? Math.hypot(p.x - x, p.y - y) < 240 : Math.hypot(p.x - x, p.y - y) < 64))) continue;
         placed.push({ v: L.v, x, y });
@@ -4961,9 +4993,10 @@ function drawMap() {
         riverLayer.width = Math.round(MW * MDPR); riverLayer.height = Math.round(MH * MDPR);
         const c2 = riverLayer.getContext('2d'), k = s / MAP_PPD, ox = mapX(-180), oy = mapY(90), W = [0.9, 1.4, 2.0, 2.7, 3.5, 4.4];
         c2.setTransform(MDPR, 0, 0, MDPR, 0, 0); c2.save(); c2.beginPath(); c2.rect(xl, yt, xr - xl, yb - yt); c2.clip();
-        c2.setTransform(MDPR * k, 0, 0, MDPR * k, MDPR * ox, MDPR * oy); c2.lineCap = 'round'; c2.lineJoin = 'round';
+        for (const o of COPIES) { c2.setTransform(MDPR * k, 0, 0, MDPR * k, MDPR * (ox + o * s), MDPR * oy); c2.lineCap = 'round'; c2.lineJoin = 'round';
         for (let c = 0; c < W.length; c++) { c2.strokeStyle = 'rgba(14,52,104,0.55)'; c2.lineWidth = (W[c] + 1.2) / k; c2.stroke(rainRivers.paths[c]); }
         for (let c = 0; c < W.length; c++) { c2.strokeStyle = '#4FA3F0'; c2.lineWidth = W[c] / k; c2.stroke(rainRivers.paths[c]); }
+        }
         c2.restore(); riverLayerKey = lk;
       }
       g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.drawImage(riverLayer, 0, 0); g.restore();
@@ -4985,8 +5018,8 @@ function drawMap() {
   if (state.mapSites) {
     g.font = font(500, MW < 560 ? 9.5 : 10.5, 'b'); g.textAlign = 'left'; g.textBaseline = 'middle';
     const names = s >= (MW < 560 ? 4 : 2);
-    for (const [name, B, L] of SITES) {
-      const x = mapX(L), y = mapY(B);
+    for (const o of COPIES) for (const [name, B, L] of SITES) {
+      const x = mapX(L + o), y = mapY(B);
       if (x < -20 || x > MW + 20 || y < -20 || y > MH + 20) continue;
       g.beginPath(); g.arc(x, y, MW < 560 ? 2.8 : 3.6, 0, 2 * Math.PI);
       g.fillStyle = '#FFFFFF'; g.fill(); g.lineWidth = 1.6; g.strokeStyle = '#141922'; g.stroke();
@@ -5496,14 +5529,14 @@ mapCvs.addEventListener('pointermove', ev => {
     mapView.cx = mdrag.cx - dx / s; mapView.cy = mdrag.cy + dy / s;
     scheduleMapDraw();
   }
-  const lon = mapLon(px), lat = mapLat(py);
-  mapHover = (lon >= -180 && lon <= 180 && lat >= -90 && lat <= 90) ? { lon, lat } : null;
+  const lon = mod(mapLon(px) + 180, 360) - 180, lat = mapLat(py);
+  mapHover = lat >= -90 && lat <= 90 ? { lon, lat } : null;
   updateMapRead();
 });
 const mapUp = ev => {
   if (mdrag && mdrag.moved < 5 && performance.now() - mdrag.t < 500 && mptr.size === 1) {
     const r = mapCvs.getBoundingClientRect(), lat = mapLat(ev.clientY - r.top), lon = mapLon(ev.clientX - r.left);
-    if (lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180) setObs(lat);
+    if (lat >= -90 && lat <= 90) setObs(lat);
   }
   mptr.delete(ev.pointerId);
   if (mptr.size < 2) mpinch = null;
