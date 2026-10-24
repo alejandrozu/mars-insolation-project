@@ -224,8 +224,8 @@ body[data-layout="compact"].no-charts .viewer { position: static; grid-row: auto
 #pMap .play { border-color: var(--line); background: var(--surface); color: var(--ink); flex: none; }
 #pMap .play:hover { border-color: var(--accent); }
 #pMap .play[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
-.dial { position: relative; width: 204px; height: 204px; flex: none; touch-action: none; cursor: pointer; border-radius: 50%; user-select: none; -webkit-user-select: none; }
-.dial.sm { width: 184px; height: 184px; }
+.dial { position: relative; width: 232px; height: 232px; flex: none; touch-action: none; cursor: pointer; border-radius: 50%; user-select: none; -webkit-user-select: none; }
+.dial.sm { width: 222px; height: 222px; }
 .dial svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 .dial:focus-visible { outline: 2px solid var(--dial-accent); outline-offset: 2px; }
 .dial.dragging { cursor: grabbing; }
@@ -242,9 +242,25 @@ body[data-layout="compact"].no-charts .viewer { position: static; grid-row: auto
 .dial .dknob { fill: var(--dial-accent); stroke: var(--dial-bg); stroke-width: 3; }
 .dial .dapd { fill: var(--dial-bg); stroke: var(--dial-ink); stroke-width: 1.4; }
 .dial .dsq { fill: var(--dial-bg); stroke: var(--dial-ink); stroke-width: 1.4; }
+.dial .mtrk { fill: none; stroke: var(--dial-track); opacity: 0.7; }
+.dial .msep { stroke: var(--dial-muted); stroke-width: 0.7; opacity: 0.7; }
+.dial .msep.ms { stroke: var(--dial-ink); stroke-width: 1.3; opacity: 0.9; }
+.dial .mname { font-family: var(--f-display); font-weight: 600; font-size: 8.8px; letter-spacing: 0.01em; fill: var(--dial-muted); pointer-events: none; }
+.dial .mname.on { fill: var(--dial-accent); font-weight: 700; }
+.dial .dfest { fill: var(--dial-accent); }
+.dshow { display: inline-flex; flex-wrap: wrap; gap: 0; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; font-size: 11.5px; max-width: 100%; }
+.dshow button { border: 0; background: transparent; color: var(--ink-2); padding: 4px 9px; cursor: pointer; font: inherit; }
+.dshow button + button { border-left: 1px solid var(--line); }
+.dshow button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.viewer .dshow { border-color: var(--space-line); }
+.viewer .dshow button { color: var(--space-muted); }
+.viewer .dshow button + button { border-left-color: var(--space-line); }
+.viewer .dshow button[aria-pressed="true"] { background: var(--space-accent); color: var(--space-accent-ink); }
+.datectl .dshow { grid-column: 1 / -1; justify-self: start; }
 .dial .dls { font-size: 8.5px; }
 .dial .dsn { font-family: var(--f-display); font-weight: 700; font-size: 8.6px; letter-spacing: 0.1em; text-transform: uppercase; fill: #1B1208; pointer-events: none; }
-.dial.sm .dial-c b { font-size: 13px; }
+.dial-c b { font-size: 13.5px; }
+.dial.sm .dial-c b { font-size: 12.5px; }
 .dial.sm .dial-c { font-size: 11px; }
 .dial-c .dc-seas { font-family: var(--f-display); font-weight: 600; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--dial-ink); }
 .viewer .dial { --dial-track: var(--space-2); --dial-ink: var(--space-ink); --dial-muted: var(--space-muted); --dial-accent: var(--space-accent); --dial-bg: var(--space-1); }
@@ -778,7 +794,7 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
       <p class="vhint" id="vhint">Drag Mars around its orbit to change the date</p>
       </div>
       <div class="ctl datectl">
-        <div class="dial" id="dateDial" role="slider" tabindex="0" aria-label="Date in the Martian year" title="Drag around the year. Coloured arcs: the five seasons of the three-sun climate (Spring, Summer, Estío, Autumn, Winter), each 134 sols, with Summer centred on perihelion. Squares: the solstices and equinoxes. Dots: perihelion and aphelion.">
+        <div class="dial" id="dateDial" role="slider" tabindex="0" aria-label="Date in the Martian year" title="Drag around the year, from New Year (Ls 0) at the top. Outer ring: the twenty months, small dots marking the festival sols. Inner ring: the five seasons. Squares: the solstices and equinoxes. Dots: perihelion and aphelion.">
           <output class="dial-c" id="dateOut"></output>
         </div>
         <div class="dial-side">
@@ -792,6 +808,7 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
           </div>
         </div>
         <div class="yspeed"><label class="ys-l" for="yearSecs">Year in</label><input type="range" id="yearSecs" min="0" max="100" step="1" value="47" aria-label="How many seconds a Martian year takes when playing, from 1 to 300"><output class="ys-o" id="yearSecsOut">15 s</output></div>
+        <div class="dshow" role="group" aria-label="What the dial shows"><button type="button" data-ds="date" aria-pressed="true">Month &amp; day</button><button type="button" data-ds="sol" aria-pressed="true">Sol</button><button type="button" data-ds="ls" aria-pressed="true">L<sub>s</sub></button></div>
       </div>
 
       <div class="ctl" id="todRow" hidden>
@@ -1118,6 +1135,10 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
           <div class="spec-row"><label class="switch sm"><input type="checkbox" id="eWatOn"><span class="track"></span><span id="eWatLbl">Depth lines in water</span></label><output id="eWatOut"></output></div>
           <input type="range" id="eWatStep" min="1" max="8" step="1" value="5" aria-labelledby="eWatLbl">
           <p class="mhint">Height above sea level on land and depth below the surface in the ocean, seas and lakes, every so many km in the chosen units; every fifth line is drawn thicker.</p>
+          <div class="spec-row"><span class="flabel" id="lineWLbl">Line thickness</span><output id="lineWOut"></output></div>
+          <input type="range" id="lineW" min="0.25" max="3" step="0.25" value="1" aria-labelledby="lineWLbl" title="Height and depth lines, isotherms, rain lines, insolation and UV index lines">
+          <div class="spec-row"><span class="flabel" id="coastWLbl">Coastline thickness</span><output id="coastWOut"></output></div>
+          <input type="range" id="coastW" min="0" max="3" step="0.25" value="1" aria-labelledby="coastWLbl" title="The outlines of the ocean, seas and lakes, drawn when the temperature or rain layer colours the water too">
           <label class="switch sm" title="Fill the space between each two neighbouring lines (height or depth lines, isotherms, rain lines or insolation lines) with one solid colour, that of the value midway between them"><input type="checkbox" id="mapBands"><span class="track"></span>Solid colour between lines</label>
         </div>
       </div>
@@ -1194,7 +1215,7 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
         </div>
         <div id="mapDateRow" class="mdial">
           <span class="flabel">Date</span>
-          <div class="dial sm" id="mapDial" role="slider" tabindex="0" aria-label="Date, synced with the Mars view" title="Drag around the year. Coloured arcs: the five seasons of the three-sun climate (Spring, Summer, Estío, Autumn, Winter), each 134 sols, with Summer centred on perihelion. Squares: the solstices and equinoxes. Dots: perihelion and aphelion.">
+          <div class="dial sm" id="mapDial" role="slider" tabindex="0" aria-label="Date, synced with the Mars view" title="Drag around the year, from New Year (Ls 0) at the top. Outer ring: the twenty months, small dots marking the festival sols. Inner ring: the five seasons. Squares: the solstices and equinoxes. Dots: perihelion and aphelion.">
             <output class="dial-c" id="mapDateOut"></output>
           </div>
           <div class="mplay">
@@ -1204,6 +1225,7 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
             </button>
             <div class="yspeed"><label class="ys-l" for="yearSecsMap">Year in</label><input type="range" id="yearSecsMap" min="0" max="100" step="1" value="47" aria-label="How many seconds a Martian year takes when playing, from 1 to 300"><output class="ys-o" id="yearSecsMapOut">15 s</output></div>
           </div>
+          <div class="dshow" role="group" aria-label="What the dial shows"><button type="button" data-ds="date" aria-pressed="true">Month &amp; day</button><button type="button" data-ds="sol" aria-pressed="true">Sol</button><button type="button" data-ds="ls" aria-pressed="true">L<sub>s</sub></button></div>
         </div>
         <div class="fgrp" id="measRow"><span class="flabel">Measure</span>
           <div class="seg small" role="group" aria-label="Insolation measure on the map">
@@ -1233,7 +1255,7 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
           <input type="range" id="gridLon" min="1" max="30" step="1" value="30" aria-label="Spacing between longitude lines, degrees">
         </div>
         <label class="switch sm"><input type="checkbox" id="mapSites" checked><span class="track"></span>Landing sites</label>
-        <label class="switch sm" title="The sol of the year, its Ls and its season in the map's corner"><input type="checkbox" id="mapSolTag"><span class="track"></span>Sol number on the map</label>
+        <label class="switch sm" title="The chosen date in the map's corner, as the dials show it (month and day, sol of the year and/or Ls), with its season"><input type="checkbox" id="mapSolTag"><span class="track"></span>Date on the map</label>
       </div>
       <div class="mgrp">
         <select class="msel" id="region" aria-label="Zoom to a region">
@@ -1294,7 +1316,7 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
       <h3>Model</h3>
       <ul>
         <li>Keplerian orbit with e = 0.0934 and a = 1.5237 AU. Perihelion falls at L<sub>s</sub> 250.9°, just before the northern winter solstice, so northern autumn and winter are the short seasons and the southern summer gets the strongest sunlight.</li>
-        <li>Five seasons (the date dials): with three suns the astronomical seasons do not follow the weather, because the mirrors cancel most of the tilt's seasons and leave the orbit's, which the whole planet shares: both halves of the populated band warm toward perihelion and cool after aphelion. Splitting the model's year into equal seasons that best group similar sols (land temperature, and rain, between 45°S and 45°N) gives five seasons of 134 sols, named after the five traditional Spanish seasons: Spring (L<sub>s</sub> 133–208°: the band at its coolest, then warming fast in the north; spring in the far south), Summer (208–294°, centred on perihelion: the band at its warmest, monsoon rain in the south), Estío (294–9°: cooling from the peak, the far south at its hottest), Autumn (9–71°: mild, the north's wet season, autumn in the far south) and Winter (71–133°, from aphelion: cool and quiet, deep winter in the far south, the southern band at its driest). They capture about 80% of the band's seasonal temperature changes, against 62% for the four astronomical quarters, and every test puts their boundaries within 2° of each other. Six seasons capture a little more but split the far south's winter off from a stretch the populated band barely tells apart.</li>
+        <li>Five seasons and the calendar (the date dials): with three suns the astronomical seasons do not follow the weather, because the mirrors cancel most of the tilt's seasons and leave the orbit's, which the whole planet shares: both halves of the populated band warm toward perihelion and cool after aphelion. Splitting the model's year into seasons that best group similar sols (land temperature, and rain, between 45°S and 45°N) gives five, named after the five traditional Spanish seasons (Estia is the late, dry summer). The calendar starts the year at L<sub>s</sub> 0°, as Mars years are counted, and gives each season four months of 6-sol weeks: 36-sol months of six weeks and 30-sol months of five. Autumn (L<sub>s</sub> 0–65°: Novary, Pluviary, Nimbary, Lenary; mild, the north's wet season), Winter (65–129°: Aphelose, Umbrose, Frigose, Brumose; from aphelion, on Aphelose 14: cool and quiet, deep winter in the far south, the southern band at its driest) and Spring (129–206°: Vertal, Pruinal, Equinal, Vernal; the band's coldest weeks, about 16 °C around L<sub>s</sub> 167°, then the north warms fast) last 138 sols. Summer (206–287°: Lucidor, Calidor, Heliodor, Fervidor; perihelion on Heliodor 5: the band at its warmest, monsoon rain in the south) and Estia (287–360°: Torrival, Ardival, Mitival, Finival; cooling from the peak, the north at its driest, the far south at its hottest) last 127, because the climate changes fast near perihelion. Two festival sols sit outside the weeks, so every month starts on the first day of a week: Perihelia, the 31st of Calidor, five sols before perihelion, and Finalia, the 31st of Finival, the last sol of the year, with Finalia II after it in leap years. A year has 668 sols, or 669 in leap years: odd years and years divisible by 10, except centuries not divisible by 500 (668.592 sols on average; the model year is 668.60). The names are Greco-Latin: Novary from novus (new), Pluviary from pluvia (rain), Nimbary from nimbus (rain cloud), Lenary from lenis (mild), Aphelose from aphelion, Umbrose from umbra (shade), Frigose from frigus (cold), Brumose from bruma (midwinter), Vertal from vertere (to turn), Pruinal from pruina (hoarfrost), Equinal from the equinox it holds, Vernal from ver (spring), Lucidor from lux (light), Calidor from calidus (warm), Heliodor from helios (the Sun, of perihelion), Fervidor from fervidus (glowing), Torrival from torrere (to parch), Ardival from ardere (to burn), Mitival from mitis (softening) and Finival from finis (end). The seasons capture about 80% of the band's seasonal temperature changes, against 62% for the four astronomical quarters. The date dials show the months on their outer ring and the seasons inside it, and can give the date as month and day, as the sol of the year (from 1 at L<sub>s</sub> 0°) or as L<sub>s</sub>; the charts still count sols from the northern winter solstice.</li>
         <li>One year is 686.98 Earth days, or 668.6 sols. A sol lasts 24 h 39 m 35 s, so one Mars hour (1/24 sol) is 1.0275 Earth hours.</li>
         <li>Daylight runs from the moment the Sun's centre rises above a flat horizon to the moment it sets. Refraction in the thin atmosphere and local terrain are ignored.</li>
         <li>Insolation is measured at the top of the atmosphere on level ground: 1361 W/m² at 1 AU, scaled by distance squared (713 W/m² at perihelion, 490 W/m² at aphelion). Dust can remove a large share of this before it reaches the surface.</li>
@@ -1628,12 +1650,28 @@ const ORB = [], IDE = [];
 for (let i = 0; i <= N; i++) { ORB.push(orbitAt(i * DT)); IDE.push(idealAt(i * DT)); }
 const T_SPRING = tOfLs(0), T_SUMMER = tOfLs(90), T_AUTUMN = tOfLs(180);
 const T_PERI = tOfLs(MARS.lsPeri), T_APH = tOfLs(MARS.lsPeri + 180);
-// The five seasons of the three-sun climate (after the five traditional Spanish seasons): equal fifths of the year, about 134 sols
-// each, with Summer centred on perihelion. Found by splitting the model's year into equal seasons that best group similar sols of
-// land temperature and rain in the populated band; the same boundaries come out of every test.
-const S5_LEN = YEAR / 5, S5_START = mod(T_PERI - S5_LEN / 2, YEAR);
-const SEASONS5 = ['Summer', 'Estío', 'Autumn', 'Winter', 'Spring'], SEAS5_COL = ['#E9B23C', '#E0703A', '#A8784E', '#5B8DEF', '#4CB782'];
-const season5 = t => Math.floor(mod(t - S5_START, YEAR) / S5_LEN) % 5;
+// The calendar of the three-sun climate. The year starts at the northern spring equinox (Ls 0), as Mars years are counted, and has
+// five seasons (after the five traditional Spanish seasons; Estia is the late, dry summer) of four months each, in 6-sol weeks:
+// 36-sol months of six weeks and 30-sol months of five. Autumn, Winter and Spring last 138 sols and Summer and Estia 127, because
+// the climate changes slowly through the aphelion half of the year and fast near perihelion. Two festival sols sit outside the
+// weeks: Perihelia (the 31st of Calidor) and Finalia (the 31st of Finival, with a second in leap years: the layout below is a leap
+// year's 669 sols, and the model year of 668.6 sols ends 0.6 sol into the second Finalia).
+const CAL_MONTHS = [['Novary', 36], ['Pluviary', 36], ['Nimbary', 36], ['Lenary', 30], ['Aphelose', 36], ['Umbrose', 36], ['Frigose', 36], ['Brumose', 30],
+  ['Vertal', 36], ['Pruinal', 36], ['Equinal', 36], ['Vernal', 30], ['Lucidor', 36], ['Calidor', 31], ['Heliodor', 30], ['Fervidor', 30],
+  ['Torrival', 36], ['Ardival', 30], ['Mitival', 30], ['Finival', 32]];
+const CAL_MSTART = []; { let c = 0; for (const m of CAL_MONTHS) { CAL_MSTART.push(c); c += m[1]; } }
+const CAL_T0 = T_SPRING, CAL_FEST = [CAL_MSTART[13] + 30, CAL_MSTART[19] + 30, CAL_MSTART[19] + 31];
+const SEASONS5 = ['Autumn', 'Winter', 'Spring', 'Summer', 'Estia'], SEAS5_COL = ['#A8784E', '#5B8DEF', '#4CB782', '#E9B23C', '#E0703A'];
+function calDate(t) {                  // month, day of the month, sol of the year (from 1), season and festival for a time t
+  const d = Math.min(668, Math.floor(mod(t - CAL_T0 + 1e-6, YEAR)));
+  let m = CAL_MONTHS.length - 1;
+  for (let i = 0; i < CAL_MONTHS.length; i++) if (d < CAL_MSTART[i] + CAL_MONTHS[i][1]) { m = i; break; }
+  const day = d - CAL_MSTART[m] + 1;
+  const fest = m === 13 && day === 31 ? 'Perihelia' : m === 19 && day === 31 ? 'Finalia' : m === 19 && day === 32 ? 'Finalia II' : '';
+  return { m, day, sol: d + 1, name: CAL_MONTHS[m][0], season: Math.floor(m / 4), fest };
+}
+const calLabel = t => { const c = calDate(t); return c.fest ? c.fest : c.name + ' ' + c.day; };
+const season5 = t => calDate(t).season;
 const NOW = new Date(), LS_TODAY = marsLs(NOW), T_TODAY = tOfLs(LS_TODAY), MY_TODAY = marsYear(NOW, LS_TODAY);
 
 // Gridline steps. Hours: the largest of 3, 2 or 1 h that still gives at least 8 lines.
@@ -1676,7 +1714,7 @@ const RAIN_STEPS = [10, 20, 25, 50, 75, 100, 150, 200, 250, 300, 400, 500, 750, 
 const ELEV_STEPS = [0, 0.1, 0.2, 0.25, 0.5, 1, 2, 2.5, 5];                              // height and depth lines, km (0 = none)
 const state = {
   t: T_TODAY, tod: 14, obsLat: 45, view: 'orbit', units: 'mars', metric: 'mean', orbit: { dur: 'real', ins: 'real', rat: 'real' },
-  lats: PRESETS.north.map((lat, i) => ({ lat, slot: i })), flip: false, dynDur: false, dynIns: false, dynRat: false, earthRef: true, layout: 'full', lineMode: 'chosen', specA: -90, specB: 90, specStep: 5, specOp: 70, show: { view: true, dur: true, ins: true, rat: true, map: true, lat: true }, ltCut: 3, ltRef: true, isoStep: 10, rainStep: 100, eLandStep: 1, eWatStep: 1, eLandOn: false, eWatOn: false, mapIso: true, light: 'total', uvFree: true, dayPart: 'mean', mapBands: false, waterPct: 26, fillLakes: true, lakeMode: 'local', waterTemp: false, mapGlobe: false, globeEx: 10, mapRivers: true, basinFill: 67, closedSeas: 'own', hellasLvl: -6470, argyreLvl: -3230, hUnit: 'km', mapLayer: 'elev', palette: 'terrain', hillshade: true, insWhen: 'date', insMetric: 'mean', mapOrbit: 'real', insShow: 'wm', tUnit: 'C', heat: 'dyn', lapse: 6, p0: 1.05, mapCtl: 'top', mapSideW: 360, yearSecs: 15, mapSolTag: false, insOp: 65, insDyn: false, mapGrid: true, gridLat: 15, gridLon: 30, mapSites: true, ratioMetric: 'mean', mode: 'natural', twoCI: 1, twoPh: 27.5, twoPhMode: 'season', twoShift: -3, twoBias: 11.5, twoA2: 6.5, twoS2: 38, twoKA: 0.2, twoKS: -159, twoPos: 'L5',
+  lats: PRESETS.north.map((lat, i) => ({ lat, slot: i })), flip: false, dynDur: false, dynIns: false, dynRat: false, earthRef: true, layout: 'full', lineMode: 'chosen', specA: -90, specB: 90, specStep: 5, specOp: 70, show: { view: true, dur: true, ins: true, rat: true, map: true, lat: true }, ltCut: 3, ltRef: true, isoStep: 10, rainStep: 100, eLandStep: 1, eWatStep: 1, eLandOn: false, eWatOn: false, mapIso: true, light: 'total', uvFree: true, dayPart: 'mean', mapBands: false, waterPct: 26, fillLakes: true, lakeMode: 'local', waterTemp: false, mapGlobe: false, globeEx: 10, mapRivers: true, basinFill: 67, closedSeas: 'own', hellasLvl: -6470, argyreLvl: -3230, hUnit: 'km', mapLayer: 'elev', palette: 'terrain', hillshade: true, insWhen: 'date', insMetric: 'mean', mapOrbit: 'real', insShow: 'wm', tUnit: 'C', heat: 'dyn', lapse: 6, p0: 1.05, mapCtl: 'top', mapSideW: 360, yearSecs: 15, mapSolTag: false, dialShow: { date: true, sol: true, ls: true }, lineW: 1, coastW: 1, insOp: 65, insDyn: false, mapGrid: true, gridLat: 15, gridLon: 30, mapSites: true, ratioMetric: 'mean', mode: 'natural', twoCI: 1, twoPh: 27.5, twoPhMode: 'season', twoShift: -3, twoBias: 11.5, twoA2: 6.5, twoS2: 38, twoKA: 0.2, twoKS: -159, twoPos: 'L5',
   three: {"K4": 0.51, "K5": 1.17, "L4": {"Light": "outer", "HN": [51, 51, 57, 50], "HS": [47, 48, 69, 72], "SN": [1, 0.16, 1, 0.31], "FS": [0.69, 1, 0.57, 0], "Soft": 9, "Lean": -0.9, "CI": 0.95, "Ph": 6, "PhMode": "season", "Shift": -71, "Bias": -0.5, "A2": 6, "S2": -77, "KA": 0.8, "KS": 60}, "L5": {"Light": "lens", "CI": 0.85, "Ph": 27.5, "PhMode": "season", "Shift": 8, "Bias": 7, "A2": 12, "S2": 54, "KA": 0, "KS": 0}}, threeSel: 'L4', twoK: 'x133', threeK: 'x067', camOff: 0, playYear: false, playSol: false
 };
 const DEFAULTS = JSON.parse(JSON.stringify(state));   // for the reset buttons
@@ -1704,6 +1742,10 @@ try {
     if (num(sv.mapSideW, 200, 2400)) state.mapSideW = sv.mapSideW;
     if (num(sv.yearSecs, 1, 300)) state.yearSecs = Math.round(sv.yearSecs);
     if (typeof sv.mapSolTag === 'boolean') state.mapSolTag = sv.mapSolTag;
+    if (sv.dialShow && typeof sv.dialShow === 'object' && ['date', 'sol', 'ls'].some(k => sv.dialShow[k] === true))
+      state.dialShow = { date: sv.dialShow.date === true, sol: sv.dialShow.sol === true, ls: sv.dialShow.ls === true };
+    if (num(sv.lineW, 0.25, 3)) state.lineW = sv.lineW;
+    if (num(sv.coastW, 0, 3)) state.coastW = sv.coastW;
     if (sv.show && typeof sv.show === 'object' && ['view', 'dur', 'ins', 'rat', 'map', 'lat'].some(k => sv.show[k] !== false))
       state.show = { view: sv.show.view !== false, dur: sv.show.dur !== false, ins: sv.show.ins !== false, rat: sv.show.rat !== false, map: sv.show.map !== false, lat: sv.show.lat !== false };
     if (num(sv.ltCut, 0.5, 8)) state.ltCut = Math.round(sv.ltCut * 2) / 2;
@@ -1810,7 +1852,7 @@ const kLabel = k => (Math.abs(k - 4 / 3) < 1e-9 ? '1.33' : Math.abs(k - 2 / 3) <
 applyMode();
 const MULTI = () => SRC.length > 1;
 function save() {
-  try { localStorage.setItem(STORE, JSON.stringify({ v: 15, mapCtl: state.mapCtl, mapSideW: Math.round(state.mapSideW), yearSecs: state.yearSecs, mapSolTag: state.mapSolTag, lakeMode: state.lakeMode, waterTemp: state.waterTemp, mapGlobe: state.mapGlobe, globeEx: state.globeEx, mapRivers: state.mapRivers, closedSeas: state.closedSeas, hellasLvl: state.hellasLvl, argyreLvl: state.argyreLvl, three: state.three, threeSel: state.threeSel, isoStep: state.isoStep, rainStep: state.rainStep, eLandStep: state.eLandStep, eWatStep: state.eWatStep, eLandOn: state.eLandOn, eWatOn: state.eWatOn, mapIso: state.mapIso, light: state.light, uvFree: state.uvFree, dayPart: state.dayPart, mapBands: state.mapBands, ltCut: state.ltCut, ltRef: state.ltRef, units: state.units, metric: state.metric, orbit: state.orbit, flip: state.flip, dynDur: state.dynDur, dynIns: state.dynIns, dynRat: state.dynRat, earthRef: state.earthRef, layout: state.layout, lineMode: state.lineMode, specA: state.specA, specB: state.specB, specStep: state.specStep, specOp: state.specOp, show: state.show, ratioMetric: state.ratioMetric, waterPct: state.waterPct, fillLakes: state.fillLakes, basinFill: state.basinFill, hUnit: state.hUnit, mapLayer: state.mapLayer, palette: state.palette, hillshade: state.hillshade, insWhen: state.insWhen, insMetric: state.insMetric, mapOrbit: state.mapOrbit, insShow: state.insShow, tUnit: state.tUnit, heat: state.heat, lapse: state.lapse, p0: state.p0, insOp: state.insOp, insDyn: state.insDyn, mapGrid: state.mapGrid, gridLat: state.gridLat, gridLon: state.gridLon, mapSites: state.mapSites, mode: state.mode, twoCI: state.twoCI, twoPh: state.twoPh, twoPhMode: state.twoPhMode, twoShift: state.twoShift, twoBias: state.twoBias, twoA2: state.twoA2, twoS2: state.twoS2, twoKA: state.twoKA, twoKS: state.twoKS, twoPos: state.twoPos, twoK: state.twoK, threeK: state.threeK, lats: state.lats })); } catch (e) {}
+  try { localStorage.setItem(STORE, JSON.stringify({ v: 15, mapCtl: state.mapCtl, mapSideW: Math.round(state.mapSideW), yearSecs: state.yearSecs, mapSolTag: state.mapSolTag, dialShow: state.dialShow, lineW: state.lineW, coastW: state.coastW, lakeMode: state.lakeMode, waterTemp: state.waterTemp, mapGlobe: state.mapGlobe, globeEx: state.globeEx, mapRivers: state.mapRivers, closedSeas: state.closedSeas, hellasLvl: state.hellasLvl, argyreLvl: state.argyreLvl, three: state.three, threeSel: state.threeSel, isoStep: state.isoStep, rainStep: state.rainStep, eLandStep: state.eLandStep, eWatStep: state.eWatStep, eLandOn: state.eLandOn, eWatOn: state.eWatOn, mapIso: state.mapIso, light: state.light, uvFree: state.uvFree, dayPart: state.dayPart, mapBands: state.mapBands, ltCut: state.ltCut, ltRef: state.ltRef, units: state.units, metric: state.metric, orbit: state.orbit, flip: state.flip, dynDur: state.dynDur, dynIns: state.dynIns, dynRat: state.dynRat, earthRef: state.earthRef, layout: state.layout, lineMode: state.lineMode, specA: state.specA, specB: state.specB, specStep: state.specStep, specOp: state.specOp, show: state.show, ratioMetric: state.ratioMetric, waterPct: state.waterPct, fillLakes: state.fillLakes, basinFill: state.basinFill, hUnit: state.hUnit, mapLayer: state.mapLayer, palette: state.palette, hillshade: state.hillshade, insWhen: state.insWhen, insMetric: state.insMetric, mapOrbit: state.mapOrbit, insShow: state.insShow, tUnit: state.tUnit, heat: state.heat, lapse: state.lapse, p0: state.p0, insOp: state.insOp, insDyn: state.insDyn, mapGrid: state.mapGrid, gridLat: state.gridLat, gridLon: state.gridLon, mapSites: state.mapSites, mode: state.mode, twoCI: state.twoCI, twoPh: state.twoPh, twoPhMode: state.twoPhMode, twoShift: state.twoShift, twoBias: state.twoBias, twoA2: state.twoA2, twoS2: state.twoS2, twoKA: state.twoKA, twoKS: state.twoKS, twoPos: state.twoPos, twoK: state.twoK, threeK: state.threeK, lats: state.lats })); } catch (e) {}
 }
 
 /* ================= formatting ================= */
@@ -2723,7 +2765,7 @@ function drawGround() {
   ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
   ctx.font = font(700, small ? 18 : 22, 'd'); ctx.fillStyle = SC.ink; ctx.fillText(latLabel(Math.round(lat * 10) / 10), 14, 30);
   ctx.font = font(400, 10.5, 'm'); ctx.fillStyle = SC.muted;
-  ctx.fillText(small ? 'Ls ' + st.ls.toFixed(1) + '°' : 'Ls ' + st.ls.toFixed(1) + '° · ' + dateLabel(state.t, 0).toLowerCase(), 14, 47);
+  ctx.fillText(small ? 'Ls ' + st.ls.toFixed(1) + '°' : 'Ls ' + st.ls.toFixed(1) + '° · ' + calLabel(state.t), 14, 47);
   ctx.textAlign = 'right';
   ctx.font = font(700, small ? 18 : 22, 'd'); ctx.fillStyle = SC.ink; ctx.fillText(fmtClock(state.tod) + ' LTST', W - 14, 30);
   ctx.font = font(400, 10.5, 'm'); ctx.fillStyle = SC.muted;
@@ -2735,10 +2777,9 @@ function drawGround() {
 function updateReadouts() {
   const st = orbitAt(state.t), m = dayMetrics(state.obsLat, st), si = seasonIdx(st.ls);
   dialCenter($('dateOut'), state.t, st.ls);
-  setText('stDate', dateLabel(state.t, 1));
-  const sd = $('stDateS'); sd.replaceChildren(lsFrag(st.ls));
-  setText('stSeason', 'N ' + SEASONS[si]);
-  setText('stSeasonS', 'S ' + SEASONS[(si + 2) % 4]);
+  { const cd = calDate(state.t); setText('stDate', cd.fest || cd.name + ' ' + cd.day);
+    $('stDateS').replaceChildren('Sol ' + cd.sol + ' · ', lsFrag(st.ls));
+    setText('stSeason', SEASONS5[cd.season]); setText('stSeasonS', 'N ' + SEASONS[si] + ' · S ' + SEASONS[(si + 2) % 4]); }
   setText('stSun', st.r.toFixed(3) + ' AU');
   const kx = SRC.reduce((a, b) => a + b.k, 0) - 1;
   setText('stSunS', MULTI() ? 'Sun ' + Math.round(m.S) + ' + mirrors ' + Math.round(m.S * kx) + ' W/m²' : Math.round(m.S) + ' W/m² · disc ' + (MARS.sunArcmin1AU / st.r).toFixed(1) + '′');
@@ -2781,52 +2822,71 @@ function updateReadouts() {
 }
 
 /* ================= date dials ================= */
-// A ring for the whole year, uniform in time and starting at the northern winter solstice (top), like the charts. The coloured
-// arcs are the northern seasons drawn to their real lengths; ticks mark the solstices and equinoxes, dots perihelion and aphelion.
+// A ring for the whole year, uniform in time and starting at New Year (Ls 0, top). The outer ring holds the twenty months of the
+// calendar (with dots at the festival sols), the inner one the five seasons; squares mark the solstices and equinoxes, dots perihelion and aphelion.
 let DIAL_N = 0;
 function makeDial(host, onSet, onEnd) {
-  const NS = 'http://www.w3.org/2000/svg', C = 100, R = 80;
-  const svg = document.createElementNS(NS, 'svg'); svg.setAttribute('viewBox', '0 0 200 200'); svg.setAttribute('aria-hidden', 'true');
+  const NS = 'http://www.w3.org/2000/svg', VB = 240, C = 120, R = 82, RM = 104;
+  const svg = document.createElementNS(NS, 'svg'); svg.setAttribute('viewBox', '0 0 ' + VB + ' ' + VB); svg.setAttribute('aria-hidden', 'true');
   const el = (tag, attrs) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); svg.append(e); return e; };
-  const P = (t, r) => { const a = 2 * Math.PI * t / YEAR; return [C + r * Math.sin(a), C - r * Math.cos(a)]; };
-  const txt = (x, y, cls, s, anchor) => { const e = el('text', { x: x.toFixed(1), y: y.toFixed(1), class: cls, 'text-anchor': anchor || 'middle', 'dominant-baseline': 'middle' }); e.textContent = s; return e; };
-  el('circle', { cx: C, cy: C, r: R, class: 'trk', 'stroke-width': 17 });
-  for (let i = 0; i < 5; i++) {        // the five seasons: equal fifths of the year, Summer centred on perihelion
-    const a = S5_START + i * S5_LEN, b = a + S5_LEN;
-    const [x0, y0] = P(a + 1.2, R), [x1, y1] = P(b - 1.2, R);
-    el('path', { d: 'M' + x0.toFixed(2) + ' ' + y0.toFixed(2) + 'A' + R + ' ' + R + ' 0 0 1 ' + x1.toFixed(2) + ' ' + y1.toFixed(2), stroke: SEAS5_COL[i], 'stroke-width': 11, fill: 'none', opacity: 0.92 });
-    const mid = mod((a + b) / 2, YEAR) / YEAR, low = mid > 0.25 && mid < 0.75, id = 'dsp' + (++DIAL_N) + '_' + i;
-    const [p0x, p0y] = P(low ? b - 2 : a + 2, R), [p1x, p1y] = P(low ? a + 2 : b - 2, R);
-    el('path', { id, d: 'M' + p0x.toFixed(2) + ' ' + p0y.toFixed(2) + 'A' + R + ' ' + R + ' 0 0 ' + (low ? 0 : 1) + ' ' + p1x.toFixed(2) + ' ' + p1y.toFixed(2), fill: 'none', stroke: 'none' });
-    const tx = el('text', { class: 'dsn', 'dominant-baseline': 'central' }), tp = document.createElementNS(NS, 'textPath');
-    tp.setAttribute('href', '#' + id); tp.setAttribute('startOffset', '50%'); tp.setAttribute('text-anchor', 'middle'); tp.textContent = SEASONS5[i]; tx.append(tp);
+  const ang = t => 2 * Math.PI * (t - CAL_T0) / YEAR;                    // New Year (Ls 0) at the top, running clockwise
+  const P = (t, r) => { const a = ang(t); return [C + r * Math.sin(a), C - r * Math.cos(a)]; };
+  const f2 = v => v.toFixed(2);
+  const txt = (x, y, cls, str) => { const e = el('text', { x: x.toFixed(1), y: y.toFixed(1), class: cls, 'text-anchor': 'middle', 'dominant-baseline': 'middle' }); e.textContent = str; return e; };
+  const arcText = (a, b, r, cls, label) => {        // text along an arc, kept upright on the lower half of the dial
+    const mid = mod((a + b) / 2 - CAL_T0, YEAR) / YEAR, low = mid > 0.25 && mid < 0.75, id = 'dsp' + (++DIAL_N);
+    const [p0x, p0y] = P(low ? b : a, r), [p1x, p1y] = P(low ? a : b, r);
+    el('path', { id, d: 'M' + f2(p0x) + ' ' + f2(p0y) + 'A' + r + ' ' + r + ' 0 0 ' + (low ? 0 : 1) + ' ' + f2(p1x) + ' ' + f2(p1y), fill: 'none', stroke: 'none' });
+    const tx = el('text', { class: cls, 'dominant-baseline': 'central' }), tp = document.createElementNS(NS, 'textPath');
+    tp.setAttribute('href', '#' + id); tp.setAttribute('startOffset', '50%'); tp.setAttribute('text-anchor', 'middle'); tp.textContent = label; tx.append(tp);
+    return tx;
+  };
+  // outer ring: the twenty months
+  el('circle', { cx: C, cy: C, r: RM, class: 'mtrk', 'stroke-width': 15 });
+  const mtext = [];
+  for (let i = 0; i < CAL_MONTHS.length; i++) {
+    const a = CAL_T0 + CAL_MSTART[i], b = Math.min(a + CAL_MONTHS[i][1], CAL_T0 + YEAR);
+    const [x0, y0] = P(a, RM - 7.5), [x1, y1] = P(a, RM + 7.5);
+    el('line', { x1: f2(x0), y1: f2(y0), x2: f2(x1), y2: f2(y1), class: i % 4 === 0 ? 'msep ms' : 'msep' });
+    mtext.push(arcText(a, b, RM, 'mname', CAL_MONTHS[i][0]));
   }
-  for (const [t, L] of [[0, 270], [T_SPRING, 0], [T_SUMMER, 90], [T_AUTUMN, 180]]) {      // solstices and equinoxes: squares
-    const [x, y] = P(t, R + 9), deg = 360 * t / YEAR;
-    el('rect', { x: (x - 3.6).toFixed(2), y: (y - 3.6).toFixed(2), width: 7.2, height: 7.2, class: 'dsq', transform: 'rotate(' + deg.toFixed(1) + ' ' + x.toFixed(2) + ' ' + y.toFixed(2) + ')' });
-    const [lx, ly] = P(t, R - 17);
-    txt(lx, ly, 'dls', 'Ls ' + L + '°');
+  for (const f of CAL_FEST) { const [x, y] = P(CAL_T0 + f + 0.5, RM + 5.2); el('circle', { cx: f2(x), cy: f2(y), r: 1.7, class: 'dfest' }); }
+  // inner ring: the five seasons
+  el('circle', { cx: C, cy: C, r: R, class: 'trk', 'stroke-width': 17 });
+  for (let i = 0; i < 5; i++) {
+    const a = CAL_T0 + CAL_MSTART[4 * i], b = i < 4 ? CAL_T0 + CAL_MSTART[4 * i + 4] : CAL_T0 + YEAR;
+    const [x0, y0] = P(a + 1.2, R), [x1, y1] = P(b - 1.2, R);
+    el('path', { d: 'M' + f2(x0) + ' ' + f2(y0) + 'A' + R + ' ' + R + ' 0 0 1 ' + f2(x1) + ' ' + f2(y1), stroke: SEAS5_COL[i], 'stroke-width': 11, fill: 'none', opacity: 0.92 });
+    arcText(a + 2, b - 2, R, 'dsn', SEASONS5[i]);
+  }
+  // solstices and equinoxes (squares) and perihelion and aphelion (dots) between the rings, labelled inside
+  for (const [t, L] of [[T_SPRING, 0], [T_SUMMER, 90], [T_AUTUMN, 180], [0, 270]]) {
+    const [x, y] = P(t, R + 9), deg = 360 * (t - CAL_T0) / YEAR;
+    el('rect', { x: f2(x - 3.6), y: f2(y - 3.6), width: 7.2, height: 7.2, class: 'dsq', transform: 'rotate(' + deg.toFixed(1) + ' ' + f2(x) + ' ' + f2(y) + ')' });
+    const [lx, ly] = P(t, R - 17); txt(lx, ly, 'dls', 'Ls ' + L + '°');
   }
   for (const [t, lab] of [[T_PERI, 'peri'], [T_APH, 'aph']]) {
-    const [x, y] = P(t, R + 9); el('circle', { cx: x.toFixed(2), cy: y.toFixed(2), r: 3.4, class: 'dapd' });
-    const [lx, ly] = P(t, R + 20);
-    txt(lx, ly, 'dapx', lab);
+    const [x, y] = P(t, R + 9); el('circle', { cx: f2(x), cy: f2(y), r: 3.4, class: 'dapd' });
+    const [lx, ly] = P(t, R - 17); txt(lx, ly, 'dapx', lab);
   }
   const hand = el('line', { class: 'dhand' }), knob = el('circle', { r: 9, class: 'dknob' });
   host.prepend(svg);
   host.setAttribute('aria-valuemin', '0'); host.setAttribute('aria-valuemax', YEAR.toFixed(1));
+  let curM = -1;
   function update(t) {
-    const [x, y] = P(t, R), [hx, hy] = P(t, 40), [kx, ky] = P(t, R - 10);
-    knob.setAttribute('cx', x.toFixed(2)); knob.setAttribute('cy', y.toFixed(2));
-    hand.setAttribute('x1', hx.toFixed(2)); hand.setAttribute('y1', hy.toFixed(2)); hand.setAttribute('x2', kx.toFixed(2)); hand.setAttribute('y2', ky.toFixed(2));
+    const [x, y] = P(t, R), [hx, hy] = P(t, 48), [kx, ky] = P(t, R - 10);
+    knob.setAttribute('cx', f2(x)); knob.setAttribute('cy', f2(y));
+    hand.setAttribute('x1', f2(hx)); hand.setAttribute('y1', f2(hy)); hand.setAttribute('x2', f2(kx)); hand.setAttribute('y2', f2(ky));
     host.setAttribute('aria-valuenow', t.toFixed(1));
-    const ls = orbitAt(t).ls; host.setAttribute('aria-valuetext', dateLabel(t, 0) + ', Ls ' + ls.toFixed(0) + '°, ' + SEASONS5[season5(t)] + ' (northern ' + SEASONS[seasonIdx(ls)] + ')');
+    const cd = calDate(t), ls = orbitAt(t).ls;
+    if (cd.m !== curM) { if (curM >= 0) mtext[curM].classList.remove('on'); mtext[cd.m].classList.add('on'); curM = cd.m; }
+    host.setAttribute('aria-valuetext', (cd.fest ? cd.fest + ', ' : '') + cd.name + ' ' + cd.day + ', sol ' + cd.sol + ' of the year, Ls ' + ls.toFixed(0) + '°, ' + SEASONS5[cd.season] + ' (northern ' + SEASONS[seasonIdx(ls)] + ')');
   }
   let drag = false;
-  const at = ev => { const b = host.getBoundingClientRect(), x = (ev.clientX - b.left) / b.width * 200 - C, y = (ev.clientY - b.top) / b.height * 200 - C;
-    return { t: mod(Math.atan2(x, -y) / (2 * Math.PI) * YEAR, YEAR), r: Math.hypot(x, y) }; };
+  const at = ev => { const b = host.getBoundingClientRect(), x = (ev.clientX - b.left) / b.width * VB - C, y = (ev.clientY - b.top) / b.height * VB - C;
+    return { t: mod(CAL_T0 + Math.atan2(x, -y) / (2 * Math.PI) * YEAR, YEAR), r: Math.hypot(x, y) }; };
   host.addEventListener('pointerdown', ev => {
-    const p = at(ev); if (p.r < 34) return;
+    const p = at(ev); if (p.r < 42) return;
     drag = true; host.classList.add('dragging'); try { host.setPointerCapture(ev.pointerId); } catch (e) {}
     ev.preventDefault(); onSet(p.t);
   });
@@ -2834,18 +2894,25 @@ function makeDial(host, onSet, onEnd) {
   const end = () => { if (!drag) return; drag = false; host.classList.remove('dragging'); if (onEnd) onEnd(); };
   host.addEventListener('pointerup', end); host.addEventListener('pointercancel', end); host.addEventListener('lostpointercapture', end);
   host.addEventListener('keydown', ev => {
-    const k = ev.key, step = ev.shiftKey ? 10 : 1;
-    const dt = k === 'ArrowRight' || k === 'ArrowUp' ? step : k === 'ArrowLeft' || k === 'ArrowDown' ? -step : k === 'PageUp' ? YEAR / 12 : k === 'PageDown' ? -YEAR / 12 : 0;
+    const k = ev.key, step = ev.shiftKey ? 6 : 1;
+    const dt = k === 'ArrowRight' || k === 'ArrowUp' ? step : k === 'ArrowLeft' || k === 'ArrowDown' ? -step : k === 'PageUp' ? YEAR / 20 : k === 'PageDown' ? -YEAR / 20 : 0;
     if (dt) { ev.preventDefault(); onSet(state.t + dt); if (onEnd) onEnd(); }
-    else if (k === 'Home') { ev.preventDefault(); onSet(0); if (onEnd) onEnd(); }
+    else if (k === 'Home') { ev.preventDefault(); onSet(CAL_T0); if (onEnd) onEnd(); }
   });
   return { update };
 }
+function dateParts(t, ls) {             // the chosen date readouts (month and day, sol of the year, Ls), first one bold
+  const cd = calDate(t), sh = state.dialShow, out = [];
+  if (sh.date) out.push(cd.name + ' ' + cd.day);
+  if (sh.sol) out.push('Sol ' + cd.sol);
+  if (sh.ls) out.push(lsFrag(ls));
+  return { cd, out };
+}
 function dialCenter(box, t, ls) {
-  const b = document.createElement('b'); b.textContent = dateLabel(t, 1);
-  const l = document.createElement('span'); l.append(lsFrag(ls));
-  const sn = document.createElement('span'); sn.className = 'dc-seas'; sn.textContent = SEASONS5[season5(t)];
-  box.replaceChildren(b, l, sn);
+  const { cd, out } = dateParts(t, ls);
+  const els = out.map((v, i) => { const e = document.createElement(i ? 'span' : 'b'); e.append(v); return e; });
+  const sn = document.createElement('span'); sn.className = 'dc-seas'; sn.textContent = cd.fest || SEASONS5[cd.season];
+  box.replaceChildren(...els, sn);
 }
 const dialSet = t => { stopYear(); setT(t); };
 const dateDial = makeDial($('dateDial'), dialSet, () => endLite());
@@ -3213,11 +3280,19 @@ applyMapCtl();
 function updateMapSol() {
   const el = $('mapSol'); el.hidden = !state.mapSolTag; if (!state.mapSolTag) return;
   const ls = (state.mapOrbit === 'circ' ? idealAt(state.t) : orbitAt(state.t)).ls;
-  const b = document.createElement('b'); b.textContent = dateLabel(state.t, 0);
-  const l = document.createElement('span'); l.append(lsFrag(ls), ' · ' + SEASONS5[season5(state.t)]);
+  const { cd, out } = dateParts(state.t, ls);
+  const b = document.createElement('b'); b.append(out[0]);
+  const l = document.createElement('span'); out.slice(1).forEach(v => l.append(v, ' · ')); l.append(cd.fest || SEASONS5[cd.season]);
   el.replaceChildren(b, l);
 }
 $('mapSolTag').addEventListener('change', e => { state.mapSolTag = e.target.checked; updateMapSol(); save(); });
+function syncDialShow() { document.querySelectorAll('.dshow button').forEach(b => b.setAttribute('aria-pressed', String(!!state.dialShow[b.dataset.ds]))); }
+document.querySelectorAll('.dshow button').forEach(b => b.addEventListener('click', () => {
+  const k = b.dataset.ds, next = { ...state.dialShow, [k]: !state.dialShow[k] };
+  if (!next.date && !next.sol && !next.ls) return;           // keep at least one
+  state.dialShow = next; syncDialShow(); updateReadouts(); updateMapDateOut(); save();
+}));
+syncDialShow();
 $('playSol').addEventListener('click', () => { state.playSol = !state.playSol; $('playSol').setAttribute('aria-pressed', String(state.playSol)); kick(); });
 
 /* ================= wiring ================= */
@@ -5029,15 +5104,16 @@ function drawMap() {
   // height and depth lines, and thick coastlines when the water is coloured too
   const coastOn = mapCoast && mapParams && (mapParams.wtOn || mapParams.wrOn);
   if (elevLines || coastOn) {
-    const lk = [elevLines ? elevLines.key : '', coastOn ? mapCoast.key : '', mapView.z.toFixed(5), mapView.cx.toFixed(5), mapView.cy.toFixed(5), MW, MH, MDPR, state.hUnit].join('|');
+    const lk = [elevLines ? elevLines.key : '', coastOn ? mapCoast.key : '', mapView.z.toFixed(5), mapView.cx.toFixed(5), mapView.cy.toFixed(5), MW, MH, MDPR, state.hUnit, state.lineW, state.coastW].join('|');
     if (lk !== lineLayerKey) {
       lineLayer.width = Math.round(MW * MDPR); lineLayer.height = Math.round(MH * MDPR);
       const c2 = lineLayer.getContext('2d'), k = s / MAP_PPD, ox = mapX(-180), oy = mapY(90);
       c2.setTransform(MDPR, 0, 0, MDPR, 0, 0); c2.save(); c2.beginPath(); c2.rect(xl, yt, xr - xl, yb - yt); c2.clip();
       for (const o of COPIES) { c2.setTransform(MDPR * k, 0, 0, MDPR * k, MDPR * (ox + o * s), MDPR * oy); c2.lineCap = 'round'; c2.lineJoin = 'round';
-      if (elevLines && elevLines.land) { c2.strokeStyle = 'rgba(40,26,16,0.55)'; c2.lineWidth = 0.8 / k; c2.stroke(elevLines.land.thin); c2.lineWidth = 1.7 / k; c2.stroke(elevLines.land.thick); }
-      if (elevLines && elevLines.water) { c2.strokeStyle = 'rgba(214,236,255,0.6)'; c2.lineWidth = 0.8 / k; c2.stroke(elevLines.water.thin); c2.lineWidth = 1.7 / k; c2.stroke(elevLines.water.thick); }
-      if (coastOn) { c2.strokeStyle = 'rgba(8,11,18,0.55)'; c2.lineWidth = 0.9 / k; c2.stroke(mapCoast.thin); c2.strokeStyle = 'rgba(8,11,18,0.92)'; c2.lineWidth = 2.6 / k; c2.stroke(mapCoast.thick); }
+      const LW = state.lineW, CW = state.coastW;
+      if (elevLines && elevLines.land) { c2.strokeStyle = 'rgba(40,26,16,0.55)'; c2.lineWidth = 0.8 * LW / k; c2.stroke(elevLines.land.thin); c2.lineWidth = 1.7 * LW / k; c2.stroke(elevLines.land.thick); }
+      if (elevLines && elevLines.water) { c2.strokeStyle = 'rgba(214,236,255,0.6)'; c2.lineWidth = 0.8 * LW / k; c2.stroke(elevLines.water.thin); c2.lineWidth = 1.7 * LW / k; c2.stroke(elevLines.water.thick); }
+      if (coastOn && CW > 0) { c2.strokeStyle = 'rgba(8,11,18,0.55)'; c2.lineWidth = 0.9 * CW / k; c2.stroke(mapCoast.thin); c2.strokeStyle = 'rgba(8,11,18,0.92)'; c2.lineWidth = 2.6 * CW / k; c2.stroke(mapCoast.thick); }
       }
       c2.restore();
       // labels on the thicker height / depth lines
@@ -5057,7 +5133,7 @@ function drawMap() {
   // iso-insolation lines every 100 W/m² (daily mean only; thick at 100 and 500), isotherms every state.isoStep °C from 0 °C (thick at 0 °C) or rain lines (thick at 300 mm)
   if (mapContours && mapStats.insOn) {
     // traced once into a screen-sized layer per set of lines and view, so redraws (observer line, sites) only blit it
-    const lk = [contourKey, mapView.z.toFixed(5), mapView.cx.toFixed(5), mapView.cy.toFixed(5), MW, MH, MDPR, state.tUnit, mapContours.labels.length, document.fonts ? document.fonts.status : ''].join('|');
+    const lk = [contourKey, mapView.z.toFixed(5), mapView.cx.toFixed(5), mapView.cy.toFixed(5), MW, MH, MDPR, state.tUnit, mapContours.labels.length, document.fonts ? document.fonts.status : '', state.lineW].join('|');
     if (lk !== contourLayerKey) {
       contourLayer.width = Math.round(MW * MDPR); contourLayer.height = Math.round(MH * MDPR);
       const g = contourLayer.getContext('2d');
@@ -5068,8 +5144,8 @@ function drawMap() {
       for (const o of COPIES) {
         g.setTransform(MDPR * k, 0, 0, MDPR * k, MDPR * (ox + o * s), MDPR * oy);
         g.strokeStyle = 'rgba(255,255,255,0.95)'; g.lineCap = 'round'; g.lineJoin = 'round';
-        g.lineWidth = 1.1 / k; g.stroke(mapContours.thin);
-        g.lineWidth = 2.8 / k; g.stroke(mapContours.thick);
+        g.lineWidth = 1.1 * state.lineW / k; g.stroke(mapContours.thin);
+        g.lineWidth = 2.8 * state.lineW / k; g.stroke(mapContours.thick);
       }
       g.restore();
       g.setTransform(MDPR, 0, 0, MDPR, 0, 0);
@@ -5208,7 +5284,7 @@ function globeTexture() {               // the flat map's picture with its lines
   if (state.mapRivers) { const R = rainYear(); if (R) { const sea = seaLevelOf(state.waterPct), rk = R.key + '|' + state.fillLakes + '|' + waterKey(sea); if (!rainRivers || rainRivers.key !== rk) rainRivers = buildRivers(R); } }
   const rivOn = state.mapRivers && rainRivers;
   const coastOn = mapCoast && mapParams && (mapParams.wtOn || mapParams.wrOn);
-  const key = [G3.mapGen, mapContours && mapStats.insOn ? contourKey : '', rivOn ? rainRivers.key : '', state.mapGrid, state.gridLat, state.gridLon, state.mapSites, state.obsLat, elevLines ? elevLines.key : '', coastOn ? mapCoast.key : ''].join('|');
+  const key = [G3.mapGen, mapContours && mapStats.insOn ? contourKey : '', rivOn ? rainRivers.key : '', state.mapGrid, state.gridLat, state.gridLon, state.mapSites, state.obsLat, elevLines ? elevLines.key : '', coastOn ? mapCoast.key : '', state.lineW, state.coastW].join('|');
   if (key === G3.texKey) return;
   const TW = G3.tw, TH = TW / 2, cv = G3.texCv || (G3.texCv = document.createElement('canvas'));
   if (cv.width !== TW) { cv.width = TW; cv.height = TH; }
@@ -5217,11 +5293,12 @@ function globeTexture() {               // the flat map's picture with its lines
   g.drawImage(mapSrc, 0, 0, TW, TH);
   g.lineCap = 'round'; g.lineJoin = 'round';
   if (elevLines || coastOn) { g.save(); g.setTransform(k, 0, 0, k, 0, 0);
-    if (elevLines && elevLines.land) { g.strokeStyle = 'rgba(40,26,16,0.55)'; g.lineWidth = 1.1 / k; g.stroke(elevLines.land.thin); g.lineWidth = 2.2 / k; g.stroke(elevLines.land.thick); }
-    if (elevLines && elevLines.water) { g.strokeStyle = 'rgba(214,236,255,0.6)'; g.lineWidth = 1.1 / k; g.stroke(elevLines.water.thin); g.lineWidth = 2.2 / k; g.stroke(elevLines.water.thick); }
-    if (coastOn) { g.strokeStyle = 'rgba(8,11,18,0.55)'; g.lineWidth = 1.2 / k; g.stroke(mapCoast.thin); g.strokeStyle = 'rgba(8,11,18,0.92)'; g.lineWidth = 3.4 / k; g.stroke(mapCoast.thick); }
+    const LW = state.lineW, CW = state.coastW;
+    if (elevLines && elevLines.land) { g.strokeStyle = 'rgba(40,26,16,0.55)'; g.lineWidth = 1.1 * LW / k; g.stroke(elevLines.land.thin); g.lineWidth = 2.2 * LW / k; g.stroke(elevLines.land.thick); }
+    if (elevLines && elevLines.water) { g.strokeStyle = 'rgba(214,236,255,0.6)'; g.lineWidth = 1.1 * LW / k; g.stroke(elevLines.water.thin); g.lineWidth = 2.2 * LW / k; g.stroke(elevLines.water.thick); }
+    if (coastOn && CW > 0) { g.strokeStyle = 'rgba(8,11,18,0.55)'; g.lineWidth = 1.2 * CW / k; g.stroke(mapCoast.thin); g.strokeStyle = 'rgba(8,11,18,0.92)'; g.lineWidth = 3.4 * CW / k; g.stroke(mapCoast.thick); }
     g.restore(); }
-  if (mapContours && mapStats.insOn) { g.save(); g.setTransform(k, 0, 0, k, 0, 0); g.strokeStyle = 'rgba(255,255,255,0.9)'; g.lineWidth = 1.5 / k; g.stroke(mapContours.thin); g.lineWidth = 3.4 / k; g.stroke(mapContours.thick); g.restore(); }
+  if (mapContours && mapStats.insOn) { g.save(); g.setTransform(k, 0, 0, k, 0, 0); g.strokeStyle = 'rgba(255,255,255,0.9)'; g.lineWidth = 1.5 * state.lineW / k; g.stroke(mapContours.thin); g.lineWidth = 3.4 * state.lineW / k; g.stroke(mapContours.thick); g.restore(); }
   if (rivOn) { const Wd = [0.9, 1.4, 2.0, 2.7, 3.5, 4.4]; g.save(); g.setTransform(k, 0, 0, k, 0, 0);
     for (let c = 0; c < Wd.length; c++) { g.strokeStyle = 'rgba(14,52,104,0.55)'; g.lineWidth = (Wd[c] * 1.3 + 1.4) / k; g.stroke(rainRivers.paths[c]); }
     for (let c = 0; c < Wd.length; c++) { g.strokeStyle = '#4FA3F0'; g.lineWidth = Wd[c] * 1.3 / k; g.stroke(rainRivers.paths[c]); }
@@ -5495,6 +5572,7 @@ function updateMapControls() {
   $('gridLat').value = state.gridLat; $('gridLon').value = state.gridLon;
   $('hillshade').checked = state.hillshade; $('insDyn').checked = state.insDyn;
   $('mapGrid').checked = state.mapGrid; $('mapSites').checked = state.mapSites; $('mapSolTag').checked = state.mapSolTag; updateMapSol();
+  $('lineW').value = state.lineW; setText('lineWOut', '×' + state.lineW.toFixed(2)); $('coastW').value = state.coastW; setText('coastWOut', state.coastW ? '×' + state.coastW.toFixed(2) : 'off');
   const sea = mapReady ? seaLevelOf(state.waterPct) : NaN;
   setText('waterOut', state.waterPct + '%' + (mapReady ? (isFinite(sea) ? ' · sea level ' + fmtH(sea) : state.waterPct >= 100 ? ' · all water' : ' · no ocean') : ''));
   $('water').title = 'Share of the surface below sea level' + (state.closedSeas === 'own' ? '; areas below it that are not joined to the ocean (Hellas, Argyre) keep their own surface' : '');
@@ -5582,6 +5660,8 @@ $('hillshade').addEventListener('change', e => { state.hillshade = e.target.chec
 $('insDyn').addEventListener('change', e => { state.insDyn = e.target.checked; mapSettingsChanged(); });
 $('mapGrid').addEventListener('change', e => { state.mapGrid = e.target.checked; updateMapControls(); scheduleMapDraw(); save(); });
 $('mapSites').addEventListener('change', e => { state.mapSites = e.target.checked; scheduleMapDraw(); save(); });
+for (const id of ['lineW', 'coastW']) $(id).addEventListener('input', e => {
+  state[id] = +e.target.value; setText('lineWOut', '×' + state.lineW.toFixed(2)); setText('coastWOut', state.coastW ? '×' + state.coastW.toFixed(2) : 'off'); scheduleMapDraw(); save(); });
 $('gridLat').addEventListener('input', e => { state.gridLat = +e.target.value; updateMapControls(); scheduleMapDraw(); save(); });
 $('gridLon').addEventListener('input', e => { state.gridLon = +e.target.value; updateMapControls(); scheduleMapDraw(); save(); });
 $('region').addEventListener('change', e => {
@@ -5899,7 +5979,7 @@ const RESET_KEYS = {
   view: ['view', 'tod', 'obsLat', 'camOff'],
   lines: ['lineMode', 'specA', 'specB', 'specStep', 'specOp', 'lats', 'flip'],
   dur: ['dynDur'], ins: ['dynIns', 'metric', 'earthRef', 'light'], rat: ['dynRat', 'ratioMetric', 'earthRef', 'light'],
-  map: ['mapSolTag', 'waterPct', 'fillLakes', 'lakeMode', 'waterTemp', 'mapGlobe', 'globeEx', 'mapRivers', 'basinFill', 'closedSeas', 'hellasLvl', 'argyreLvl', 'hUnit', 'mapLayer', 'palette', 'hillshade', 'insWhen', 'insMetric', 'mapOrbit', 'insShow', 'tUnit', 'heat', 'lapse', 'p0', 'isoStep', 'rainStep', 'eLandStep', 'eWatStep', 'eLandOn', 'eWatOn', 'mapIso', 'dayPart', 'mapBands', 'insOp', 'insDyn', 'mapGrid', 'gridLat', 'gridLon', 'mapSites'],
+  map: ['mapSolTag', 'lineW', 'coastW', 'waterPct', 'fillLakes', 'lakeMode', 'waterTemp', 'mapGlobe', 'globeEx', 'mapRivers', 'basinFill', 'closedSeas', 'hellasLvl', 'argyreLvl', 'hUnit', 'mapLayer', 'palette', 'hillshade', 'insWhen', 'insMetric', 'mapOrbit', 'insShow', 'tUnit', 'heat', 'lapse', 'p0', 'isoStep', 'rainStep', 'eLandStep', 'eWatStep', 'eLandOn', 'eWatOn', 'mapIso', 'dayPart', 'mapBands', 'insOp', 'insDyn', 'mapGrid', 'gridLat', 'gridLon', 'mapSites'],
   lat: ['ltCut', 'ltRef'],
 };
 const copyDefaults = keys => { for (const k of keys) state[k] = JSON.parse(JSON.stringify(DEFAULTS[k])); };
