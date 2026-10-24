@@ -358,7 +358,8 @@ svg .l-ref { stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 6 4; }
       <li><a href="#rivers"><span class="num">25</span>Rivers</a></li>
       <li><a href="#seasonfit"><span class="num">26</span>Finding the seasons</a></li>
       <li><a href="#map"><span class="num">27</span>Map, globe and colours</a></li>
-      <li><a href="#limits"><span class="num">28</span>What is left out</a></li>
+      <li><a href="#climzones"><span class="num">28</span>Climate zones</a></li>
+      <li><a href="#limits"><span class="num">29</span>What is left out</a></li>
     </ol>
     <p class="tp"><a href="#quirks">III · Martian quirks</a></p>
     <p class="tp"><a href="#using">IV · Using the simulator</a></p>
@@ -373,7 +374,7 @@ svg .l-ref { stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 6 4; }
       <summary>Contents</summary>
       <ol>
         <li><a href="#why">I · The choices, and why</a> <span class="sub">goal · light · L4 and L5 · L5 · L4 · UV · air · water · height · results · seasons · calendar · building</span></li>
-        <li><a href="#how">II · How the model works</a> <span class="sub">orbit · sunlight · shaping · UV · temperature · grid · height · day and night · rain · Earth test · lakes · rivers · seasons · map</span></li>
+        <li><a href="#how">II · How the model works</a> <span class="sub">orbit · sunlight · shaping · UV · temperature · grid · height · day and night · rain · Earth test · lakes · rivers · seasons · map · climate zones</span></li>
         <li><a href="#quirks">III · Martian quirks</a></li>
         <li><a href="#using">IV · Using the simulator</a> <span class="sub">glossary · sources</span></li>
       </ol>
@@ -907,10 +908,11 @@ svg .l-ref { stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 6 4; }
         <li><b>Temperature</b> is pinned to fixed temperatures from −60 to 60 °C and spends most of its colour on 0–35 °C, where people live: dark capri just above 0 °C, bright green at 10 °C, yellow at 20, orange at 30 and pure red at 35, then darker, ashier reds to 60. At 0 °C the colour flips to a light azure, which turns bluer and darker as it gets colder, so freezing stands out at a glance. The legend gives 0–35 °C two-thirds of its width.</li>
         <li><b>Rain</b> doubles with each colour: 300 mm a year yellow, 600 mm green, 1.2 m cyan, 2.4 m purple, 4.8 m magenta.</li>
         <li><b>Insolation</b> uses a fixed scale by default, or stretches between the lowest and highest values on land.</li>
+        <li><b>Climate zones</b> use the Köppen–Geiger colours of Beck et al. (2018), or for the Martian zones a hue for each warmth class, paler where drier (section 28).</li>
       </ul>
       <h3>Lines</h3>
       <ul>
-        <li><b>Isotherms</b> every 1–30 °C, counted from 0 °C, which is drawn thick.</li>
+        <li><b>Isotherms</b> every 1–10 °C in half-degree steps, counted from 0 °C, or every 1–20 °F counted from 0 °F; freezing is always drawn thick.</li>
         <li><b>Rain lines</b> every 10 mm to 1 m a year up to the first line at or above 600 mm, then twice that gap up to the first line at or above 2.4 m, then four times it: every 100 mm, for instance, becomes every 200 mm from 600 mm and every 400 mm from 2.4 m. The 300 mm line, roughly the edge of dry country, is always drawn thick.</li>
         <li><b>Insolation lines</b> every 100 W/m² (thick at 100 and 500); visible light every 50 W/m²; the peak UV index every whole number, thick at the WHO category boundaries 3, 6, 8 and 11.</li>
         <li><b>Height and depth lines</b> every 0.1–5 km in the chosen units, every fifth thicker.</li>
@@ -919,8 +921,47 @@ svg .l-ref { stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 6 4; }
       </ul>
     </section>
 
+    <section id="climzones">
+      <h2><span class="sn">28</span>Climate zones</h2>
+      <p>The map can sort every place into a climate zone, two ways: with the <b>Köppen–Geiger</b> classes used for Earth, so this Mars can be compared with places people know, and with <b>Martian zones</b> drawn up for this world, because its climates are built differently from Earth's.</p>
+      <h3>Twelve months</h3>
+      <p>Both work from twelve "months": the twelve slices of the Martian year the rain model already uses, 55.7 sols each. For every map pixel the simulator takes each month's mean temperature, from the dynamic grid cooled by the pixel's height, and its rain. Rain is counted as a rate, in mm per 30.4 Earth days and the year's total per Earth year, so thresholds set for Earth keep their meaning. "Summer" is each place's warmer half-year, since the three-sun seasons do not follow the hemispheres.</p>
+      <h3>Köppen–Geiger</h3>
+      <p>The rules follow Peel et al. (2007), with the colours of Beck et al. (2018):</p>
+      <ul>
+        <li><b>E, polar</b> if the warmest month is under 10 °C (ET tundra above 0 °C, EF frost below).</li>
+        <li><b>B, arid</b> if the year's rain is under 10 × (2 × mean temperature + 14) mm, with +14 or −14 when 70% of the rain falls in summer or in winter (BW desert under half of that; h or k for a mean above or below 18 °C).</li>
+        <li><b>A, tropical</b> if the coldest month is 18 °C or more; <b>C, temperate</b> if it is above 0 °C; <b>D, cold</b> otherwise.</li>
+        <li>The second letter gives the dry season (s dry summer, w dry winter, f none) and the third the summer's warmth (a hot, b warm, c cold, d very cold winter).</li>
+      </ul>
+      <figure>
+        <img src="img/guide-koppen.webp" width="1446" height="724" alt="Köppen–Geiger climate map of the three-sun Mars" loading="lazy">
+        <figcaption>Köppen–Geiger classes with three suns. Yellow Csa around the northern ocean, green Cfb over the southern highlands, the steppes and deserts of Arabia, Chryse and Elysium in orange and red, magenta Dsa over the far south, grey ET on the volcano tops.</figcaption>
+      </figure>
+      <p>Half the land is <b>temperate</b> (C, 51%): oceanic Cfb over the southern highlands (20%) and Mediterranean Csa around the northern ocean (15%). A quarter is <b>arid</b> (B, 27%), the steppes and deserts of Arabia, Chryse, Xanthe and Elysium. Most of the far south is <b>cold</b> (D, 18%), with warm summers and winters below freezing, mostly dry-summer Dsa and Dsb, and the volcano tops are <b>polar</b> (E, 4%). There are almost no tropical climates (under 1%): most land stands high (half of it more than 4.3 km above the sea), and even at sea level the band's coolest weeks fall below the 18 °C the A classes need.</p>
+      <h3>Martian zones</h3>
+      <p>Köppen's thresholds come from Earth, where warmth follows latitude and the seasons follow the hemispheres. Here warmth depends mostly on height, the strongest seasons are set by the orbit (the far south swings by 20–40 K between its months), and the biggest regional contrast is <i>when</i> the rain falls: in the cool half of the year around the northern ocean, with the warmth over the southern highlands. The Martian zones use three letters built on those facts, and measure wetness with the rain model's own potential evaporation instead of Köppen's rule of thumb:</p>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Letter</th><th>Meaning</th><th>Rule</th></tr></thead>
+          <tbody>
+            <tr><th>W · M · C</th><td>Warm · mild · cold</td><td>Mean temperature 15 °C or more · 7–15 °C · under 7 °C</td></tr>
+            <tr><th>S</th><td>Seasonal</td><td>Warmest and coldest months 20 K or more apart, whatever the mean</td></tr>
+            <tr><th>r · h · d · x</th><td>Rainy · humid · dry · desert</td><td>The year's rain over its potential evaporation: 1 or more · 0.5–1 · 0.25–0.5 · under 0.25</td></tr>
+            <tr><th>s · c</th><td>Summer rain · cool-season rain</td><td>For rainy and humid places: 60% or more of the rain in the warmer half-year · 40% or less (no letter if even)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <figure>
+        <img src="img/guide-zones.webp" width="1446" height="724" alt="Martian climate zones of the three-sun Mars" loading="lazy">
+        <figcaption>Martian zones with three suns: a hue for each warmth class (orange warm, green mild, blue cold, purple seasonal), paler where drier.</figcaption>
+      </figure>
+      <p>With three suns, 40% of the land is <b>mild</b>, mostly the humid highlands of the southern band, much of it with summer rain (Mhs 11%, Mh 10%); 31% is <b>warm</b>, from the rainy coasts of the northern ocean with their cool-season rain (Wrc, Whc) to the dry warm belt of Arabia and Chryse (Wd 12%, Wx 3%); 21% is <b>seasonal</b>, nearly all the far south, mostly dry (Sd 12%); and 9% is <b>cold</b>, the high Tharsis and Elysium volcanoes and the highest plateaus, rainy where the winds push moist air up their slopes. By wetness, 19% of the land is rainy, 39% humid, 35% dry and 7% desert.</p>
+      <p class="note"><span class="tag">In the simulator</span>Map → <b>Insolation</b> → <b>Show: Climate zones</b>, then <b>Köppen–Geiger</b> or <b>Martian zones</b>. The legend lists the zones on the map with their share of the land; hovering gives a place's zone, its months' range of temperature, its rain and how much of it falls in the warmer half.</p>
+    </section>
+
     <section id="limits">
-      <h2><span class="sn">28</span>What is left out</h2>
+      <h2><span class="sn">29</span>What is left out</h2>
       <ul>
         <li><b>Ocean currents.</b> The heat the oceans carry poleward is included on average, spread evenly over land and sea, but there are no gyres, warm boundary currents like the Gulf Stream, upwelling or deep circulation.</li>
         <li><b>Snow, sea ice and changing clouds</b>, and the feedbacks they bring.</li>
@@ -1001,11 +1042,11 @@ svg .l-ref { stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 6 4; }
     </div>
     <section class="usesec">
       <ul>
-        <li><b>Sky bar.</b> Natural, Two suns or Three suns; the UV-free switch; each array's strength and shaping, with the Fine-tune and Seasons boxes.</li>
+        <li><b>Sky bar.</b> Natural, Two suns or Three suns (the default); the UV-free switch; each array's strength and shaping, with the Fine-tune and Seasons boxes.</li>
         <li><b>Date dials.</b> Drag round the year, from New Year at the top: the outer ring holds the twenty months (dots mark the festival sols), the inner ring the five seasons, squares the solstices and equinoxes and dots perihelion and aphelion. The buttons under each dial choose how the centre gives the date: <b>Month &amp; day</b>, <b>Sol</b> of the year, <b>L<sub>s</sub></b>, or any mix. The play button runs the year in anything from 1 to 300 seconds, set with <b>Year in</b>; the map's lines keep up while it plays.</li>
         <li><b>Mars view.</b> The orbit to scale, or a ground view of the sky dome at any latitude with every sun's path; drag Mars round its orbit to change the date.</li>
         <li><b>Daylight, Insolation and Ratio.</b> Day length, sunlight (daily mean or noon peak) and the seasonal swing across the year, for any set of latitudes or a spectrum of them.</li>
-        <li><b>Map.</b> Water level, lakes and seas; elevation or insolation layers showing sunlight (all light, visible or UV index), temperature or rain; rivers; height and depth lines; line and coastline thickness; a flat map that wraps round or a 3D globe. The controls can sit above the map or in a column on its left (drag its edge to resize it), and <b>Date on the map</b> puts the date, as the dial shows it, in the map's corner.</li>
+        <li><b>Map.</b> Water level, lakes and seas; elevation or insolation layers showing sunlight (all light, visible or UV index), temperature, rain or climate zones (Köppen–Geiger or Martian); rivers; height and depth lines; line and coastline thickness; a flat map that wraps round or a 3D globe. The controls can sit above the map or in a column on its left (drag its edge to resize it), and <b>Date on the map</b> puts the date, as the dial shows it, in the map's corner.</li>
         <li><b>Temperature.</b> Temperature by latitude over the land, with the counts of cold and hot sols used in this guide.</li>
       </ul>
       <figure>
@@ -1030,6 +1071,8 @@ svg .l-ref { stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 6 4; }
         <div><dt>Energy balance model</dt><dd>A climate model that balances absorbed sunlight against heat radiated to space, stored and carried away.</dd></div>
         <div><dt>Moist static energy</dt><dd>The heat, height and water vapour of air together; near-surface air flows toward where it peaks.</dd></div>
         <div><dt>Budyko curve</dt><dd>The relation between rain, evaporative demand and how much of the rain the land evaporates over a year.</dd></div>
+        <div><dt>Köppen–Geiger</dt><dd>The standard classification of Earth's climates by monthly temperature and rain, in about 30 classes such as Cfb (oceanic) or BSk (cold steppe).</dd></div>
+        <div><dt>Potential evaporation</dt><dd>How much water the ground would evaporate in a year if it were always wet; rain over it measures how wet a climate is.</dd></div>
         <div><dt>Festival sol</dt><dd>A calendar day outside the weeks: Perihelia, Finalia and, in leap years, Finalia II.</dd></div>
       </dl>
     </section>
@@ -1041,6 +1084,7 @@ svg .l-ref { stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 6 4; }
         <li>Orbit and solar time: Allison &amp; McEwen 2000, <i>A post-Pathfinder evaluation of areocentric solar coordinates</i>. Mars Year numbering: Clancy et al. 2000.</li>
         <li>Energy balance: North &amp; Coakley 1979; heat transport scaling: Williams &amp; Kasting 1997.</li>
         <li>Spectrum: ASTM E-490 / G-173 extraterrestrial solar spectrum. UV index: Madronich 2007.</li>
+        <li>Climate classes: Peel, Finlayson &amp; McMahon 2007; Beck et al. 2018 (colours).</li>
         <li>Rain model and tests: GPCP precipitation, NCEP reanalysis winds and temperatures, NOAA OISST sea temperatures, ETOPO topography; tropical boundary-layer flow after Lindzen &amp; Nigam 1987; flow over terrain after Sheppard 1956; land evaporation after Priestley &amp; Taylor 1972 and the Budyko curve in Fu's form, Zhang et al. 2004.</li>
         <li>Lapse rates: <a href="https://repositorio.aemet.es/bitstream/20.500.11765/12179/1/atmosphere-11-00656.pdf">Pyrenees (AEMET)</a>; <a href="https://mountwashington.org/overview-of-lapse-rate-research/">Mount Washington Observatory</a>; <a href="https://hess.copernicus.org/articles/16/4661/2012/hess-16-4661-2012.pdf">Alps (HESS 2012)</a>; <a href="https://dspace.ucuenca.edu.ec/entities/publication/5505fe67-40d2-4e6d-8e13-eab1a877a187/full">Ecuadorian Andes (Córdova et al. 2016)</a>.</li>
       </ul>
