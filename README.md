@@ -4,6 +4,8 @@ An interactive simulator of daylight and sunlight on Mars across its eccentric y
 
 **Live site:** https://alejandrozu.github.io/mars-insolation-project/
 
+**How it works:** https://alejandrozu.github.io/mars-insolation-project/guide.html, a guide to every choice behind the default three-sun world (the mirrors at L4 and L5, the air, the ocean and lakes, the climate models) and the quirks of Mars that shape them.
+
 Mars has a sol close to an Earth day and an axial tilt close to Earth's (25.19°), but its orbit is far more eccentric (e = 0.0934). The seasons have unequal lengths (154 / 193 / 179 / 143 sols) and sunlight at perihelion is about 45% stronger than at aphelion (713 vs 490 W/m²), so the length and strength of daylight behave very differently from Earth.
 
 ## What it does
