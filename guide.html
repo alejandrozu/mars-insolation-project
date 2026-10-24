@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>How it works · Mars Insolation Project</title>
+<title>Guide · Mars Insolation Project</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="How the Mars Insolation Project builds its terraformed, three-sun Mars: the mirrors at L4 and L5, the air, the ocean and lakes, the climate models, and the quirks of Mars that shape it all.">
+<meta name="description" content="Why the Mars Insolation Project's terraformed, three-sun Mars is built the way it is, choice by choice, and how its model computes the orbit, sunlight, temperatures, rain, lakes, rivers, seasons and calendar.">
 <meta name="theme-color" content="#0F141E">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='%23C4643D'/%3E%3Cpath d='M16 3a13 13 0 0 1 0 26z' fill='%23140b0a' opacity='.55'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -108,7 +108,7 @@ main p { margin: 0 0 14px; }
 main ul { padding-left: 1.2em; margin: 0 0 16px; }
 main li { margin-bottom: 7px; }
 .mono, .formula { font-family: var(--f-mono); font-size: 0.92em; font-variant-numeric: tabular-nums; }
-.formula { display: block; padding: 10px 14px; background: var(--band); border-radius: 6px; margin: 4px 0 16px; overflow-x: auto; white-space: nowrap; max-width: 68ch; }
+.formula { display: block; padding: 10px 14px; background: var(--band); border-radius: 6px; margin: 4px 0 16px; overflow-x: auto; white-space: pre; line-height: 1.75; max-width: 68ch; }
 
 .note { font-size: 15px; background: var(--band); border-radius: 8px; padding: 13px 16px; margin: 6px 0 18px; max-width: 68ch; }
 .note .tag { display: block; font-family: var(--f-mono); font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
@@ -214,6 +214,67 @@ footer { max-width: 1180px; margin: 30px auto 0; padding-top: 18px; border-top: 
   figure .frame.bare svg { min-width: 0; }
 }
 @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+
+/* v2: parts, decision cards, orientation cards, numbered sections */
+.toplinks a.go { color: var(--accent-ink); background: var(--accent); padding: 2px 10px; border-radius: 999px; }
+.toplinks a.go:hover { text-decoration: none; filter: brightness(1.08); }
+.orgmap { max-width: 1180px; margin: 0 auto; padding-block: 26px 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.orgmap a { display: block; text-decoration: none; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px 15px; min-width: 0; }
+.orgmap a:hover { border-color: var(--accent); }
+.orgmap .pn { font-family: var(--f-mono); font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+.orgmap b { display: block; font-family: var(--f-display); text-transform: uppercase; font-size: 23px; font-weight: 600; letter-spacing: 0.02em; margin: 4px 0 5px; line-height: 1.05; }
+.orgmap .d { display: block; font-size: 14px; color: var(--ink-2); line-height: 1.45; }
+.part { padding: 0 0 22px; margin-top: 26px; border-top: 3px solid var(--ink); }
+main > .part:first-of-type { margin-top: 0; }
+.part-n { font-family: var(--f-mono); font-size: 12.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin: 16px 0 6px; }
+.part h2.part-t { font-size: clamp(40px, 5.2vw, 60px); margin: 0 0 12px; }
+.part p.part-l { font-size: 17.5px; line-height: 1.55; color: var(--ink-2); max-width: 64ch; margin: 0; }
+.part + section { border-top: 0; padding-top: 6px; }
+.part + figure { margin-top: 0; }
+section h2 .sn { font-family: var(--f-mono); font-size: 0.4em; font-weight: 500; color: var(--accent); letter-spacing: 0.04em; vertical-align: 0.55em; margin-right: 12px; }
+.decide { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; margin: 0 0 22px; max-width: 68ch; }
+.decide > div { display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: 12px; background: var(--surface); padding: 10px 14px; font-size: 15px; line-height: 1.5; }
+.decide .k { font-family: var(--f-mono); font-size: 11.5px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); padding-top: 2px; }
+.decide > div:first-child { background: var(--accent-soft); }
+.decide > div:first-child .k { color: var(--accent); }
+.toc .tp { margin: 16px 0 4px; font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
+.toc .tp a { color: var(--accent); padding: 2px 8px; }
+.toc p.tp:first-of-type { margin-top: 2px; }
+.toc .num { font-family: var(--f-mono); font-size: 11px; color: var(--muted); margin-right: 7px; }
+.toc a.on .num { color: var(--accent); }
+.toc-m .sub { display: block; font-size: 13px; color: var(--muted); line-height: 1.4; margin-top: 2px; }
+.gloss { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; margin: 0; }
+.gloss > div { background: var(--surface); padding: 11px 14px 12px; min-width: 0; }
+.gloss dt { font-weight: 600; font-size: 15px; margin-bottom: 2px; }
+.gloss dd { margin: 0; font-size: 14.5px; line-height: 1.5; color: var(--ink-2); }
+.quirksec, .usesec { padding-top: 0; }
+/* pipeline, calendar and fit figures */
+svg .p-box { fill: var(--surface); stroke: var(--line); stroke-width: 1.4; }
+svg .p-key { stroke: var(--accent); }
+svg .p-t { font-family: var(--f-body); font-weight: 600; font-size: 13px; fill: var(--ink); }
+svg .p-s { font-family: var(--f-mono); font-size: 11px; fill: var(--ink-2); }
+svg .p-in { fill: var(--band); stroke: var(--line); }
+svg .p-arr { stroke: var(--ink-2); stroke-width: 1.6; }
+svg .p-arrhead { fill: var(--ink-2); }
+svg .p-feed { stroke: var(--muted); stroke-width: 1.2; stroke-dasharray: 3 3; }
+svg .p-loop { fill: none; stroke: var(--accent); stroke-width: 1.8; }
+svg .p-note { font-family: var(--f-mono); font-size: 11px; fill: var(--accent); }
+svg.space .cal-m { font-family: var(--f-display); font-weight: 600; font-size: 14px; letter-spacing: 0.02em; fill: #ECE6DD; }
+svg.space .cal-s { font-family: var(--f-mono); font-size: 10.5px; font-weight: 500; letter-spacing: 0.08em; fill: #10141C; }
+svg.space .cal-c1 { font-family: var(--f-display); font-weight: 600; font-size: 30px; letter-spacing: 0.02em; fill: #ECE6DD; }
+svg.space .cal-c2 { font-family: var(--f-mono); font-size: 11.5px; fill: var(--space-muted); }
+svg.space .cal-l { font-family: var(--f-mono); font-size: 11px; fill: var(--space-muted); }
+svg.space .cal-l.pk { fill: var(--space-accent); }
+svg .b-t { fill: var(--c-l4); opacity: 0.5; } svg .b-r { fill: var(--c-l5); opacity: 0.5; }
+svg .b-t.hl, svg .b-r.hl { opacity: 1; }
+svg .tick.hl { fill: var(--ink); font-weight: 600; }
+svg .l-ref { stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 6 4; }
+@media (max-width: 900px) { .orgmap { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) {
+  .orgmap { grid-template-columns: minmax(0, 1fr); }
+  .decide > div { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .toplinks { gap: 6px 12px; }
+}
 </style>
 </head>
 <body>
@@ -221,18 +282,22 @@ footer { max-width: 1180px; margin: 30px auto 0; padding-top: 18px; border-top: 
 <header class="top">
   <a class="brand" href="./">Mars Insolation Project</a>
   <nav class="toplinks" aria-label="Site">
-    <a href="./#three">Open the simulator</a>
-    <a href="https://github.com/alejandrozu/mars-insolation-project">Source on GitHub</a>
+    <a href="#why">I · Choices</a>
+    <a href="#how">II · The model</a>
+    <a href="#quirks">III · Quirks</a>
+    <a href="#using">IV · Using it</a>
+    <a class="go" href="./#three">Open the simulator →</a>
   </nav>
 </header>
 
 <div class="hero">
   <p class="eyebrow">Guide · the default three-sun world</p>
-  <h1>How it works</h1>
-  <p class="lede">The Mars Insolation Project imagines Mars after terraforming: Earth-like air at 1.05 atm, an ocean in the northern lowlands, seas in Hellas and Argyre, lakes in thousands of craters, and two giant mirror arrays that add their light to the Sun's. The simulator works out that world's days, sunlight, temperatures, rain and rivers. This guide goes through every choice behind its default world, the three-sun sky: what each one is, how it works, and why it was made.</p>
+  <h1>How it works, and why</h1>
+  <p class="lede">The Mars Insolation Project imagines Mars after terraforming: Earth-like air at 1.05 atm, an ocean in the northern lowlands, seas in Hellas and Argyre, lakes in thousands of craters, and two giant mirror arrays that add their light to the Sun's. The simulator works out that world's days, sunlight, temperatures, rain, rivers and seasons. This guide sets out every choice behind its default world and why it was made, then how the model computes each step.</p>
   <div class="ctas">
     <a class="btn primary" href="./#three">Open the simulator with three suns →</a>
-    <a class="btn" href="#quirks">Jump to the Martian quirks</a>
+    <a class="btn" href="#why">Start with the choices</a>
+    <a class="btn" href="#how">Go to the model</a>
   </div>
 </div>
 
@@ -251,39 +316,54 @@ footer { max-width: 1180px; margin: 30px auto 0; padding-top: 18px; border-top: 
   </dl>
 </div>
 
+<nav class="orgmap" aria-label="Parts of this guide">
+  <a href="#why"><span class="pn">Part I</span><b>The choices, and why</b><span class="d">Thirteen decisions, from the goal to the calendar. Each starts with what was chosen, why, and what it was chosen over.</span></a>
+  <a href="#how"><span class="pn">Part II</span><b>How the model works</b><span class="d">From the orbit to the rivers: each computation, its equations and constants, and how it was tested on Earth.</span></a>
+  <a href="#quirks"><span class="pn">Part III</span><b>Martian quirks</b><span class="d">What makes Mars different from Earth, in numbers, and how each difference shows up here.</span></a>
+  <a href="#using"><span class="pn">Part IV</span><b>Using the simulator</b><span class="d">Where every setting lives, how to read the maps and dials, and a glossary.</span></a>
+</nav>
+
 <div class="page">
   <nav class="toc" aria-label="Contents">
     <p>Contents</p>
+    <p class="tp"><a href="#why">I · The choices, and why</a></p>
     <ol>
-      <li><a href="#idea">The idea</a></li>
-      <li><a href="#sunlight">Sunlight on Mars</a></li>
-      <li><a href="#sky">The three-sun sky</a>
-        <ol>
-          <li><a href="#lagrange">Why L4 and L5</a></li>
-          <li><a href="#l5">L5, the second sun</a></li>
-          <li><a href="#l4">L4, the supplemental sun</a></li>
-          <li><a href="#uv">UV-free mirrors</a></li>
-          <li><a href="#tuning">How the settings were chosen</a></li>
-          <li><a href="#build">What it would take to build</a></li>
-          <li><a href="#two">The two-sun alternative</a></li>
-        </ol>
-      </li>
-      <li><a href="#air">Air</a></li>
-      <li><a href="#water">Water</a></li>
-      <li><a href="#climate">How the climate is computed</a>
-        <ol>
-          <li><a href="#temperature">Temperature</a></li>
-          <li><a href="#lapse">Cooling with height</a></li>
-          <li><a href="#daynight">Day and night</a></li>
-          <li><a href="#rain">Rain</a></li>
-          <li><a href="#rivers">Rivers and lakes</a></li>
-          <li><a href="#limits">What is left out</a></li>
-        </ol>
-      </li>
-      <li><a href="#results">Targets and results</a></li>
-      <li><a href="#seasons">The five seasons</a></li>
-      <li><a href="#quirks">Martian quirks</a></li>
-      <li><a href="#using">Using the simulator</a></li>
+      <li><a href="#goal"><span class="num">01</span>The goal</a></li>
+      <li><a href="#light"><span class="num">02</span>Why add light</a></li>
+      <li><a href="#lagrange"><span class="num">03</span>Mirrors at L4 and L5</a></li>
+      <li><a href="#l5"><span class="num">04</span>L5, the second sun</a></li>
+      <li><a href="#l4"><span class="num">05</span>L4, the supplemental sun</a></li>
+      <li><a href="#uv"><span class="num">06</span>UV-free mirrors</a></li>
+      <li><a href="#air"><span class="num">07</span>Air</a></li>
+      <li><a href="#water"><span class="num">08</span>Water</a></li>
+      <li><a href="#lapse"><span class="num">09</span>Cooling with height</a></li>
+      <li><a href="#results"><span class="num">10</span>Targets and results</a></li>
+      <li><a href="#seasons"><span class="num">11</span>Five seasons</a></li>
+      <li><a href="#calendar"><span class="num">12</span>The calendar</a></li>
+      <li><a href="#build"><span class="num">13</span>Building the mirrors</a></li>
+    </ol>
+    <p class="tp"><a href="#how">II · How the model works</a></p>
+    <ol>
+      <li><a href="#orbit"><span class="num">14</span>Orbit and time</a></li>
+      <li><a href="#insolation"><span class="num">15</span>Sunlight and daylight</a></li>
+      <li><a href="#shaping"><span class="num">16</span>Shaping the mirror light</a></li>
+      <li><a href="#spectrum"><span class="num">17</span>Wavelengths and UV</a></li>
+      <li><a href="#temperature"><span class="num">18</span>Temperature</a></li>
+      <li><a href="#dynamic"><span class="num">19</span>The dynamic grid</a></li>
+      <li><a href="#height"><span class="num">20</span>Height and water</a></li>
+      <li><a href="#daynight"><span class="num">21</span>Day and night</a></li>
+      <li><a href="#rain"><span class="num">22</span>Winds and rain</a></li>
+      <li><a href="#earthtest"><span class="num">23</span>Tested on Earth</a></li>
+      <li><a href="#lakes"><span class="num">24</span>Lakes</a></li>
+      <li><a href="#rivers"><span class="num">25</span>Rivers</a></li>
+      <li><a href="#seasonfit"><span class="num">26</span>Finding the seasons</a></li>
+      <li><a href="#map"><span class="num">27</span>Map, globe and colours</a></li>
+      <li><a href="#limits"><span class="num">28</span>What is left out</a></li>
+    </ol>
+    <p class="tp"><a href="#quirks">III · Martian quirks</a></p>
+    <p class="tp"><a href="#using">IV · Using the simulator</a></p>
+    <ol>
+      <li><a href="#glossary">Glossary</a></li>
       <li><a href="#sources">Sources</a></li>
     </ol>
   </nav>
@@ -292,77 +372,108 @@ footer { max-width: 1180px; margin: 30px auto 0; padding-top: 18px; border-top: 
     <details class="toc-m">
       <summary>Contents</summary>
       <ol>
-        <li><a href="#idea">The idea</a></li>
-        <li><a href="#sunlight">Sunlight on Mars</a></li>
-        <li><a href="#sky">The three-sun sky</a></li>
-        <li><a href="#air">Air</a></li>
-        <li><a href="#water">Water</a></li>
-        <li><a href="#climate">How the climate is computed</a></li>
-        <li><a href="#results">Targets and results</a></li>
-        <li><a href="#seasons">The five seasons</a></li>
-        <li><a href="#quirks">Martian quirks</a></li>
-        <li><a href="#using">Using the simulator</a></li>
-        <li><a href="#sources">Sources</a></li>
+        <li><a href="#why">I · The choices, and why</a> <span class="sub">goal · light · L4 and L5 · L5 · L4 · UV · air · water · height · results · seasons · calendar · building</span></li>
+        <li><a href="#how">II · How the model works</a> <span class="sub">orbit · sunlight · shaping · UV · temperature · grid · height · day and night · rain · Earth test · lakes · rivers · seasons · map</span></li>
+        <li><a href="#quirks">III · Martian quirks</a></li>
+        <li><a href="#using">IV · Using the simulator</a> <span class="sub">glossary · sources</span></li>
       </ol>
     </details>
 
-    <section id="idea">
-      <h2>The idea</h2>
-      <p>Today Mars is a frozen desert under a thin carbon-dioxide atmosphere, about 0.6% of Earth's surface pressure. The project does not simulate how to turn it into a living planet. It assumes the big pieces are already in place and asks what the climate would then be:</p>
+    <!-- ===================================================== PART I ===================================================== -->
+    <div class="part" id="why">
+      <p class="part-n">Part I</p>
+      <h2 class="part-t">The choices, and why</h2>
+      <p class="part-l">Every default in the simulator is a decision. Each section here opens with the decision itself: what was chosen, the reason, and what it was chosen over. The reasoning follows. Everything goes back to one goal, set out first.</p>
+    </div>
+
+    <section id="goal">
+      <h2><span class="sn">01</span>The goal</h2>
+      <div class="decide">
+        <div><span class="k">Chosen</span><span>A Mars where people could live under open sky: a mild climate across the populated band, 45°S–45°N, a warm sea, and far north and south that are cold in winter but not frozen.</span></div>
+        <div><span class="k">Because</span><span>Every other choice (where the mirrors sit, how their light is shaped, how much air and water there is) only matters for the climate it produces. A clear target makes those choices testable.</span></div>
+        <div><span class="k">Instead of</span><span>Simulating how to terraform Mars. The project assumes the big pieces are already in place and asks what the climate would then be.</span></div>
+      </div>
+      <p>Today Mars is a frozen desert under a thin carbon-dioxide atmosphere, about 0.6% of Earth's surface pressure. The project takes three things as given:</p>
       <ul>
         <li><b>Air like Earth's</b>, at 1.05 atm at sea level.</li>
         <li><b>Enough water</b> for an ocean in the northern lowlands, with lakes wherever the land can hold them.</li>
         <li><b>Extra light from mirrors</b>, because Mars's own sunlight cannot keep such a world warm.</li>
       </ul>
-      <p>The last point is the heart of the project. With Earth-like air and only the Sun, the model puts the land between 45°S and 45°N at about −45 °C on average at sea level, and the ocean would freeze over. Every other choice (where the mirrors sit, how their light is shaped, how high the sea stands) follows from making that world comfortable for people.</p>
-      <p>The climate models behind the numbers were built and tested on Earth, fitted to its observed temperatures, winds, rain and lakes, and then run with Mars's orbit, spin, gravity, air and terrain. They show the climate this sunlight would drive. They are not a weather forecast.</p>
+      <p>The climate is then judged against three comfort targets, all on daily mean temperatures at each place's own height:</p>
+      <ul>
+        <li><b>Land between 45°S and 45°N between 0 and 30 °C</b>, roughly the span of Earth's temperate and subtropical climates, on as many sols as possible.</li>
+        <li><b>The ocean north of the equator between 20 and 30 °C</b>, a warm sea like Earth's subtropical oceans, which also feeds the rain.</li>
+        <li><b>Land poleward of 45° between −20 and 30 °C</b>: cold winters are fine, an ice-cap climate is not.</li>
+      </ul>
+      <p>Candidate skies were run through the full climate model with the default air, water and lakes, and scored on how many sols they keep inside those ranges with all the mirror light delivered. Among skies that did about equally well, the default favours more rain over land and less arid land, meaning land that gets under 300 mm a year, roughly the edge of dry country. <a href="#results">Section 10</a> shows how the result scores.</p>
+      <p>The climate models behind every number were built and tested on Earth, fitted to its observed temperatures, winds, rain and lakes, and then run with Mars's orbit, spin, gravity, air and terrain (<a href="#how">Part II</a>). They show the climate this sunlight would drive. They are not a weather forecast.</p>
     </section>
 
-    <section id="sunlight">
-      <h2>Sunlight on Mars</h2>
+    <section id="light">
+      <h2><span class="sn">02</span>Why add light</h2>
+      <div class="decide">
+        <div><span class="k">Chosen</span><span>Add sunlight with mirrors until Mars gets 1,458 W/m² on average above the air, 107% of what Earth gets.</span></div>
+        <div><span class="k">Because</span><span>With Earth-like air and the Sun alone, the model puts the land between 45°S and 45°N at about −45 °C on average at sea level, and the ocean would freeze over.</span></div>
+        <div><span class="k">Instead of</span><span>A much stronger greenhouse. The model holds the greenhouse at Earth's strength, so the extra warmth has to arrive as light.</span></div>
+      </div>
       <p>Mars is 1.52 times farther from the Sun than Earth, so it gets 43% of Earth's sunlight: 589 W/m² above the air on average, against 1,361 W/m². Its orbit is also more elongated, with an eccentricity of 0.093 against Earth's 0.017, so its sunlight swings by 45% over the year, from 490 W/m² at aphelion to 713 W/m² at perihelion.</p>
-      <p>The three suns raise the yearly average to 1,458 W/m², 7% more than Earth gets. The chart shows where that light lands over a year. The Sun alone gives the familiar pattern, strongest at the equator and weakest at the poles. L5 adds most of its light away from the latitudes the Sun already heats, so that between 45°S and 45°N the Sun and L5 together give a nearly even 300–335 W/m². Beyond about 50° L4 adds a ring of extra light, peaking near 600 W/m² around 60°N and 460 W/m² around 60°S.</p>
+      <p>The three suns raise the yearly average to 1,458 W/m². The chart shows where that light lands. The Sun alone gives the familiar pattern, strongest at the equator and weakest at the poles. L5 adds most of its light away from the latitudes the Sun already heats, so that between 45°S and 45°N the Sun and L5 together give a nearly even 300–335 W/m². Beyond about 50° L4 adds a ring of extra light, peaking near 600 W/m² around 60°N and 460 W/m² around 60°S.</p>
       <figure>
         <div class="frame"><svg viewBox="0 0 760 340" role="img" aria-labelledby="figLightT"><title id="figLightT">Yearly-average sunlight by latitude for the Sun, L5 and L4, with Earth for comparison</title><line class="grid" x1="56" x2="690" y1="296.0" y2="296.0"/><text class="tick" x="48" y="300.0" text-anchor="end">0</text><line class="grid" x1="56" x2="690" y1="253.2" y2="253.2"/><text class="tick" x="48" y="257.2" text-anchor="end">100</text><line class="grid" x1="56" x2="690" y1="210.5" y2="210.5"/><text class="tick" x="48" y="214.5" text-anchor="end">200</text><line class="grid" x1="56" x2="690" y1="167.7" y2="167.7"/><text class="tick" x="48" y="171.7" text-anchor="end">300</text><line class="grid" x1="56" x2="690" y1="124.9" y2="124.9"/><text class="tick" x="48" y="128.9" text-anchor="end">400</text><line class="grid" x1="56" x2="690" y1="82.2" y2="82.2"/><text class="tick" x="48" y="86.2" text-anchor="end">500</text><line class="grid" x1="56" x2="690" y1="39.4" y2="39.4"/><text class="tick" x="48" y="43.4" text-anchor="end">600</text><line class="grid" x1="56.0" x2="56.0" y1="18" y2="296"/><text class="tick" x="56.0" y="314" text-anchor="middle">90°S</text><line class="grid" x1="161.7" x2="161.7" y1="18" y2="296"/><text class="tick" x="161.7" y="314" text-anchor="middle">60°S</text><line class="grid" x1="267.3" x2="267.3" y1="18" y2="296"/><text class="tick" x="267.3" y="314" text-anchor="middle">30°S</text><line class="grid" x1="373.0" x2="373.0" y1="18" y2="296"/><text class="tick" x="373.0" y="314" text-anchor="middle">0°</text><line class="grid" x1="478.7" x2="478.7" y1="18" y2="296"/><text class="tick" x="478.7" y="314" text-anchor="middle">30°N</text><line class="grid" x1="584.3" x2="584.3" y1="18" y2="296"/><text class="tick" x="584.3" y="314" text-anchor="middle">60°N</text><line class="grid" x1="690.0" x2="690.0" y1="18" y2="296"/><text class="tick" x="690.0" y="314" text-anchor="middle">90°N</text><rect class="band" x="214.5" y="18" width="317.0" height="278"/><text class="note" x="373.0" y="32" text-anchor="middle">populated band, 45°S–45°N</text><polygon class="a-sun" points="56.0,261.9 59.5,261.9 66.6,261.8 73.6,261.7 80.7,261.4 87.7,261.1 94.7,260.8 101.8,260.3 108.8,259.8 115.9,259.1 122.9,258.4 130.0,257.5 137.0,256.6 144.1,255.4 151.1,254.0 158.1,252.5 165.2,250.8 172.2,249.2 179.3,247.5 186.3,245.8 193.4,244.1 200.4,242.4 207.5,240.8 214.5,239.2 221.5,237.6 228.6,236.1 235.6,234.6 242.7,233.2 249.7,231.8 256.8,230.5 263.8,229.3 270.9,228.1 277.9,227.0 284.9,226.0 292.0,225.0 299.0,224.1 306.1,223.3 313.1,222.6 320.2,221.9 327.2,221.4 334.3,220.9 341.3,220.4 348.3,220.1 355.4,219.9 362.4,219.7 369.5,219.6 376.5,219.6 383.6,219.7 390.6,219.9 397.7,220.1 404.7,220.4 411.7,220.9 418.8,221.4 425.8,221.9 432.9,222.6 439.9,223.3 447.0,224.1 454.0,225.0 461.1,226.0 468.1,227.0 475.1,228.1 482.2,229.3 489.2,230.5 496.3,231.8 503.3,233.2 510.4,234.6 517.4,236.1 524.5,237.6 531.5,239.2 538.5,240.8 545.6,242.4 552.6,244.1 559.7,245.8 566.7,247.5 573.8,249.2 580.8,250.8 587.9,252.5 594.9,254.0 601.9,255.4 609.0,256.6 616.0,257.5 623.1,258.4 630.1,259.1 637.2,259.8 644.2,260.3 651.3,260.8 658.3,261.1 665.3,261.4 672.4,261.7 679.4,261.8 686.5,261.9 690.0,261.9 690.0,296.0 686.5,296.0 679.4,296.0 672.4,296.0 665.3,296.0 658.3,296.0 651.3,296.0 644.2,296.0 637.2,296.0 630.1,296.0 623.1,296.0 616.0,296.0 609.0,296.0 601.9,296.0 594.9,296.0 587.9,296.0 580.8,296.0 573.8,296.0 566.7,296.0 559.7,296.0 552.6,296.0 545.6,296.0 538.5,296.0 531.5,296.0 524.5,296.0 517.4,296.0 510.4,296.0 503.3,296.0 496.3,296.0 489.2,296.0 482.2,296.0 475.1,296.0 468.1,296.0 461.1,296.0 454.0,296.0 447.0,296.0 439.9,296.0 432.9,296.0 425.8,296.0 418.8,296.0 411.7,296.0 404.7,296.0 397.7,296.0 390.6,296.0 383.6,296.0 376.5,296.0 369.5,296.0 362.4,296.0 355.4,296.0 348.3,296.0 341.3,296.0 334.3,296.0 327.2,296.0 320.2,296.0 313.1,296.0 306.1,296.0 299.0,296.0 292.0,296.0 284.9,296.0 277.9,296.0 270.9,296.0 263.8,296.0 256.8,296.0 249.7,296.0 242.7,296.0 235.6,296.0 228.6,296.0 221.5,296.0 214.5,296.0 207.5,296.0 200.4,296.0 193.4,296.0 186.3,296.0 179.3,296.0 172.2,296.0 165.2,296.0 158.1,296.0 151.1,296.0 144.1,296.0 137.0,296.0 130.0,296.0 122.9,296.0 115.9,296.0 108.8,296.0 101.8,296.0 94.7,296.0 87.7,296.0 80.7,296.0 73.6,296.0 66.6,296.0 59.5,296.0 56.0,296.0"/><polygon class="a-l5" points="56.0,165.5 59.5,165.5 66.6,165.7 73.6,166.0 80.7,166.5 87.7,167.2 94.7,167.9 101.8,168.8 108.8,169.6 115.9,170.5 122.9,171.2 130.0,171.8 137.0,172.1 144.1,171.8 151.1,170.7 158.1,169.1 165.2,167.3 172.2,165.5 179.3,163.8 186.3,162.1 193.4,160.5 200.4,159.1 207.5,157.9 214.5,156.7 221.5,155.8 228.6,155.0 235.6,154.3 242.7,153.7 249.7,153.3 256.8,153.0 263.8,152.8 270.9,152.7 277.9,152.7 284.9,152.8 292.0,152.9 299.0,153.1 306.1,153.3 313.1,153.6 320.2,153.8 327.2,154.0 334.3,154.2 341.3,154.4 348.3,154.6 355.4,154.7 362.4,154.8 369.5,154.8 376.5,154.8 383.6,154.8 390.6,154.7 397.7,154.6 404.7,154.5 411.7,154.4 418.8,154.2 425.8,154.1 432.9,154.0 439.9,153.9 447.0,153.9 454.0,153.9 461.1,154.0 468.1,154.2 475.1,154.5 482.2,155.0 489.2,155.6 496.3,156.3 503.3,157.2 510.4,158.3 517.4,159.5 524.5,161.0 531.5,162.6 538.5,164.4 545.6,166.4 552.6,168.5 559.7,170.8 566.7,173.2 573.8,175.7 580.8,178.2 587.9,180.6 594.9,182.9 601.9,184.6 609.0,185.3 616.0,185.6 623.1,185.5 630.1,185.2 637.2,184.7 644.2,184.2 651.3,183.7 658.3,183.2 665.3,182.8 672.4,182.4 679.4,182.2 686.5,182.0 690.0,182.0 690.0,261.9 686.5,261.9 679.4,261.8 672.4,261.7 665.3,261.4 658.3,261.1 651.3,260.8 644.2,260.3 637.2,259.8 630.1,259.1 623.1,258.4 616.0,257.5 609.0,256.6 601.9,255.4 594.9,254.0 587.9,252.5 580.8,250.8 573.8,249.2 566.7,247.5 559.7,245.8 552.6,244.1 545.6,242.4 538.5,240.8 531.5,239.2 524.5,237.6 517.4,236.1 510.4,234.6 503.3,233.2 496.3,231.8 489.2,230.5 482.2,229.3 475.1,228.1 468.1,227.0 461.1,226.0 454.0,225.0 447.0,224.1 439.9,223.3 432.9,222.6 425.8,221.9 418.8,221.4 411.7,220.9 404.7,220.4 397.7,220.1 390.6,219.9 383.6,219.7 376.5,219.6 369.5,219.6 362.4,219.7 355.4,219.9 348.3,220.1 341.3,220.4 334.3,220.9 327.2,221.4 320.2,221.9 313.1,222.6 306.1,223.3 299.0,224.1 292.0,225.0 284.9,226.0 277.9,227.0 270.9,228.1 263.8,229.3 256.8,230.5 249.7,231.8 242.7,233.2 235.6,234.6 228.6,236.1 221.5,237.6 214.5,239.2 207.5,240.8 200.4,242.4 193.4,244.1 186.3,245.8 179.3,247.5 172.2,249.2 165.2,250.8 158.1,252.5 151.1,254.0 144.1,255.4 137.0,256.6 130.0,257.5 122.9,258.4 115.9,259.1 108.8,259.8 101.8,260.3 94.7,260.8 87.7,261.1 80.7,261.4 73.6,261.7 66.6,261.8 59.5,261.9 56.0,261.9"/><polygon class="a-l4" points="56.0,150.0 59.5,150.0 66.6,146.6 73.6,143.3 80.7,140.0 87.7,136.7 94.7,133.4 101.8,130.0 108.8,126.4 115.9,123.8 122.9,120.4 130.0,116.7 137.0,112.7 144.1,108.3 151.1,102.8 158.1,101.1 165.2,98.0 172.2,95.4 179.3,94.1 186.3,96.5 193.4,106.8 200.4,123.1 207.5,143.2 214.5,156.7 221.5,155.8 228.6,155.0 235.6,154.3 242.7,153.7 249.7,153.3 256.8,153.0 263.8,152.8 270.9,152.7 277.9,152.7 284.9,152.8 292.0,152.9 299.0,153.1 306.1,153.3 313.1,153.6 320.2,153.8 327.2,154.0 334.3,154.2 341.3,154.4 348.3,154.6 355.4,154.7 362.4,154.8 369.5,154.8 376.5,154.8 383.6,154.8 390.6,154.7 397.7,154.6 404.7,154.5 411.7,154.4 418.8,154.2 425.8,154.1 432.9,154.0 439.9,153.9 447.0,153.9 454.0,153.9 461.1,154.0 468.1,154.2 475.1,154.5 482.2,155.0 489.2,155.6 496.3,156.3 503.3,157.2 510.4,158.3 517.4,159.5 524.5,161.0 531.5,162.6 538.5,164.4 545.6,166.4 552.6,147.9 559.7,140.8 566.7,123.7 573.8,93.3 580.8,59.8 587.9,41.1 594.9,45.9 601.9,53.3 609.0,59.8 616.0,66.2 623.1,72.6 630.1,79.3 637.2,86.1 644.2,93.3 651.3,100.7 658.3,108.5 665.3,116.6 672.4,124.9 679.4,133.7 686.5,143.2 690.0,143.2 690.0,182.0 686.5,182.0 679.4,182.2 672.4,182.4 665.3,182.8 658.3,183.2 651.3,183.7 644.2,184.2 637.2,184.7 630.1,185.2 623.1,185.5 616.0,185.6 609.0,185.3 601.9,184.6 594.9,182.9 587.9,180.6 580.8,178.2 573.8,175.7 566.7,173.2 559.7,170.8 552.6,168.5 545.6,166.4 538.5,164.4 531.5,162.6 524.5,161.0 517.4,159.5 510.4,158.3 503.3,157.2 496.3,156.3 489.2,155.6 482.2,155.0 475.1,154.5 468.1,154.2 461.1,154.0 454.0,153.9 447.0,153.9 439.9,153.9 432.9,154.0 425.8,154.1 418.8,154.2 411.7,154.4 404.7,154.5 397.7,154.6 390.6,154.7 383.6,154.8 376.5,154.8 369.5,154.8 362.4,154.8 355.4,154.7 348.3,154.6 341.3,154.4 334.3,154.2 327.2,154.0 320.2,153.8 313.1,153.6 306.1,153.3 299.0,153.1 292.0,152.9 284.9,152.8 277.9,152.7 270.9,152.7 263.8,152.8 256.8,153.0 249.7,153.3 242.7,153.7 235.6,154.3 228.6,155.0 221.5,155.8 214.5,156.7 207.5,157.9 200.4,159.1 193.4,160.5 186.3,162.1 179.3,163.8 172.2,165.5 165.2,167.3 158.1,169.1 151.1,170.7 144.1,171.8 137.0,172.1 130.0,171.8 122.9,171.2 115.9,170.5 108.8,169.6 101.8,168.8 94.7,167.9 87.7,167.2 80.7,166.5 73.6,166.0 66.6,165.7 59.5,165.5 56.0,165.5"/><polyline class="l-earth" points="56.0,222.3 59.5,222.3 66.6,222.1 73.6,221.7 80.7,221.1 87.7,220.3 94.7,219.3 101.8,218.1 108.8,216.6 115.9,214.9 122.9,212.9 130.0,210.6 137.0,207.9 144.1,204.6 151.1,200.9 158.1,196.9 165.2,192.9 172.2,188.8 179.3,184.7 186.3,180.6 193.4,176.5 200.4,172.5 207.5,168.6 214.5,164.7 221.5,161.0 228.6,157.4 235.6,153.9 242.7,150.5 249.7,147.2 256.8,144.2 263.8,141.2 270.9,138.4 277.9,135.8 284.9,133.4 292.0,131.1 299.0,129.0 306.1,127.1 313.1,125.3 320.2,123.8 327.2,122.4 334.3,121.2 341.3,120.2 348.3,119.5 355.4,118.9 362.4,118.5 369.5,118.3 376.5,118.3 383.6,118.5 390.6,118.9 397.7,119.5 404.7,120.2 411.7,121.2 418.8,122.4 425.8,123.8 432.9,125.3 439.9,127.1 447.0,129.0 454.0,131.1 461.1,133.4 468.1,135.8 475.1,138.4 482.2,141.2 489.2,144.2 496.3,147.2 503.3,150.5 510.4,153.9 517.4,157.4 524.5,161.0 531.5,164.7 538.5,168.6 545.6,172.5 552.6,176.5 559.7,180.6 566.7,184.7 573.8,188.8 580.8,192.9 587.9,196.9 594.9,200.9 601.9,204.6 609.0,207.9 616.0,210.6 623.1,212.9 630.1,214.9 637.2,216.6 644.2,218.1 651.3,219.3 658.3,220.3 665.3,221.1 672.4,221.7 679.4,222.1 686.5,222.3 690.0,222.3"/><text class="lab earth" x="373.0" y="110.1" text-anchor="middle">Earth</text><text class="lab sun" x="698" y="282.9">Sun</text><text class="lab l5" x="698" y="226.0">L5</text><text class="lab l4" x="698" y="166.6">L4</text><text class="tick" x="48" y="14" text-anchor="end">W/m²</text><line class="axis" x1="56" x2="690" y1="296" y2="296"/></svg></div>
         <figcaption>Yearly-average sunlight above the air, by latitude (daily mean, W/m²), stacked: the Sun, then L5, then L4. Dashed: Earth, for comparison.</figcaption>
       </figure>
-      <p>Why so much light at high latitudes? Temperature is the goal, not an even light map. High latitudes lose most of their light for months in winter, the slanting light crosses more air and cloud, and the winds carry heat away toward the poles. To end up only a little cooler than the tropics, they need more light over a year. Earth shows the opposite extreme: its equator gets 2.4 times what its poles get, which is why its poles are icy.</p>
+      <p><b>Why so much light at high latitudes?</b> The goal is temperature, not an even light map. High latitudes lose most of their light for months in winter, the slanting light crosses more air and cloud, and the winds carry heat away toward the poles. To end up only a little cooler than the tropics, they need more light over a year. Earth shows the opposite extreme: its equator gets 2.4 times what its poles get, which is why its poles are icy.</p>
     </section>
 
-    <section id="sky">
-      <h2>The three-sun sky</h2>
-      <p>The default sky has three suns: the real Sun; a <b>second sun</b> at L5 that lights the whole planet with a shaped beam; and a <b>supplemental sun</b> at L4 that lights only the high latitudes. The populated band between 45°S and 45°N sees just the Sun and L5, so it keeps a normal rhythm of days and nights.</p>
-
-      <h3 id="lagrange">Why L4 and L5</h3>
-      <p>L4 and L5 are two of the five Lagrange points of the Sun–Mars pair, on Mars's orbit 60° ahead of and 60° behind the planet. Each forms an equilateral triangle with the Sun and Mars. An object placed there keeps its place relative to both, and the points are stable: a small drift does not grow. Mars already has a few Trojan asteroids at these points, such as 5261 Eureka at L5.</p>
+    <section id="lagrange">
+      <h2><span class="sn">03</span>Mirrors at L4 and L5</h2>
+      <div class="decide">
+        <div><span class="k">Chosen</span><span>Two mirror arrays at the Sun–Mars Lagrange points L4 and L5, 60° ahead of and behind Mars on its orbit.</span></div>
+        <div><span class="k">Because</span><span>They are as far from the Sun as Mars, they hold still in Mars's sky relative to the Sun, and they are stable.</span></div>
+        <div><span class="k">Instead of</span><span>Mirrors orbiting Mars itself, which would pass through Mars's shadow and sweep their light across the planet as they circle it.</span></div>
+      </div>
+      <p>L4 and L5 are two of the five Lagrange points of the Sun–Mars pair. Each forms an equilateral triangle with the Sun and Mars. An object placed there keeps its place relative to both, and the points are stable: a small drift does not grow. Mars already has a few Trojan asteroids at these points, such as 5261 Eureka at L5.</p>
       <figure>
         <div class="frame bare"><svg viewBox="0 0 640 430" role="img" aria-labelledby="figGeoT" class="space"><title id="figGeoT">The Sun, Mars and the L4 and L5 points form two equilateral triangles; each mirror shines on Mars from 60 degrees away from the Sun</title><defs><radialGradient id="sunGlow"><stop offset="0" stop-color="#FFE7B0"/><stop offset="0.45" stop-color="#F3B65A" stop-opacity="0.85"/><stop offset="1" stop-color="#F3B65A" stop-opacity="0"/></radialGradient><marker id="arr4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="m-l4"/></marker><marker id="arr5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="m-l5"/></marker><marker id="arrO" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="m-orbit"/></marker></defs><rect x="0" y="0" width="640" height="430" rx="10" class="sp-bg"/><circle cx="320" cy="196" r="150" class="sp-orbit"/><path d="M371.3,55.0 A150,150 0 0 0 268.7,55.0" class="sp-dir" marker-end="url(#arrO)"/><text x="320" y="34.0" class="sp-note" text-anchor="middle">Mars’s orbit, seen from above its north pole</text><polygon points="320.0,196.0 449.9,271.0 320.0,346.0" class="sp-tri"/><polygon points="320.0,196.0 190.1,271.0 320.0,346.0" class="sp-tri"/><line x1="337.3" y1="206.0" x2="441.2" y2="266.0" class="sp-ray"/><line x1="302.7" y1="206.0" x2="198.8" y2="266.0" class="sp-ray"/><line x1="320.0" y1="216.0" x2="320.0" y2="336.0" class="sp-ray"/><line x1="441.2" y1="276.0" x2="329.5" y2="340.5" class="sp-l4" marker-end="url(#arr4)"/><line x1="198.8" y1="276.0" x2="310.5" y2="340.5" class="sp-l5" marker-end="url(#arr5)"/><path d="M320.0,308.0 A38,38 0 0 1 352.9,327.0" class="sp-arc4"/><text x="346.5" y="304.1" class="sp-small" text-anchor="middle">60°</text><path d="M320.0,308.0 A38,38 0 0 0 287.1,327.0" class="sp-arc5"/><text x="293.5" y="304.1" class="sp-small" text-anchor="middle">60°</text><circle cx="320" cy="196" r="34" fill="url(#sunGlow)"/><circle cx="320" cy="196" r="11" class="sp-sun"/><text x="342" y="182" class="sp-lab">Sun</text><circle cx="320.0" cy="346.0" r="8" class="sp-mars"/><text x="320.0" y="372.0" class="sp-lab" text-anchor="middle">Mars</text><rect x="440.9" y="268.0" width="18" height="6" rx="1" class="sp-arr4" transform="rotate(15 449.9 271.0)"/><rect x="181.1" y="268.0" width="18" height="6" rx="1" class="sp-arr5" transform="rotate(-15 190.1 271.0)"/><text x="467.9" y="263.0" class="sp-lab l4">L4</text><text x="467.9" y="280.0" class="sp-small">60° ahead of Mars</text><text x="172.1" y="263.0" class="sp-lab l5" text-anchor="end">L5</text><text x="172.1" y="280.0" class="sp-small" text-anchor="end">60° behind Mars</text><text x="467.9" y="400" class="sp-small l4" text-anchor="middle">supplemental sun · rises 4 h before the Sun</text><text x="172.1" y="400" class="sp-small l5" text-anchor="middle">second sun · sets 4 h after the Sun</text></svg></div>
         <figcaption>Seen from above Mars's north pole. Positions on the orbit are to scale; the bodies are not. Each mirror reflects sunlight to Mars from 60° away from the Sun.</figcaption>
       </figure>
-      <p>Three things make them the right place for the mirrors:</p>
       <ul>
         <li><b>They are as far from the Sun as Mars.</b> The light a mirror catches, and so the light it sends on, rises and falls with Mars's own sunlight over the eccentric year. The mirror light is always the same multiple of sunlight.</li>
-        <li><b>They hold still in Mars's sky relative to the Sun.</b> Seen from Mars, L4 always stands 60° west of the Sun along the ecliptic and L5 60° east. Mars turns 360° in a sol, so L4 rises and sets 4 Mars hours (4 h 07 min) before the Sun, a morning sun, and L5 4 Mars hours after it, an evening sun.</li>
+        <li><b>They hold still in Mars's sky relative to the Sun.</b> Seen from Mars, L4 always stands 60° west of the Sun along the ecliptic and L5 60° east. Mars turns 360° in a sol, so L4 rises and sets about 4 Mars hours before the Sun, a morning sun, and L5 about 4 Mars hours after it, an evening sun.</li>
         <li><b>They are stable</b>, so the arrays need only small corrections to stay in place.</li>
       </ul>
+      <p>The two arrays get different jobs. L5 lights the whole planet with a shaped beam (section 04). L4 lights only the high latitudes (section 05), so the populated band sees just the Sun and L5 and keeps a normal rhythm of days and nights.</p>
       <p class="note"><span class="tag">In the simulator</span>Sky bar → <b>Three suns</b>. <b>L5 light</b> and <b>L4 light</b> set each array's strength; <b>Shaping</b> switches between the two arrays' settings; <b>Reset</b> returns the whole sky to these defaults.</p>
+    </section>
 
-      <h3 id="l5">L5, the second sun</h3>
-      <p>L5 sends 1.17 times the Sun's light, averaged over Mars, but not evenly. Its beam is shaped like a concave lens: dimmest along one line across the planet and brighter toward the north and south. The profile is</p>
+    <section id="l5">
+      <h2><span class="sn">04</span>L5, the second sun</h2>
+      <div class="decide">
+        <div><span class="k">Chosen</span><span>1.17 times the Sun's light, in a beam shaped like a concave lens (depth k = 0.85) whose dimmest line moves with the seasons.</span></div>
+        <div><span class="k">Because</span><span>An even second sun would simply multiply the Sun's own pattern: the tropics would overheat long before the high latitudes warmed up.</span></div>
+        <div><span class="k">Instead of</span><span>An even beam, or a fixed lens that ignores the seasons.</span></div>
+      </div>
+      <p>The beam is dimmest along one line across the planet and brighter toward the north and south. The profile is</p>
       <span class="formula">light ∝ 1 − k · cos 2(a − p),   k = 0.85</span>
-      <p>divided by its own average so the total stays 1.17×. Here <i>a</i> is the latitude as seen from the array (the real latitude when the array is over the equator), <i>p</i> is the latitude of the dimmest line and <i>k</i> sets the depth of the dip. With k = 0.85 the dimmest line gets 0.26 times the average and the far north and south edges 3.2 times.</p>
+      <p>divided by its own average so the total stays 1.17×. Here <i>a</i> is the latitude as seen from the array, <i>p</i> the latitude of the dimmest line and <i>k</i> the depth of the dip. With k = 0.85 the dimmest line gets 0.26 times the average and the far north and south edges 3.2 times. <a href="#shaping">Section 16</a> gives the details.</p>
       <p>The dimmest line moves with the seasons:</p>
       <span class="formula">p = 7° + 27.5° · sin(L<sub>s</sub> − 8°) + 12° · sin 2(L<sub>s</sub> − 54°)</span>
-      <p>It reaches 46°N in northern summer and 13°S at its southernmost, in northern autumn. It follows the latitude where the Sun stands overhead, and in northern summer runs well north of it, so the dimmest part of the beam falls where the Sun is already high and the days are long, and the mirror light goes where the Sun is weak: the winter hemisphere and the far summer latitudes. The second term, a twice-a-year swing, lets the two halves of the year differ, because Mars's eccentric orbit makes the southern summer short and hot and the northern summer long and mild.</p>
-      <p>Why shape the beam at all? A uniform second sun would simply multiply the Sun's own pattern, and the tropics would overheat long before the high latitudes warmed up. The lens moves light from latitudes that have too much to latitudes that have too little, which evens out both the yearly temperatures and the seasons.</p>
-      <p class="note"><span class="tag">In the simulator</span>Under <b>Shaping → L5</b>, the light is set to <b>Lens</b> with k = 0.85 and a phase that follows the seasons; the <b>Fine-tune</b> box holds the bias, shift and twice-a-year terms.</p>
+      <p>It reaches 46°N in northern summer and 13°S at its southernmost, in northern autumn. It follows the latitude where the Sun stands overhead, and in northern summer runs well north of it, so the dimmest part of the beam falls where the Sun is already high and the days are long. The mirror light goes where the Sun is weak: the winter hemisphere and the far summer latitudes. The twice-a-year term lets the two halves of the year differ, because Mars's eccentric orbit makes the southern summer short and hot and the northern summer long and mild.</p>
       <figure>
         <div class="frame"><svg viewBox="0 0 760 380" role="img" aria-labelledby="figSchedT"><title id="figSchedT">Through the year: where L4 lights, where L5 is dimmest, and the latitude of the overhead Sun</title><rect class="cap" x="56.0" y="34.0" width="4.2" height="64.6" fill-opacity="0.51"/><rect class="cap" x="59.8" y="34.0" width="4.2" height="64.5" fill-opacity="0.52"/><rect class="cap" x="63.6" y="34.0" width="4.2" height="64.5" fill-opacity="0.52"/><rect class="cap" x="67.3" y="34.0" width="4.2" height="64.5" fill-opacity="0.52"/><rect class="cap" x="67.3" y="259.4" width="4.2" height="72.6" fill-opacity="0.09"/><rect class="cap" x="71.1" y="34.0" width="4.2" height="64.5" fill-opacity="0.53"/><rect class="cap" x="71.1" y="259.1" width="4.2" height="72.9" fill-opacity="0.09"/><rect class="cap" x="74.9" y="34.0" width="4.2" height="64.6" fill-opacity="0.53"/><rect class="cap" x="74.9" y="258.8" width="4.2" height="73.2" fill-opacity="0.10"/><rect class="cap" x="78.7" y="34.0" width="4.2" height="64.6" fill-opacity="0.53"/><rect class="cap" x="78.7" y="258.5" width="4.2" height="73.5" fill-opacity="0.11"/><rect class="cap" x="82.4" y="34.0" width="4.2" height="64.6" fill-opacity="0.52"/><rect class="cap" x="82.4" y="258.2" width="4.2" height="73.8" fill-opacity="0.11"/><rect class="cap" x="86.2" y="34.0" width="4.2" height="64.6" fill-opacity="0.52"/><rect class="cap" x="86.2" y="258.0" width="4.2" height="74.0" fill-opacity="0.12"/><rect class="cap" x="90.0" y="34.0" width="4.2" height="64.6" fill-opacity="0.52"/><rect class="cap" x="90.0" y="257.8" width="4.2" height="74.2" fill-opacity="0.13"/><rect class="cap" x="93.8" y="34.0" width="4.2" height="64.7" fill-opacity="0.52"/><rect class="cap" x="93.8" y="257.6" width="4.2" height="74.4" fill-opacity="0.14"/><rect class="cap" x="97.6" y="34.0" width="4.2" height="64.7" fill-opacity="0.51"/><rect class="cap" x="97.6" y="257.5" width="4.2" height="74.5" fill-opacity="0.15"/><rect class="cap" x="101.3" y="34.0" width="4.2" height="64.7" fill-opacity="0.50"/><rect class="cap" x="101.3" y="257.5" width="4.2" height="74.5" fill-opacity="0.17"/><rect class="cap" x="105.1" y="34.0" width="4.2" height="64.8" fill-opacity="0.50"/><rect class="cap" x="105.1" y="257.5" width="4.2" height="74.5" fill-opacity="0.18"/><rect class="cap" x="108.9" y="34.0" width="4.2" height="64.8" fill-opacity="0.49"/><rect class="cap" x="108.9" y="257.5" width="4.2" height="74.5" fill-opacity="0.19"/><rect class="cap" x="112.7" y="34.0" width="4.2" height="64.8" fill-opacity="0.48"/><rect class="cap" x="112.7" y="257.5" width="4.2" height="74.5" fill-opacity="0.21"/><rect class="cap" x="116.4" y="34.0" width="4.2" height="64.9" fill-opacity="0.47"/><rect class="cap" x="116.4" y="257.5" width="4.2" height="74.5" fill-opacity="0.22"/><rect class="cap" x="120.2" y="34.0" width="4.2" height="64.9" fill-opacity="0.46"/><rect class="cap" x="120.2" y="257.5" width="4.2" height="74.5" fill-opacity="0.24"/><rect class="cap" x="124.0" y="34.0" width="4.2" height="64.9" fill-opacity="0.45"/><rect class="cap" x="124.0" y="257.5" width="4.2" height="74.5" fill-opacity="0.25"/><rect class="cap" x="127.8" y="34.0" width="4.2" height="65.0" fill-opacity="0.44"/><rect class="cap" x="127.8" y="257.5" width="4.2" height="74.5" fill-opacity="0.27"/><rect class="cap" x="131.6" y="34.0" width="4.2" height="65.0" fill-opacity="0.43"/><rect class="cap" x="131.6" y="257.5" width="4.2" height="74.5" fill-opacity="0.29"/><rect class="cap" x="135.3" y="34.0" width="4.2" height="65.1" fill-opacity="0.42"/><rect class="cap" x="135.3" y="257.5" width="4.2" height="74.5" fill-opacity="0.31"/><rect class="cap" x="139.1" y="34.0" width="4.2" height="65.1" fill-opacity="0.40"/><rect class="cap" x="139.1" y="257.5" width="4.2" height="74.5" fill-opacity="0.32"/><rect class="cap" x="142.9" y="34.0" width="4.2" height="65.1" fill-opacity="0.39"/><rect class="cap" x="142.9" y="257.5" width="4.2" height="74.5" fill-opacity="0.34"/><rect class="cap" x="146.7" y="34.0" width="4.2" height="65.1" fill-opacity="0.38"/><rect class="cap" x="146.7" y="257.5" width="4.2" height="74.5" fill-opacity="0.36"/><rect class="cap" x="150.4" y="34.0" width="4.2" height="65.2" fill-opacity="0.36"/><rect class="cap" x="150.4" y="257.5" width="4.2" height="74.5" fill-opacity="0.38"/><rect class="cap" x="154.2" y="34.0" width="4.2" height="65.2" fill-opacity="0.35"/><rect class="cap" x="154.2" y="257.5" width="4.2" height="74.5" fill-opacity="0.40"/><rect class="cap" x="158.0" y="34.0" width="4.2" height="65.2" fill-opacity="0.34"/><rect class="cap" x="158.0" y="257.5" width="4.2" height="74.5" fill-opacity="0.41"/><rect class="cap" x="161.8" y="34.0" width="4.2" height="65.2" fill-opacity="0.32"/><rect class="cap" x="161.8" y="257.6" width="4.2" height="74.4" fill-opacity="0.43"/><rect class="cap" x="165.6" y="34.0" width="4.2" height="65.2" fill-opacity="0.31"/><rect class="cap" x="165.6" y="257.8" width="4.2" height="74.2" fill-opacity="0.45"/><rect class="cap" x="169.3" y="34.0" width="4.2" height="65.2" fill-opacity="0.30"/><rect class="cap" x="169.3" y="258.0" width="4.2" height="74.0" fill-opacity="0.46"/><rect class="cap" x="173.1" y="34.0" width="4.2" height="65.2" fill-opacity="0.28"/><rect class="cap" x="173.1" y="258.2" width="4.2" height="73.8" fill-opacity="0.48"/><rect class="cap" x="176.9" y="34.0" width="4.2" height="65.2" fill-opacity="0.27"/><rect class="cap" x="176.9" y="258.4" width="4.2" height="73.6" fill-opacity="0.50"/><rect class="cap" x="180.7" y="34.0" width="4.2" height="65.2" fill-opacity="0.26"/><rect class="cap" x="180.7" y="258.7" width="4.2" height="73.3" fill-opacity="0.51"/><rect class="cap" x="184.4" y="34.0" width="4.2" height="65.2" fill-opacity="0.25"/><rect class="cap" x="184.4" y="258.9" width="4.2" height="73.1" fill-opacity="0.52"/><rect class="cap" x="188.2" y="34.0" width="4.2" height="65.2" fill-opacity="0.24"/><rect class="cap" x="188.2" y="259.2" width="4.2" height="72.8" fill-opacity="0.54"/><rect class="cap" x="192.0" y="34.0" width="4.2" height="65.2" fill-opacity="0.23"/><rect class="cap" x="192.0" y="259.5" width="4.2" height="72.5" fill-opacity="0.55"/><rect class="cap" x="195.8" y="34.0" width="4.2" height="65.1" fill-opacity="0.22"/><rect class="cap" x="195.8" y="259.8" width="4.2" height="72.2" fill-opacity="0.56"/><rect class="cap" x="199.6" y="34.0" width="4.2" height="65.1" fill-opacity="0.21"/><rect class="cap" x="199.6" y="260.1" width="4.2" height="71.9" fill-opacity="0.57"/><rect class="cap" x="203.3" y="34.0" width="4.2" height="65.0" fill-opacity="0.20"/><rect class="cap" x="203.3" y="260.4" width="4.2" height="71.6" fill-opacity="0.58"/><rect class="cap" x="207.1" y="34.0" width="4.2" height="65.0" fill-opacity="0.19"/><rect class="cap" x="207.1" y="260.8" width="4.2" height="71.2" fill-opacity="0.59"/><rect class="cap" x="210.9" y="34.0" width="4.2" height="64.9" fill-opacity="0.19"/><rect class="cap" x="210.9" y="261.1" width="4.2" height="70.9" fill-opacity="0.59"/><rect class="cap" x="214.7" y="34.0" width="4.2" height="64.8" fill-opacity="0.18"/><rect class="cap" x="214.7" y="261.5" width="4.2" height="70.5" fill-opacity="0.60"/><rect class="cap" x="218.4" y="34.0" width="4.2" height="64.7" fill-opacity="0.18"/><rect class="cap" x="218.4" y="261.9" width="4.2" height="70.1" fill-opacity="0.60"/><rect class="cap" x="222.2" y="34.0" width="4.2" height="64.6" fill-opacity="0.18"/><rect class="cap" x="222.2" y="262.3" width="4.2" height="69.7" fill-opacity="0.60"/><rect class="cap" x="226.0" y="34.0" width="4.2" height="64.5" fill-opacity="0.18"/><rect class="cap" x="226.0" y="262.7" width="4.2" height="69.3" fill-opacity="0.60"/><rect class="cap" x="229.8" y="34.0" width="4.2" height="64.4" fill-opacity="0.18"/><rect class="cap" x="229.8" y="263.1" width="4.2" height="68.9" fill-opacity="0.60"/><rect class="cap" x="233.6" y="34.0" width="4.2" height="64.2" fill-opacity="0.18"/><rect class="cap" x="233.6" y="263.6" width="4.2" height="68.4" fill-opacity="0.59"/><rect class="cap" x="237.3" y="34.0" width="4.2" height="64.1" fill-opacity="0.19"/><rect class="cap" x="237.3" y="264.2" width="4.2" height="67.8" fill-opacity="0.59"/><rect class="cap" x="241.1" y="34.0" width="4.2" height="63.9" fill-opacity="0.19"/><rect class="cap" x="241.1" y="264.7" width="4.2" height="67.3" fill-opacity="0.58"/><rect class="cap" x="244.9" y="34.0" width="4.2" height="63.7" fill-opacity="0.20"/><rect class="cap" x="244.9" y="265.4" width="4.2" height="66.6" fill-opacity="0.57"/><rect class="cap" x="248.7" y="34.0" width="4.2" height="63.5" fill-opacity="0.21"/><rect class="cap" x="248.7" y="266.0" width="4.2" height="66.0" fill-opacity="0.56"/><rect class="cap" x="252.4" y="34.0" width="4.2" height="63.2" fill-opacity="0.21"/><rect class="cap" x="252.4" y="266.7" width="4.2" height="65.3" fill-opacity="0.55"/><rect class="cap" x="256.2" y="34.0" width="4.2" height="63.0" fill-opacity="0.22"/><rect class="cap" x="256.2" y="267.4" width="4.2" height="64.6" fill-opacity="0.54"/><rect class="cap" x="260.0" y="34.0" width="4.2" height="62.7" fill-opacity="0.23"/><rect class="cap" x="260.0" y="268.2" width="4.2" height="63.8" fill-opacity="0.52"/><rect class="cap" x="263.8" y="34.0" width="4.2" height="62.5" fill-opacity="0.24"/><rect class="cap" x="263.8" y="268.9" width="4.2" height="63.1" fill-opacity="0.51"/><rect class="cap" x="267.6" y="34.0" width="4.2" height="62.2" fill-opacity="0.25"/><rect class="cap" x="267.6" y="269.7" width="4.2" height="62.3" fill-opacity="0.49"/><rect class="cap" x="271.3" y="34.0" width="4.2" height="61.9" fill-opacity="0.26"/><rect class="cap" x="271.3" y="270.6" width="4.2" height="61.4" fill-opacity="0.48"/><rect class="cap" x="275.1" y="34.0" width="4.2" height="61.6" fill-opacity="0.27"/><rect class="cap" x="275.1" y="271.4" width="4.2" height="60.6" fill-opacity="0.46"/><rect class="cap" x="278.9" y="34.0" width="4.2" height="61.3" fill-opacity="0.29"/><rect class="cap" x="278.9" y="272.3" width="4.2" height="59.7" fill-opacity="0.45"/><rect class="cap" x="282.7" y="34.0" width="4.2" height="61.0" fill-opacity="0.30"/><rect class="cap" x="282.7" y="273.2" width="4.2" height="58.8" fill-opacity="0.43"/><rect class="cap" x="286.4" y="34.0" width="4.2" height="60.7" fill-opacity="0.31"/><rect class="cap" x="286.4" y="274.0" width="4.2" height="58.0" fill-opacity="0.41"/><rect class="cap" x="290.2" y="34.0" width="4.2" height="60.4" fill-opacity="0.32"/><rect class="cap" x="290.2" y="275.0" width="4.2" height="57.0" fill-opacity="0.39"/><rect class="cap" x="294.0" y="34.0" width="4.2" height="60.1" fill-opacity="0.33"/><rect class="cap" x="294.0" y="275.9" width="4.2" height="56.1" fill-opacity="0.37"/><rect class="cap" x="297.8" y="34.0" width="4.2" height="59.8" fill-opacity="0.34"/><rect class="cap" x="297.8" y="276.8" width="4.2" height="55.2" fill-opacity="0.36"/><rect class="cap" x="301.6" y="34.0" width="4.2" height="59.5" fill-opacity="0.36"/><rect class="cap" x="301.6" y="277.8" width="4.2" height="54.2" fill-opacity="0.34"/><rect class="cap" x="305.3" y="34.0" width="4.2" height="59.2" fill-opacity="0.37"/><rect class="cap" x="305.3" y="278.7" width="4.2" height="53.3" fill-opacity="0.32"/><rect class="cap" x="309.1" y="34.0" width="4.2" height="58.9" fill-opacity="0.38"/><rect class="cap" x="309.1" y="279.6" width="4.2" height="52.4" fill-opacity="0.30"/><rect class="cap" x="312.9" y="34.0" width="4.2" height="58.6" fill-opacity="0.39"/><rect class="cap" x="312.9" y="280.6" width="4.2" height="51.4" fill-opacity="0.29"/><rect class="cap" x="316.7" y="34.0" width="4.2" height="58.3" fill-opacity="0.40"/><rect class="cap" x="316.7" y="281.5" width="4.2" height="50.5" fill-opacity="0.27"/><rect class="cap" x="320.4" y="34.0" width="4.2" height="58.0" fill-opacity="0.41"/><rect class="cap" x="320.4" y="282.5" width="4.2" height="49.5" fill-opacity="0.25"/><rect class="cap" x="324.2" y="34.0" width="4.2" height="57.7" fill-opacity="0.41"/><rect class="cap" x="324.2" y="283.4" width="4.2" height="48.6" fill-opacity="0.24"/><rect class="cap" x="328.0" y="34.0" width="4.2" height="57.4" fill-opacity="0.42"/><rect class="cap" x="328.0" y="284.3" width="4.2" height="47.7" fill-opacity="0.22"/><rect class="cap" x="331.8" y="34.0" width="4.2" height="57.1" fill-opacity="0.43"/><rect class="cap" x="331.8" y="285.3" width="4.2" height="46.7" fill-opacity="0.21"/><rect class="cap" x="335.6" y="34.0" width="4.2" height="56.8" fill-opacity="0.44"/><rect class="cap" x="335.6" y="286.2" width="4.2" height="45.8" fill-opacity="0.19"/><rect class="cap" x="339.3" y="34.0" width="4.2" height="56.6" fill-opacity="0.44"/><rect class="cap" x="339.3" y="287.1" width="4.2" height="44.9" fill-opacity="0.18"/><rect class="cap" x="343.1" y="34.0" width="4.2" height="56.3" fill-opacity="0.45"/><rect class="cap" x="343.1" y="288.0" width="4.2" height="44.0" fill-opacity="0.17"/><rect class="cap" x="346.9" y="34.0" width="4.2" height="56.1" fill-opacity="0.45"/><rect class="cap" x="346.9" y="288.8" width="4.2" height="43.2" fill-opacity="0.16"/><rect class="cap" x="350.7" y="34.0" width="4.2" height="55.9" fill-opacity="0.45"/><rect class="cap" x="350.7" y="289.7" width="4.2" height="42.3" fill-opacity="0.14"/><rect class="cap" x="354.4" y="34.0" width="4.2" height="55.7" fill-opacity="0.46"/><rect class="cap" x="354.4" y="290.5" width="4.2" height="41.5" fill-opacity="0.13"/><rect class="cap" x="358.2" y="34.0" width="4.2" height="55.5" fill-opacity="0.46"/><rect class="cap" x="358.2" y="291.3" width="4.2" height="40.7" fill-opacity="0.13"/><rect class="cap" x="362.0" y="34.0" width="4.2" height="55.3" fill-opacity="0.46"/><rect class="cap" x="362.0" y="292.0" width="4.2" height="40.0" fill-opacity="0.12"/><rect class="cap" x="365.8" y="34.0" width="4.2" height="55.2" fill-opacity="0.46"/><rect class="cap" x="365.8" y="292.8" width="4.2" height="39.2" fill-opacity="0.11"/><rect class="cap" x="369.6" y="34.0" width="4.2" height="55.0" fill-opacity="0.46"/><rect class="cap" x="369.6" y="293.5" width="4.2" height="38.5" fill-opacity="0.10"/><rect class="cap" x="373.3" y="34.0" width="4.2" height="54.9" fill-opacity="0.46"/><rect class="cap" x="373.3" y="294.2" width="4.2" height="37.8" fill-opacity="0.10"/><rect class="cap" x="377.1" y="34.0" width="4.2" height="54.8" fill-opacity="0.45"/><rect class="cap" x="377.1" y="294.8" width="4.2" height="37.2" fill-opacity="0.09"/><rect class="cap" x="380.9" y="34.0" width="4.2" height="54.7" fill-opacity="0.45"/><rect class="cap" x="380.9" y="295.4" width="4.2" height="36.6" fill-opacity="0.09"/><rect class="cap" x="384.7" y="34.0" width="4.2" height="54.7" fill-opacity="0.45"/><rect class="cap" x="388.4" y="34.0" width="4.2" height="54.6" fill-opacity="0.44"/><rect class="cap" x="392.2" y="34.0" width="4.2" height="54.6" fill-opacity="0.44"/><rect class="cap" x="396.0" y="34.0" width="4.2" height="54.6" fill-opacity="0.43"/><rect class="cap" x="399.8" y="34.0" width="4.2" height="54.7" fill-opacity="0.42"/><rect class="cap" x="403.6" y="34.0" width="4.2" height="54.8" fill-opacity="0.41"/><rect class="cap" x="407.3" y="34.0" width="4.2" height="54.9" fill-opacity="0.40"/><rect class="cap" x="411.1" y="34.0" width="4.2" height="55.0" fill-opacity="0.39"/><rect class="cap" x="414.9" y="34.0" width="4.2" height="55.1" fill-opacity="0.38"/><rect class="cap" x="414.9" y="299.5" width="4.2" height="32.5" fill-opacity="0.09"/><rect class="cap" x="418.7" y="34.0" width="4.2" height="55.3" fill-opacity="0.37"/><rect class="cap" x="418.7" y="299.9" width="4.2" height="32.1" fill-opacity="0.09"/><rect class="cap" x="422.4" y="34.0" width="4.2" height="55.5" fill-opacity="0.36"/><rect class="cap" x="422.4" y="300.3" width="4.2" height="31.7" fill-opacity="0.09"/><rect class="cap" x="426.2" y="34.0" width="4.2" height="55.7" fill-opacity="0.35"/><rect class="cap" x="426.2" y="300.7" width="4.2" height="31.3" fill-opacity="0.10"/><rect class="cap" x="430.0" y="34.0" width="4.2" height="55.9" fill-opacity="0.33"/><rect class="cap" x="430.0" y="301.1" width="4.2" height="30.9" fill-opacity="0.10"/><rect class="cap" x="433.8" y="34.0" width="4.2" height="56.1" fill-opacity="0.32"/><rect class="cap" x="433.8" y="301.4" width="4.2" height="30.6" fill-opacity="0.10"/><rect class="cap" x="437.6" y="34.0" width="4.2" height="56.4" fill-opacity="0.30"/><rect class="cap" x="437.6" y="301.7" width="4.2" height="30.3" fill-opacity="0.11"/><rect class="cap" x="441.3" y="34.0" width="4.2" height="56.7" fill-opacity="0.29"/><rect class="cap" x="441.3" y="302.1" width="4.2" height="29.9" fill-opacity="0.11"/><rect class="cap" x="445.1" y="34.0" width="4.2" height="56.9" fill-opacity="0.28"/><rect class="cap" x="445.1" y="302.4" width="4.2" height="29.6" fill-opacity="0.11"/><rect class="cap" x="448.9" y="34.0" width="4.2" height="57.2" fill-opacity="0.26"/><rect class="cap" x="448.9" y="302.7" width="4.2" height="29.3" fill-opacity="0.11"/><rect class="cap" x="452.7" y="34.0" width="4.2" height="57.5" fill-opacity="0.25"/><rect class="cap" x="452.7" y="303.0" width="4.2" height="29.0" fill-opacity="0.12"/><rect class="cap" x="456.4" y="34.0" width="4.2" height="57.9" fill-opacity="0.24"/><rect class="cap" x="456.4" y="303.2" width="4.2" height="28.8" fill-opacity="0.12"/><rect class="cap" x="460.2" y="34.0" width="4.2" height="58.2" fill-opacity="0.23"/><rect class="cap" x="460.2" y="303.5" width="4.2" height="28.5" fill-opacity="0.12"/><rect class="cap" x="464.0" y="34.0" width="4.2" height="58.5" fill-opacity="0.21"/><rect class="cap" x="464.0" y="303.7" width="4.2" height="28.3" fill-opacity="0.12"/><rect class="cap" x="467.8" y="34.0" width="4.2" height="58.9" fill-opacity="0.20"/><rect class="cap" x="467.8" y="303.9" width="4.2" height="28.1" fill-opacity="0.12"/><rect class="cap" x="471.6" y="34.0" width="4.2" height="59.2" fill-opacity="0.19"/><rect class="cap" x="471.6" y="304.1" width="4.2" height="27.9" fill-opacity="0.12"/><rect class="cap" x="475.3" y="34.0" width="4.2" height="59.6" fill-opacity="0.18"/><rect class="cap" x="475.3" y="304.3" width="4.2" height="27.7" fill-opacity="0.12"/><rect class="cap" x="479.1" y="34.0" width="4.2" height="59.9" fill-opacity="0.17"/><rect class="cap" x="479.1" y="304.5" width="4.2" height="27.5" fill-opacity="0.12"/><rect class="cap" x="482.9" y="34.0" width="4.2" height="60.3" fill-opacity="0.16"/><rect class="cap" x="482.9" y="304.6" width="4.2" height="27.4" fill-opacity="0.12"/><rect class="cap" x="486.7" y="34.0" width="4.2" height="60.6" fill-opacity="0.15"/><rect class="cap" x="486.7" y="304.8" width="4.2" height="27.2" fill-opacity="0.12"/><rect class="cap" x="490.4" y="34.0" width="4.2" height="61.0" fill-opacity="0.14"/><rect class="cap" x="490.4" y="304.9" width="4.2" height="27.1" fill-opacity="0.12"/><rect class="cap" x="494.2" y="34.0" width="4.2" height="61.3" fill-opacity="0.13"/><rect class="cap" x="494.2" y="304.9" width="4.2" height="27.1" fill-opacity="0.12"/><rect class="cap" x="498.0" y="34.0" width="4.2" height="61.7" fill-opacity="0.13"/><rect class="cap" x="498.0" y="305.0" width="4.2" height="27.0" fill-opacity="0.12"/><rect class="cap" x="501.8" y="34.0" width="4.2" height="62.0" fill-opacity="0.12"/><rect class="cap" x="501.8" y="305.1" width="4.2" height="26.9" fill-opacity="0.12"/><rect class="cap" x="505.6" y="34.0" width="4.2" height="62.4" fill-opacity="0.11"/><rect class="cap" x="505.6" y="305.1" width="4.2" height="26.9" fill-opacity="0.11"/><rect class="cap" x="509.3" y="34.0" width="4.2" height="62.7" fill-opacity="0.11"/><rect class="cap" x="509.3" y="305.1" width="4.2" height="26.9" fill-opacity="0.11"/><rect class="cap" x="513.1" y="34.0" width="4.2" height="63.0" fill-opacity="0.10"/><rect class="cap" x="513.1" y="305.1" width="4.2" height="26.9" fill-opacity="0.11"/><rect class="cap" x="516.9" y="34.0" width="4.2" height="63.4" fill-opacity="0.10"/><rect class="cap" x="516.9" y="305.0" width="4.2" height="27.0" fill-opacity="0.10"/><rect class="cap" x="520.7" y="34.0" width="4.2" height="63.7" fill-opacity="0.10"/><rect class="cap" x="520.7" y="304.9" width="4.2" height="27.1" fill-opacity="0.10"/><rect class="cap" x="524.4" y="34.0" width="4.2" height="64.0" fill-opacity="0.09"/><rect class="cap" x="524.4" y="304.8" width="4.2" height="27.2" fill-opacity="0.10"/><rect class="cap" x="528.2" y="34.0" width="4.2" height="64.3" fill-opacity="0.09"/><rect class="cap" x="528.2" y="304.7" width="4.2" height="27.3" fill-opacity="0.10"/><rect class="cap" x="532.0" y="34.0" width="4.2" height="64.5" fill-opacity="0.09"/><rect class="cap" x="532.0" y="304.6" width="4.2" height="27.4" fill-opacity="0.09"/><rect class="cap" x="535.8" y="304.4" width="4.2" height="27.6" fill-opacity="0.09"/><rect class="cap" x="539.6" y="304.2" width="4.2" height="27.8" fill-opacity="0.09"/><rect class="cap" x="581.1" y="299.7" width="4.2" height="32.3" fill-opacity="0.09"/><rect class="cap" x="584.9" y="299.0" width="4.2" height="33.0" fill-opacity="0.09"/><rect class="cap" x="588.7" y="34.0" width="4.2" height="66.7" fill-opacity="0.09"/><rect class="cap" x="588.7" y="298.3" width="4.2" height="33.7" fill-opacity="0.09"/><rect class="cap" x="592.4" y="34.0" width="4.2" height="66.7" fill-opacity="0.09"/><rect class="cap" x="592.4" y="297.5" width="4.2" height="34.5" fill-opacity="0.10"/><rect class="cap" x="596.2" y="34.0" width="4.2" height="66.7" fill-opacity="0.09"/><rect class="cap" x="596.2" y="296.6" width="4.2" height="35.4" fill-opacity="0.10"/><rect class="cap" x="600.0" y="34.0" width="4.2" height="66.7" fill-opacity="0.10"/><rect class="cap" x="600.0" y="295.8" width="4.2" height="36.2" fill-opacity="0.11"/><rect class="cap" x="603.8" y="34.0" width="4.2" height="66.7" fill-opacity="0.10"/><rect class="cap" x="603.8" y="294.8" width="4.2" height="37.2" fill-opacity="0.11"/><rect class="cap" x="607.6" y="34.0" width="4.2" height="66.7" fill-opacity="0.11"/><rect class="cap" x="607.6" y="293.9" width="4.2" height="38.1" fill-opacity="0.11"/><rect class="cap" x="611.3" y="34.0" width="4.2" height="66.7" fill-opacity="0.11"/><rect class="cap" x="611.3" y="292.9" width="4.2" height="39.1" fill-opacity="0.12"/><rect class="cap" x="615.1" y="34.0" width="4.2" height="66.6" fill-opacity="0.12"/><rect class="cap" x="615.1" y="291.8" width="4.2" height="40.2" fill-opacity="0.12"/><rect class="cap" x="618.9" y="34.0" width="4.2" height="66.6" fill-opacity="0.12"/><rect class="cap" x="618.9" y="290.8" width="4.2" height="41.2" fill-opacity="0.13"/><rect class="cap" x="622.7" y="34.0" width="4.2" height="66.6" fill-opacity="0.13"/><rect class="cap" x="622.7" y="289.7" width="4.2" height="42.3" fill-opacity="0.13"/><rect class="cap" x="626.4" y="34.0" width="4.2" height="66.5" fill-opacity="0.14"/><rect class="cap" x="626.4" y="288.6" width="4.2" height="43.4" fill-opacity="0.13"/><rect class="cap" x="630.2" y="34.0" width="4.2" height="66.5" fill-opacity="0.15"/><rect class="cap" x="630.2" y="287.5" width="4.2" height="44.5" fill-opacity="0.13"/><rect class="cap" x="634.0" y="34.0" width="4.2" height="66.4" fill-opacity="0.16"/><rect class="cap" x="634.0" y="286.3" width="4.2" height="45.7" fill-opacity="0.14"/><rect class="cap" x="637.8" y="34.0" width="4.2" height="66.3" fill-opacity="0.17"/><rect class="cap" x="637.8" y="285.2" width="4.2" height="46.8" fill-opacity="0.14"/><rect class="cap" x="641.6" y="34.0" width="4.2" height="66.3" fill-opacity="0.18"/><rect class="cap" x="641.6" y="284.0" width="4.2" height="48.0" fill-opacity="0.14"/><rect class="cap" x="645.3" y="34.0" width="4.2" height="66.2" fill-opacity="0.19"/><rect class="cap" x="645.3" y="282.9" width="4.2" height="49.1" fill-opacity="0.14"/><rect class="cap" x="649.1" y="34.0" width="4.2" height="66.1" fill-opacity="0.20"/><rect class="cap" x="649.1" y="281.7" width="4.2" height="50.3" fill-opacity="0.14"/><rect class="cap" x="652.9" y="34.0" width="4.2" height="66.0" fill-opacity="0.21"/><rect class="cap" x="652.9" y="280.5" width="4.2" height="51.5" fill-opacity="0.14"/><rect class="cap" x="656.7" y="34.0" width="4.2" height="66.0" fill-opacity="0.23"/><rect class="cap" x="656.7" y="279.4" width="4.2" height="52.6" fill-opacity="0.14"/><rect class="cap" x="660.4" y="34.0" width="4.2" height="65.9" fill-opacity="0.24"/><rect class="cap" x="660.4" y="278.2" width="4.2" height="53.8" fill-opacity="0.14"/><rect class="cap" x="664.2" y="34.0" width="4.2" height="65.8" fill-opacity="0.25"/><rect class="cap" x="664.2" y="277.1" width="4.2" height="54.9" fill-opacity="0.14"/><rect class="cap" x="668.0" y="34.0" width="4.2" height="65.7" fill-opacity="0.27"/><rect class="cap" x="668.0" y="275.9" width="4.2" height="56.1" fill-opacity="0.13"/><rect class="cap" x="671.8" y="34.0" width="4.2" height="65.6" fill-opacity="0.28"/><rect class="cap" x="671.8" y="274.8" width="4.2" height="57.2" fill-opacity="0.13"/><rect class="cap" x="675.6" y="34.0" width="4.2" height="65.5" fill-opacity="0.30"/><rect class="cap" x="675.6" y="273.7" width="4.2" height="58.3" fill-opacity="0.13"/><rect class="cap" x="679.3" y="34.0" width="4.2" height="65.4" fill-opacity="0.32"/><rect class="cap" x="679.3" y="272.6" width="4.2" height="59.4" fill-opacity="0.12"/><rect class="cap" x="683.1" y="34.0" width="4.2" height="65.4" fill-opacity="0.33"/><rect class="cap" x="683.1" y="271.5" width="4.2" height="60.5" fill-opacity="0.12"/><rect class="cap" x="686.9" y="34.0" width="4.2" height="65.3" fill-opacity="0.35"/><rect class="cap" x="686.9" y="270.5" width="4.2" height="61.5" fill-opacity="0.12"/><rect class="cap" x="690.7" y="34.0" width="4.2" height="65.2" fill-opacity="0.36"/><rect class="cap" x="690.7" y="269.5" width="4.2" height="62.5" fill-opacity="0.11"/><rect class="cap" x="694.4" y="34.0" width="4.2" height="65.1" fill-opacity="0.38"/><rect class="cap" x="694.4" y="268.5" width="4.2" height="63.5" fill-opacity="0.11"/><rect class="cap" x="698.2" y="34.0" width="4.2" height="65.0" fill-opacity="0.40"/><rect class="cap" x="698.2" y="267.5" width="4.2" height="64.5" fill-opacity="0.10"/><rect class="cap" x="702.0" y="34.0" width="4.2" height="65.0" fill-opacity="0.41"/><rect class="cap" x="702.0" y="266.6" width="4.2" height="65.4" fill-opacity="0.10"/><rect class="cap" x="705.8" y="34.0" width="4.2" height="64.9" fill-opacity="0.43"/><rect class="cap" x="705.8" y="265.8" width="4.2" height="66.2" fill-opacity="0.10"/><rect class="cap" x="709.6" y="34.0" width="4.2" height="64.8" fill-opacity="0.44"/><rect class="cap" x="709.6" y="264.9" width="4.2" height="67.1" fill-opacity="0.09"/><rect class="cap" x="713.3" y="34.0" width="4.2" height="64.8" fill-opacity="0.45"/><rect class="cap" x="713.3" y="264.1" width="4.2" height="67.9" fill-opacity="0.09"/><rect class="cap" x="717.1" y="34.0" width="4.2" height="64.7" fill-opacity="0.47"/><rect class="cap" x="720.9" y="34.0" width="4.2" height="64.7" fill-opacity="0.48"/><rect class="cap" x="724.7" y="34.0" width="4.2" height="64.6" fill-opacity="0.49"/><rect class="cap" x="728.4" y="34.0" width="4.2" height="64.6" fill-opacity="0.50"/><rect class="cap" x="732.2" y="34.0" width="4.2" height="64.6" fill-opacity="0.50"/><line class="grid" x1="56" x2="736" y1="332.0" y2="332.0"/><text class="tick" x="48" y="336.0" text-anchor="end">90°S</text><line class="grid" x1="56" x2="736" y1="282.3" y2="282.3"/><text class="tick" x="48" y="286.3" text-anchor="end">60°S</text><line class="grid" x1="56" x2="736" y1="232.7" y2="232.7"/><text class="tick" x="48" y="236.7" text-anchor="end">30°S</text><line class="axis" x1="56" x2="736" y1="183.0" y2="183.0"/><text class="tick" x="48" y="187.0" text-anchor="end">0°</text><line class="grid" x1="56" x2="736" y1="133.3" y2="133.3"/><text class="tick" x="48" y="137.3" text-anchor="end">30°N</text><line class="grid" x1="56" x2="736" y1="83.7" y2="83.7"/><text class="tick" x="48" y="87.7" text-anchor="end">60°N</text><line class="grid" x1="56" x2="736" y1="34.0" y2="34.0"/><text class="tick" x="48" y="38.0" text-anchor="end">90°N</text><line class="grid" x1="56.0" x2="56.0" y1="34" y2="332"/><text class="tick" x="56.0" y="349" text-anchor="middle">Ls 0°</text><text class="note" x="141.0" y="366" text-anchor="middle">N spring</text><line class="grid" x1="226.0" x2="226.0" y1="34" y2="332"/><text class="tick" x="226.0" y="349" text-anchor="middle">Ls 90°</text><text class="note" x="311.0" y="366" text-anchor="middle">N summer</text><line class="grid" x1="396.0" x2="396.0" y1="34" y2="332"/><text class="tick" x="396.0" y="349" text-anchor="middle">Ls 180°</text><text class="note" x="481.0" y="366" text-anchor="middle">N autumn</text><line class="grid" x1="566.0" x2="566.0" y1="34" y2="332"/><text class="tick" x="566.0" y="349" text-anchor="middle">Ls 270°</text><text class="note" x="651.0" y="366" text-anchor="middle">N winter</text><line class="grid" x1="736.0" x2="736.0" y1="34" y2="332"/><text class="tick" x="736.0" y="349" text-anchor="middle">Ls 360°</text><line class="mark" x1="189.9" x2="189.9" y1="28" y2="332"/><text class="note" x="189.9" y="22" text-anchor="middle">aphelion</text><line class="mark" x1="529.9" x2="529.9" y1="28" y2="332"/><text class="note" x="529.9" y="22" text-anchor="middle">perihelion</text><polyline class="l-edge" points="56.0,98.6 61.7,98.5 67.3,98.5 73.0,98.5 78.7,98.6 84.3,98.6 90.0,98.6 95.7,98.7 101.3,98.7 107.0,98.8 112.7,98.8 118.3,98.9 124.0,98.9 129.7,99.0 135.3,99.0 141.0,99.1 146.7,99.1 152.3,99.2 158.0,99.2 163.7,99.2 169.3,99.2 175.0,99.2 180.7,99.2 186.3,99.2 192.0,99.2 197.7,99.1 203.3,99.1 209.0,99.0 214.7,98.9 220.3,98.7 226.0,98.6 231.7,98.4 237.3,98.1 243.0,97.9 248.7,97.6 254.3,97.2 260.0,96.9 265.7,96.5 271.3,96.1 277.0,95.6 282.7,95.2 288.3,94.7 294.0,94.3 299.7,93.8 305.3,93.3 311.0,92.9 316.7,92.4 322.3,92.0 328.0,91.5 333.7,91.1 339.3,90.7 345.0,90.3 350.7,90.0 356.3,89.7 362.0,89.4 367.7,89.2 373.3,89.0 379.0,88.8 384.7,88.7 390.3,88.6 396.0,88.6 401.7,88.7 407.3,88.8 413.0,89.0 418.7,89.2 424.3,89.5 430.0,89.8 435.7,90.1 441.3,90.5 447.0,90.9 452.7,91.4 458.3,91.9 464.0,92.4 469.7,92.9 475.3,93.4 481.0,93.9 486.7,94.4 492.3,95.0 498.0,95.5 503.7,96.0 509.3,96.5 515.0,97.0 520.7,97.5 526.3,98.0 532.0,98.4 537.7,98.8 543.3,99.2 549.0,99.5 554.7,99.8 560.3,100.0 566.0,100.2 571.7,100.4 577.3,100.5 583.0,100.6 588.7,100.7 594.3,100.7 600.0,100.7 605.7,100.7 611.3,100.7 617.0,100.6 622.7,100.6 628.3,100.5 634.0,100.4 639.7,100.3 645.3,100.2 651.0,100.1 656.7,100.0 662.3,99.9 668.0,99.7 673.7,99.6 679.3,99.5 685.0,99.4 690.7,99.2 696.3,99.1 702.0,99.0 707.7,98.9 713.3,98.8 719.0,98.7 724.7,98.7 730.3,98.6 736.0,98.6"/><polyline class="l-edge" points="56.0,260.8 61.7,260.2 67.3,259.6 73.0,259.1 78.7,258.6 84.3,258.2 90.0,257.9 95.7,257.6 101.3,257.5 107.0,257.5 112.7,257.5 118.3,257.5 124.0,257.5 129.7,257.5 135.3,257.5 141.0,257.5 146.7,257.5 152.3,257.5 158.0,257.5 163.7,257.6 169.3,257.9 175.0,258.2 180.7,258.5 186.3,258.9 192.0,259.3 197.7,259.8 203.3,260.3 209.0,260.8 214.7,261.3 220.3,261.9 226.0,262.5 231.7,263.1 237.3,263.9 243.0,264.7 248.7,265.7 254.3,266.7 260.0,267.8 265.7,268.9 271.3,270.1 277.0,271.4 282.7,272.7 288.3,274.0 294.0,275.4 299.7,276.8 305.3,278.2 311.0,279.6 316.7,281.1 322.3,282.5 328.0,283.9 333.7,285.3 339.3,286.6 345.0,288.0 350.7,289.2 356.3,290.5 362.0,291.7 367.7,292.8 373.3,293.8 379.0,294.8 384.7,295.7 390.3,296.5 396.0,297.2 401.7,297.9 407.3,298.5 413.0,299.1 418.7,299.7 424.3,300.3 430.0,300.9 435.7,301.4 441.3,301.9 447.0,302.4 452.7,302.8 458.3,303.2 464.0,303.6 469.7,303.9 475.3,304.2 481.0,304.5 486.7,304.7 492.3,304.9 498.0,305.0 503.7,305.1 509.3,305.1 515.0,305.1 520.7,305.0 526.3,304.8 532.0,304.7 537.7,304.4 543.3,304.1 549.0,303.7 554.7,303.3 560.3,302.8 566.0,302.2 571.7,301.5 577.3,300.7 583.0,299.7 588.7,298.7 594.3,297.5 600.0,296.2 605.7,294.8 611.3,293.4 617.0,291.8 622.7,290.2 628.3,288.6 634.0,286.9 639.7,285.2 645.3,283.5 651.0,281.7 656.7,280.0 662.3,278.2 668.0,276.5 673.7,274.8 679.3,273.1 685.0,271.5 690.7,270.0 696.3,268.5 702.0,267.1 707.7,265.8 713.3,264.5 719.0,263.4 724.7,262.4 730.3,261.5 736.0,260.8"/><polyline class="l-sundecl" points="56.0,183.0 61.7,180.9 67.3,178.8 73.0,176.7 78.7,174.6 84.3,172.5 90.0,170.5 95.7,168.5 101.3,166.5 107.0,164.6 112.7,162.7 118.3,160.8 124.0,159.0 129.7,157.3 135.3,155.6 141.0,154.0 146.7,152.5 152.3,151.0 158.0,149.7 163.7,148.4 169.3,147.2 175.0,146.1 180.7,145.1 186.3,144.2 192.0,143.5 197.7,142.8 203.3,142.3 209.0,141.8 214.7,141.5 220.3,141.4 226.0,141.3 231.7,141.4 237.3,141.5 243.0,141.8 248.7,142.3 254.3,142.8 260.0,143.5 265.7,144.2 271.3,145.1 277.0,146.1 282.7,147.2 288.3,148.4 294.0,149.7 299.7,151.0 305.3,152.5 311.0,154.0 316.7,155.6 322.3,157.3 328.0,159.0 333.7,160.8 339.3,162.7 345.0,164.6 350.7,166.5 356.3,168.5 362.0,170.5 367.7,172.5 373.3,174.6 379.0,176.7 384.7,178.8 390.3,180.9 396.0,183.0 401.7,185.1 407.3,187.2 413.0,189.3 418.7,191.4 424.3,193.5 430.0,195.5 435.7,197.5 441.3,199.5 447.0,201.4 452.7,203.3 458.3,205.2 464.0,207.0 469.7,208.7 475.3,210.4 481.0,212.0 486.7,213.5 492.3,215.0 498.0,216.3 503.7,217.6 509.3,218.8 515.0,219.9 520.7,220.9 526.3,221.8 532.0,222.5 537.7,223.2 543.3,223.7 549.0,224.2 554.7,224.5 560.3,224.6 566.0,224.7 571.7,224.6 577.3,224.5 583.0,224.2 588.7,223.7 594.3,223.2 600.0,222.5 605.7,221.8 611.3,220.9 617.0,219.9 622.7,218.8 628.3,217.6 634.0,216.3 639.7,215.0 645.3,213.5 651.0,212.0 656.7,210.4 662.3,208.7 668.0,207.0 673.7,205.2 679.3,203.3 685.0,201.4 690.7,199.5 696.3,197.5 702.0,195.5 707.7,193.5 713.3,191.4 719.0,189.3 724.7,187.2 730.3,185.1 736.0,183.0"/><polyline class="l-dim" points="56.0,196.6 61.7,194.8 67.3,192.8 73.0,190.5 78.7,188.0 84.3,185.3 90.0,182.4 95.7,179.3 101.3,176.1 107.0,172.7 112.7,169.1 118.3,165.5 124.0,161.7 129.7,157.9 135.3,154.0 141.0,150.2 146.7,146.3 152.3,142.4 158.0,138.7 163.7,135.0 169.3,131.4 175.0,128.0 180.7,124.7 186.3,121.7 192.0,118.8 197.7,116.2 203.3,113.9 209.0,111.8 214.7,110.0 220.3,108.6 226.0,107.4 231.7,106.6 237.3,106.2 243.0,106.0 248.7,106.2 254.3,106.8 260.0,107.7 265.7,108.9 271.3,110.4 277.0,112.3 282.7,114.4 288.3,116.9 294.0,119.5 299.7,122.5 305.3,125.6 311.0,128.9 316.7,132.4 322.3,136.0 328.0,139.8 333.7,143.6 339.3,147.5 345.0,151.4 350.7,155.4 356.3,159.3 362.0,163.1 367.7,166.9 373.3,170.6 379.0,174.2 384.7,177.6 390.3,180.9 396.0,184.0 401.7,186.9 407.3,189.6 413.0,192.1 418.7,194.3 424.3,196.4 430.0,198.2 435.7,199.8 441.3,201.2 447.0,202.3 452.7,203.2 458.3,203.9 464.0,204.5 469.7,204.8 475.3,205.0 481.0,204.9 486.7,204.8 492.3,204.5 498.0,204.2 503.7,203.7 509.3,203.2 515.0,202.6 520.7,201.9 526.3,201.3 532.0,200.7 537.7,200.0 543.3,199.4 549.0,198.9 554.7,198.4 560.3,198.0 566.0,197.6 571.7,197.3 577.3,197.2 583.0,197.1 588.7,197.1 594.3,197.2 600.0,197.4 605.7,197.6 611.3,198.0 617.0,198.4 622.7,198.9 628.3,199.4 634.0,199.9 639.7,200.5 645.3,201.1 651.0,201.6 656.7,202.2 662.3,202.6 668.0,203.0 673.7,203.4 679.3,203.6 685.0,203.7 690.7,203.6 696.3,203.4 702.0,203.0 707.7,202.5 713.3,201.7 719.0,200.8 724.7,199.6 730.3,198.2 736.0,196.6"/><text class="lab l4" x="71.1" y="77.0">L4 north cap</text><text class="lab l4" x="286.4" y="292.3">L4 south cap</text><text class="lab l5" x="358.2" y="123.4">L5 dimmest line</text><text class="lab sun" x="622.7" y="234.3" text-anchor="middle">overhead Sun</text></svg></div>
         <figcaption>Through the Martian year. Red: L5's dimmest line. Dashed gold: the latitude where the Sun stands overhead at noon. Blue lines: L4's edges; blue shading: how much of L4's light each cap gets (strength × share), darker for more.</figcaption>
       </figure>
+      <p class="note"><span class="tag">In the simulator</span>Under <b>Shaping → L5</b>: <b>Lens</b> with k = 0.85 and a phase that follows the seasons; the <b>Fine-tune</b> box holds the bias, shift and twice-a-year terms.</p>
+    </section>
 
-      <h3 id="l4">L4, the supplemental sun</h3>
-      <p>L4 lights only the outer latitudes: north of a northern edge and south of a southern edge, neither ever closer to the equator than 45°. Its strength is set at 0.51 times the Sun's, and over the year it delivers 0.31 times on average. Inside each cap the light rises from zero at the edge over a 9° ramp and then leans toward the edge rather than the pole (pole lean −0.9), falling to a tenth of its edge value at the pole itself. Its light peaks around 60° in each hemisphere, over the land around the northern ocean and the southern uplands, and tapers toward poles that are dark half the year anyway.</p>
+    <section id="l4">
+      <h2><span class="sn">05</span>L4, the supplemental sun</h2>
+      <div class="decide">
+        <div><span class="k">Chosen</span><span>Light only for the outer latitudes, beyond edges that never come inside 45°: up to 0.51 times the Sun's light, 0.31 on average, steered between north and south through the year.</span></div>
+        <div><span class="k">Because</span><span>The high latitudes need far more light a year than one shaped beam can give them without overheating the middle. A separate array solves the two problems separately, and the band keeps its nights.</span></div>
+        <div><span class="k">Instead of</span><span>One stronger L5 doing all the work: the two-sun sky, which leaves a much harder world (section 10).</span></div>
+      </div>
+      <p>Inside each cap the light rises from zero at the edge over a 9° ramp and then leans toward the edge rather than the pole (pole lean −0.9), falling to a tenth of its edge value at the pole itself. It peaks around 60° in each hemisphere, over the land around the northern ocean and the southern uplands, and tapers toward poles that are dark half the year anyway.</p>
       <p>Four settings, given at L<sub>s</sub> 0°, 90°, 180° and 270° and joined by smooth curves, steer it through the year:</p>
       <div class="tablewrap">
         <table>
@@ -376,51 +487,37 @@ footer { max-width: 1180px; margin: 30px auto 0; padding-top: 18px; border-top: 
         </table>
       </div>
       <p>Read across the table. In northern spring and autumn, L4 lights only the north, warming the northern ocean and the land beyond 50°N. In northern summer, which is the long southern winter near aphelion, it sends most of its light south to the southern uplands. Around perihelion, when Mars is closest to the Sun and the southern summer is at its hottest, it switches off.</p>
-      <p>No latitude gets more than 10 times the light the array would give it unshaped. Whatever a cap cannot take, in polar night for instance, goes to the other cap, so no light is wasted.</p>
-      <p><b>Why the north edge sits at 50–57°N</b> rather than at the 45° limit: light delivered further poleward meets more cloud, and more of it is reflected back to space, so the same light warms the planet a little less. With the edge beyond 50°N and the north share set so that the northern cap still gets the light it needs, the populated band runs about 0.4 °C cooler.</p>
-      <p><b>Why a separate supplemental sun at all?</b> The high latitudes need far more light per year than one shaped beam can give them without overheating the middle band (the two-sun sky below shows the result). L4 decouples the two problems: the caps get what they need, and the band keeps its nights.</p>
-      <p class="note"><span class="tag">In the simulator</span>Under <b>Shaping → L4</b>, the light is set to <b>Outer latitudes</b>, with <b>Soft edge</b> 9° and <b>Pole lean</b> −0.9. The <b>Seasons</b> box holds the table above.</p>
+      <p>No latitude gets more than 10 times the light the array would give it unshaped, and whatever a cap cannot take, in polar night for instance, goes to the other cap, so no light is wasted.</p>
+      <p><b>Why the north edge sits at 50–57°N</b> rather than at the 45° limit: light delivered further poleward meets more cloud, and more of it is reflected back to space, so the same light warms the planet a little less. With the edge beyond 50°N, and the north share set so that the northern cap still gets the light it needs, the populated band runs about 0.4 °C cooler.</p>
+      <p class="note"><span class="tag">In the simulator</span>Under <b>Shaping → L4</b>: <b>Outer latitudes</b>, <b>Soft edge</b> 9° and <b>Pole lean</b> −0.9. The <b>Seasons</b> box holds the table above.</p>
+    </section>
 
-      <h3 id="uv">UV-free mirrors</h3>
-      <p>The arrays reflect nothing shorter than 400 nm. Ultraviolet is 8% of sunlight above the air (6.3% UV-A, 1.3% UV-B, 0.5% UV-C). The mirrors make up for it by reflecting 1.087 times as much of the rest, so each still delivers its full stated light, 42% of it visible.</p>
-      <p>The reason is exposure. Full-spectrum mirrors would add 1.5 times the Sun's ultraviolet on top of the Sun's own, from two more directions and at hours when the Sun is low. With UV-free mirrors only the Sun sends ultraviolet. The clear-sky UV index at noon in the tropics, at sea level, is then about 2.5–3.5, against 10–12 in Earth's tropics: low to moderate on the WHO scale. Mars's thick air column helps too: under its weak gravity 1.05 atm means 2.77 times Earth's air overhead, which by itself cuts the index to 0.54 times.</p>
+    <section id="uv">
+      <h2><span class="sn">06</span>UV-free mirrors</h2>
+      <div class="decide">
+        <div><span class="k">Chosen</span><span>Mirrors that reflect nothing shorter than 400 nm, and 1.087 times as much of the rest, so each still delivers its full stated light.</span></div>
+        <div><span class="k">Because</span><span>Only the Sun then sends ultraviolet, and the tropical noon UV index at sea level stays at 2.5–3.5, against 10–12 on Earth.</span></div>
+        <div><span class="k">Instead of</span><span>Full-spectrum mirrors, which would add 1.5 times the Sun's ultraviolet on top of the Sun's own, from two more directions and at hours when the Sun is low.</span></div>
+      </div>
+      <p>Ultraviolet is 8% of sunlight above the air (6.3% UV-A, 1.3% UV-B, 0.5% UV-C). Without it the mirrors' light is 42% visible. Mars's thick air column helps too: under its weak gravity 1.05 atm means 2.77 times Earth's air overhead, which by itself cuts the UV index to 0.54 times.</p>
       <p>The swap also warms the climate a little. In the stratosphere, ozone would have absorbed the mirrors' UV-B and UV-C, and air scatters near-ultraviolet light back to space more than visible light. The replacement visible and infrared light mostly reaches the lower air and the ground instead. A simple column model puts the effect at that of 2% more mirror light: about 1.3 °C warmer land and 9% more rain with three suns.</p>
       <p>There are side effects. The stratosphere, warmed only by the Sun's ultraviolet, would be colder than Earth's. The mirrors' visible light breaks ozone down without the UV-C that makes it, so the ozone layer could be thinner than assumed. Plants use 400–700 nm and lose nothing they need; skin makes vitamin D from UV-B, which the Sun alone would supply at about a quarter of Earth's tropical UV index.</p>
       <p class="note"><span class="tag">In the simulator</span>The <b>UV-free mirrors</b> switch in the sky bar (on by default). Every insolation view can show <b>All light</b>, <b>Visible</b> or the <b>UV index</b>.</p>
-
-      <h3 id="tuning">How the settings were chosen</h3>
-      <p>The numbers above come from a search, not from intuition. Candidate skies were run through the full climate model with the default air, water and lakes, and scored against comfort targets for the people, the sea and the far north and south:</p>
-      <ul>
-        <li>land between 45°S and 45°N with a daily mean between 0 and 30 °C;</li>
-        <li>the ocean north of the equator between 20 and 30 °C;</li>
-        <li>land poleward of 45° between −20 and 30 °C.</li>
-      </ul>
-      <p>The best skies keep as many sols as possible inside those ranges with all the mirror light delivered. Among skies that do about equally well, the default favours more rain over land and less arid land, meaning land that gets under 300 mm a year, roughly the edge of dry country. The <a href="#results">results</a> are below.</p>
-
-      <h3 id="build">What it would take to build</h3>
-      <p>The simulator treats each array as a light source with a set strength and shape. Building one is a different matter. These are order-of-magnitude estimates, outside the simulator:</p>
-      <ul>
-        <li><b>Size.</b> A mirror cannot be brighter than the Sun it reflects. To deliver 1.17 times the Sun's light, the L5 array has to fill at least 1.17 times the Sun's apparent area in Mars's sky. L5 is as far from Mars as the Sun is, so the array must be roughly as large as the Sun itself: at least 1.5 million km across, a reflecting area of about 2 × 10<sup>12</sup> km² tilted 30° to the sunlight, and more to shape the beam. L4, which concentrates its light on the caps, is of the same order.</li>
-        <li><b>Mass.</b> Reflective film weighing a few grams per square metre adds up to about 10<sup>16</sup> kg, the material of an asteroid 20–30 km across.</li>
-        <li><b>Aiming.</b> From 228 million km away, even a perfect mirror spreads the Sun's image into a patch of light about 1.4 million km wide, 200 times wider than Mars, so almost all of each facet's light misses. To shape the light, each facet is aimed so the sharp edge of its sun-image falls across Mars, lighting the planet on one side of a line and not the other. Many facets with their edges at different latitudes build up any profile, the lens of L5 or the caps of L4.</li>
-        <li><b>Light pressure.</b> Sunlight pushes on a mirror. For film of 3 g/m² the push is about 40% of the Sun's pull, so the arrays would sit somewhat off the classical L4 and L5 points and need constant steering, unless the film is heavier: at about 25 g/m² the push drops under 5%.</li>
-      </ul>
-
-      <h3 id="two">The two-sun alternative</h3>
-      <p>The simulator also offers a two-sun sky: one array at L5 sending 1.33 times the Sun's light, which brings Mars's average to about Earth's. Its lens is deeper (k = 1, swinging by ±0.2 over the year), with the dimmest line swinging ±27.5° around 11.5°N.</p>
-      <p>It is a much harder world. With one beam doing all the shaping, warming the high latitudes enough would overheat the middle, so the compromise leaves the populated band below 0 °C on about 29 sols a year, the northern ocean at about 10 °C, 330 mm of rain over land with 61% of the land under 300 mm, and Hellas shrunk to a lake 2 km deep on its floor. That is why the three-sun sky is the default.</p>
     </section>
 
     <section id="air">
-      <h2>Air</h2>
-      <p>The default sea-level pressure is <b>1.05 atm</b>, with an Earth-like mix of nitrogen and oxygen.</p>
+      <h2><span class="sn">07</span>Air</h2>
+      <div class="decide">
+        <div><span class="k">Chosen</span><span>1.05 atm at sea level, with an Earth-like mix of nitrogen and oxygen.</span></div>
+        <div><span class="k">Because</span><span>People breathe it comfortably at sea level, and under Mars's weak gravity pressure falls slowly with height, so the southern highlands, on average 3.7 km above the sea, still have about 0.89 atm.</span></div>
+        <div><span class="k">Instead of</span><span>The same mass of air as Earth's, which under Mars gravity would give only 0.38 atm.</span></div>
+      </div>
       <p>Pressure is the weight of the air overhead. Mars's gravity is 0.38 of Earth's, so 1 atm on Mars takes 2.64 times as much air above each square metre, and 1.05 atm takes 2.77 times. In total that is about 70% of the mass of Earth's atmosphere, spread over a planet with 28% of Earth's surface.</p>
-      <p>1.05 atm was chosen so that people can breathe it comfortably and the highlands stay livable. Under weak gravity pressure falls slowly with height, so the southern highlands, on average 3.7 km above the sea, still have about 0.89 atm.</p>
       <p>Consequences the simulator includes:</p>
       <ul>
         <li><b>Earth-equivalent heights.</b> With the same air, pressure falls 0.38 times as fast with height as on Earth. Heights can be shown in Earth-equivalent km (Mars km × 0.38), the climb that would thin the air as much on Earth. Olympus Mons, about 24 km above the sea, is like a 9.2 km climb on Earth.</li>
-        <li><b>More heat stored and carried.</b> The air that takes part in the seasons stores heat, so the land's heat capacity grows with the air above it. Heat transport scales with pressure and with the square of the planet's spin rate (Williams &amp; Kasting 1997), which comes to about Earth's at 1 atm.</li>
-        <li><b>Smaller daily swings, more water vapour per column and a lower UV index</b>, covered in their own sections.</li>
+        <li><b>More heat stored and carried.</b> The air that takes part in the seasons stores heat, so the land's heat capacity grows with the air above it, and heat transport scales with pressure (section 18).</li>
+        <li><b>Smaller daily swings, more water vapour per column and a lower UV index</b> (sections 21, 22 and 17).</li>
       </ul>
       <p>The model keeps Earth's greenhouse effect. With 2.6 times Earth's air at Earth's composition the greenhouse would be stronger, so the composition is assumed adjusted to give Earth-like warming.</p>
       <p class="note"><span class="tag">Getting there</span>Mars's own carbon dioxide could add only a few hundredths of an atmosphere, and the planet has little nitrogen, so most of this air would have to come from elsewhere. The project takes the air as given.</p>
@@ -428,10 +525,14 @@ footer { max-width: 1180px; margin: 30px auto 0; padding-top: 18px; border-top: 
     </section>
 
     <section id="water">
-      <h2>Water</h2>
-      <p>Sea level is set by the share of Mars's surface that lies below it. The default, <b>26%</b>, puts the sea 3.12 km below the MOLA datum, Mars's reference level. Only water joined to the northern lowlands stands at that level: an ocean covering 23.8% of the planet, about 1 km deep on average and 3.8 km at its deepest.</p>
-      <p>Hellas and Argyre, the two giant impact basins of the south, reach below that level but are walled in, so they are closed seas with their own levels, like the Caspian. Every other closed depression, from large basins to small craters, holds a lake.</p>
-      <p>How full each lake is comes from its own water balance. A lake rises until evaporation from its surface equals what flows in: the runoff from its catchment, the rain on it and the overflow from basins upstream. A basin that fills spills through its lowest point into the next basin or the sea. The lakes change the rain and the temperatures in turn, so the balance is repeated until they settle.</p>
+      <h2><span class="sn">08</span>Water</h2>
+      <div class="decide">
+        <div><span class="k">Chosen</span><span>Sea level at the height below which 26% of the surface lies (3.12 km below the MOLA datum), with every closed basin holding the lake its own water balance sustains.</span></div>
+        <div><span class="k">Because</span><span>That turns the northern lowlands into a real ocean while leaving more than half the planet as land, and the lakes and southern seas spread open water across the highlands, far from the ocean, which feeds rain there.</span></div>
+        <div><span class="k">Instead of</span><span>More sea, or one fill level for every crater regardless of its climate (still available as <b>Same fill everywhere</b>).</span></div>
+      </div>
+      <p>Only water joined to the northern lowlands stands at sea level: an ocean covering 23.8% of the planet, about 1 km deep on average and 3.8 km at its deepest. Hellas and Argyre, the two giant impact basins of the south, reach below sea level but are walled in, so they are closed seas with their own levels, like the Caspian. Every other closed depression, from large basins to small craters, holds a lake.</p>
+      <p>How full each lake is comes from its own water balance: it rises until evaporation from its surface equals what flows in, from its catchment, the rain on it and the basins upstream (section 24).</p>
       <figure>
         <img src="img/guide-elev.webp" width="1446" height="724" alt="Map of Mars with the northern ocean, full Hellas and Argyre seas, crater lakes and rivers over the MOLA relief" loading="lazy">
         <figcaption>The default map: MOLA relief, the 26% ocean in the north, Hellas (centre right, south) and Argyre (centre left, south) full, lakes in the craters and the rivers of the three-sun climate.</figcaption>
@@ -441,60 +542,28 @@ footer { max-width: 1180px; margin: 30px auto 0; padding-top: 18px; border-top: 
         <li><b>Hellas fills to its brim and spills.</b> It becomes a sea 9.3 km deep whose surface stands 1.27 km above the datum, 4.4 km above the ocean. Once full it evaporates about 0.48 m a year and gets about 0.49 m of rain, so it sustains itself, as Earth's oceans do at the same latitudes.</li>
         <li><b>Argyre fills and spills too</b>, 5.1 km deep, its surface 0.14 km above the datum.</li>
         <li><b>The crater lakes</b> are 84–95% full on average, depending on the region, and about 84% of them spill.</li>
-        <li><b>Water covers 45% of the planet</b>: ocean 23.8%, lakes and closed seas 21.4% (Hellas and Argyre 7.2% of it). That leaves 54.8% land.</li>
+        <li><b>Water covers 45% of the planet</b>: ocean 23.8%, lakes and closed seas 21.4% (Hellas and Argyre 7.2% of it).</li>
         <li><b>In all, a global layer of 475 m</b>: 229 m in the ocean, 202 m in Hellas and Argyre and 44 m in the other lakes.</li>
       </ul>
-      <p>Why 26%: it turns the northern lowlands into a real ocean while leaving more than half the planet as land once the lakes have filled. The lakes and the southern seas then put open water across the southern highlands, far from the ocean, which feeds rain there.</p>
       <p class="note"><span class="tag">Getting there</span>475 m is 69 million km³, about 5% of Earth's oceans. Mars's polar caps hold enough ice for a layer of roughly 20–30 m and more is frozen in the ground; the rest would have to be brought in, for example from icy bodies of the outer solar system. The project takes the water as given.</p>
       <p class="note"><span class="tag">In the simulator</span>Map → <b>Water level</b>; <b>Fill craters and closed basins</b> with <b>Lakes: Water balance</b>; <b>Hellas, Argyre: Own level</b>. The readout gives the water needed.</p>
     </section>
 
-    <section id="climate">
-      <h2>How the climate is computed</h2>
-      <p>Every climate number comes from models built and tested on Earth, then run with Mars's orbit, spin, gravity, air and terrain.</p>
-
-      <h3 id="temperature">Temperature</h3>
-      <p>The temperatures come from an energy-balance model of the kind climate scientists use for first estimates (Budyko–Sellers type, after North &amp; Coakley 1979). Each place absorbs sunlight with Earth's cloud albedo, radiates heat to space following Earth's measured relation (203.3 + 2.09·T W/m², with T in °C), stores heat in land and sea, and passes heat toward the poles. Its heat capacities and exchanges were fitted to Earth's seasons: on Earth's orbit it gives Earth's 15 °C global mean and the right winters and summers at 45°N.</p>
-      <p>The default <b>dynamic</b> setting runs it on a 4° × 6° grid with the map's own ocean, seas and lakes, and with Earth-like prevailing winds (trade winds, westerlies and polar easterlies) carrying heat east or west. Fitted to 23 mid-latitude cities on Earth, it reproduces their January–July temperature range within 4.3 K.</p>
-      <p>For Mars, the land's heat capacity includes the deeper soil layer that Mars's longer year reaches, plus the extra air; heat transport scales with pressure and spin rate. The model has no snow, sea ice or clouds that change with the climate, so read it as how warm the light makes each place.</p>
-      <figure>
-        <img src="img/guide-temp.webp" width="1446" height="724" alt="Map of yearly average temperature on the three-sun Mars, with isotherms every 10 degrees" loading="lazy">
-        <figcaption>Yearly-average temperature with three suns, isotherms every 10 °C. Warm lowlands around the northern ocean, cooler southern uplands and cold peaks on the Tharsis and Elysium volcanoes.</figcaption>
-      </figure>
-
-      <h3 id="lapse">Cooling with height</h3>
-      <p>Air cools as you climb. The default lapse rate is <b>6 K per Earth-equivalent km</b>, which is 2.3 K per Mars km. It is the middle of what mountain stations on Earth measure for daily mean temperatures (about 4.5 K/km in the Pyrenees, 5.5 on Mount Washington, from 4.4 in winter to 8.2 in summer in the Alps, 6.9 in the Ecuadorian Andes) and of humid air cooling as it rises (5.5–5.7 K/km over a year). The often-quoted 6.5 K/km is the standard atmosphere's average for the free air up to 11 km, not for the ground.</p>
-      <p>The rate is given per Earth-equivalent km because rising air cools with the drop in pressure, and under Mars gravity pressure drops 0.38 times as fast per km. Each patch of land is cooled from its sea-level temperature by its own height, and so is each lake: Hellas's surface, 4.4 km above the ocean, is about 10 K cooler than the ocean at the same latitude.</p>
-
-      <h3 id="daynight">Day and night</h3>
-      <p>The energy balance gives each sol's average. A second model gives the daily high and low: it treats the ground and the air near it as one layer, warmed by the light of all the suns over the sol and losing heat in proportion to how warm it is. It was fitted to typical daily ranges on Earth's land, from 16 K in desert summers and 9.5 K in the humid tropics to 5.5 K in maritime winters, with the high near 14:30.</p>
-      <p>For Mars it takes in the 2.7% longer sol and the thick air column, which narrows the daily range to 0.67 times Earth's for the same sunlight and humidity. Three suns stretch the warm part of the day, since the morning sun rises before the Sun and the evening sun sets after it, so daily ranges are mostly 4–7 K.</p>
-      <p class="note"><span class="tag">In the simulator</span>On the map, <b>Map: Insolation</b> and <b>Show: Insolation-based temperature</b>. <b>When</b>: chosen date, yearly average, seasonal swing, 10th warmest or 10th coldest sol. <b>Each sol</b>: average, high or low. The <b>Lapse rate</b> slider sits below.</p>
-
-      <h3 id="rain">Rain</h3>
-      <p>Rain comes from a moisture budget on a 2° grid. Water evaporates from the ocean, the lakes and wet ground. Low-level winds, driven by the temperature contrasts, carry the vapour. It rains where air rises or the column nears saturation, on windward slopes and along storm tracks, and high terrain holds moist air back. The year is solved in 12 slices, twice, the second time with the soil water the first pass leaves.</p>
-      <p>It was tested on Earth with the same code and Earth's radius, rotation, gravity and terrain. Given Earth's observed temperatures and winds, its rain over land correlates 0.85 with the observed and its global total is within 4% (1,020 mm a year against 983). Run as it runs for Mars, from its own temperatures and winds, it does worse: a correlation of 0.63, typically within a factor of 2. Its summer monsoons come out too weak and it fills Earth's large closed basins too full (it fills the Caspian basin, for instance). On Mars that means the monsoon rain on the southern highlands is probably underestimated, and full seas in Hellas and Argyre are the wet end of what is possible.</p>
-      <figure>
-        <img src="img/guide-rain.webp" width="1446" height="724" alt="Map of yearly rain on the three-sun Mars, with rain lines and rivers" loading="lazy">
-        <figcaption>Yearly rain with three suns and the rivers it feeds. Colours double with each step: yellow 300 mm, green 600 mm, cyan 1.2 m; the thick white line marks 300 mm, roughly the edge of dry country.</figcaption>
-      </figure>
-
-      <h3 id="rivers">Rivers and lakes</h3>
-      <p>Rivers follow the yearly runoff (rain minus what the land evaporates) downhill. Each lake gathers its inflow and passes water on only once it is full. Where a river runs through a chain of lakes it is drawn straight across each one, from where it enters to the spill point, so it reads as one river. Flows above about 25 m³/s are drawn, much wider than real so they show at the scale of a planet.</p>
-
-      <h3 id="limits">What is left out</h3>
-      <ul>
-        <li><b>Ocean currents.</b> The heat the oceans carry poleward is included on average, spread evenly over land and sea, but there are no gyres, warm boundary currents like the Gulf Stream, upwelling or deep circulation.</li>
-        <li><b>Snow, sea ice and changing clouds</b>, and the feedbacks they bring.</li>
-        <li><b>Mountains blocking heat transport.</b> Rain does see terrain; temperatures only through height.</li>
-        <li><b>Dust, soils and vegetation.</b></li>
-        <li><b>Time.</b> How the planet got here, and how long its air and water would last, are outside the model.</li>
-      </ul>
+    <section id="lapse">
+      <h2><span class="sn">09</span>Cooling with height</h2>
+      <div class="decide">
+        <div><span class="k">Chosen</span><span>A lapse rate of 6 K per Earth-equivalent km, which is 2.3 K per Mars km.</span></div>
+        <div><span class="k">Because</span><span>It is the middle of what mountain stations on Earth measure for daily mean temperatures, and of humid air cooling as it rises.</span></div>
+        <div><span class="k">Instead of</span><span>The often-quoted 6.5 K/km, the standard atmosphere's average for the free air up to 11 km rather than for the ground; or 5 K/km, which left high ground about 1 °C warmer per Earth-equivalent km.</span></div>
+      </div>
+      <p>Measured rates for daily means are about 4.5 K/km in the Pyrenees, 5.5 on Mount Washington, from 4.4 in winter to 8.2 in summer in the Alps, and 6.9 in the Ecuadorian Andes. Air at 85% humidity cooling along the moist adiabat gives 5.5–5.7 K/km over a year.</p>
+      <p>The rate is given per Earth-equivalent km because rising air cools with the drop in pressure, and under Mars gravity pressure drops 0.38 times as fast per km. Each patch of land is cooled from its sea-level temperature by its own height, and so is each lake: Hellas's surface, 4.4 km above the ocean, is about 10 K cooler than the ocean at the same latitude. With 6 rather than 5 K/km the band has about 6 more frosty sols a year, all of them on high ground.</p>
+      <p class="note"><span class="tag">In the simulator</span>The <b>Lapse rate</b> slider under the temperature layer's settings.</p>
     </section>
 
     <section id="results">
-      <h2>Targets and results</h2>
-      <p>How the default sky does against the comfort targets, next to the two-sun alternative, at the default air, sea level and lapse rate:</p>
+      <h2><span class="sn">10</span>Targets and results</h2>
+      <p>How the default sky does against the targets of section 01, next to the two-sun alternative, at the default air, sea level and lapse rate:</p>
       <div class="tablewrap">
         <table class="keycol">
           <thead><tr><th>Measure</th><th>Three suns (default)</th><th>Two suns</th><th>Target</th></tr></thead>
@@ -512,13 +581,28 @@ footer { max-width: 1180px; margin: 30px auto 0; padding-top: 18px; border-top: 
         </table>
       </div>
       <p>The frosty sols in the populated band fall almost all on high ground, Tharsis, Elysium and the southern uplands, where the air is cooler. The far north is the warm spot: land beyond 45°N passes 30 °C on about 25 sols a year, the price of keeping the northern ocean warm and the populated band cool.</p>
+      <figure>
+        <img src="img/guide-temp.webp" width="1446" height="724" alt="Map of yearly average temperature on the three-sun Mars, with isotherms every 10 degrees" loading="lazy">
+        <figcaption>Yearly-average temperature with three suns, isotherms every 10 °C. Warm lowlands around the northern ocean, cooler southern uplands and cold peaks on the Tharsis and Elysium volcanoes. Colours: light azure below 0 °C, dark capri just above it, green 10 °C, yellow 20, orange 30, red 35.</figcaption>
+      </figure>
+      <h3>The two-sun alternative</h3>
+      <p>The simulator also offers a two-sun sky: one array at L5 sending 1.33 times the Sun's light, which brings Mars's average to about Earth's. Its lens is deeper (k = 1, swinging by ±0.2 over the year), with the dimmest line swinging ±27.5° around 11.5°N. With one beam doing all the shaping, warming the high latitudes enough would overheat the middle, so the compromise leaves the populated band below 0 °C on about 29 sols a year, the northern ocean at about 10 °C, 330 mm of rain over land with 61% of the land under 300 mm, and Hellas shrunk to a lake 2 km deep on its floor. That is why the three-sun sky is the default.</p>
       <p class="note"><span class="tag">In the simulator</span>The <b>Temperature</b> panel (temperature by latitude) counts these sols; hover the map for any place's values.</p>
     </section>
 
     <section id="seasons">
-      <h2>The five seasons</h2>
+      <h2><span class="sn">11</span>Five seasons</h2>
+      <div class="decide">
+        <div><span class="k">Chosen</span><span>Five seasons: Autumn, Winter, Spring, Summer and Estia, named after the five traditional Spanish seasons (Estia, from <i>estío</i>, is the late, dry summer).</span></div>
+        <div><span class="k">Because</span><span>They group the climate's real phases best: about 80% of the populated band's seasonal temperature changes, against 62% for the four astronomical seasons and 74% for the best four equal ones.</span></div>
+        <div><span class="k">Instead of</span><span>Earth's four, which do not follow this climate, or six, which add little and split a stretch the band can barely tell apart.</span></div>
+      </div>
       <p>Earth's four seasons work because, in the temperate zones, temperature follows one yearly wave set by the tilt, and the two hemispheres mirror each other. On the three-sun Mars that pattern breaks down. The mirrors were tuned to cancel most of the tilt's seasons, and what is left is the orbit's: 45% more sunlight at perihelion, and a slow passage through the far side of the orbit. The whole populated band follows that cycle together. The northern half is warmest around L<sub>s</sub> 260°, its astronomical winter, and the southern half about 30° later.</p>
-      <p>To find seasons that fit, the model's year was split into parts, with the start date chosen so that each part groups the most similar sols of land temperature and rain between 45°S and 45°N. Five seasons stand out: they capture about 80% of the band's seasonal temperature changes, against 62% for the four astronomical quarters, and every version of the test puts their boundaries in the same places. They are named after the five traditional Spanish seasons, with Estia for the late, dry summer the Spanish call <i>estío</i>.</p>
+      <p>So the seasons were found from the climate itself. The model's year was split into parts, with the start chosen so that each part groups the most similar sols of land temperature and rain between 45°S and 45°N (section 26 has the method). Going from four parts to five gains far more than going from five to six, and every version of the test puts the five boundaries in the same places, within a few degrees of L<sub>s</sub>.</p>
+      <figure>
+        <div class="frame"><svg viewBox="0 0 760 300" role="img" aria-labelledby="figFitT"><title id="figFitT">Share of the populated band’s seasonal changes captured by 2 to 7 equal seasons</title><line class="grid" x1="56" x2="610" y1="254.0" y2="254.0"/><text class="tick" x="48" y="258.0" text-anchor="end">0%</text><line class="grid" x1="56" x2="610" y1="206.8" y2="206.8"/><text class="tick" x="48" y="210.8" text-anchor="end">20%</text><line class="grid" x1="56" x2="610" y1="159.6" y2="159.6"/><text class="tick" x="48" y="163.6" text-anchor="end">40%</text><line class="grid" x1="56" x2="610" y1="112.4" y2="112.4"/><text class="tick" x="48" y="116.4" text-anchor="end">60%</text><line class="grid" x1="56" x2="610" y1="65.2" y2="65.2"/><text class="tick" x="48" y="69.2" text-anchor="end">80%</text><line class="grid" x1="56" x2="610" y1="18.0" y2="18.0"/><text class="tick" x="48" y="22.0" text-anchor="end">100%</text><rect class="b-t" x="74.2" y="137.4" width="26" height="116.6" rx="2"/><rect class="b-r" x="104.2" y="152.8" width="26" height="101.2" rx="2"/><text class="tick" x="102.2" y="272" text-anchor="middle">2 seasons</text><text class="tick" x="102.2" y="287" text-anchor="middle">334 sols</text><rect class="b-t" x="166.5" y="92.6" width="26" height="161.4" rx="2"/><rect class="b-r" x="196.5" y="112.4" width="26" height="141.6" rx="2"/><text class="tick" x="194.5" y="272" text-anchor="middle">3 seasons</text><text class="tick" x="194.5" y="287" text-anchor="middle">223 sols</text><rect class="b-t" x="258.8" y="79.1" width="26" height="174.9" rx="2"/><rect class="b-r" x="288.8" y="94.0" width="26" height="160.0" rx="2"/><text class="tick" x="286.8" y="272" text-anchor="middle">4 seasons</text><text class="tick" x="286.8" y="287" text-anchor="middle">167 sols</text><rect class="b-t hl" x="351.2" y="66.4" width="26" height="187.6" rx="2"/><rect class="b-r hl" x="381.2" y="73.9" width="26" height="180.1" rx="2"/><text class="tick hl" x="379.2" y="272" text-anchor="middle">5 seasons</text><text class="tick" x="379.2" y="287" text-anchor="middle">134 sols</text><rect class="b-t" x="443.5" y="57.2" width="26" height="196.8" rx="2"/><rect class="b-r" x="473.5" y="65.4" width="26" height="188.6" rx="2"/><text class="tick" x="471.5" y="272" text-anchor="middle">6 seasons</text><text class="tick" x="471.5" y="287" text-anchor="middle">111 sols</text><rect class="b-t" x="535.8" y="51.7" width="26" height="202.3" rx="2"/><rect class="b-r" x="565.8" y="60.0" width="26" height="194.0" rx="2"/><text class="tick" x="563.8" y="272" text-anchor="middle">7 seasons</text><text class="tick" x="563.8" y="287" text-anchor="middle">96 sols</text><line class="l-ref" x1="56" x2="610" y1="107.7" y2="107.7"/><text class="note" x="618" y="111.7">4 astronomical</text><text class="note" x="618" y="125.7">seasons: 62%</text><rect class="b-t" x="620" y="26" width="12" height="12" rx="2"/><text class="note" x="638" y="36">temperature</text><rect class="b-r" x="620" y="46" width="12" height="12" rx="2"/><text class="note" x="638" y="56">temperature</text><text class="note" x="638" y="70">and rain</text><line class="axis" x1="56" x2="610" y1="254.0" y2="254.0"/></svg></div>
+        <figcaption>How much of the populated band's seasonal changes each number of equal seasons captures (the share of the sol-to-sol variance explained by the season averages), for land temperature alone and with rain added. Five is where the gains level off.</figcaption>
+      </figure>
       <div class="tablewrap">
         <table>
           <thead><tr><th>Season</th><th>L<sub>s</sub></th><th>Sols</th><th>What happens</th></tr></thead>
@@ -531,10 +615,36 @@ footer { max-width: 1180px; margin: 30px auto 0; padding-top: 18px; border-top: 
           </tbody>
         </table>
       </div>
-      <p>Temperatures are sea-level-equivalent land averages; the ground is cooler by about 2.3 K per km of height. The two halves of the band share the temperature seasons but not the rain: the north gets its rain in the cool months, like a Mediterranean climate, and the south in the warm ones, like a monsoon. The seasons near perihelion are shorter because the climate changes fastest there.</p>
+      <p>Temperatures are sea-level-equivalent land averages; the ground is cooler by about 2.3 K per km of height. The two halves of the band share the temperature seasons but not the rain: the north gets its rain in the cool months, like a Mediterranean climate, and the south in the warm ones, like a monsoon.</p>
+      <p><b>Why is Spring the cold season?</b> The climate lags the light by about a season, because the ocean and the soil store heat. In the band, Autumn gets the least light of the year (about 295 W/m² on average against 393 in Summer) but stays mild on the heat stored through Summer and Estia; the cold arrives in Spring, when the light is already rising again. Spring is still a time of growing light, as on Earth.</p>
+      <p><b>Why are Summer and Estia shorter?</b> Near perihelion Mars moves fastest and the climate changes fastest, so a season there needs fewer sols to hold one phase of the weather. The calendar (next section) makes Summer and Estia 127 sols and the other three 138, which fits the populated band's climate as well as equal seasons or slightly better.</p>
+    </section>
 
-      <h3>The calendar</h3>
-      <p>The year starts at L<sub>s</sub> 0°, the northern spring equinox, as Mars years are counted. Each season has four months, and the months are made of 6-sol weeks: 36-sol months of six weeks and 30-sol months of five. Two festival sols sit outside the weeks, so every month starts on the first day of a week: <b>Perihelia</b>, the 31st of Calidor, five sols before perihelion, and <b>Finalia</b>, the 31st of Finival and the last sol of the year, with <b>Finalia II</b> after it in leap years. A year has 668 sols, or 669 in a leap year: odd years and years divisible by 10 are leap years, except centuries not divisible by 500. That averages 668.592 sols, against 668.59 for the real Martian year.</p>
+    <section id="calendar">
+      <h2><span class="sn">12</span>The calendar</h2>
+      <div class="decide">
+        <div><span class="k">Chosen</span><span>A year that starts at L<sub>s</sub> 0°, with 20 months, four in each season, made of 6-sol weeks: months of 36 sols (six weeks) or 30 (five), plus two festival sols, three in leap years.</span></div>
+        <div><span class="k">Because</span><span>Every month is a whole number of weeks, every season a whole number of months, and the months add up to the seasons exactly. The start matches how Mars years are already counted.</span></div>
+        <div><span class="k">Instead of</span><span>A 15-month year of 9-sol weeks, or the Darian calendar's 24 months of 27–28 sols, which was designed for a planet without this climate's seasons.</span></div>
+      </div>
+      <figure>
+        <div class="frame bare"><svg viewBox="0 0 560 560" role="img" aria-labelledby="figCalT" class="space"><title id="figCalT">The calendar wheel: twenty months in five seasons, from New Year at Ls 0 at the top, with the festival sols, solstices, equinoxes, perihelion and aphelion</title><rect x="0" y="0" width="560" height="560" rx="10" class="sp-bg"/><circle cx="280" cy="280" r="228" fill="none" stroke="#1d2535" stroke-width="34"/><line x1="280.0" y1="69.0" x2="280.0" y2="35.0" stroke="#ECE6DD" stroke-width="1.6"/><path id="calm0" d="M280.0 52.0 A228 228 0 0 1 355.7 64.9" fill="none"/><text class="cal-m" dominant-baseline="central"><textPath href="#calm0" startOffset="50%" text-anchor="middle">Novary</textPath></text><line x1="350.0" y1="81.0" x2="361.3" y2="48.9" stroke="#3a4458" stroke-width="1"/><path id="calm1" d="M355.7 64.9 A228 228 0 0 1 422.8 102.2" fill="none"/><text class="cal-m" dominant-baseline="central"><textPath href="#calm1" startOffset="50%" text-anchor="middle">Pluviary</textPath></text><line x1="412.1" y1="115.5" x2="433.4" y2="89.0" stroke="#3a4458" stroke-width="1"/><path id="calm2" d="M422.8 102.2 A228 228 0 0 1 473.7 159.7" fill="none"/><text class="cal-m" dominant-baseline="central"><textPath href="#calm2" startOffset="50%" text-anchor="middle">Nimbary</textPath></text><line x1="459.2" y1="168.7" x2="488.1" y2="150.7" stroke="#3a4458" stroke-width="1"/><path id="calm3" d="M473.7 159.7 A228 228 0 0 1 499.5 218.3" fill="none"/><text class="cal-m" dominant-baseline="central"><textPath href="#calm3" startOffset="50%" text-anchor="middle">Lenary</textPath></text><line x1="483.1" y1="222.9" x2="515.9" y2="213.7" stroke="#ECE6DD" stroke-width="1.6"/><path id="calm4" d="M499.5 218.3 A228 228 0 0 1 507.5 294.7" fill="none"/><text class="cal-m" dominant-baseline="central"><textPath href="#calm4" startOffset="50%" text-anchor="middle">Aphelose</textPath></text><line x1="490.6" y1="293.6" x2="524.5" y2="295.8" stroke="#3a4458" stroke-width="1"/><path id="calm5" d="M489.8 369.4 A228 228 0 0 0 507.5 294.7" fill="none"/><text class="cal-m" dominant-baseline="central"><textPath href="#calm5" startOffset="50%" text-anchor="middle">Umbrose</textPath></text><line x1="474.1" y1="362.7" x2="505.4" y2="376.0" stroke="#3a4458" stroke-width="1"/><path id="calm6" d="M448.2 433.9 A228 228 0 0 0 489.8 369.4" fill="none"/><text class="cal-m" dominant-baseline="central"><textPath href="#calm6" startOffset="50%" text-anchor="middle">Frigose</textPath></text><line x1="435.7" y1="422.4" x2="460.8" y2="445.4" stroke="#3a4458" stroke-width="1"/><path id="calm7" d="M398.8 474.6 A228 228 0 0 0 448.2 433.9" fill="none"/><text class="cal-m" dominant-baseline="central"><textPath href="#calm7" startOffset="50%" text-anchor="middle">Brumose</textPath></text><line x1="389.9" y1="460.1" x2="407.6" y2="489.1" stroke="#ECE6DD" stroke-width="1.6"/><path id="calm8" d="M327.4 503.0 A228 228 0 0 0 398.8 474.6" fill="none"/><text class="cal-m" dominant-baseline="central"><textPath href="#calm8" startOffset="50%" text-anchor="middle">Vertal</textPath></text><line x1="323.9" y1="486.4" x2="331.0" y2="519.6" stroke="#3a4458" stroke-width="1"/><path id="calm9" d="M250.7 506.1 A228 228 0 0 0 327.4 503.0" fill="none"/><text class="cal-m" dominant-baseline="central"><textPath href="#calm9" startOffset="50%" text-anchor="middle">Pruinal</textPath></text><line x1="252.9" y1="489.3" x2="248.5" y2="523.0" stroke="#3a4458" stroke-width="1"/><path id="calm10" d="M177.3 483.6 A228 228 0 0 0 250.7 506.1" fill="none"/><text class="cal-m" dominant-baseline="central"><textPath href="#calm10" startOffset="50%" text-anchor="middle">Equinal</textPath></text><line x1="185.0" y1="468.4" x2="169.7" y2="498.8" stroke="#3a4458" stroke-width="1"/><path id="calm11" d="M124.8 447.0 A228 228 0 0 0 177.3 483.6" fill="none"/><text class="cal-m" dominant-baseline="central"><textPath href="#calm11" startOffset="50%" text-anchor="middle">Vernal</textPath></text><line x1="136.3" y1="434.5" x2="113.2" y2="459.4" stroke="#ECE6DD" stroke-width="1.6"/><path id="calm12" d="M78.1 386.0 A228 228 0 0 0 124.8 447.0" fill="none"/><text class="cal-m" dominant-baseline="central"><textPath href="#calm12" startOffset="50%" text-anchor="middle">Lucidor</textPath></text><line x1="93.2" y1="378.1" x2="63.1" y2="393.9" stroke="#3a4458" stroke-width="1"/><path id="calm13" d="M56.2 323.5 A228 228 0 0 0 78.1 386.0" fill="none"/><text class="cal-m" dominant-baseline="central"><textPath href="#calm13" startOffset="50%" text-anchor="middle">Calidor</textPath></text><line x1="72.9" y1="320.3" x2="39.5" y2="326.8" stroke="#3a4458" stroke-width="1"/><path id="calm14" d="M52.9 259.6 A228 228 0 0 0 56.2 323.5" fill="none"/><text class="cal-m" dominant-baseline="central"><textPath href="#calm14" startOffset="50%" text-anchor="middle">Heliodor</textPath></text><line x1="69.8" y1="261.1" x2="36.0" y2="258.0" stroke="#3a4458" stroke-width="1"/><path id="calm15" d="M52.9 259.6 A228 228 0 0 1 67.6 197.2" fill="none"/><text class="cal-m" dominant-baseline="central"><textPath href="#calm15" startOffset="50%" text-anchor="middle">Fervidor</textPath></text><line x1="83.4" y1="203.4" x2="51.7" y2="191.0" stroke="#ECE6DD" stroke-width="1.6"/><path id="calm16" d="M67.6 197.2 A228 228 0 0 1 107.1 131.4" fill="none"/><text class="cal-m" dominant-baseline="central"><textPath href="#calm16" startOffset="50%" text-anchor="middle">Torrival</textPath></text><line x1="120.0" y1="142.5" x2="94.2" y2="120.3" stroke="#3a4458" stroke-width="1"/><path id="calm17" d="M107.1 131.4 A228 228 0 0 1 155.3 89.1" fill="none"/><text class="cal-m" dominant-baseline="central"><textPath href="#calm17" startOffset="50%" text-anchor="middle">Ardival</textPath></text><line x1="164.6" y1="103.4" x2="146.0" y2="74.9" stroke="#3a4458" stroke-width="1"/><path id="calm18" d="M155.3 89.1 A228 228 0 0 1 213.3 62.0" fill="none"/><text class="cal-m" dominant-baseline="central"><textPath href="#calm18" startOffset="50%" text-anchor="middle">Mitival</textPath></text><line x1="218.3" y1="78.2" x2="208.3" y2="45.7" stroke="#3a4458" stroke-width="1"/><path id="calm19" d="M213.3 62.0 A228 228 0 0 1 280.0 52.0" fill="none"/><text class="cal-m" dominant-baseline="central"><textPath href="#calm19" startOffset="50%" text-anchor="middle">Finival</textPath></text><circle cx="43.7" cy="327.1" r="3.6" class="sp-peri"/><circle cx="277.5" cy="39.0" r="3.6" class="sp-peri"/><path d="M282.5 102.0 A178 178 0 0 1 450.7 229.4" fill="none" stroke="#A8784E" stroke-width="24"/><path id="cals0" d="M282.5 102.0 A178 178 0 0 1 450.7 229.4" fill="none"/><text class="cal-s" dominant-baseline="central"><textPath href="#cals0" startOffset="50%" text-anchor="middle">AUTUMN · 138 SOLS</textPath></text><path d="M452.0 234.3 A178 178 0 0 1 374.8 430.6" fill="none" stroke="#5B8DEF" stroke-width="24"/><path id="cals1" d="M374.8 430.6 A178 178 0 0 0 452.0 234.3" fill="none"/><text class="cal-s" dominant-baseline="central"><textPath href="#cals1" startOffset="50%" text-anchor="middle">WINTER · 138 SOLS</textPath></text><path d="M370.6 433.2 A178 178 0 0 1 160.7 412.1" fill="none" stroke="#4CB782" stroke-width="24"/><path id="cals2" d="M160.7 412.1 A178 178 0 0 0 370.6 433.2" fill="none"/><text class="cal-s" dominant-baseline="central"><textPath href="#cals2" startOffset="50%" text-anchor="middle">SPRING · 138 SOLS</textPath></text><path d="M157.0 408.6 A178 178 0 0 1 113.3 217.7" fill="none" stroke="#E9B23C" stroke-width="24"/><path id="cals3" d="M113.3 217.7 A178 178 0 0 0 157.0 408.6" fill="none"/><text class="cal-s" dominant-baseline="central"><textPath href="#cals3" startOffset="50%" text-anchor="middle">SUMMER · 127 SOLS</textPath></text><path d="M115.1 213.0 A178 178 0 0 1 277.5 102.0" fill="none" stroke="#E0703A" stroke-width="24"/><path id="cals4" d="M115.1 213.0 A178 178 0 0 1 277.5 102.0" fill="none"/><text class="cal-s" dominant-baseline="central"><textPath href="#cals4" startOffset="50%" text-anchor="middle">ESTIA · 127 SOLS</textPath></text><rect x="275.0" y="72.0" width="10" height="10" fill="#0F141E" stroke="#ECE6DD" stroke-width="1.6" transform="rotate(0.0 280.0 77.0)"/><text class="cal-l" x="280.0" y="156.0" text-anchor="middle">Ls 0°</text><rect x="472.0" y="323.8" width="10" height="10" fill="#0F141E" stroke="#ECE6DD" stroke-width="1.6" transform="rotate(103.9 477.0 328.8)"/><text class="cal-l" x="404.2" y="314.8" text-anchor="middle">Ls 90°</text><rect x="206.4" y="466.0" width="10" height="10" fill="#0F141E" stroke="#ECE6DD" stroke-width="1.6" transform="rotate(199.8 211.4 471.0)"/><text class="cal-l" x="236.7" y="404.5" text-anchor="middle">Ls 180°</text><rect x="73.4" y="251.1" width="10" height="10" fill="#0F141E" stroke="#ECE6DD" stroke-width="1.6" transform="rotate(276.8 78.4 256.1)"/><text class="cal-l" x="152.9" y="268.9" text-anchor="middle">Ls 270°</text><circle cx="480.7" cy="249.3" r="5" fill="#0F141E" stroke="#E7AE6F" stroke-width="2"/><text class="cal-l pk" x="406.5" y="264.6" text-anchor="middle">aphelion</text><circle cx="79.4" cy="311.3" r="5" fill="#0F141E" stroke="#E7AE6F" stroke-width="2"/><text class="cal-l pk" x="153.5" y="303.7" text-anchor="middle">perihelion</text><text class="cal-c1" x="280" y="262" text-anchor="middle">668 sols</text><text class="cal-c2" x="280.0" y="286.0" text-anchor="middle">669 in leap years</text><text class="cal-c2" x="280.0" y="303.0" text-anchor="middle">20 months · 111 weeks</text><text class="cal-c2" x="280.0" y="320.0" text-anchor="middle">+ 2 festival sols</text><circle cx="308" cy="540" r="3.6" class="sp-peri"/><text class="cal-l" x="544" y="544" text-anchor="end">festival sols: Perihelia, Finalia</text></svg></div>
+        <figcaption>The calendar wheel, uniform in time, with New Year at the top: the twenty months outside, the five seasons inside, squares at the solstices and equinoxes, open dots at perihelion and aphelion, gold dots at the festival sols.</figcaption>
+      </figure>
+      <h3>Why the year starts at L<sub>s</sub> 0°</h3>
+      <p>L<sub>s</sub> 0° is the northern spring equinox. Planetary scientists number Mars years from it: Mars Year 1 began on 11 April 1955 (Clancy et al. 2000), and the Darian calendar also begins its year near it. For this climate it is a good place too: the best five-season split starts within a few degrees of it (L<sub>s</sub> 7–9°), so starting the year there, and the first season with it, costs nothing in how well the seasons fit.</p>
+      <h3>Months and weeks</h3>
+      <p>A 6-sol week divides both month lengths, so each month begins on the first day of a week. Autumn, Winter and Spring are each 36 + 36 + 36 + 30 = 138 sols; Summer is 36 + 30 + 30 + 30 = 126 sols plus Perihelia, and Estia 126 plus Finalia (and Finalia II in leap years). In all, 111 weeks: 666 sols, plus the festivals.</p>
+      <h3>Festival sols</h3>
+      <p>The festivals sit outside the weeks, like the five or six complementary days at the end of the French Republican calendar or the five epagomenal days of the ancient Egyptian one, so they never break the weekly cycle:</p>
+      <ul>
+        <li><b>Perihelia</b>, the 31st of Calidor, five sols before perihelion, the year's closest approach to the Sun.</li>
+        <li><b>Finalia</b>, the 31st of Finival, the last sol of the year, and in leap years <b>Finalia II</b>, the 32nd.</li>
+      </ul>
+      <h3>Leap years</h3>
+      <p>A year has 668 sols, or 669 in a leap year. Odd years and years divisible by 10 are leap years, except centuries not divisible by 500. Over 1,000 years that gives 592 leap years, an average of 668.592 sols, against 668.59 for the real Martian year from one northern spring equinox to the next.</p>
+      <h3>The names</h3>
+      <p>The names are Greco-Latin, so they read the same in any language written in the Latin script. As in the French Republican calendar, each season's months share an ending: <i>-ary</i> in Autumn, <i>-ose</i> in Winter, <i>-al</i> in Spring, <i>-or</i> in Summer and <i>-ival</i> in Estia. Each root describes its month's weather or sky.</p>
       <div class="tablewrap">
         <table class="cal">
           <thead><tr><th>Month</th><th>Sols</th><th>Days</th><th>From L<sub>s</sub></th><th>Name from</th><th>Weather in the band</th></tr></thead>
@@ -562,14 +672,272 @@ footer { max-width: 1180px; margin: 30px auto 0; padding-top: 18px; border-top: 
           </tbody>
         </table>
       </div>
-      <p>Band temperatures are the month's land average between 45°S and 45°N at sea-level equivalent; N and S are the northern and southern halves. The names are Greco-Latin, so they read the same in any language that uses the Latin script.</p>
-      <p class="note"><span class="tag">In the simulator</span>The date dials show the months on an outer ring, with dots at the festival sols, and the five seasons inside it, with squares at the solstices and equinoxes and dots at perihelion and aphelion. Buttons under each dial choose how the centre gives the date: month and day, the sol of the year, L<sub>s</sub>, or any mix. The charts still count sols from the northern winter solstice, where the model's year starts.</p>
+      <p>Band temperatures are the month's land average between 45°S and 45°N at sea-level equivalent; "the north" and "the south" are the band's northern and southern halves.</p>
+      <p class="note"><span class="tag">In the simulator</span>The date dials show the months on an outer ring, with dots at the festival sols, and the five seasons inside it. Buttons under each dial choose how the date is given: month and day, the sol of the year, L<sub>s</sub>, or any mix. The charts still count sols from the northern winter solstice, where the model's year starts (section 14).</p>
     </section>
 
-    <section id="quirks">
-      <h2>Martian quirks</h2>
-      <p>Mars looks Earth-like at first glance: a day of almost 24 hours and a similar tilt. The differences behind that resemblance shape every part of the project.</p>
+    <section id="build">
+      <h2><span class="sn">13</span>Building the mirrors</h2>
+      <p>The simulator treats each array as a light source with a set strength and shape. Building one is a different matter. These are order-of-magnitude estimates, outside the simulator:</p>
+      <ul>
+        <li><b>Size.</b> A mirror cannot be brighter than the Sun it reflects. To deliver 1.17 times the Sun's light, the L5 array has to fill at least 1.17 times the Sun's apparent area in Mars's sky. L5 is as far from Mars as the Sun is, so the array must be roughly as large as the Sun itself: at least 1.5 million km across, a reflecting area of about 2 × 10<sup>12</sup> km² tilted 30° to the sunlight, and more to shape the beam. L4, which concentrates its light on the caps, is of the same order.</li>
+        <li><b>Mass.</b> Reflective film weighing a few grams per square metre adds up to about 10<sup>16</sup> kg, the material of an asteroid 20–30 km across.</li>
+        <li><b>Aiming.</b> From 228 million km away, even a perfect mirror spreads the Sun's image into a patch of light about 1.4 million km wide, 200 times wider than Mars, so almost all of each facet's light misses. To shape the light, each facet is aimed so the sharp edge of its sun-image falls across Mars, lighting the planet on one side of a line and not the other. Many facets with their edges at different latitudes build up any profile, the lens of L5 or the caps of L4.</li>
+        <li><b>Light pressure.</b> Sunlight pushes on a mirror. For film of 3 g/m² the push is about 40% of the Sun's pull, so the arrays would sit somewhat off the classical L4 and L5 points and need constant steering, unless the film is heavier: at about 25 g/m² the push drops under 5%.</li>
+      </ul>
+    </section>
 
+    <!-- ===================================================== PART II ===================================================== -->
+    <div class="part" id="how">
+      <p class="part-n">Part II</p>
+      <h2 class="part-t">How the model works</h2>
+      <p class="part-l">The simulator computes its world in five stages, each feeding the next. Every model was first built and tested on Earth, with Earth's radius, spin, gravity, air and terrain, and then run with Mars's numbers. This part goes through the stages in order, with their equations and constants.</p>
+    </div>
+    <figure class="pipefig">
+      <div class="frame"><svg viewBox="0 0 760 330" role="img" aria-labelledby="figPipeT" class="pipe"><title id="figPipeT">How the model fits together: orbit, sunlight, temperature, winds and rain, lakes and rivers, with the lakes feeding back</title><defs><marker id="pArr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="p-arrhead"/></marker></defs><rect class="p-box" x="0" y="150" width="132" height="92" rx="8"/><text class="p-t" x="66.0" y="174" text-anchor="middle">1 · Orbit and time</text><text class="p-s" x="66.0" y="195.0" text-anchor="middle">Kepler orbit, Ls,</text><text class="p-s" x="66.0" y="210.0" text-anchor="middle">sols, solar time</text><line class="p-arr" x1="135" y1="196.0" x2="154" y2="196.0" marker-end="url(#pArr)"/><rect class="p-box" x="157" y="150" width="132" height="92" rx="8"/><text class="p-t" x="223.0" y="174" text-anchor="middle">2 · Sunlight</text><text class="p-s" x="223.0" y="195.0" text-anchor="middle">three suns by</text><text class="p-s" x="223.0" y="210.0" text-anchor="middle">latitude and sol;</text><text class="p-s" x="223.0" y="225.0" text-anchor="middle">daylight, peak, UV</text><line class="p-arr" x1="292" y1="196.0" x2="311" y2="196.0" marker-end="url(#pArr)"/><rect class="p-box p-key" x="314" y="150" width="132" height="92" rx="8"/><text class="p-t" x="380.0" y="174" text-anchor="middle">3 · Temperature</text><text class="p-s" x="380.0" y="195.0" text-anchor="middle">energy balance on</text><text class="p-s" x="380.0" y="210.0" text-anchor="middle">a 4° × 6° grid; day</text><text class="p-s" x="380.0" y="225.0" text-anchor="middle">and night; height</text><line class="p-arr" x1="449" y1="196.0" x2="468" y2="196.0" marker-end="url(#pArr)"/><rect class="p-box p-key" x="471" y="150" width="132" height="92" rx="8"/><text class="p-t" x="537.0" y="174" text-anchor="middle">4 · Winds and rain</text><text class="p-s" x="537.0" y="195.0" text-anchor="middle">winds from the</text><text class="p-s" x="537.0" y="210.0" text-anchor="middle">temperatures; a</text><text class="p-s" x="537.0" y="225.0" text-anchor="middle">moisture budget, 2°</text><line class="p-arr" x1="606" y1="196.0" x2="625" y2="196.0" marker-end="url(#pArr)"/><rect class="p-box" x="628" y="150" width="132" height="92" rx="8"/><text class="p-t" x="694.0" y="174" text-anchor="middle">5 · Lakes, rivers</text><text class="p-s" x="694.0" y="195.0" text-anchor="middle">each lake’s water</text><text class="p-s" x="694.0" y="210.0" text-anchor="middle">balance; spills;</text><text class="p-s" x="694.0" y="225.0" text-anchor="middle">runoff routed</text><rect class="p-in" x="30" y="40" width="259" height="46" rx="6"/><text class="p-t" x="159.5" y="59" text-anchor="middle">Sky</text><text class="p-s" x="159.5" y="76" text-anchor="middle">L5 lens, L4 caps, UV-free</text><line class="p-feed" x1="159.5" y1="86" x2="223.0" y2="147" marker-end="url(#pArr)"/><rect class="p-in" x="314" y="40" width="132" height="46" rx="6"/><text class="p-t" x="380.0" y="59" text-anchor="middle">Air</text><text class="p-s" x="380.0" y="76" text-anchor="middle">1.05 atm, 6 K/km</text><line class="p-feed" x1="366.0" y1="86" x2="392.0" y2="147" marker-end="url(#pArr)"/><line class="p-feed" x1="394.0" y1="86" x2="549.0" y2="147" marker-end="url(#pArr)"/><rect class="p-in" x="485" y="40" width="275" height="46" rx="6"/><text class="p-t" x="622.5" y="59" text-anchor="middle">Land and water</text><text class="p-s" x="622.5" y="76" text-anchor="middle">MOLA relief, sea level, lakes</text><line class="p-feed" x1="594.5" y1="86" x2="368.0" y2="147" marker-end="url(#pArr)"/><line class="p-feed" x1="622.5" y1="86" x2="525.0" y2="147" marker-end="url(#pArr)"/><line class="p-feed" x1="650.5" y1="86" x2="706.0" y2="147" marker-end="url(#pArr)"/><path class="p-loop" d="M694.0,245 C694.0,294 380.0,294 380.0,247" marker-end="url(#pArr)"/><text class="p-note" x="537.0" y="300.0" text-anchor="middle">the lakes change the temperatures and the rain,</text><text class="p-note" x="537.0" y="315.0" text-anchor="middle">so the loop is repeated until the lake area settles</text></svg></div>
+      <figcaption>The model's stages. Dashed arrows: settings that feed each stage. The lakes change the temperatures and the rain, and the rain changes the lakes, so that loop is repeated until it settles.</figcaption>
+    </figure>
+
+    <section id="orbit">
+      <h2><span class="sn">14</span>Orbit and time</h2>
+      <p>Mars follows a Keplerian orbit: eccentricity e = 0.0934, semi-major axis a = 1.5237 AU, perihelion at L<sub>s</sub> 250.9°, tilt 25.19°. A year is 686.98 Earth days, or 668.6 sols of 88,775 s (24 h 39 m 35 s). The simulator's clocks use Mars hours, a 24th of a sol (1.0275 Earth hours).</p>
+      <p>For a time <i>t</i> in sols the position comes from Kepler's equation, solved by Newton's method:</p>
+      <span class="formula">M = M₀ + 2π t / 668.6<br>E − e sin E = M<br>ν = 2 atan[√((1 + e)/(1 − e)) tan(E/2)]<br>L<sub>s</sub> = ν + 250.9°,   r = a (1 − e cos E)</span>
+      <p>The Sun's declination, the latitude where it stands overhead at noon, is δ = asin(sin 25.19° · sin L<sub>s</sub>). Its light above the air is 1,361 W/m² divided by r² (r in AU): 713 W/m² at perihelion, 490 at aphelion.</p>
+      <ul>
+        <li><b>Two ways of counting.</b> The model's clock, and the charts, count sols from the northern winter solstice (L<sub>s</sub> 270°). The calendar counts from New Year at L<sub>s</sub> 0°, sol 1 being Novary 1; the winter solstice then falls on Fervidor 4, sol 515.</li>
+        <li><b>Clock time.</b> Times of day are local true solar time: 12:00 is when the Sun crosses the meridian. Because of the eccentric orbit, a sundial and a steady clock disagree by up to −51 to +40 minutes over the year. The <b>Today</b> button finds today's L<sub>s</sub> with the formula of Allison &amp; McEwen (2000).</li>
+        <li><b>The circular reference.</b> Each chart can also show a planet on a circular orbit with the same tilt and the same starting solstice: its distance stays at 1.5237 AU and L<sub>s</sub> advances at a steady rate, so its four seasons last 167.1 sols each, against 193, 179, 143 and 154 for the real ones.</li>
+      </ul>
+    </section>
+
+    <section id="insolation">
+      <h2><span class="sn">15</span>Sunlight and daylight</h2>
+      <p>Insolation is measured at the top of the air, on level ground. For one source with declination δ, a place at latitude φ gets on average over the sol</p>
+      <span class="formula">Q = (S / π) · (H₀ sin φ sin δ + cos φ cos δ sin H₀)<br>cos H₀ = −tan φ tan δ</span>
+      <p>where S is the source's light at Mars and H₀ the hour angle of sunset (0 in polar night, π in polar day). Each mirror array is treated as a second source of the same kind:</p>
+      <ul>
+        <li><b>Its own declination.</b> Seen from Mars, L4 stands 60° behind the Sun along the ecliptic and L5 60° ahead, so their declinations are asin(sin 25.19° · sin(L<sub>s</sub> ∓ 60°)). In northern spring, for instance, L4 lights the planet as the Sun would in the southern summer and L5 as in the northern summer.</li>
+        <li><b>Its own hour.</b> Each crosses the meridian about 4 Mars hours before (L4) or after (L5) the Sun, a little more or less with the season, because the ecliptic is tilted against the equator.</li>
+        <li><b>Its own strength and shape.</b> S is the stated multiple of sunlight, times the shaping profile of section 16.</li>
+      </ul>
+      <p><b>Daylight</b> runs from the moment the first sun's centre rises above a flat horizon to the moment the last one sets, merging the arcs of all the suns whose light reaches the place: L4 adds no daylight between its two edges. Refraction and terrain are ignored. The <b>peak</b> is the brightest moment of the sol, adding all the suns. The <b>seasonal ratio</b> divides each sol's light by the dimmest sol of the year at the same latitude.</p>
+      <p>Earth comparison lines on the charts are typical Earth values for the same measure: daily means of 100 and 500 W/m² for mid-latitude winter and summer and 250 and 450 in the tropics; noon peaks of 350 and 1,300 W/m² for mid-latitude winter and summer, 700 for tropical winter and 1,000 at the equator.</p>
+    </section>
+
+    <section id="shaping">
+      <h2><span class="sn">16</span>Shaping the mirror light</h2>
+      <h3>The lens of L5</h3>
+      <p>Across the disc of Mars it lights, the array's beam goes as</p>
+      <span class="formula">f(a) = 1 − k cos 2(a − p)<br>f(a) = 1 + k once |a − p| passes 90°</span>
+      <p>where <i>a</i> is the angle from the lit disc's east–west centre line. On the ground that centre line is a great circle through the point under the array, tilted with the array's declination, so <i>a</i> equals the real latitude when the array is over the equator. The profile is divided by its average over the disc, N(k, p) = ∫ f(a) cos²a da / (π/2) over −90° to 90° (computed exactly), so the array always delivers its stated average. Without a phase the average is 1 − k/2, and k = 1 would leave the centre line dark with the north and south edges at 4 times the average.</p>
+      <p>The phase and the depth can follow the seasons:</p>
+      <span class="formula">p(L<sub>s</sub>) = bias + A sin(L<sub>s</sub> − shift) + A₂ sin 2(L<sub>s</sub> − s₂)<br>k(L<sub>s</sub>) = k + a sin(L<sub>s</sub> − s)</span>
+      <p>The three-sun defaults are bias 7°, A = 27.5°, shift 8°, A₂ = 12°, s₂ = 54°, k = 0.85 with no swing; the two-sun defaults are k = 1 swinging by ±0.2, with the dimmest line swinging ±27.5° (plus ±6.5° twice a year) around 11.5°N.</p>
+      <h3>The caps of L4</h3>
+      <ul>
+        <li><b>Where.</b> Only poleward of a north edge and a south edge, neither ever closer to the equator than 45°. At each edge the light rises from zero over a soft ramp (a smoothstep 9° wide).</li>
+        <li><b>Leaning.</b> Inside each cap the light follows the array's own unshaped pattern, tilted toward the edge or the pole by the pole lean g: at g = −0.9 the pole gets a tenth of what the edge gets.</li>
+        <li><b>Through the year.</b> The two edges, the share sent north and the strength are set at L<sub>s</sub> 0°, 90°, 180° and 270° and joined by a smooth periodic curve (a Catmull–Rom spline).</li>
+        <li><b>Limits.</b> Each cap receives its share of the array's light, but no latitude more than 10 times what the array would give it unshaped; what one cap cannot take goes to the other.</li>
+      </ul>
+    </section>
+
+    <section id="spectrum">
+      <h2><span class="sn">17</span>Wavelengths and the UV index</h2>
+      <p>Of sunlight above the air, 8.0% lies below 400 nm (ultraviolet: 0.5% UV-C, 1.3% UV-B, 6.3% UV-A), 39.0% between 400 and 700 nm (visible) and 53.0% above 700 nm, from the ASTM E-490/G-173 extraterrestrial spectrum. UV-free mirrors reflect none of the first part and 1.087 times as much of the rest, so 42.4% of their light is visible.</p>
+      <p>The UV index is the clear-sky value at the ground, from Madronich's formula for Earth's air at 1 AU:</p>
+      <span class="formula">UVI = 12.5 · μ<sup>2.42</sup> · (Ω / 300 DU)<sup>−1.23</sup><br>      · (1 / r²) · m<sup>−0.6</sup></span>
+      <p>with μ the cosine of the Sun's zenith angle and Ω the ozone column, taken as Earth's 300 DU. The last two factors are added for Mars: the Sun's distance, and m, the air column relative to Earth's at sea level. The exponent −0.6 reproduces the 6–8% rise of the UV index per km of height measured on Earth. At 1.05 atm, m = 2.77, which alone lowers the index to 0.54 times; on the map it rises about 7% per Earth-equivalent km. Clouds are left out.</p>
+      <p>The climate effect of UV-free mirrors comes from a simple column model: Earth's ozone layer, Rayleigh scattering for the air column, grey clouds and ground, and a colder stratosphere sending part of its lost heating less back down. It puts the warming at that of 2.0% more mirror light at 1.05 atm (uncertain by about ±0.65%), and the temperature and rain models take it as that.</p>
+    </section>
+
+    <section id="temperature">
+      <h2><span class="sn">18</span>Temperature: the energy balance</h2>
+      <p>The temperatures come from a seasonal energy-balance model of the kind climate scientists use for first estimates (Budyko–Sellers type, after North &amp; Coakley 1979). In its simplest form each 2° latitude band has a land box and a sea box, each obeying</p>
+      <span class="formula">C · dT/dt = (1 − α) Q − (A + B T)<br>          + transport + land–sea exchange</span>
+      <ul>
+        <li><b>Sunlight absorbed</b>, (1 − α) Q, with Earth's cloud albedo but no snow or sea ice: a top-of-atmosphere albedo of 0.24–0.27 in the tropics, rising only to about 0.44 toward the poles, like Earth's ice-free Southern Ocean (Earth's poles reach 0.65).</li>
+        <li><b>Heat radiated to space</b>, A + B T = 203.3 + 2.09 · T W/m² with T in °C, Earth's fit to satellite measurements, which includes Earth's greenhouse effect.</li>
+        <li><b>Heat stored</b>, C: on Earth 1.0 × 10<sup>7</sup> J/m²/K for land and air and 1.0 × 10<sup>8</sup> for a 24 m ocean mixed layer.</li>
+        <li><b>Heat moved</b>: 2.0 W/m²/K between land and sea, and poleward by diffusion at 0.649 W/m²/K.</li>
+      </ul>
+      <p>The heat capacities and exchanges were fitted to Earth's seasons with Earth's real albedo, ice included. On Earth's orbit the model gives a 15 °C global mean, 29 °C at the equator and −7 / 23 °C (January / July) on land at 45°N.</p>
+      <p><b>For Mars</b> three things change:</p>
+      <ul>
+        <li><b>Land heat capacity</b> is soil (3.0 × 10<sup>6</sup> J/m²/K on Earth, × 1.37 for the deeper layer that Mars's longer seasons reach) plus the air that takes part in the seasons (7.0 × 10<sup>6</sup> for Earth's air, scaled with the air above, so less over high ground). The ocean box gains the extra air too.</li>
+        <li><b>Heat transport</b> (diffusion, land–sea exchange and winds) scales with pressure × (Earth's spin rate / Mars's)², as in Williams &amp; Kasting (1997), which comes to about Earth's at 1 atm.</li>
+        <li><b>The greenhouse</b> is held at Earth's, assuming an air composition tuned to Earth-like warming.</li>
+      </ul>
+      <p>On Earth the formulas give back the calibrated model exactly. The year is periodic, so it is solved harmonic by harmonic (the yearly mean plus five harmonics), exact to well under 0.1 K. The <b>continental</b>, <b>mixed</b> and <b>maritime</b> settings make land 85%, 50% or 15% of every band; the default <b>dynamic</b> setting uses the map's own land and water instead (next section).</p>
+    </section>
+
+    <section id="dynamic">
+      <h2><span class="sn">19</span>The dynamic grid</h2>
+      <p>The dynamic setting runs the same energy balance on a 4° × 6° latitude–longitude grid with the map's own ocean, seas and lakes:</p>
+      <ul>
+        <li>Each cell's heat capacity mixes its water and land shares.</li>
+        <li>Heat diffuses north–south as in the zonal model, and along latitude circles at a tenth of that.</li>
+        <li>Earth-like prevailing low-level winds carry heat east or west: trade winds to 30°, westerlies from 30° to 60°, weak polar easterlies.</li>
+      </ul>
+      <p>The wind strength and the east–west mixing were fitted on Earth's land and sea to the January–July temperature range of 23 mid-latitude cities: within 4.3 K RMS (r = 0.89), against 6.8 K with diffusion alone. Cities next to Earth's winter sea ice, like Yakutsk and Fairbanks, are far more extreme than the model, which has no ice. Ocean currents are not modelled as such: the poleward heat transport fitted on Earth includes the oceans' share on average, spread smoothly over land and sea, without gyres, warm boundary currents, upwelling or deep circulation.</p>
+    </section>
+
+    <section id="height">
+      <h2><span class="sn">20</span>Height and water temperatures</h2>
+      <ul>
+        <li><b>Land.</b> Each map pixel takes its cell's sea-level temperature and cools it by the lapse rate times its height above sea level, in Earth-equivalent km (section 09).</li>
+        <li><b>Earth-equivalent km</b> multiply Mars heights by g<sub>Mars</sub>/g<sub>Earth</sub> = 0.38. With the same air, pressure falls that much more slowly with height on Mars, so Olympus Mons, about 24 km above the sea, thins the air like a 9.2 km climb on Earth.</li>
+        <li><b>Water.</b> The ocean takes its cell's sea-level temperature. A lake's is moved by the lapse rate to the lake's own surface height, so it is cooler than the open ocean by about 2.3 K for each km its surface stands above sea level: Hellas at its brim, 4.4 km up, by about 10 K. The grid has one value per cell for land and water together, so coastal water carries some of the land's seasons.</li>
+        <li><b>Extremes.</b> The 10th warmest and 10th coldest sol are each place's temperature on the 10th warmest (coldest) sol of its year: a hot or cold spell that comes round every year rather than a one-off extreme.</li>
+        <li><b>Temperature by latitude.</b> The panel reads each 2° band's land cell by cell, each patch cooled by its own height, and leaves out the ocean, the lakes and ground above a cut-off (3 Earth-equivalent km by default). Summaries weight each band by its counted land.</li>
+      </ul>
+    </section>
+
+    <section id="daynight">
+      <h2><span class="sn">21</span>Day and night</h2>
+      <p>The energy balance gives each sol's average. The rise to the afternoon high and the fall to the dawn low come from a linear balance for the ground and the air near it:</p>
+      <span class="formula">C · dT′/dt = η F(t) − λ T′</span>
+      <p>driven by the light of all the suns over the sol, F(t), and solved harmonic by harmonic over the sol. It was fitted to typical daily ranges on Earth's land: desert summer 16 K, continental mid-latitude summer 13 K and winter 9 K, humid tropics 9.5 K, maritime summer 8 K and winter 5.5 K, with the high near 14:30. The fit gives η = 0.59 of the light warming the ground, C = 5.2 × 10<sup>5</sup> J/m²/K (the soil and the air mixed by day), λ = 49 W/m²/K in dry country and 115 in moist country, and 6.0 K from passing weather added in quadrature, all within about 1 K of those ranges.</p>
+      <ul>
+        <li><b>For Mars</b>, the sol is 2.7% longer, and the range scales with the air column overhead as m<sup>−0.4</sup>. That exponent gives both the wider ranges of Earth's high plateaus and the 50–70 K range of today's thin Martian air. At 1.05 atm the range is 0.67 times Earth's for the same sunlight and humidity.</li>
+        <li><b>Moist</b> means near water (the share of ocean, seas and lakes in a 4° × 6° cell and its neighbours, full at 35%) or, once the rain is known, rain close to the potential evaporation (full at P/E<sub>p</sub> = 1, none below 0.3). Water surfaces swing 6% as much as moist land.</li>
+        <li><b>Three suns</b> spread the light over a longer day, since the morning sun rises before the Sun and the evening sun sets after it, so the range is mostly 4–7 K at the defaults.</li>
+      </ul>
+    </section>
+
+    <section id="rain">
+      <h2><span class="sn">22</span>Winds and rain</h2>
+      <p>Rain comes from a seasonal moisture budget on a 2° grid: water vapour is evaporated, carried by the winds, held back by terrain and rained out. Each of 12 slices of the year is solved as a steady state, twice: the second time with the soil water the first pass leaves. It runs in the background, in about 15 seconds; the default skies' rain is stored in the page.</p>
+      <h3>Water vapour</h3>
+      <p>Each column holds water vapour up to a saturation amount of ρ<sub>v,sat</sub> · R<sub>v</sub>T² / (LΓ) per metre, which is about 2.6 times Earth's at the same temperature because Mars's air column is deeper. The vapour is carried by low-level, moisture-weighted winds and mixed by eddies.</p>
+      <h3>Winds</h3>
+      <ul>
+        <li><b>The Hadley cells.</b> Near the surface the air flows toward the latitudes of highest moist static energy: warm, moist air means low surface pressure, and friction and the Coriolis force turn the flow, as in Lindzen and Nigam's tropical boundary-layer model applied to the zonal mean. So the rising branch sits wherever that energy peaks (on Earth over the warmest seas rather than the hottest deserts), even near a pole, and the cells cross the equator into the summer hemisphere. Flow toward the equator turns into trade winds, flow toward a pole into westerlies.</li>
+        <li><b>Their reach.</b> Each cell extends as far as the eddy-regime scaling allows, with the thermal Rossby number to the ¼ power: about 1.4 times Earth's width on Mars.</li>
+        <li><b>Beyond them</b> come eddy-driven westerlies, the Ferrel cell and stronger eddy mixing, growing with the temperature gradient; monsoon flow follows the land–sea temperature contrasts.</li>
+      </ul>
+      <h3>Terrain</h3>
+      <p>Across each step in surface height, only the vapour above the higher ground is exchanged, less the height the wind can lift air by (wind speed ÷ buoyancy frequency, after Sheppard). So moist low air rains out on the windward side and high plateaus stay dry.</p>
+      <h3>When it rains</h3>
+      <p>Rain falls once the column passes 50% of saturation, on a 4.7-day timescale; more where the low-level flow converges (rising air) and much less where it diverges (sinking air, as over Earth's subtropical deserts). Storm tracks add rain where it cools poleward, and air blown up slopes condenses.</p>
+      <h3>Evaporation</h3>
+      <p>The ocean and lakes evaporate by a bulk formula capped by the year's mean net radiation (water stores heat), and not at all while frozen. Land evaporates at a Priestley–Taylor rate, its yearly share set by the Budyko curve in Fu's form (w = 2.6, the global calibration on river runoff of Zhang et al. 2004) from the year's rain and demand. A chosen date interpolates between the slices.</p>
+      <figure>
+        <img src="img/guide-rain.webp" width="1446" height="724" alt="Map of yearly rain on the three-sun Mars, with rain lines and rivers" loading="lazy">
+        <figcaption>Yearly rain with three suns and the rivers it feeds. Colours double with each step: yellow 300 mm, green 600 mm, cyan 1.2 m, purple 2.4 m. Rain lines every 100 mm, every 200 mm from 600 mm and every 400 mm from 2.4 m; the thick line marks 300 mm, roughly the edge of dry country.</figcaption>
+      </figure>
+    </section>
+
+    <section id="earthtest">
+      <h2><span class="sn">23</span>Tested on Earth</h2>
+      <p>The rain model was run with Earth's radius, rotation, gravity and topography (ETOPO, 20′). Its constants were fitted with Earth's observed temperatures, winds, vertical motion and sea temperatures (NCEP and OISST long-term means) against observed rain (GPCP) and the natural sizes of Earth's closed-basin lakes; the circulation part was fitted separately to the observed low-level winds and their convergence.</p>
+      <ul>
+        <li><b>With observed temperatures and winds</b>, rain over land correlates 0.85 with the observed, typically within a factor of 1.6, and the global total is 1,020 mm a year against 983.</li>
+        <li><b>Run as it runs for Mars</b>, from the energy-balance temperatures and its own winds, it does worse: correlation 0.63, typically within a factor of 2.1, 870 mm a year globally.</li>
+      </ul>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Region (mm a year)</th><th>Model</th><th>Observed</th><th>Region (mm a year)</th><th>Model</th><th>Observed</th></tr></thead>
+          <tbody>
+            <tr><th>Western Europe</th><td class="n">980</td><td class="n">~1,010</td><th>India</th><td class="n">290</td><td class="n">1,120</td></tr>
+            <tr><th>Sahara</th><td class="n">100</td><td class="n">100</td><th>Eastern China</th><td class="n">260</td><td class="n">1,340</td></tr>
+            <tr><th>Congo</th><td class="n">1,480</td><td class="n">1,700</td><th>Eastern US</th><td class="n">450</td><td class="n">1,320</td></tr>
+            <tr><th>Amazon</th><td class="n">1,670</td><td class="n">2,490</td><th>Arabia</th><td class="n">380</td><td class="n">120</td></tr>
+            <tr><th>Tibet</th><td class="n">240</td><td class="n">430</td><th></th><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>The summer monsoons come out far too weak, and Arabia too wet. The model also fills Earth's large closed basins too much: the Caspian, Aral, Balkhash and Tarim basins and the Makgadikgadi pans all come out full, whereas in reality the Caspian covers 371 thousand km², the Aral covered 68 thousand before 1960, and the others are small or dry. Lake Chad comes out about right (28 thousand km² against 20).</p>
+      <p>What that means for Mars: rain on the southern highlands, which depends on monsoon air from the northern ocean, is probably underestimated, and full seas in Hellas and Argyre are the wet end of what is possible. Mars also runs in a regime Earth cannot test directly: in neither default sky are the tropics the warmest latitudes for most of the year, so the air rises at high latitudes and the tropics get their rain from cells crossing the equator rather than from an Earth-like rain belt.</p>
+    </section>
+
+    <section id="lakes">
+      <h2><span class="sn">24</span>Lakes</h2>
+      <ul>
+        <li><b>Finding the basins.</b> A priority flood from the ocean (8-connected, wrapping round in longitude) finds every closed depression, the height of its brim and the drainage tree that links it to the next basin or the sea. A basin with several pits under one rim is one lake.</li>
+        <li><b>Hellas and Argyre</b> lie below sea level but are walled off, so by default they are closed seas with their own surfaces.</li>
+        <li><b>The balance.</b> Each lake rises until evaporation from its surface equals what comes in: the runoff from its catchment (rain minus land evaporation), the rain on it and the overflow from the basins upstream, all yearly means from the rain model. Basins are solved from the top of each drainage tree down, so each knows its upstream overflow before its own level is found.</li>
+        <li><b>Spilling.</b> A basin that fills spills through its lowest outlet into the next basin or the sea.</li>
+        <li><b>Feedback.</b> The lakes change the rain and the temperatures in turn, so after a change of sky the balance is repeated, up to three times, until the lake area settles. For the default three-sun and two-sun skies the result is stored.</li>
+      </ul>
+      <p>With the default sky the balance fills Hellas and Argyre to their brims, from a dry start as well. At 35–55°S open water gets about as much rain as it evaporates, as Earth's oceans do at those latitudes. <b>Same fill everywhere</b> replaces the balance with one share of each basin's depth, and sets Hellas and Argyre by hand.</p>
+    </section>
+
+    <section id="rivers">
+      <h2><span class="sn">25</span>Rivers</h2>
+      <p>The yearly runoff from the rain model (rain minus land evaporation; on lakes, rain minus lake evaporation) is routed downhill along the steepest descent. Each lake gathers its inflow and passes water on through its outlet only if it is full; past the outlet the water follows the first ground that drains away from the lake.</p>
+      <p>Flows above about 25 m³/s, a sizeable river, are drawn, far wider than real so they show at the scale of a planet. Where a river runs into a lake that spills, it carries on across the lake as a straight line from where it enters to the spill point and then along the overflow, so a chain of lakes reads as one river. That is drawn for the main inflows (at least 30% of what leaves the lake) where the line stays on the water, and not across Hellas, Argyre or the largest lakes; smaller streams end at the shore.</p>
+    </section>
+
+    <section id="seasonfit">
+      <h2><span class="sn">26</span>Finding the seasons</h2>
+      <p>The five seasons of section 11 come from a fit, not a guess:</p>
+      <ul>
+        <li><b>What is compared.</b> For every land cell of the 4° × 6° grid between 45°S and 45°N, its temperature on each sol of the model's year minus its yearly mean, weighted by its land area. For the version with rain, each 2° land cell's rain through the year is added the same way, scaled so the rain carries as much total variation as the temperature.</li>
+        <li><b>The score.</b> A set of seasons replaces each sol's pattern with the average pattern of its season. The score is the share of all the sol-to-sol variation that those averages reproduce (the R² of the fit): 100% would mean every sol of a season looks the same.</li>
+        <li><b>The search.</b> For each number of equal seasons, every possible start sol is tried and the best kept.</li>
+      </ul>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Seasons</th><th>Sols each</th><th>Band temperature</th><th>Band temperature and rain</th><th>All land temperature</th></tr></thead>
+          <tbody>
+            <tr><th>2</th><td class="n">334</td><td class="n">49%</td><td class="n">43%</td><td class="n">60%</td></tr>
+            <tr><th>3</th><td class="n">223</td><td class="n">68%</td><td class="n">60%</td><td class="n">67%</td></tr>
+            <tr><th>4</th><td class="n">167</td><td class="n">74%</td><td class="n">68%</td><td class="n">74%</td></tr>
+            <tr><th>5</th><td class="n">134</td><td class="n">80%</td><td class="n">76%</td><td class="n">81%</td></tr>
+            <tr><th>6</th><td class="n">111</td><td class="n">83%</td><td class="n">80%</td><td class="n">86%</td></tr>
+            <tr><th>7</th><td class="n">95</td><td class="n">86%</td><td class="n">82%</td><td class="n">89%</td></tr>
+            <tr><th>The calendar's five</th><td class="n">127–138</td><td class="n">80%</td><td class="n">77%</td><td class="n">81%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>The four astronomical seasons score 62% on band temperature. For five seasons all three versions agree on the boundaries within about 2°: L<sub>s</sub> 7–9°, 69–71°, 131–133°, 206–208° and 292–294°. Six seasons capture a little more, but their extra boundary falls in the long, quiet stretch of Autumn and Winter, splitting off the far south's deepest winter from weeks the populated band can barely tell apart. Starting the calendar at L<sub>s</sub> 0° and giving the two seasons near perihelion fewer sols keeps the score about the same: slightly higher for the band, slightly lower over all land.</p>
+    </section>
+
+    <section id="map">
+      <h2><span class="sn">27</span>The map, the globe, lines and colours</h2>
+      <ul>
+        <li><b>Relief.</b> Mars Global Surveyor's MOLA gridded topography (MEGDR) at 4 pixels per degree, about 15 km at the equator, stored to the nearest 5 m against the MOLA areoid, in an equirectangular projection that wraps round east–west.</li>
+        <li><b>Sea level</b> is set by the share of the surface (by area) that lies below it: at 26% it stands 3.12 km below the datum.</li>
+        <li><b>The globe</b> wraps the same map, with its layers, lines, rivers, grid and sites, on a sphere (WebGL). Its relief is the height of the ground or, where there is water, of the flat water surface, exaggerated ten times by default: at true scale Olympus Mons rises only 0.7% of Mars's radius.</li>
+      </ul>
+      <h3>Colour scales</h3>
+      <ul>
+        <li><b>Temperature</b> is pinned to fixed temperatures from −60 to 60 °C and spends most of its colour on 0–35 °C, where people live: dark capri just above 0 °C, bright green at 10 °C, yellow at 20, orange at 30 and pure red at 35, then darker, ashier reds to 60. At 0 °C the colour flips to a light azure, which turns bluer and darker as it gets colder, so freezing stands out at a glance. The legend gives 0–35 °C two-thirds of its width.</li>
+        <li><b>Rain</b> doubles with each colour: 300 mm a year yellow, 600 mm green, 1.2 m cyan, 2.4 m purple, 4.8 m magenta.</li>
+        <li><b>Insolation</b> uses a fixed scale by default, or stretches between the lowest and highest values on land.</li>
+      </ul>
+      <h3>Lines</h3>
+      <ul>
+        <li><b>Isotherms</b> every 1–30 °C, counted from 0 °C, which is drawn thick.</li>
+        <li><b>Rain lines</b> every 10 mm to 1 m a year up to the first line at or above 600 mm, then twice that gap up to the first line at or above 2.4 m, then four times it: every 100 mm, for instance, becomes every 200 mm from 600 mm and every 400 mm from 2.4 m. The 300 mm line, roughly the edge of dry country, is always drawn thick.</li>
+        <li><b>Insolation lines</b> every 100 W/m² (thick at 100 and 500); visible light every 50 W/m²; the peak UV index every whole number, thick at the WHO category boundaries 3, 6, 8 and 11.</li>
+        <li><b>Height and depth lines</b> every 0.1–5 km in the chosen units, every fifth thicker.</li>
+        <li><b>Thickness.</b> One slider scales all of these lines (×0.25 to ×3), another the coastlines drawn when water is coloured too (off to ×3). <b>Solid colour between lines</b> fills each band between two neighbouring lines with the colour of its middle value.</li>
+        <li><b>While the year plays</b> or a dial is dragged, the map shows a half-resolution preview and its lines are traced from it about eight times a second; labels return once it settles.</li>
+      </ul>
+    </section>
+
+    <section id="limits">
+      <h2><span class="sn">28</span>What is left out</h2>
+      <ul>
+        <li><b>Ocean currents.</b> The heat the oceans carry poleward is included on average, spread evenly over land and sea, but there are no gyres, warm boundary currents like the Gulf Stream, upwelling or deep circulation.</li>
+        <li><b>Snow, sea ice and changing clouds</b>, and the feedbacks they bring.</li>
+        <li><b>Mountains blocking heat transport.</b> Rain does see terrain; temperatures only through height.</li>
+        <li><b>Dust, soils and vegetation.</b></li>
+        <li><b>Slopes and the atmosphere in the insolation layer</b>, which shows flat ground at the top of the air.</li>
+        <li><b>Time.</b> How the planet got here, and how long its air and water would last, are outside the model.</li>
+      </ul>
+    </section>
+
+    <!-- ===================================================== PART III ===================================================== -->
+    <div class="part" id="quirks">
+      <p class="part-n">Part III</p>
+      <h2 class="part-t">Martian quirks</h2>
+      <p class="part-l">Mars looks Earth-like at first glance: a day of almost 24 hours and a similar tilt. The differences behind that resemblance shape every part of the project.</p>
+    </div>
+    <section class="quirksec">
       <div class="qgroup">
         <h4>Orbit and calendar</h4>
         <figure>
@@ -578,14 +946,13 @@ footer { max-width: 1180px; margin: 30px auto 0; padding-top: 18px; border-top: 
         </figure>
         <div class="quirks">
           <article class="quirk"><p class="fig">490–713 W/m²</p><h3>A lopsided orbit</h3><p>Mars's distance from the Sun runs from 1.38 to 1.67 AU, so its sunlight swings by 45% over the year; Earth's swings by 7%. Because the mirrors share Mars's distance from the Sun, their light swings with it.</p></article>
-          <article class="quirk"><p class="fig">193 · 179 · 143 · 154 sols</p><h3>Unequal seasons</h3><p>Northern spring, summer, autumn and winter. Perihelion comes at L<sub>s</sub> 251°, just before the northern winter solstice, so the southern summer is short and hot and the southern winter long and cold. The three-sun sky is built around it: L4 switches off at perihelion and sends its light south through the long southern winter. Its climate follows <a href="#seasons">five seasons</a> of equal length instead.</p></article>
+          <article class="quirk"><p class="fig">193 · 179 · 143 · 154 sols</p><h3>Unequal seasons</h3><p>Northern spring, summer, autumn and winter. Perihelion comes at L<sub>s</sub> 251°, just before the northern winter solstice, so the southern summer is short and hot and the southern winter long and cold. The three-sun sky is built around it: L4 switches off at perihelion and sends its light south through the long southern winter. Its climate follows <a href="#seasons">five seasons</a> of its own instead.</p></article>
           <article class="quirk"><p class="fig">L<sub>s</sub> 0°–360°</p><h3>A calendar by angle</h3><p>Mars's seasons are counted by the solar longitude, L<sub>s</sub>: the angle Mars has moved round the Sun since the northern spring equinox. L<sub>s</sub> 90° is the northern summer solstice, 180° the autumn equinox, 270° the winter solstice. Equal steps of L<sub>s</sub> take unequal time.</p></article>
           <article class="quirk"><p class="fig">24 h 39 m 35 s</p><h3>A slightly longer day</h3><p>A sol is 2.7% longer than an Earth day. The simulator's clocks use Mars hours, a 24th of a sol (1.0275 Earth hours), on local solar time, so 12:00 is when the Sun crosses the meridian.</p></article>
           <article class="quirk"><p class="fig">668.6 sols</p><h3>A long year</h3><p>A Martian year lasts 687 Earth days, 1.88 Earth years. Each season lasts about twice as long as on Earth, giving the ground more time to heat up and cool down, and the seasonal heat reaches deeper into the soil.</p></article>
           <article class="quirk"><p class="fig">−51 to +40 min</p><h3>Sundials and clocks disagree</h3><p>Because of the eccentric orbit, a Martian sundial runs up to about 50 minutes ahead of or behind a steady clock over the year. On Earth the difference is at most 16 minutes.</p></article>
         </div>
       </div>
-
       <div class="qgroup">
         <h4>The sky</h4>
         <div class="quirks">
@@ -596,7 +963,6 @@ footer { max-width: 1180px; margin: 30px auto 0; padding-top: 18px; border-top: 
           <article class="quirk"><p class="fig">25.19°</p><h3>A wandering tilt</h3><p>Mars's tilt is close to Earth's 23.44° today, but with no large moon to steady it, it has swung between about 15° and 45° over the last 10 million years. The sky is designed for today's tilt.</p></article>
         </div>
       </div>
-
       <div class="qgroup">
         <h4>Gravity and air</h4>
         <div class="quirks">
@@ -607,7 +973,6 @@ footer { max-width: 1180px; margin: 30px auto 0; padding-top: 18px; border-top: 
           <article class="quirk"><p class="fig">UV index 2.5–3.5</p><h3>A weak sunburn</h3><p>The fainter Sun, the heavy air column and UV-free mirrors keep the tropical noon UV index at sea level a quarter of Earth's. Sunscreen is optional; vitamin D comes slowly.</p></article>
         </div>
       </div>
-
       <div class="qgroup">
         <h4>Land and water</h4>
         <div class="quirks">
@@ -617,26 +982,30 @@ footer { max-width: 1180px; margin: 30px auto 0; padding-top: 18px; border-top: 
           <article class="quirk"><p class="fig">14% lakes</p><h3>A planet of lakes</h3><p>Besides Hellas and Argyre, crater lakes cover about 14% of Mars. Thousands of old impact craters become lakes, many spilling into the next.</p></article>
         </div>
       </div>
-
       <div class="qgroup">
         <h4>Weather and climate</h4>
         <div class="quirks">
           <article class="quirk"><p class="fig">1.4× wider</p><h3>Wider tropics</h3><p>The tropical circulation cells reach about 1.4 times as far from the equator as Earth's, by the scaling for how far they can extend, which depends on the planet's size, spin and temperature contrasts.</p></article>
           <article class="quirk"><p class="fig">26 °C at 80°N</p><h3>Warmest in the far north</h3><p>With three suns the land averages about 21–22 °C over the year (at sea level) from 60°S to 45°N, and the warmest land is the far north, around 26 °C beyond 60°N, where L4's light lands. The tropics are not the warmest latitudes, so they get their rain from circulation cells crossing the equator rather than from an Earth-like tropical rain belt.</p></article>
           <article class="quirk"><p class="fig">No ice caps</p><h3>Temperate poles</h3><p>With L4 lighting the caps, land north of 45°N never has a sol averaging below −20 °C and land south of 45°S has about one a year. Winter snow could still fall in places, but away from the highest volcano summits nowhere is cold enough for an ice cap. The model itself has no ice.</p></article>
+          <article class="quirk"><p class="fig">Cold spring</p><h3>The light comes first</h3><p>The climate lags the light by about a season. The populated band gets the least light in Autumn but stays mild on stored heat, and is coldest in Spring, when the light is already rising.</p></article>
         </div>
       </div>
     </section>
 
-    <section id="using">
-      <h2>Using the simulator</h2>
-      <p><a href="./#three">This link</a> opens the simulator with the three-sun sky. Each panel has a <b>Reset</b> button that returns it to the defaults described here.</p>
+    <!-- ===================================================== PART IV ===================================================== -->
+    <div class="part" id="using">
+      <p class="part-n">Part IV</p>
+      <h2 class="part-t">Using the simulator</h2>
+      <p class="part-l"><a href="./#three">This link</a> opens the simulator with the three-sun sky. Each panel has a <b>Reset</b> button that returns it to the defaults described here, and your settings are kept in your browser.</p>
+    </div>
+    <section class="usesec">
       <ul>
-        <li><b>Sky bar.</b> Natural, Two suns or Three suns; the UV-free switch; each array's strength and shaping.</li>
-        <li><b>Date dials.</b> Drag round the year through the twenty months and five seasons; the buttons under the dial choose how the date is given (month and day, sol of the year, L<sub>s</sub>). The play button runs the year in anything from 1 to 300 seconds, set with <b>Year in</b>.</li>
+        <li><b>Sky bar.</b> Natural, Two suns or Three suns; the UV-free switch; each array's strength and shaping, with the Fine-tune and Seasons boxes.</li>
+        <li><b>Date dials.</b> Drag round the year, from New Year at the top: the outer ring holds the twenty months (dots mark the festival sols), the inner ring the five seasons, squares the solstices and equinoxes and dots perihelion and aphelion. The buttons under each dial choose how the centre gives the date: <b>Month &amp; day</b>, <b>Sol</b> of the year, <b>L<sub>s</sub></b>, or any mix. The play button runs the year in anything from 1 to 300 seconds, set with <b>Year in</b>; the map's lines keep up while it plays.</li>
         <li><b>Mars view.</b> The orbit to scale, or a ground view of the sky dome at any latitude with every sun's path; drag Mars round its orbit to change the date.</li>
-        <li><b>Daylight, Insolation and Ratio.</b> Day length, sunlight (daily mean or noon peak) and the seasonal swing across the year, for any set of latitudes.</li>
-        <li><b>Map.</b> Water level, lakes and seas; elevation or insolation layers showing sunlight (all light, visible or UV index), temperature or rain; rivers; height and depth lines; a flat map that wraps round or a 3D globe. Its controls can sit above the map or in a column on its left (drag the column's edge to resize it), and the sol, its L<sub>s</sub> and its season can be shown in the map's corner.</li>
+        <li><b>Daylight, Insolation and Ratio.</b> Day length, sunlight (daily mean or noon peak) and the seasonal swing across the year, for any set of latitudes or a spectrum of them.</li>
+        <li><b>Map.</b> Water level, lakes and seas; elevation or insolation layers showing sunlight (all light, visible or UV index), temperature or rain; rivers; height and depth lines; line and coastline thickness; a flat map that wraps round or a 3D globe. The controls can sit above the map or in a column on its left (drag its edge to resize it), and <b>Date on the map</b> puts the date, as the dial shows it, in the map's corner.</li>
         <li><b>Temperature.</b> Temperature by latitude over the land, with the counts of cold and hot sols used in this guide.</li>
       </ul>
       <figure>
@@ -645,14 +1014,34 @@ footer { max-width: 1180px; margin: 30px auto 0; padding-top: 18px; border-top: 
       </figure>
     </section>
 
+    <section id="glossary">
+      <h2>Glossary</h2>
+      <dl class="gloss">
+        <div><dt>L<sub>s</sub>, solar longitude</dt><dd>The angle Mars has moved round the Sun since the northern spring equinox: 0° spring equinox, 90° summer solstice, 180° autumn equinox, 270° winter solstice (northern seasons).</dd></div>
+        <div><dt>Sol</dt><dd>A Martian solar day, 24 h 39 m 35 s. A Mars hour is a 24th of it.</dd></div>
+        <div><dt>Perihelion, aphelion</dt><dd>The closest (1.38 AU) and farthest (1.67 AU) points of Mars's orbit from the Sun, at L<sub>s</sub> 251° and 71°.</dd></div>
+        <div><dt>L4, L5</dt><dd>Lagrange points of the Sun–Mars pair, on Mars's orbit 60° ahead of and behind the planet, where the mirror arrays sit.</dd></div>
+        <div><dt>Populated band</dt><dd>Land between 45°S and 45°N, where the comfort targets apply.</dd></div>
+        <div><dt>Insolation</dt><dd>Sunlight arriving on level ground at the top of the air, in W/m², as a daily mean or a peak.</dd></div>
+        <div><dt>MOLA datum</dt><dd>Mars's reference level for heights, from the Mars Orbiter Laser Altimeter. The default sea stands 3.12 km below it.</dd></div>
+        <div><dt>Earth-equivalent km</dt><dd>Mars heights × 0.38: the climb on Earth that thins the air as much.</dd></div>
+        <div><dt>Lapse rate</dt><dd>How fast the air cools with height; 6 K per Earth-equivalent km here.</dd></div>
+        <div><dt>Albedo</dt><dd>The share of sunlight reflected back to space.</dd></div>
+        <div><dt>Energy balance model</dt><dd>A climate model that balances absorbed sunlight against heat radiated to space, stored and carried away.</dd></div>
+        <div><dt>Moist static energy</dt><dd>The heat, height and water vapour of air together; near-surface air flows toward where it peaks.</dd></div>
+        <div><dt>Budyko curve</dt><dd>The relation between rain, evaporative demand and how much of the rain the land evaporates over a year.</dd></div>
+        <div><dt>Festival sol</dt><dd>A calendar day outside the weeks: Perihelia, Finalia and, in leap years, Finalia II.</dd></div>
+      </dl>
+    </section>
+
     <section id="sources" class="sources">
       <h2>Sources</h2>
       <ul>
         <li>Topography: Mars Global Surveyor MOLA gridded data (MEGDR, 4 pixels per degree), Smith et al. 2003, NASA PDS Geosciences Node.</li>
-        <li>Orbit and calendar: Allison &amp; McEwen 2000, <i>A post-Pathfinder evaluation of areocentric solar coordinates</i>.</li>
+        <li>Orbit and solar time: Allison &amp; McEwen 2000, <i>A post-Pathfinder evaluation of areocentric solar coordinates</i>. Mars Year numbering: Clancy et al. 2000.</li>
         <li>Energy balance: North &amp; Coakley 1979; heat transport scaling: Williams &amp; Kasting 1997.</li>
         <li>Spectrum: ASTM E-490 / G-173 extraterrestrial solar spectrum. UV index: Madronich 2007.</li>
-        <li>Rain model tests: GPCP precipitation, NCEP reanalysis winds and temperatures, NOAA OISST sea temperatures, ETOPO topography; Budyko curve in Fu's form, Zhang et al. 2004; tropical boundary-layer flow after Lindzen &amp; Nigam 1987.</li>
+        <li>Rain model and tests: GPCP precipitation, NCEP reanalysis winds and temperatures, NOAA OISST sea temperatures, ETOPO topography; tropical boundary-layer flow after Lindzen &amp; Nigam 1987; flow over terrain after Sheppard 1956; land evaporation after Priestley &amp; Taylor 1972 and the Budyko curve in Fu's form, Zhang et al. 2004.</li>
         <li>Lapse rates: <a href="https://repositorio.aemet.es/bitstream/20.500.11765/12179/1/atmosphere-11-00656.pdf">Pyrenees (AEMET)</a>; <a href="https://mountwashington.org/overview-of-lapse-rate-research/">Mount Washington Observatory</a>; <a href="https://hess.copernicus.org/articles/16/4661/2012/hess-16-4661-2012.pdf">Alps (HESS 2012)</a>; <a href="https://dspace.ucuenca.edu.ec/entities/publication/5505fe67-40d2-4e6d-8e13-eab1a877a187/full">Ecuadorian Andes (Córdova et al. 2016)</a>.</li>
       </ul>
     </section>
@@ -675,6 +1064,7 @@ footer { max-width: 1180px; margin: 30px auto 0; padding-top: 18px; border-top: 
     for (const e of entries) if (e.isIntersecting) current = e.target.id;
     if (!current) return;
     for (const a of links) a.classList.toggle('on', a === byId.get(current));
+    const on = byId.get(current); if (on && on.scrollIntoView && window.innerWidth > 980) { const r = on.getBoundingClientRect(), t = on.closest('.toc').getBoundingClientRect(); if (r.top < t.top || r.bottom > t.bottom) on.scrollIntoView({ block: 'nearest' }); }
   }, { rootMargin: '-10% 0px -75% 0px' });
   targets.forEach(t => io.observe(t));
 })();

@@ -95,8 +95,10 @@ h1 {
   font-family: var(--f-mono); font-size: 12px; color: var(--muted);
 }
 .consts b { font-weight: 500; color: var(--ink-2); }
-.consts a.guide-link { color: var(--accent); font-weight: 500; text-decoration: none; }
-.consts a.guide-link:hover, .consts a.guide-link:focus-visible { text-decoration: underline; }
+.ttl { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; }
+.guide-btn { display: inline-flex; align-items: center; gap: 7px; padding: 6px 13px 6px 11px; border-radius: 999px; border: 1.5px solid var(--accent); color: var(--accent); background: var(--accent-soft, transparent); font-weight: 600; font-size: 13.5px; line-height: 1.2; text-decoration: none; white-space: nowrap; }
+.guide-btn:hover, .guide-btn:focus-visible { background: var(--accent); color: var(--accent-ink); }
+.guide-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .unitbox { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .topctl { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
 .seg.small button { font-size: 12px; padding: 3px 9px; }
@@ -317,6 +319,10 @@ body[data-layout="compact"] #mapCtlRow { display: none !important; }
 .mleg-t { font-family: var(--f-display); font-weight: 600; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 3px; }
 .mleg-bar { height: 10px; border-radius: 3px; }
 .mleg-lab { display: flex; justify-content: space-between; font-family: var(--f-mono); font-size: 10.5px; color: var(--ink-2); margin-top: 3px; font-variant-numeric: tabular-nums; }
+.mleg-lab.pos { display: block; position: relative; height: 1.35em; }
+.mleg-lab.pos span { position: absolute; top: 0; transform: translateX(-50%); white-space: nowrap; }
+.mleg-lab.pos span:first-child { transform: none; }
+.mleg-lab.pos span:last-child { transform: translateX(-100%); }
 .mread {
   font-family: var(--f-mono); font-size: 12px; color: var(--ink-2); background: var(--band-b);
   border: 1px solid var(--grid); border-radius: 8px; padding: 8px 10px; display: grid; gap: 3px; font-variant-numeric: tabular-nums;
@@ -631,14 +637,13 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
 <body>
 <header class="top">
   <div>
-    <h1>Mars Insolation Project</h1>
+    <div class="ttl"><h1>Mars Insolation Project</h1><a class="guide-btn" href="guide.html" title="Every choice behind the default world and why it was made, and how the model works, step by step"><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M3 4.2c2.4-.9 4.8-.7 7 .8 2.2-1.5 4.6-1.7 7-.8v11.3c-2.4-.8-4.8-.6-7 .9-2.2-1.5-4.6-1.7-7-.9z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 5v11.3" stroke="currentColor" stroke-width="1.6"/></svg>Guide: why and how it works</a></div>
     <p class="consts">
       <span>e = <b>0.0934</b></span>
       <span>obliquity <b>25.19°</b></span>
       <span>1 sol = <b>24 h 39 m 35 s</b></span>
       <span>1 year = <b>668.6 sols</b> = 687.0 days</span>
       <span>perihelion at L<sub>s</sub> <b>251°</b></span>
-      <span><a class="guide-link" href="guide.html">How it works →</a></span>
     </p>
   </div>
   <div class="topctl">
@@ -1202,7 +1207,7 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
         <div id="rainIsoRow" hidden>
           <div class="spec-row"><span class="flabel" id="rIsoLbl">Rain lines</span><output id="rIsoOut"></output></div>
           <input type="range" id="rainStep" min="0" max="13" step="1" value="5" aria-labelledby="rIsoLbl">
-          <p class="mhint">Lines of equal yearly rain (on a chosen date: that day's rate over a year); the 300 mm line, the edge of dry country, is drawn thick.</p>
+          <p class="mhint" id="rIsoHint">Lines of equal yearly rain (on a chosen date: that day's rate over a year); the 300 mm line, the edge of dry country, is drawn thick.</p>
         </div>
         <div class="fgrp"><span class="flabel">When</span>
           <div class="seg small" role="group" aria-label="Insolation period">
@@ -1314,6 +1319,7 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
 
     <section class="notes" aria-label="Model notes">
       <h3>Model</h3>
+      <p class="notes-guide">The <a href="guide.html">guide</a> explains every choice behind the default world, and how the model works, in full.</p>
       <ul>
         <li>Keplerian orbit with e = 0.0934 and a = 1.5237 AU. Perihelion falls at L<sub>s</sub> 250.9°, just before the northern winter solstice, so northern autumn and winter are the short seasons and the southern summer gets the strongest sunlight.</li>
         <li>Five seasons and the calendar (the date dials): with three suns the astronomical seasons do not follow the weather, because the mirrors cancel most of the tilt's seasons and leave the orbit's, which the whole planet shares: both halves of the populated band warm toward perihelion and cool after aphelion. Splitting the model's year into seasons that best group similar sols (land temperature, and rain, between 45°S and 45°N) gives five, named after the five traditional Spanish seasons (Estia is the late, dry summer). The calendar starts the year at L<sub>s</sub> 0°, as Mars years are counted, and gives each season four months of 6-sol weeks: 36-sol months of six weeks and 30-sol months of five. Autumn (L<sub>s</sub> 0–65°: Novary, Pluviary, Nimbary, Lenary; mild, the north's wet season), Winter (65–129°: Aphelose, Umbrose, Frigose, Brumose; from aphelion, on Aphelose 14: cool and quiet, deep winter in the far south, the southern band at its driest) and Spring (129–206°: Vertal, Pruinal, Equinal, Vernal; the band's coldest weeks, about 16 °C around L<sub>s</sub> 167°, then the north warms fast) last 138 sols. Summer (206–287°: Lucidor, Calidor, Heliodor, Fervidor; perihelion on Heliodor 5: the band at its warmest, monsoon rain in the south) and Estia (287–360°: Torrival, Ardival, Mitival, Finival; cooling from the peak, the north at its driest, the far south at its hottest) last 127, because the climate changes fast near perihelion. Two festival sols sit outside the weeks, so every month starts on the first day of a week: Perihelia, the 31st of Calidor, five sols before perihelion, and Finalia, the 31st of Finival, the last sol of the year, with Finalia II after it in leap years. A year has 668 sols, or 669 in leap years: odd years and years divisible by 10, except centuries not divisible by 500 (668.592 sols on average; the model year is 668.60). The names are Greco-Latin: Novary from novus (new), Pluviary from pluvia (rain), Nimbary from nimbus (rain cloud), Lenary from lenis (mild), Aphelose from aphelion, Umbrose from umbra (shade), Frigose from frigus (cold), Brumose from bruma (midwinter), Vertal from vertere (to turn), Pruinal from pruina (hoarfrost), Equinal from the equinox it holds, Vernal from ver (spring), Lucidor from lux (light), Calidor from calidus (warm), Heliodor from helios (the Sun, of perihelion), Fervidor from fervidus (glowing), Torrival from torrere (to parch), Ardival from ardere (to burn), Mitival from mitis (softening) and Finival from finis (end). The seasons capture about 80% of the band's seasonal temperature changes, against 62% for the four astronomical quarters. The date dials show the months on their outer ring and the seasons inside it, and can give the date as month and day, as the sol of the year (from 1 at L<sub>s</sub> 0°) or as L<sub>s</sub>; the charts still count sols from the northern winter solstice.</li>
@@ -1333,9 +1339,9 @@ td i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; marg
         <li>10th warmest and 10th coldest sol: each place's temperature on the 10th warmest (coldest) sol of its year in the temperature model, cooled with height: a hot or cold spell that comes round every year rather than a one-off extreme.</li>
         <li>Daily high and low (Each sol: Average, High, Low; for every temperature view, so also the seasonal swing of the highs or lows and the 10th warmest or coldest high or low). The energy-balance model gives each sol's average. The rise to the afternoon high and the fall to the dawn low come from a linear balance for the ground and the air near it, C dT′/dt = η F(t) − λ T′. It is driven by the light of all the suns over the sol, so mirrors that rise before the Sun or set after it stretch the warm part of the day and narrow the range, and it is solved harmonic by harmonic over the sol. It was fitted to typical ranges on Earth's land: desert summer 16 K, continental mid-latitude summer 13 K and winter 9 K, humid tropics 9.5 K, maritime summer 8 K and winter 5.5 K, with the high near 14:30. That gives η = 0.59 of the light warming the ground, C = 5.2 × 10⁵ J/m²/K (the soil and the air mixed by day), λ = 49 W/m²/K in dry country and 115 W/m²/K in moist country, and 6.0 K from passing weather added in quadrature, all within about 1 K of those values. For Mars, the sol is 2.7% longer, and the range scales with the air column overhead as m<sup>−0.4</sup>. That exponent gives both the wider ranges of Earth's high plateaus and the 50–70 K range of today's thin Martian air. Under Mars gravity 1.05 atm is 2.77× Earth's air, so the range is 0.67× Earth's for the same sunlight and humidity. Moist means near water (the share of ocean, seas and lakes in each 4° × 6° cell and its neighbours, full at 35%) or, once the rain has been computed, rain close to the potential evaporation (full at P/Ep = 1, none below 0.3). Water surfaces swing 6% as much as moist land. At the defaults the range is mostly 4–7 K with three suns, which spread the light over the sol, and up to about 11 K in the dry interiors with two suns. The latitude panel still counts daily averages.</li>
         <li>Rain: a seasonal moisture budget on a 2° grid, solved as a steady state for 12 slices of the year, twice (the second time with the soil water the first pass leaves), in the background (about 15 seconds). Column water vapour is carried by low-level, moisture-weighted winds and mixed by eddies. The winds come from the temperature model. In the Hadley regime the low-level air flows toward the latitudes of highest near-surface moist static energy: warm, moist air means low surface pressure, and friction and the Coriolis force turn the flow, as in Lindzen and Nigam's tropical boundary-layer model applied to the zonal mean. So the rising branch sits wherever that energy peaks (on Earth over the warmest seas rather than the hottest deserts), even near a pole, and the cells cross the equator into the summer hemisphere, as climate models of planets with warm poles show. Flow toward the equator turns into trade winds, flow toward a pole into westerlies. Each cell reaches as far as the eddy-regime scaling allows: the thermal Rossby number to the ¼ power, about 1.4× Earth's width on Mars. Beyond it come eddy-driven westerlies, the Ferrel cell and stronger eddy mixing, growing with the size of the temperature gradient, and monsoon flow follows the land–sea temperature contrasts. Terrain holds moisture back: across each step in surface height only the vapour above the higher ground is exchanged, less the height the wind can lift air by (wind speed ÷ buoyancy frequency, after Sheppard), so moist low air rains out on the windward side and high plateaus stay dry. Rain falls once the column passes 50% of saturation, on a 4.7-day timescale, more where the low-level flow converges (rising air) and much less where it diverges (sinking air, as over Earth's subtropical deserts); storm tracks add rain where it cools poleward, and air blown up slopes condenses. The ocean and lakes evaporate by a bulk formula capped by the year's mean net radiation (water stores heat), none while frozen; land at a Priestley–Taylor rate, its yearly share set by the Budyko curve in Fu's form (w = 2.6, the global calibration on river runoff of Zhang et al. 2004) from the year's rain and demand. The saturation column is ρ<sub>v,sat</sub> × R<sub>v</sub>T²/(LΓ) per metre, about 2.6× Earth's at the same temperature because Mars's air column is deeper. Chosen date interpolates between the slices.
-          <br><b>Tested on Earth.</b> The same code was run with Earth's radius, rotation, gravity and topography (ETOPO, 20′). Its constants were fitted with Earth's observed temperatures, winds, vertical motion and sea temperatures (NCEP and OISST long-term means) against observed rain (GPCP) and the natural sizes of Earth's closed-basin lakes. With that observed forcing, its rain over land correlates 0.85 with the observed, typically within a factor of 1.6, and it gives 1,020 mm a year globally (observed 983). The circulation part was fitted separately to the observed low-level winds and their convergence. Run as it runs here, from the energy-balance temperatures and its own winds, it does worse: correlation 0.63, typically within a factor of 2.1, 870 mm a year globally. Western Europe gets 980 mm (observed about 1,010), the Sahara 100 (100), the Congo 1,480 (1,700), the Amazon 1,670 (2,490) and Tibet 240 (430). But the summer monsoons come out far too weak: India gets 290 mm against 1,120, eastern China 260 against 1,340 and the eastern US 450 against 1,320. Arabia comes out too wet: 380 mm against 120. It also fills Earth's large closed basins too much. The Caspian, Aral, Balkhash and Tarim basins and the Makgadikgadi pans all come out full, whereas in reality the Caspian covers 371 thousand km², the Aral 68 thousand before 1960, and the others are small or dry. Lake Chad comes out about right (28 thousand km², against 20). So read big closed seas as the wet end of what is possible. In neither default sky are the tropics the warmest latitudes for most of the year. With three suns, the light sent to the outer latitudes makes 50–60°N or the south pole the warmest; with two suns, the lens profile heats the summer hemisphere's high latitudes. The air rises there, and the tropics get their rain from cells crossing the equator rather than from an Earth-like rain belt; Earth cannot test that regime directly. Because the monsoons are weak on Earth, rain on Mars's southern highlands, which depends on monsoon air from the northern ocean, is probably underestimated. At the defaults (a 26% sea, UV-free mirrors, 6 K/km), land gets about 630 mm a year on average with three suns (16% of it under 300 mm, 9% under 250 mm, 1% under 100 mm) and about 330 mm with two suns (61% under 300 mm, 56% under 250 mm, 34% under 100 mm). At 5 K/km it was about 670 mm and 250 mm: colder high ground gets less rain, but its lakes evaporate less and grow, and with two suns the extra lake surface more than makes up for it. Two suns leave the northern ocean cool (about 10 °C on average), so it evaporates little, and the southern highlands are a high continent far from it. Searching the two-sun settings for more rain gave the present two-sun default (k swinging by ±0.2 instead of ±0.6, its timing and the semiannual part moved), which cut the land under 100 mm from 43% to 26% (with full-spectrum mirrors). Wetter two-sun skies exist, but only with tens more sols below 0 °C in the populated band and harsher seasons in the far south. Rain lines can be drawn every 10 mm to 1 m a year (on a chosen date, at that day's rate over a year); the 300 mm line, roughly the edge of dry country, is always drawn thick. Colours double with each step: 300 mm a year is yellow, 600 mm green, 1.2 m cyan, 2.4 m purple and 4.8 m magenta. Read it as the pattern this sunlight would drive, not a forecast: clouds and their feedbacks are left out.</li>
+          <br><b>Tested on Earth.</b> The same code was run with Earth's radius, rotation, gravity and topography (ETOPO, 20′). Its constants were fitted with Earth's observed temperatures, winds, vertical motion and sea temperatures (NCEP and OISST long-term means) against observed rain (GPCP) and the natural sizes of Earth's closed-basin lakes. With that observed forcing, its rain over land correlates 0.85 with the observed, typically within a factor of 1.6, and it gives 1,020 mm a year globally (observed 983). The circulation part was fitted separately to the observed low-level winds and their convergence. Run as it runs here, from the energy-balance temperatures and its own winds, it does worse: correlation 0.63, typically within a factor of 2.1, 870 mm a year globally. Western Europe gets 980 mm (observed about 1,010), the Sahara 100 (100), the Congo 1,480 (1,700), the Amazon 1,670 (2,490) and Tibet 240 (430). But the summer monsoons come out far too weak: India gets 290 mm against 1,120, eastern China 260 against 1,340 and the eastern US 450 against 1,320. Arabia comes out too wet: 380 mm against 120. It also fills Earth's large closed basins too much. The Caspian, Aral, Balkhash and Tarim basins and the Makgadikgadi pans all come out full, whereas in reality the Caspian covers 371 thousand km², the Aral 68 thousand before 1960, and the others are small or dry. Lake Chad comes out about right (28 thousand km², against 20). So read big closed seas as the wet end of what is possible. In neither default sky are the tropics the warmest latitudes for most of the year. With three suns, the light sent to the outer latitudes makes 50–60°N or the south pole the warmest; with two suns, the lens profile heats the summer hemisphere's high latitudes. The air rises there, and the tropics get their rain from cells crossing the equator rather than from an Earth-like rain belt; Earth cannot test that regime directly. Because the monsoons are weak on Earth, rain on Mars's southern highlands, which depends on monsoon air from the northern ocean, is probably underestimated. At the defaults (a 26% sea, UV-free mirrors, 6 K/km), land gets about 630 mm a year on average with three suns (16% of it under 300 mm, 9% under 250 mm, 1% under 100 mm) and about 330 mm with two suns (61% under 300 mm, 56% under 250 mm, 34% under 100 mm). At 5 K/km it was about 670 mm and 250 mm: colder high ground gets less rain, but its lakes evaporate less and grow, and with two suns the extra lake surface more than makes up for it. Two suns leave the northern ocean cool (about 10 °C on average), so it evaporates little, and the southern highlands are a high continent far from it. Searching the two-sun settings for more rain gave the present two-sun default (k swinging by ±0.2 instead of ±0.6, its timing and the semiannual part moved), which cut the land under 100 mm from 43% to 26% (with full-spectrum mirrors). Wetter two-sun skies exist, but only with tens more sols below 0 °C in the populated band and harsher seasons in the far south. Rain lines can be drawn every 10 mm to 1 m a year (on a chosen date, at that day's rate over a year), with the gap doubled past the first line at or above 600 mm and doubled again past the first at or above 2.4 m (every 100 mm, for instance, then every 200 mm from 600 mm and every 400 mm from 2.4 m); the 300 mm line, roughly the edge of dry country, is always drawn thick. Colours double with each step: 300 mm a year is yellow, 600 mm green, 1.2 m cyan, 2.4 m purple and 4.8 m magenta. Read it as the pattern this sunlight would drive, not a forecast: clouds and their feedbacks are left out.</li>
         <li>Rivers: the yearly runoff from the rain model (rain minus land evaporation; on lakes, rain minus lake evaporation) is routed downhill along the steepest descent; each lake gathers its inflow and passes water on through its outlet only if it is full; past the outlet the water follows the first ground that drains away from the lake. Flows above about 25 m³/s (a sizeable river) are drawn; they appear once the rain has been computed, far wider than real so they show at planetary scale. Where a river runs into a lake that spills, it carries on across the lake as a straight line from where it enters to the spill point and then along the overflow, so a chain of lakes reads as one river. That is drawn for the main inflows (at least 30% of what leaves the lake) where the line stays on the water, and not across Hellas, Argyre or the largest lakes; smaller streams end at the shore.</li>
-        <li>Lines and colours: each set of lines has its own switch. Height lines on land (above sea level) and depth lines under the ocean, seas and lakes (below their own surface) are off by default and can be drawn every 0.1–5 km in the chosen units, every fifth line thicker; the layer's own lines (isotherms, rain lines, insolation or UV index lines) are on by default and can be switched off. “Solid colour between lines” fills each band between two neighbouring lines (height or depth lines, isotherms, rain lines, insolation lines or UV index lines) with one colour, that of the value midway between them, to exaggerate the steps. “Land &amp; water” colours show only where the water is.</li>
+        <li>Lines and colours: each set of lines has its own switch. Height lines on land (above sea level) and depth lines under the ocean, seas and lakes (below their own surface) are off by default and can be drawn every 0.1–5 km in the chosen units, every fifth line thicker; the layer's own lines (isotherms, rain lines, insolation or UV index lines) are on by default and can be switched off. “Solid colour between lines” fills each band between two neighbouring lines (height or depth lines, isotherms, rain lines, insolation lines or UV index lines) with one colour, that of the value midway between them, to exaggerate the steps. “Land &amp; water” colours show only where the water is. Line thickness scales all these lines (×0.25–3) and Coastline thickness the coasts (off to ×3); while the year plays or a dial is dragged, the lines are traced from the map's half-resolution preview about eight times a second and labelled once it settles. Temperature colours are pinned to temperatures and spend most of their change on 0–35 °C: dark capri just above 0 °C, bright green at 10, yellow at 20, orange at 30 and pure red at 35, then darker, ashier reds up to 60; at 0 °C the colour flips to a light azure that turns bluer and darker as it gets colder. The legend gives 0–35 °C two-thirds of its width.</li>
         <li>Water needed: the readout gives the water the map holds as a global equivalent layer, the depth it would have if spread evenly over Mars, split into the ocean, Hellas and Argyre, and the other lakes; with water-balance lakes it appears once they are balanced for the sky. At the defaults (a 26% sea, 6 K/km) that is 475 m with three suns and 274 m with two suns.</li>
         <li>Over water too: the ocean, Hellas, Argyre and the lakes are coloured by the layer as well. On the rain layer that is the rain falling on them; on the temperature layer it is their surface temperature from the same model: the cell's sea-level temperature for the ocean and, for a lake, that temperature moved by the lapse rate to the lake's own surface height, so at the default lapse rate a lake's water is cooler than the open ocean at the same place by about 2.3 K for each km its surface stands above sea level, and warmer below it: Hellas at its brim, about 4.4 km above the ocean, by about 10 K. The temperature model has one value per 4° × 6° cell for land and water together, so coastal water carries some of the land's seasons. The land averages leave the water out. Their coasts are then drawn as a dark line, thick around the ocean and lakes of some size and thin around small crater lakes, so water and land can still be told apart.</li>
         <li>Globe: the same map, with its layers, isotherms, rivers, grid and sites, wrapped on a sphere (WebGL). Its relief is the height of the ground or, where there is water, of the flat water surface, exaggerated by the relief setting (×10 by default): at true scale Olympus Mons, about 24 km above the 26% sea, rises only 0.7% of Mars's radius. Drag turns the globe, scroll or pinch zooms, the region list turns it to a region, and hovering reads values as on the flat map.</li>
@@ -3526,18 +3532,24 @@ const LUT_UV = new Uint8ClampedArray(1001 * 3);
     for (let j = 0; j < 3; j++) LUT_UV[k * 3 + j] = Math.round(a[j] + (b[j] - a[j]) * f); } })();
 const uvRGB = t => { const k = Math.round(clamp(t, 0, 1) * 1000) * 3; return [LUT_UV[k], LUT_UV[k + 1], LUT_UV[k + 2]]; };
 const uvGrad = () => 'linear-gradient(90deg,' + UV_COL.map((c, i) => c + ' ' + (100 * i / 12).toFixed(1) + '%').join(',') + ')';
-// Temperature colours pinned to temperatures: blue −20 °C, cyan 0, green 10, yellow 20, orange 30, red 40, darker beyond
-const TEMP_STOPS = [[-60, '#141b4d'], [-40, '#1f3c99'], [-20, '#2f6fdf'], [0, '#22d3ee'], [10, '#22c55e'], [20, '#facc15'], [30, '#f97316'], [40, '#dc2626'], [50, '#991b1b'], [60, '#5a0b0b']];
+// Temperature colours pinned to temperatures, with most of the change spent on 0–35 °C, where people live. Above freezing:
+// dark capri (hue 195) just above 0 °C, bright green at 10, yellow at 20, orange at 30 and pure red at 35, then darker and
+// ashier up to 60. At 0 °C the colour flips to a light azure (hue 210) that turns bluer and darker as it gets colder.
+const TEMP_COLD = [[-60, '#0e0f45'], [-40, '#182381'], [-25, '#1e3db8'], [-15, '#235de7'], [-7, '#478df5'], [0, '#8fc7ff']];
+const TEMP_WARM = [[0, '#007ba3'], [10, '#22c55e'], [20, '#facc15'], [30, '#f97316'], [35, '#ff0000'], [42, '#a01c16'], [50, '#5e3530'], [60, '#2e2a29']];
 const LUT_TEMP = new Uint8ClampedArray(1001 * 3);
+const tempStopsAt = T => T <= 0 ? TEMP_COLD : TEMP_WARM;
 (() => {
   const rgb = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
   for (let k = 0; k <= 1000; k++) {
-    const T = -60 + 120 * k / 1000; let i = 0;
-    while (i < TEMP_STOPS.length - 2 && T > TEMP_STOPS[i + 1][0]) i++;
-    const [t0, c0] = TEMP_STOPS[i], [t1, c1] = TEMP_STOPS[i + 1], f = clamp((T - t0) / (t1 - t0), 0, 1), a = rgb(c0), b = rgb(c1);
+    const T = -60 + 120 * k / 1000, S = tempStopsAt(T); let i = 0;
+    while (i < S.length - 2 && T > S[i + 1][0]) i++;
+    const [t0, c0] = S[i], [t1, c1] = S[i + 1], f = clamp((T - t0) / (t1 - t0), 0, 1), a = rgb(c0), b = rgb(c1);
     for (let j = 0; j < 3; j++) LUT_TEMP[k * 3 + j] = Math.round(a[j] + (b[j] - a[j]) * f);
   }
 })();
+// the legend gives 0–35 °C two-thirds of its width: −60…0 °C the first 22%, 35…60 °C the last 12%
+const tempPos = T => T <= 0 ? 22 * (clamp(T, -60, 0) + 60) / 60 : T <= 35 ? 22 + 66 * T / 35 : 88 + 12 * (Math.min(T, 60) - 35) / 25;
 const tempRGB = t => { const k = Math.round(clamp(t, 0, 1) * 1000) * 3; return [LUT_TEMP[k], LUT_TEMP[k + 1], LUT_TEMP[k + 2]]; };
 const SWING_STOPS = [[0, '#2c7bb6'], [10, '#00a6ca'], [20, '#00ccbc'], [30, '#90eb9d'], [40, '#ffff8c'], [50, '#f9d057'], [60, '#f29e2e'], [70, '#e76818'], [80, '#d7191c']];
 const LUT_SWING = new Uint8ClampedArray(1001 * 3);
@@ -3550,7 +3562,7 @@ const LUT_SWING = new Uint8ClampedArray(1001 * 3);
 })();
 const swingRGB = t => { const k = Math.round(clamp(t, 0, 1) * 1000) * 3; return [LUT_SWING[k], LUT_SWING[k + 1], LUT_SWING[k + 2]]; };
 const swingGrad = () => 'linear-gradient(90deg,' + SWING_STOPS.map(([v, c]) => c + ' ' + (v / 0.8).toFixed(1) + '%').join(',') + ')';
-const tempGrad = () => 'linear-gradient(90deg,' + TEMP_STOPS.map(([v, c]) => c + ' ' + ((v + 60) / 1.2).toFixed(1) + '%').join(',') + ')';
+const tempGrad = () => 'linear-gradient(90deg,' + TEMP_COLD.concat(TEMP_WARM).map(([v, c]) => c + ' ' + tempPos(v).toFixed(1) + '%').join(',') + ')';
 const insGrad = () => 'linear-gradient(90deg,' + Array.from({ length: 11 }, (_, i) => { const c = insRGB(i / 10); return 'rgb(' + c.join(',') + ') ' + (i * 10) + '%'; }).join(',') + ')';
 // Height units. With the same air on both planets, pressure falls with height g_Mars/g_Earth as fast on Mars,
 // so climbing 1 km on Mars thins the air like climbing 0.38 km on Earth (the same factor converts water depth to pressure).
@@ -4819,11 +4831,11 @@ function buildRivers(R) {
 function rainReady() {
   rainRivers = null; scheduleMapBuild(); updateMapRead();
 }
-let VGRID = null, DGRID = null, mapContours = null, contourKey = '', contourHide = false, contourTimer = 0;
+let VGRID = null, DGRID = null, mapContours = null, contourKey = '', contourHide = false, contourTimer = 0, liteContourT = 0;
 let mapCoast = null, elevLines = null;
 const bandQ = (v, base, step) => base + (Math.floor((v - base) / step) + 0.5) * step;          // the value midway between its two lines
 const elevStepM = km => km > 0 ? km * 1000 / (state.hUnit === 'earth' ? H_EARTH : 1) : 0;       // a line interval in the chosen units → Mars metres
-// While the date or lapse-rate slider moves (or the year is playing) contours are hidden, then traced once things settle.
+// While a slider moves, contours are hidden (or, while the map shows its half-resolution preview, traced quickly from it), then traced sharp once things settle.
 function holdContours() {
   contourHide = true; clearTimeout(contourTimer);
   contourTimer = setTimeout(() => { contourHide = false; scheduleMapBuild(); }, 250);
@@ -4854,7 +4866,7 @@ function buildMap() {
   const wrOn = rainOn && !!RF && state.waterTemp;                     // rain over the ocean, seas and lakes too
   // solid colour between lines: the band each value falls in, for whatever lines are drawn
   const bandsOn = state.mapBands, stepL = state.eLandOn ? elevStepM(state.eLandStep) : 0, stepW = state.eWatOn ? elevStepM(state.eWatStep) : 0, ryr = state.insWhen === 'year' ? 1 : RN_SECYR / MARS.solSec;
-  const bandV = !bandsOn || !insOn ? null : rainOn ? (v => bandQ(v * ryr, 0, state.rainStep) / ryr) : (swingOn ? (v => bandQ(v, 0, state.isoStep)) : tempOn ? (v => bandQ(v, 273.15, state.isoStep)) : uvOn ? (v => bandQ(v, 0, uvPeak ? 1 : 0.25)) : state.insMetric === 'mean' ? (v => bandQ(v, 0, visOn ? 50 : 100)) : null);
+  const bandV = !bandsOn || !insOn ? null : rainOn ? (v => rainBand(v * ryr, state.rainStep) / ryr) : (swingOn ? (v => bandQ(v, 0, state.isoStep)) : tempOn ? (v => bandQ(v, 273.15, state.isoStep)) : uvOn ? (v => bandQ(v, 0, uvPeak ? 1 : 0.25)) : state.insMetric === 'mean' ? (v => bandQ(v, 0, visOn ? 50 : 100)) : null);
   const n = MAP_W * MAP_H;
   if (!VGRID) { VGRID = new Float32Array(n); DGRID = new Float32Array(n); }
   const V = VGRID, D = DGRID;
@@ -4932,17 +4944,21 @@ function buildMap() {
   // iso-insolation contours (daily mean only); skipped while the water slider is moving
   if (insOn && state.mapIso && (rainOn ? !!RF : (tempOn || uvOn || state.insMetric === 'mean'))) {
     const ckey = [waterKey(sea), state.insShow, RF ? RAIN.key : '', MODE_KEY, state.mapOrbit, state.insWhen, state.insWhen === 'date' ? state.t.toFixed(2) : '', tempOn, tempOn ? state.lapse + '|' + state.heat + '|' + state.isoStep + '|' + state.p0 + '|' + state.waterTemp + '|' + state.dayPart + (state.dayPart !== 'mean' ? '|' + dtrWet().key : '') : '', rainOn ? state.rainStep + '|' + wrOn : '', wmLight, uvOn ? state.uvFree + '|' + state.p0 + '|' + state.insMetric : visOn ? state.uvFree : ''].join('|');
-    if (ckey === contourKey && mapContours) { /* unchanged: reuse */ }
-    else if (contourHide) { mapContours = null; contourKey = ''; }
-    else if (waterDragging && mapContours) { /* keep the previous lines until the water slider settles */ }
-    else if (st > 1) { /* half-resolution preview: keep the current lines */ }
-    else if (rainOn) {                // as yearly amounts (on a chosen date, that day's rate over a year); 300 mm always drawn, thick
-      const L2 = new Float32Array(V.length); for (let q = 0; q < V.length; q++) L2[q] = V[q] * ryr;
-      const A = computeContours(L2, 0, state.rainStep, state.rainStep - 0.01, () => false), B = computeContours(L2, 300, 1e9, 299.99, () => true);
-      mapContours = { thin: A.thin, thick: B.thick, labels: A.labels.concat(B.labels), rain: true }; contourKey = ckey;
+    const liteC = st > 1, ck = ckey + (liteC ? '|lite' : '');     // the half-resolution preview (a dial or slider moving, the year playing) gets quick lines
+    if (ck === contourKey && mapContours) { /* unchanged: reuse */ }
+    else if (liteC && mapContours && mapContours.lite && performance.now() - liteContourT < 120) { /* the preview's lines refresh about 8 times a second */ }
+    else if (!liteC && contourHide) { if (!mapContours || !mapContours.lite) { mapContours = null; contourKey = ''; } }   // a preview's lines stay until the sharp ones come
+    else if (!liteC && waterDragging && mapContours) { /* keep the previous lines until the water slider settles */ }
+    else {
+      const A = [BW, BH, st, !liteC];
+      if (rainOn) {                   // as yearly amounts (on a chosen date, that day's rate over a year); the spacing doubles above 600 mm and 2.4 m
+        const nn = BW * BH, L2 = new Float32Array(nn); for (let q = 0; q < nn; q++) L2[q] = V[q] * ryr;
+        mapContours = contourLevels(L2, rainLevels(state.rainStep, fieldMax(L2, nn)), v => v === 300, ...A); mapContours.rain = true;
+      }
+      else mapContours = swingOn ? computeContours(V, 0, state.isoStep, state.isoStep - 0.01, () => false, ...A) : tempOn ? computeContours(V, 273.15, state.isoStep, 273.15 - Math.floor(60 / state.isoStep + 1e-9) * state.isoStep - 0.01, v => Math.abs(v - 273.15) < 0.01, ...A) : uvOn ? (uvPeak ? computeContours(V, 0, 1, 1, v => v === 3 || v === 6 || v === 8 || v === 11, ...A) : computeContours(V, 0, 0.25, 0.25, v => Math.abs(v - Math.round(v)) < 1e-6, ...A))
+        : visOn ? computeContours(V, 0, 50, 50, v => v % 250 === 0, ...A) : computeContours(V, 0, 100, 100, v => v === 100 || v === 500, ...A);
+      mapContours.lite = liteC; contourKey = ck; liteContourT = performance.now();
     }
-    else { mapContours = swingOn ? computeContours(V, 0, state.isoStep, state.isoStep - 0.01, () => false) : tempOn ? computeContours(V, 273.15, state.isoStep, 273.15 - Math.floor(60 / state.isoStep + 1e-9) * state.isoStep - 0.01, v => Math.abs(v - 273.15) < 0.01) : uvOn ? (uvPeak ? computeContours(V, 0, 1, 1, v => v === 3 || v === 6 || v === 8 || v === 11) : computeContours(V, 0, 0.25, 0.25, v => Math.abs(v - Math.round(v)) < 1e-6))
-      : visOn ? computeContours(V, 0, 50, 50, v => v % 250 === 0) : computeContours(V, 0, 100, 100, v => v === 100 || v === 500); contourKey = ckey; }
   } else { mapContours = null; contourKey = ''; }
   // coastlines (when the water is coloured too) and height / depth lines, traced at full resolution
   if (st === 1) {
@@ -4991,33 +5007,61 @@ function chainPath(S) {                 // flat x0,y0,x1,y1,… segments -> one 
   }
   return P;
 }
-function computeContours(V, base, step, minLevel, isThick) {
-  const thinS = [], thickS = [], labels = [];
+// Lines of equal value of the field V, by marching squares, at the sorted levels given. V holds W × H grid points sc map pixels
+// apart (sc = 2 for the half-resolution preview used while a dial or slider moves or the year plays); the lines come out in
+// full-resolution map pixels either way. Labels are skipped for the preview.
+function contourLevels(V, levels, isThick, W = MAP_W, H = MAP_H, sc = 1, wantLabels = true) {
+  const thinS = [], thickS = [], labels = [], NL = levels.length, every = 60 / (sc * sc);
   let segs = 0;
-  for (let r = 0; r < MAP_H - 1; r++) {
-    for (let c = 0; c < MAP_W - 1; c++) {
-      const k = r * MAP_W + c, a = V[k], b = V[k + 1], cc = V[k + MAP_W + 1], dd = V[k + MAP_W];
-      if (a !== a || b !== b || cc !== cc || dd !== dd) continue;       // NaN: water
-      const mn = Math.min(a, b, cc, dd), mx = Math.max(a, b, cc, dd);
-      if (mx - mn < 1e-6) continue;
-      for (let v = Math.max(minLevel, base + Math.ceil((mn - base) / step) * step); v <= mx; v += step) {
-        if (v <= mn) continue;
-        const x0 = c + 0.5, y0 = r + 0.5;
-        const T = (a >= v) !== (b >= v), R = (b >= v) !== (cc >= v), Bo = (dd >= v) !== (cc >= v), L = (a >= v) !== (dd >= v);
-        const pT = T ? [x0 + (v - a) / (b - a), y0] : null, pR = R ? [x0 + 1, y0 + (v - b) / (cc - b)] : null;
-        const pB = Bo ? [x0 + (v - dd) / (cc - dd), y0 + 1] : null, pL = L ? [x0, y0 + (v - a) / (dd - a)] : null;
-        const pts = [pT, pR, pB, pL].filter(Boolean);
-        const path = isThick(v) ? thickS : thinS;
-        const seg = (p, q) => { path.push(p[0], p[1], q[0], q[1]); if ((segs++ % 60) === 0) labels.push({ v, x: (p[0] + q[0]) / 2, y: (p[1] + q[1]) / 2 }); };
-        if (pts.length === 2) seg(pts[0], pts[1]);
-        else if (pts.length === 4) {
-          if (a >= v) { seg(pT, pL); seg(pR, pB); } else { seg(pT, pR); seg(pL, pB); }
+  if (NL) {
+    const thick = levels.map(isThick);
+    for (let r = 0; r < H - 1; r++) {
+      for (let c = 0; c < W - 1; c++) {
+        const k = r * W + c, a = V[k], b = V[k + 1], cc = V[k + W + 1], dd = V[k + W];
+        if (a !== a || b !== b || cc !== cc || dd !== dd) continue;       // NaN: water
+        const mn = Math.min(a, b, cc, dd), mx = Math.max(a, b, cc, dd);
+        if (mx - mn < 1e-6) continue;
+        let lo = 0, hi = NL; while (lo < hi) { const m = (lo + hi) >> 1; if (levels[m] <= mn) lo = m + 1; else hi = m; }   // first level above mn
+        const X0 = sc * c + 0.5, Y0 = sc * r + 0.5;
+        for (let i = lo; i < NL && levels[i] <= mx; i++) {
+          const v = levels[i], A = a >= v, B = b >= v, Cc = cc >= v, D = dd >= v;
+          const tX = X0 + sc * (v - a) / (b - a), rY = Y0 + sc * (v - b) / (cc - b), bX = X0 + sc * (v - dd) / (cc - dd), lY = Y0 + sc * (v - a) / (dd - a);
+          const path = thick[i] ? thickS : thinS, m0 = path.length;
+          if (A !== B && B !== Cc && D !== Cc && A !== D) {            // saddle: two segments
+            if (A) path.push(tX, Y0, X0, lY, X0 + sc, rY, bX, Y0 + sc); else path.push(tX, Y0, X0 + sc, rY, X0, lY, bX, Y0 + sc);
+          } else {
+            if (A !== B) path.push(tX, Y0);
+            if (B !== Cc) path.push(X0 + sc, rY);
+            if (D !== Cc) path.push(bX, Y0 + sc);
+            if (A !== D) path.push(X0, lY);
+            if (path.length - m0 !== 4) { path.length = m0; continue; }
+          }
+          if (wantLabels && (segs++ % every) === 0) labels.push({ v, x: (path[m0] + path[m0 + 2]) / 2, y: (path[m0 + 1] + path[m0 + 3]) / 2 });
         }
       }
     }
   }
   return { thin: chainPath(thinS), thick: chainPath(thickS), labels };
 }
+function fieldMax(V, n) { let m = -Infinity; for (let q = 0; q < n; q++) { const v = V[q]; if (v > m) m = v; } return m; }
+// evenly spaced levels base + j·step from minLevel up to the field's maximum
+function computeContours(V, base, step, minLevel, isThick, W = MAP_W, H = MAP_H, sc = 1, wantLabels = true) {
+  const vmax = fieldMax(V, W * H), levels = [];
+  for (let j = Math.ceil((minLevel - base) / step); base + j * step <= vmax && levels.length < 5000; j++) levels.push(base + j * step);
+  return contourLevels(V, levels, isThick, W, H, sc, wantLabels);
+}
+// Rain lines: every s mm a year up to the first line at or above 600 mm, then every 2s up to the first line at or above 2.4 m,
+// then every 4s; the 300 mm line, roughly the edge of dry country, is always drawn (thick).
+function rainBreaks(s) { const a = s * Math.ceil(600 / s - 1e-9); return { a, b: a + 2 * s * Math.ceil((2400 - a) / (2 * s) - 1e-9) }; }
+function rainLevels(s, vmax) {
+  const { a, b } = rainBreaks(s), out = [];
+  for (let j = 1; j * s <= a && j * s <= vmax + s; j++) out.push(j * s);
+  for (let v = a + 2 * s; v <= b && v <= vmax + 2 * s; v += 2 * s) out.push(v);
+  for (let v = b + 4 * s; v <= vmax; v += 4 * s) out.push(v);
+  if (!out.includes(300)) { out.push(300); out.sort((x, y) => x - y); }
+  return out;
+}
+function rainBand(v, s) { const { a, b } = rainBreaks(s); return v < a ? bandQ(v, 0, s) : v < b ? bandQ(v, a, 2 * s) : bandQ(v, b, 4 * s); }
 let mapBuildQueued = false, mapDrawQueued = false;
 function scheduleMapBuild() { if (!mapBuildQueued) { mapBuildQueued = true; requestAnimationFrame(() => { mapBuildQueued = false; if (!$('pMap').hidden) { buildMap(); drawMap(); } }); } }
 function scheduleMapDraw() { if (!mapDrawQueued) { mapDrawQueued = true; requestAnimationFrame(() => { mapDrawQueued = false; drawMap(); }); } }
@@ -5417,7 +5461,7 @@ function renderMapLegend() {
     const t = document.createElement('div'); t.className = 'mleg-t'; t.textContent = title;
     const bar = document.createElement('div'); bar.className = 'mleg-bar'; bar.style.background = grad;
     const lab = document.createElement('div'); lab.className = 'mleg-lab';
-    for (const s of labels) { const sp = document.createElement('span'); sp.textContent = s; lab.append(sp); }
+    for (const s of labels) { const sp = document.createElement('span'); if (typeof s === 'object') { sp.textContent = s.t; sp.style.left = s.p + '%'; lab.classList.add('pos'); } else sp.textContent = s; lab.append(sp); }
     wrap.append(t, bar, lab); box.append(wrap);
   };
   const stopsGrad = stops => 'linear-gradient(90deg,' + stops.map((st, i) => st[1] + ' ' + (100 * i / (stops.length - 1)).toFixed(1) + '%').join(',') + ')';
@@ -5431,7 +5475,7 @@ function renderMapLegend() {
     if (mapParams && mapParams.rainOn) { if (mapParams.RF) { const st = state.insWhen === 'year' ? RAIN_YR : RAIN_SOL;
       add((mapParams.wrOn ? 'Rain' : 'Rain over land') + (state.insWhen === 'year' ? ', per Earth year' : ' on this date, per sol'), 'linear-gradient(90deg,' + RAIN_COL.map((c, i) => c + ' ' + (100 * i / (RAIN_COL.length - 1)).toFixed(1) + '%').join(',') + ')', st.map(fmtRain)); } }
     else if (mapParams && mapParams.swingOn) add('Seasonal swing: warmest minus coldest sol' + dayPartText(), swingGrad(), [0, 20, 40, 60, 80].map(fmtDT));
-    else if (mapParams && mapParams.tempOn) add((state.insWhen === 'warm10' ? 'Insolation-based temperature, 10th warmest sol' : state.insWhen === 'cold10' ? 'Insolation-based temperature, 10th coldest sol' : 'Insolation-based temperature') + dayPartText(), tempGrad(), [-60, -40, -20, 0, 20, 40, 60].map(v => fmtTemp(v + 273.15)));
+    else if (mapParams && mapParams.tempOn) add((state.insWhen === 'warm10' ? 'Insolation-based temperature, 10th warmest sol' : state.insWhen === 'cold10' ? 'Insolation-based temperature, 10th coldest sol' : 'Insolation-based temperature') + dayPartText() + ', ' + (state.tUnit === 'K' ? 'K' : state.tUnit === 'F' ? '°F' : '°C'), tempGrad(), [-60, -30, 0, 10, 20, 30, 35, 60].map(v => ({ t: fmtTemp(v + 273.15).replace(/ ?(°C|°F|K)$/, ''), p: tempPos(v) })));
     else if (mapParams && mapParams.uvOn) add((mapParams.uvPeak ? 'Peak UV index' : 'Sol-average UV index') + ', clear sky' + (mapParams.uvPeak ? ' (WHO colours)' : ''), mapParams.uvPeak ? uvGrad() : insGrad(), mapParams.uvPeak ? ['0', '3', '6', '9', '12'] : qs.map(v => String(Math.round(v * 10) / 10)));
     else add((state.insMetric === 'mean' ? 'Daily-mean' : 'Peak') + (mapParams && mapParams.visOn ? ' visible light (400–700 nm)' : ' insolation') + ', W/m²' + (state.insDyn ? '' : ' (fixed scale)'), insGrad(), qs.map(fmtInt));
   }
@@ -5532,7 +5576,7 @@ function updateMapControls() {
   pr('iwW10', state.insWhen === 'warm10'); pr('iwC10', state.insWhen === 'cold10'); $('iwW10').hidden = $('iwC10').hidden = state.insShow !== 'temp';
   pr('isRain', state.insShow === 'rain'); $('mapRivers').checked = state.mapRivers;
   $('wtRow').hidden = !(state.insShow === 'temp' || state.insShow === 'rain'); $('waterTemp').checked = state.waterTemp;
-  $('rainIsoRow').hidden = !(state.mapLayer === 'ins' && state.insShow === 'rain') || !state.mapIso; $('rainStep').value = RAIN_STEPS.indexOf(state.rainStep); setText('rIsoOut', rainIsoText());
+  $('rainIsoRow').hidden = !(state.mapLayer === 'ins' && state.insShow === 'rain') || !state.mapIso; $('rainStep').value = RAIN_STEPS.indexOf(state.rainStep); setText('rIsoOut', rainIsoText()); setText('rIsoHint', rainHintText());
   $('eLandOn').checked = state.eLandOn; $('eLandStep').hidden = !state.eLandOn; $('eLandStep').value = ELEV_STEPS.indexOf(state.eLandStep); setText('eLandOut', state.eLandOn ? elevIsoText(state.eLandStep) : 'off');
   $('eWatOn').checked = state.eWatOn; $('eWatStep').hidden = !state.eWatOn; $('eWatStep').value = ELEV_STEPS.indexOf(state.eWatStep); setText('eWatOut', state.eWatOn ? elevIsoText(state.eWatStep) : 'off'); $('mapBands').checked = state.mapBands;
   document.querySelectorAll('.js-light').forEach(bt => bt.setAttribute('aria-pressed', String(bt.dataset.light === state.light)));
@@ -5636,13 +5680,18 @@ for (const [id, u] of [['tuC', 'C'], ['tuF', 'F'], ['tuK', 'K']]) $(id).addEvent
 function isoText() { const d = state.isoStep, u = state.tUnit, v = u === 'F' ? d * 9 / 5 : d;
   return 'every ' + (Number.isInteger(v) ? v : v.toFixed(1)) + (u === 'F' ? ' °F' : u === 'K' ? ' K' : ' °C') + (state.insWhen === 'swing' ? ' of swing' : ' from ' + fmtTemp(273.15)); }
 $('isoStep').addEventListener('input', e => { state.isoStep = Math.round(+e.target.value); setText('isoOut', isoText()); holdContours(); save(); });
-function rainIsoText() { const v = state.rainStep; return 'every ' + (v >= 1000 ? '1 m' : v + ' mm') + ' a year'; }
+const mmText = v => v >= 1000 ? +(v / 1000).toFixed(2) + ' m' : v + ' mm';
+function rainIsoText() { return 'every ' + mmText(state.rainStep) + ' a year'; }
+function rainHintText() {
+  const s = state.rainStep, { a, b } = rainBreaks(s);
+  return 'Lines of equal yearly rain (on a chosen date: that day\'s rate over a year): every ' + mmText(s) + ' up to ' + mmText(a) + ', every ' + mmText(2 * s) + ' up to ' + mmText(b) + ' and every ' + mmText(4 * s) + ' beyond, so the gap doubles past 600 mm and again past 2.4 m. The 300 mm line, the edge of dry country, is drawn thick.';
+}
 function elevIsoText(v) { return v > 0 ? 'every ' + v + ' ' + hUnitName() : 'none'; }
 $('eLandOn').addEventListener('change', e => { state.eLandOn = e.target.checked; mapSettingsChanged(); });
 $('eWatOn').addEventListener('change', e => { state.eWatOn = e.target.checked; mapSettingsChanged(); });
 $('mapIso').addEventListener('change', e => { state.mapIso = e.target.checked; mapSettingsChanged(); });
 for (const [id, v] of [['dpMean', 'mean'], ['dpHigh', 'high'], ['dpLow', 'low']]) $(id).addEventListener('click', () => { state.dayPart = v; mapSettingsChanged(); });
-$('rainStep').addEventListener('input', e => { state.rainStep = RAIN_STEPS[+e.target.value] || 100; setText('rIsoOut', rainIsoText()); holdContours(); save(); });
+$('rainStep').addEventListener('input', e => { state.rainStep = RAIN_STEPS[+e.target.value] || 100; setText('rIsoOut', rainIsoText()); setText('rIsoHint', rainHintText()); holdContours(); save(); });
 $('eLandStep').addEventListener('input', e => { state.eLandStep = ELEV_STEPS[+e.target.value] || 1; setText('eLandOut', elevIsoText(state.eLandStep)); scheduleMapBuild(); save(); });
 $('eWatStep').addEventListener('input', e => { state.eWatStep = ELEV_STEPS[+e.target.value] || 1; setText('eWatOut', elevIsoText(state.eWatStep)); scheduleMapBuild(); save(); });
 $('mapBands').addEventListener('change', e => { state.mapBands = e.target.checked; mapSettingsChanged(); });
