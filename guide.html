@@ -276,6 +276,7 @@ footer { max-width: 1180px; margin: 30px auto 0; padding-top: 18px; border-top: 
         </ol>
       </li>
       <li><a href="#results">Targets and results</a></li>
+      <li><a href="#seasons">The five seasons</a></li>
       <li><a href="#quirks">Martian quirks</a></li>
       <li><a href="#using">Using the simulator</a></li>
       <li><a href="#sources">Sources</a></li>
@@ -293,6 +294,7 @@ footer { max-width: 1180px; margin: 30px auto 0; padding-top: 18px; border-top: 
         <li><a href="#water">Water</a></li>
         <li><a href="#climate">How the climate is computed</a></li>
         <li><a href="#results">Targets and results</a></li>
+        <li><a href="#seasons">The five seasons</a></li>
         <li><a href="#quirks">Martian quirks</a></li>
         <li><a href="#using">Using the simulator</a></li>
         <li><a href="#sources">Sources</a></li>
@@ -508,6 +510,26 @@ footer { max-width: 1180px; margin: 30px auto 0; padding-top: 18px; border-top: 
       <p class="note"><span class="tag">In the simulator</span>The <b>Temperature</b> panel (temperature by latitude) counts these sols; hover the map for any place's values.</p>
     </section>
 
+    <section id="seasons">
+      <h2>The five seasons</h2>
+      <p>Earth's four seasons work because, in the temperate zones, temperature follows one yearly wave set by the tilt, and the two hemispheres mirror each other. On the three-sun Mars that pattern breaks down. The mirrors were tuned to cancel most of the tilt's seasons, and what is left is the orbit's: 45% more sunlight at perihelion, and a slow passage through the far side of the orbit. The whole populated band follows that cycle together. The northern half is warmest around L<sub>s</sub> 260°, its astronomical winter, and the southern half about 30° later.</p>
+      <p>To find seasons that fit, the model's year was split into equal parts, with the start date chosen so that each part groups the most similar sols of land temperature and rain between 45°S and 45°N. Five seasons of 134 sols stand out. They capture about 80% of the band's seasonal temperature changes, against 62% for the four astronomical quarters, and every version of the test puts their boundaries in the same places, within 2° of L<sub>s</sub>. The perihelion falls in the middle of one of them. They are named after the five traditional Spanish seasons:</p>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Season</th><th>L<sub>s</sub></th><th>What happens</th></tr></thead>
+          <tbody>
+            <tr><th>Spring</th><td class="n">133–208°</td><td>The band at its coolest, then the north warms fast. Spring in the far south (from 4 to 23 °C); the far north at its warmest, while L4 sends all its light north.</td></tr>
+            <tr><th>Summer</th><td class="n">208–294°</td><td>Centred on perihelion. The band at its warmest (about 29 °C in the north, rising to 26 °C in the south), with monsoon rain over the southern half.</td></tr>
+            <tr><th>Estío</th><td class="n">294–9°</td><td>The late, fading summer: the band cools from its peak while the far south reaches its hottest, about 33 °C. The south stays wet.</td></tr>
+            <tr><th>Autumn</th><td class="n">9–71°</td><td>Mild and steady in the band (18–21 °C). The north's wet season while the south dries; autumn in the far south.</td></tr>
+            <tr><th>Winter</th><td class="n">71–133°</td><td>From aphelion: cool and quiet. Deep winter in the far south (about 8 °C, down to 4); the southern half of the band at its driest.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Temperatures are sea-level-equivalent land averages for each season; the ground is cooler by about 2.3 K per km of height. The two halves of the band share the temperature seasons but not the rain: the north gets its rain in the cool months, like a Mediterranean climate, and the south in the warm ones, like a monsoon. Six equal seasons capture a little more, but their extra boundary splits off the far south's deepest winter from a stretch the populated band can barely tell apart.</p>
+      <p class="note"><span class="tag">In the simulator</span>The date dials show the five seasons as coloured arcs, with squares at the solstices and equinoxes and dots at perihelion and aphelion; the centre names the season of the chosen date.</p>
+    </section>
+
     <section id="quirks">
       <h2>Martian quirks</h2>
       <p>Mars looks Earth-like at first glance: a day of almost 24 hours and a similar tilt. The differences behind that resemblance shape every part of the project.</p>
@@ -520,7 +542,7 @@ footer { max-width: 1180px; margin: 30px auto 0; padding-top: 18px; border-top: 
         </figure>
         <div class="quirks">
           <article class="quirk"><p class="fig">490–713 W/m²</p><h3>A lopsided orbit</h3><p>Mars's distance from the Sun runs from 1.38 to 1.67 AU, so its sunlight swings by 45% over the year; Earth's swings by 7%. Because the mirrors share Mars's distance from the Sun, their light swings with it.</p></article>
-          <article class="quirk"><p class="fig">193 · 179 · 143 · 154 sols</p><h3>Unequal seasons</h3><p>Northern spring, summer, autumn and winter. Perihelion comes at L<sub>s</sub> 251°, just before the northern winter solstice, so the southern summer is short and hot and the southern winter long and cold. The three-sun sky is built around it: L4 switches off at perihelion and sends its light south through the long southern winter.</p></article>
+          <article class="quirk"><p class="fig">193 · 179 · 143 · 154 sols</p><h3>Unequal seasons</h3><p>Northern spring, summer, autumn and winter. Perihelion comes at L<sub>s</sub> 251°, just before the northern winter solstice, so the southern summer is short and hot and the southern winter long and cold. The three-sun sky is built around it: L4 switches off at perihelion and sends its light south through the long southern winter. Its climate follows <a href="#seasons">five seasons</a> of equal length instead.</p></article>
           <article class="quirk"><p class="fig">L<sub>s</sub> 0°–360°</p><h3>A calendar by angle</h3><p>Mars's seasons are counted by the solar longitude, L<sub>s</sub>: the angle Mars has moved round the Sun since the northern spring equinox. L<sub>s</sub> 90° is the northern summer solstice, 180° the autumn equinox, 270° the winter solstice. Equal steps of L<sub>s</sub> take unequal time.</p></article>
           <article class="quirk"><p class="fig">24 h 39 m 35 s</p><h3>A slightly longer day</h3><p>A sol is 2.7% longer than an Earth day. The simulator's clocks use Mars hours, a 24th of a sol (1.0275 Earth hours), on local solar time, so 12:00 is when the Sun crosses the meridian.</p></article>
           <article class="quirk"><p class="fig">668.6 sols</p><h3>A long year</h3><p>A Martian year lasts 687 Earth days, 1.88 Earth years. Each season lasts about twice as long as on Earth, giving the ground more time to heat up and cool down, and the seasonal heat reaches deeper into the soil.</p></article>
@@ -575,9 +597,10 @@ footer { max-width: 1180px; margin: 30px auto 0; padding-top: 18px; border-top: 
       <p><a href="./#three">This link</a> opens the simulator with the three-sun sky. Each panel has a <b>Reset</b> button that returns it to the defaults described here.</p>
       <ul>
         <li><b>Sky bar.</b> Natural, Two suns or Three suns; the UV-free switch; each array's strength and shaping.</li>
+        <li><b>Date dials.</b> Drag round the year through the five seasons. The play button runs the year in anything from 1 to 300 seconds, set with <b>Year in</b>.</li>
         <li><b>Mars view.</b> The orbit to scale, or a ground view of the sky dome at any latitude with every sun's path; drag Mars round its orbit to change the date.</li>
         <li><b>Daylight, Insolation and Ratio.</b> Day length, sunlight (daily mean or noon peak) and the seasonal swing across the year, for any set of latitudes.</li>
-        <li><b>Map.</b> Water level, lakes and seas; elevation or insolation layers showing sunlight (all light, visible or UV index), temperature or rain; rivers; height and depth lines; a flat map that wraps round or a 3D globe.</li>
+        <li><b>Map.</b> Water level, lakes and seas; elevation or insolation layers showing sunlight (all light, visible or UV index), temperature or rain; rivers; height and depth lines; a flat map that wraps round or a 3D globe. Its controls can sit above the map or in a column on its left (drag the column's edge to resize it), and the sol, its L<sub>s</sub> and its season can be shown in the map's corner.</li>
         <li><b>Temperature.</b> Temperature by latitude over the land, with the counts of cold and hot sols used in this guide.</li>
       </ul>
       <figure>
