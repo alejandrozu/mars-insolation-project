@@ -908,7 +908,7 @@ svg .l-ref { stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 6 4; }
         <li><b>Temperature</b> is pinned to fixed temperatures from −60 to 60 °C and spends most of its colour on 0–35 °C, where people live: dark capri just above 0 °C, bright green at 10 °C, yellow at 20, orange at 30 and pure red at 35, then darker, ashier reds to 60. At 0 °C the colour flips to a light azure, which turns bluer and darker as it gets colder, so freezing stands out at a glance. The legend gives 0–35 °C two-thirds of its width.</li>
         <li><b>Rain</b> doubles with each colour: 300 mm a year yellow, 600 mm green, 1.2 m cyan, 2.4 m purple, 4.8 m magenta.</li>
         <li><b>Insolation</b> uses a fixed scale by default, or stretches between the lowest and highest values on land.</li>
-        <li><b>Climate zones</b> use the Köppen–Geiger colours of Beck et al. (2018), or for the Martian zones a hue for each warmth class, paler where drier (section 28).</li>
+        <li><b>Climate zones</b> use the Köppen–Geiger colours of Beck et al. (2018), or for the Martian zones a hue for each warmth class, paler where drier, shifted for seasonal climates (section 28).</li>
       </ul>
       <h3>Lines</h3>
       <ul>
@@ -940,23 +940,25 @@ svg .l-ref { stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 6 4; }
       </figure>
       <p>Half the land is <b>temperate</b> (C, 51%): oceanic Cfb over the southern highlands (20%) and Mediterranean Csa around the northern ocean (15%). A quarter is <b>arid</b> (B, 27%), the steppes and deserts of Arabia, Chryse, Xanthe and Elysium. Most of the far south is <b>cold</b> (D, 18%), with warm summers and winters below freezing, mostly dry-summer Dsa and Dsb, and the volcano tops are <b>polar</b> (E, 4%). There are almost no tropical climates (under 1%): most land stands high (half of it more than 4.3 km above the sea), and even at sea level the band's coolest weeks fall below the 18 °C the A classes need.</p>
       <h3>Martian zones</h3>
-      <p>Köppen's thresholds come from Earth, where warmth follows latitude and the seasons follow the hemispheres. Here warmth depends mostly on height, the strongest seasons are set by the orbit (the far south swings by 20–40 K between its months), and the biggest regional contrast is <i>when</i> the rain falls: in the cool half of the year around the northern ocean, with the warmth over the southern highlands. The Martian zones use three letters built on those facts, and measure wetness with the rain model's own potential evaporation instead of Köppen's rule of thumb:</p>
+      <p>Köppen's thresholds come from Earth, where warmth follows latitude and the seasons follow the hemispheres. Here warmth depends mostly on height, the strongest seasons come from the orbit and from the thin air over Tharsis, and wetness is best measured against the rain model's own potential evaporation rather than Köppen's rule of thumb. The Martian zones are built on those facts:</p>
       <div class="tablewrap">
         <table>
-          <thead><tr><th>Letter</th><th>Meaning</th><th>Rule</th></tr></thead>
+          <thead><tr><th>Part</th><th>Meaning</th><th>Rule</th></tr></thead>
           <tbody>
             <tr><th>W · M · C</th><td>Warm · mild · cold</td><td>Mean temperature 15 °C or more · 7–15 °C · under 7 °C</td></tr>
-            <tr><th>S</th><td>Seasonal</td><td>Warmest and coldest months 20 K or more apart, whatever the mean</td></tr>
             <tr><th>r · h · d · x</th><td>Rainy · humid · dry · desert</td><td>The year's rain over its potential evaporation: 1 or more · 0.5–1 · 0.25–0.5 · under 0.25</td></tr>
-            <tr><th>s · c</th><td>Summer rain · cool-season rain</td><td>For rainy and humid places: 60% or more of the rain in the warmer half-year · 40% or less (no letter if even)</td></tr>
+            <tr><th>e · u</th><td>Even · uneven rain</td><td>Uneven when 60% or more of the year's rain falls in one half of the year, warm or cool</td></tr>
+            <tr><th>s (in front)</th><td>Seasonal</td><td>Warmest and coldest months 20 K or more apart</td></tr>
+            <tr><th>Pt · Pb · Pf</th><td>Polar tundra · barren · frost</td><td>Warmest month under 10 °C: 5–10 °C · 0–5 °C · below 0 °C. Only the Tharsis heights</td></tr>
           </tbody>
         </table>
       </div>
+      <p>So <b>Mhu</b> is mild, humid, with uneven rain, and <b>sMdu</b> the same warmth but dry and seasonal. The legend sets them out the same way: a block for each warmth class, a row for each wetness, and columns for even, uneven, seasonal even and seasonal uneven.</p>
       <figure>
         <img src="img/guide-zones.webp" width="1446" height="724" alt="Martian climate zones of the three-sun Mars" loading="lazy">
-        <figcaption>Martian zones with three suns: a hue for each warmth class (orange warm, green mild, blue cold, purple seasonal), paler where drier.</figcaption>
+        <figcaption>Martian zones with three suns: orange warm, green mild, blue cold, grey and white polar, paler where drier. Seasonal climates shift in hue: warm toward red, mild toward olive (the far south), cold toward violet (the flanks of Tharsis).</figcaption>
       </figure>
-      <p>With three suns, 40% of the land is <b>mild</b>, mostly the humid highlands of the southern band, much of it with summer rain (Mhs 11%, Mh 10%); 31% is <b>warm</b>, from the rainy coasts of the northern ocean with their cool-season rain (Wrc, Whc) to the dry warm belt of Arabia and Chryse (Wd 12%, Wx 3%); 21% is <b>seasonal</b>, nearly all the far south, mostly dry (Sd 12%); and 9% is <b>cold</b>, the high Tharsis and Elysium volcanoes and the highest plateaus, rainy where the winds push moist air up their slopes. By wetness, 19% of the land is rainy, 39% humid, 35% dry and 7% desert.</p>
+      <p>With three suns, 56% of the land is <b>mild</b>: the humid highlands of the populated band (Mhu 13%, Mhe 10%) and the dry, seasonal far south (sMdu 7%, sMde 4%). 33% is <b>warm</b>, from the dry belt of Arabia and Chryse (Wde 10%) to the humid and rainy lowlands around the northern ocean. 8% is <b>cold</b>, a ring round the Tharsis heights, and 4% is <b>polar</b>, the heights themselves (Pt 3.5%, Pb 0.4%, Pf 0.3%). A fifth of the land is seasonal: nearly all of the far south, where the orbit drives big swings, and the flanks of Tharsis, where the thinner air overhead lets the temperature swing more. Almost half of the land (45%) gets uneven rain. By wetness, 17% of the land is rainy, 38% humid, 34% dry and 7% desert.</p>
       <p class="note"><span class="tag">In the simulator</span>Map → <b>Insolation</b> → <b>Show: Climate zones</b>, then <b>Köppen–Geiger</b> or <b>Martian zones</b>. The legend lists the zones on the map with their share of the land; hovering gives a place's zone, its months' range of temperature, its rain and how much of it falls in the warmer half.</p>
     </section>
 
