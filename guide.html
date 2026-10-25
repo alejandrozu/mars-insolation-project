@@ -138,6 +138,8 @@ td.n { font-family: var(--f-mono); white-space: nowrap; }
 .cal tr.s0 > * { border-top: 2px solid var(--muted); }
 .cal .cs { display: block; font-size: 11.5px; color: var(--muted); font-weight: 400; }
 .cal td:nth-child(5) { white-space: nowrap; }
+.cmp { font-size: 13.5px; }
+.cmp th, .cmp td { padding: 7px 10px; }
 .keycol td:nth-child(2) { color: var(--ink); font-weight: 500; }
 
 /* chart styling */
@@ -313,7 +315,7 @@ svg .l-ref { stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 6 4; }
     <div><dt>Populated band, 45°S–45°N</dt><dd><span class="num">≈3.5 sols a year</span>with a daily mean outside 0–30 °C on land, all of them hot; no frost</dd></div>
     <div><dt>Northern ocean</dt><dd><span class="num">23–30 °C</span>over the year, north of the equator</dd></div>
     <div><dt>Rain</dt><dd><span class="num">735 mm a year</span>over land on average; 9% of the land gets less than 300 mm</dd></div>
-    <div><dt>Climates</dt><dd><span class="num">Seven skies</span>Temperate, the default, and Warm, Cool, Cold, Dry, Wet and Seasonal to choose from (section 10)</dd></div>
+    <div><dt>Climates</dt><dd><span class="num">Seven skies</span>Hot, Warm (the default), Cool, Cold, Dry, Wet and Seasonal to choose from, each set beside Earth (sections 10 and 28)</dd></div>
   </dl>
 </div>
 
@@ -592,10 +594,10 @@ svg .l-ref { stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 6 4; }
 
     <section id="results">
       <h2><span class="sn">10</span>Targets and results</h2>
-      <p>How the default sky does against the targets of section 01, next to the two-sun alternative, at the default air (1,000 ppm of CO₂), sea level and lapse rate:</p>
+      <p>How the default sky, Warm, does against the targets of section 01, next to the two-sun alternative, at the default air (1,000 ppm of CO₂), sea level and lapse rate:</p>
       <div class="tablewrap">
         <table class="keycol">
-          <thead><tr><th>Measure</th><th>Three suns (default)</th><th>Two suns</th><th>Target</th></tr></thead>
+          <thead><tr><th>Measure</th><th>Three suns, Warm (default)</th><th>Two suns</th><th>Target</th></tr></thead>
           <tbody>
             <tr><th>Land 45°S–45°N, sols a year below 0 °C</th><td class="n">0</td><td class="n">6.5</td><td>as few as possible</td></tr>
             <tr><th>Land 45°S–45°N, sols a year above 30 °C</th><td class="n">3.5</td><td class="n">46</td><td>as few as possible</td></tr>
@@ -615,22 +617,38 @@ svg .l-ref { stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 6 4; }
         <figcaption>Yearly-average temperature with three suns, isotherms every 10 °C. Warm lowlands around the northern ocean, cooler southern uplands and cold peaks on the Tharsis and Elysium volcanoes. Colours: light azure below 0 °C, dark capri just above it, green 10 °C, yellow 20, orange 30, red 35.</figcaption>
       </figure>
       <h3>Other climates</h3>
-      <p>The simulator offers seven three-sun skies to choose from, each tuned at 1,000 ppm of CO₂ with its own lakes balanced and stored. Temperate is the default; the others give a warmer, cooler, colder, drier, wetter or more seasonal planet, all of them habitable. Shares are of the land:</p>
+      <p>The simulator offers seven three-sun skies to choose from, each tuned at 1,000 ppm of CO₂ with its own lakes balanced and stored, and all of them habitable. <b>Warm</b>, the default, and <b>Cool</b> are the two gentlest, a step apart in warmth; the others give a hotter, colder, drier, wetter or more seasonal planet. Shares are of the land, and section 28 sets them beside Earth's:</p>
       <div class="tablewrap">
-        <table>
-          <thead><tr><th>Climate</th><th>Mirrors</th><th>Hot / warm / mild</th><th>Cool / cold / colder</th><th>Rainy / humid / dry / desert</th><th>Band sols outside 0–30 °C</th><th>Band's seasonal swing</th></tr></thead>
+        <table class="cmp">
+          <thead><tr><th>Climate</th><th>Hot / warm /<br>mild</th><th>Cool / cold /<br>colder</th><th>Rainy / humid /<br>dry / desert</th><th>Band sols<br>outside 0–30 °C</th><th>Band's<br>yearly range</th></tr></thead>
           <tbody>
-            <tr><th>Temperate (default)</th><td>L5 up to 1.21×, dimmed to 90% and 80%; L4 0.66×, keeping 60% of its northward spill</td><td class="n">4 / 25 / 42%</td><td class="n">21 / 5 / 3%</td><td class="n">21 / 44 / 31 / 4%</td><td class="n">3.5</td><td class="n">9.4 K</td></tr>
-            <tr><th>Warm</th><td>L5 up to 1.31×, dimmed to 85% and 70%; L4 as Temperate but keeping half its northward spill</td><td class="n">12.5 / 27 / 46%</td><td class="n">10.5 / 3.5 / 1%</td><td class="n">21 / 42 / 30 / 6.5%</td><td class="n">12.6</td><td class="n">8.5 K</td></tr>
-            <tr><th>Cool</th><td>L5 up to 1.22×, dimmed to 85% and 70%; L4 0.60×, keeping all its spill</td><td class="n">1 / 20 / 24%</td><td class="n">42 / 9 / 4%</td><td class="n">21.5 / 43 / 33 / 3%</td><td class="n">0</td><td class="n">7.9 K</td></tr>
-            <tr><th>Cold</th><td>L5 up to 1.20×, dimmed to 90% and 80%; L4 0.70×, keeping 70% of its northward spill and none of its southward</td><td class="n">1.5 / 23 / 21%</td><td class="n">29 / 18.5 / 7%</td><td class="n">20 / 45 / 27 / 9%</td><td class="n">2.5</td><td class="n">10.5 K</td></tr>
-            <tr><th>Dry</th><td>L5 up to 1.24×, dimmed to 90% and 80%; L4 0.60×, keeping 40% of its northward spill</td><td class="n">5 / 24 / 44%</td><td class="n">20 / 4.5 / 2%</td><td class="n">16 / 38 / 35 / 11.5%</td><td class="n">5.1</td><td class="n">9.9 K</td></tr>
-            <tr><th>Wet</th><td>L5 up to 1.22×, dimmed to 85% and 70%; L4 0.66×, keeping all its spill</td><td class="n">1.6 / 23 / 30.5%</td><td class="n">35 / 7 / 3%</td><td class="n">25 / 46 / 27 / 1.6%</td><td class="n">0.1</td><td class="n">7.9 K</td></tr>
-            <tr><th>Seasonal</th><td>L5 a steady 1.11×; L4 0.56×, keeping all its spill</td><td class="n">1 / 24 / 26%</td><td class="n">38 / 7.5 / 3%</td><td class="n">18 / 45 / 32 / 5%</td><td class="n">10.5</td><td class="n">13.1 K</td></tr>
+            <tr><th>Hot</th><td class="n">12.5 / 26.5 / 46%</td><td class="n">10.5 / 3.5 / 1.1%</td><td class="n">21.5 / 41.5 / 30.5 / 6.4%</td><td class="n">12.6</td><td class="n">8.5 K</td></tr>
+            <tr><th>Warm (default)</th><td class="n">4.1 / 25 / 42.5%</td><td class="n">21 / 5 / 2.3%</td><td class="n">21.5 / 44 / 30.5 / 4%</td><td class="n">3.5</td><td class="n">9.4 K</td></tr>
+            <tr><th>Cool</th><td class="n">0.9 / 19.5 / 24%</td><td class="n">42 / 9.4 / 3.9%</td><td class="n">21.5 / 43 / 33 / 2.7%</td><td class="n">0</td><td class="n">7.9 K</td></tr>
+            <tr><th>Cold</th><td class="n">1.5 / 22.5 / 21%</td><td class="n">29 / 18.5 / 7.3%</td><td class="n">19.5 / 45.5 / 26.5 / 8.4%</td><td class="n">2.5</td><td class="n">10.5 K</td></tr>
+            <tr><th>Dry</th><td class="n">4.8 / 24 / 44.5%</td><td class="n">20.5 / 4.5 / 2%</td><td class="n">15.5 / 38.5 / 35 / 11%</td><td class="n">5.1</td><td class="n">9.9 K</td></tr>
+            <tr><th>Wet</th><td class="n">1.6 / 23 / 30.5%</td><td class="n">35 / 6.9 / 3.1%</td><td class="n">25 / 46 / 27 / 1.6%</td><td class="n">0.1</td><td class="n">7.9 K</td></tr>
+            <tr><th>Seasonal</th><td class="n">1.1 / 24 / 26%</td><td class="n">38.5 / 7.5 / 3.2%</td><td class="n">18 / 45.5 / 31.5 / 4.8%</td><td class="n">10.5</td><td class="n">13.1 K</td></tr>
           </tbody>
         </table>
       </div>
-      <p>"Colder" is frigid and polar together. <b>Warm</b> adds hot and warm land and about 13 hot sols a year in the band. <b>Cool</b> keeps the cool highlands and mild lowlands of the earlier skies. <b>Cold</b> has as much warm and mild land as Cool but freezes the far south and the high uplands, turning away L4's spill to the south that keeps the far south mild in the other skies; its far north is hot in late summer (about 90 sols above 30 °C). <b>Dry</b> turns away more of L4's spill to the north, cooling the northern ocean that feeds the rain: rain falls to about 650 mm, dry land reaches 35% and rainy land drops to 16%, and Hellas and Argyre settle well below their brims; drying further turns dry land into desert faster than humid land into dry. <b>Wet</b> keeps all of L4's spill: the rainiest planet, with almost no desert and the hottest far north (about 115 sols above 30 °C). <b>Seasonal</b> keeps L5 steady through the year, so the perihelion summer is sharp: the band's warmest and coldest weeks come about 13 K apart, and it has about 10 hot sols a year.</p>
+      <p>"Colder" is frigid and polar together. The yearly range is the gap between the warmest and coldest sols at each latitude, averaged over the band; the band as a whole varies less, because its two halves peak at different times (about 7.5 °C for Warm).</p>
+      <p><b>Warm</b> and <b>Cool</b> share the same gentle year and differ by a step in warmth. Warm turns most of the highlands mild and the lowlands round the ocean warm (67.5% of the land warm or mild), with about 3.5 hot sols a year in the band; Cool keeps the cool highlands and mild lowlands of the earlier skies (66.5% cool or mild), with no sols outside 0–30 °C in the band, a slightly flatter year and a little less rain (685 mm against 735). Which suits better is a matter of taste. <b>Hot</b> adds hot and warm land and about 13 hot sols a year in the band. <b>Cold</b> has as much warm and mild land as Cool but freezes the far south and the high uplands, turning away L4's spill to the south that keeps the far south mild in the other skies; its far north is hot in late summer (about 90 sols above 30 °C). <b>Dry</b> turns away more of L4's spill to the north, cooling the northern ocean that feeds the rain: rain falls to about 650 mm, dry land reaches 35% and rainy land drops to 15.5%, and Hellas and Argyre settle well below their brims; drying further turns dry land into desert faster than humid land into dry. <b>Wet</b> keeps all of L4's spill: the rainiest planet, with almost no desert and the hottest far north (about 115 sols above 30 °C). <b>Seasonal</b> keeps L5 steady through the year, so the perihelion summer is sharp: the band's yearly range reaches about 13 K, and it has about 10 hot sols a year.</p>
+      <p>The mirrors behind them, as multiples of the Sun's own light at Mars: L5 at its brightest, with the shares of that it sends at L<sub>s</sub> 180° and 270°, and L4 at its brightest, with how much it keeps of the light that one cap cannot take and spills to the other (section 05):</p>
+      <div class="tablewrap">
+        <table class="cmp">
+          <thead><tr><th>Climate</th><th>L5, the second sun</th><th>L4, the supplemental sun</th></tr></thead>
+          <tbody>
+            <tr><th>Hot</th><td>1.31×, dimmed to 85% and 70%</td><td>0.66×, keeping half its northward spill</td></tr>
+            <tr><th>Warm (default)</th><td>1.21×, dimmed to 90% and 80%</td><td>0.66×, keeping 60% of its northward spill</td></tr>
+            <tr><th>Cool</th><td>1.22×, dimmed to 85% and 70%</td><td>0.60×, keeping all its spill</td></tr>
+            <tr><th>Cold</th><td>1.20×, dimmed to 90% and 80%</td><td>0.70×, keeping 70% of its northward spill and none of its southward</td></tr>
+            <tr><th>Dry</th><td>1.24×, dimmed to 90% and 80%</td><td>0.60×, keeping 40% of its northward spill</td></tr>
+            <tr><th>Wet</th><td>1.22×, dimmed to 85% and 70%</td><td>0.66×, keeping all its spill</td></tr>
+            <tr><th>Seasonal</th><td>a steady 1.11×</td><td>0.56×, keeping all its spill</td></tr>
+          </tbody>
+        </table>
+      </div>
       <p class="note"><span class="tag">In the simulator</span>Sky bar → <b>Climate</b>. Changing any mirror setting makes the sky <b>Custom</b>.</p>
       <h3>The two-sun alternative</h3>
       <p>The simulator also offers a two-sun sky: one array at L5 sending 1.33 times the Sun's light, which brings Mars's average to about Earth's. Its lens is deeper (k = 1, swinging by ±0.2 over the year), with the dimmest line swinging ±27.5° around 11.5°N. With one beam doing all the shaping, warming the high latitudes enough would overheat the middle, so the compromise leaves the populated band hot (above 30 °C on about 46 sols a year) while the northern ocean averages about 16 °C, 330 mm of rain over land with 66% of the land under 300 mm, the far south outside −20 to 30 °C for more than a quarter of the year, and Hellas shrunk to a lake 1.6 km deep on its floor. That is why the three-sun sky is the default.</p>
@@ -1004,8 +1022,29 @@ svg .l-ref { stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 6 4; }
         <img src="img/guide-zones.webp" width="1446" height="724" alt="Martian climate zones of the three-sun Mars" loading="lazy">
         <figcaption>Martian zones with three suns. A hue for each warmth class, 60° apart: magenta hot, red warm, yellow mild, green cool, cyan cold, blue frigid, grey-white polar; darker where wetter, paler where drier. Uneven rain turns the hue toward the next class, seasonal climates turn it the other way.</figcaption>
       </figure>
-      <p>With three suns the largest class is <b>mild</b> (43%): the humid and dry uplands of the populated band and much of the far south (Mhe 12%, Md 11%, Mhu 6%). <b>Warm</b> climates (25%) fill the lowlands round the northern ocean, from the dry belt of Arabia and Chryse (Wd 9%) to humid warm coasts (Whe 7%). A fifth of the land is <b>cool</b> (21%), the highest uplands (Khu 5%, Kd 4%, Khe 4%), and <b>hot</b> climates are few (4%), mostly dry lowlands. 5% is <b>cold</b>, mostly the flanks of Tharsis, and Tharsis itself rises through <b>frigid</b> (1.7%) to <b>polar</b> (0.6%) on its summits. 8% of the land is seasonal, mostly the far south, and 19% gets uneven rain. By wetness, 21% of the land is rainy, 44% humid, 31% dry and 4% desert.</p>
+      <p>With the default Warm sky the largest class is <b>mild</b> (42.5%): the humid and dry uplands of the populated band and much of the far south (Mhe 12%, Md 11%, Mhu 6%). The lowlands round the northern ocean are <b>warm</b> (25%), from the dry belt of Arabia and Chryse (Wd 9%) to humid warm coasts (Whe 7%). A fifth of the land is <b>cool</b> (21%), the highest uplands (Khu 5%, Kd 4%, Khe 4%), and <b>hot</b> climates are few (4%), mostly dry lowlands. 5% is <b>cold</b>, mostly the flanks of Tharsis, and Tharsis itself rises through <b>frigid</b> (1.7%) to <b>polar</b> (0.6%) on its summits. 8% of the land is seasonal, mostly the far south, and 19.5% gets uneven rain. By wetness, 21.5% of the land is rainy, 44% humid, 30.5% dry and 4% desert.</p>
       <p class="note"><span class="tag">In the simulator</span>Map → <b>Insolation</b> → <b>Show: Climate zones</b>, then <b>Köppen–Geiger</b> or <b>Martian zones</b>. Click zones in the legend (or a row or block title) to highlight them on the map, with their total share of the land; <b>Clear</b> shows them all again. The legend lists the zones on the map with their share of the land; hovering gives a place's zone, its months' range of temperature, its rain and how much of it falls in the warmer half.</p>
+      <h3>Against Earth</h3>
+      <p>The Martian zones can be worked out for Earth too, from its observed climate: NCEP temperatures for 1991–2020 brought to each place's height at the same 6 K per km, GPCP rain, and the rain model's own potential evaporation. Set beside the seven skies, they show how differently the two worlds are built. Shares are of the land; Antarctica, 8.7% of Earth's land, is left out of the first row:</p>
+      <div class="tablewrap">
+        <table class="cmp">
+          <thead><tr><th>Land</th><th>Hot / warm / mild</th><th>Cool / cold / colder</th><th>Rainy / humid / dry / desert</th><th>Seasonal</th><th>Mean, °C</th><th>Rain, mm</th></tr></thead>
+          <tbody>
+            <tr><th>Earth without Antarctica</th><td class="n">18 / 25 / 11%</td><td class="n">7.8 / 9.2 / 29%</td><td class="n">46.5 / 25.5 / 11.5 / 16%</td><td class="n">17.5%</td><td class="n">13.0</td><td class="n">845</td></tr>
+            <tr><th>Earth, all its land</th><td class="n">16.5 / 23 / 10%</td><td class="n">7.1 / 8.4 / 35%</td><td class="n">51 / 23.5 / 10.5 / 15%</td><td class="n">16%</td><td class="n">9.1</td><td class="n">790</td></tr>
+            <tr><th>Hot</th><td class="n">12.5 / 26.5 / 46%</td><td class="n">10.5 / 3.5 / 1.1%</td><td class="n">21.5 / 41.5 / 30.5 / 6.4%</td><td class="n">6.9%</td><td class="n">19.1</td><td class="n">790</td></tr>
+            <tr><th>Warm (default)</th><td class="n">4.1 / 25 / 42.5%</td><td class="n">21 / 5 / 2.3%</td><td class="n">21.5 / 44 / 30.5 / 4%</td><td class="n">8%</td><td class="n">17.1</td><td class="n">735</td></tr>
+            <tr><th>Cool</th><td class="n">0.9 / 19.5 / 24%</td><td class="n">42 / 9.4 / 3.9%</td><td class="n">21.5 / 43 / 33 / 2.7%</td><td class="n">7.1%</td><td class="n">14.9</td><td class="n">685</td></tr>
+            <tr><th>Cold</th><td class="n">1.5 / 22.5 / 21%</td><td class="n">29 / 18.5 / 7.3%</td><td class="n">19.5 / 45.5 / 26.5 / 8.4%</td><td class="n">4.7%</td><td class="n">14.4</td><td class="n">665</td></tr>
+            <tr><th>Dry</th><td class="n">4.8 / 24 / 44.5%</td><td class="n">20.5 / 4.5 / 2%</td><td class="n">15.5 / 38.5 / 35 / 11%</td><td class="n">9.1%</td><td class="n">17.3</td><td class="n">650</td></tr>
+            <tr><th>Wet</th><td class="n">1.6 / 23 / 30.5%</td><td class="n">35 / 6.9 / 3.1%</td><td class="n">25 / 46 / 27 / 1.6%</td><td class="n">7.1%</td><td class="n">15.9</td><td class="n">760</td></tr>
+            <tr><th>Seasonal</th><td class="n">1.1 / 24 / 26%</td><td class="n">38.5 / 7.5 / 3.2%</td><td class="n">18 / 45.5 / 31.5 / 4.8%</td><td class="n">12%</td><td class="n">15.8</td><td class="n">670</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Earth's land sits at the extremes: about a fifth of it is hot and nearly 30% frigid or polar (Siberia, northern Canada, Greenland and the high mountains), which leaves under a fifth mild or cool. Every sky here gathers its land in the middle, 50–66.5% mild or cool, with at most 12.5% hot and at most 7.3% frigid or polar. Even Hot has less hot land than Earth, and Cold, with twice Earth's share of cold land, has a quarter of its frigid and polar land. The share of warm land is the one thing they all have in common with Earth: about a fifth to a quarter in every case.</p>
+      <p>Earth is split by wetness too: nearly half its land is rainy, from the rainforests to the wet boreal north, a sixth is desert, and only 37% lies between. The skies here put 72–77% of their land in humid or dry, with less rainy land (15.5–25%) and less desert (1.6–11%); Dry comes closest to Earth's deserts and Wet has the fewest. Earth's great continental interiors also make 17.5% of its land seasonal, against 4.7–12% here, with Seasonal the closest. Every sky has warmer land than Earth on average (14.4–19.1 °C against 13.0 °C), a little less rain over it (650–790 mm against 845) and less of it under 300 mm a year (3.6–16.5% against 21%).</p>
+      <p>The match is close but not exact. Earth's temperatures come from a grid 2.5° across, about 280 km, so the height is taken off a temperature shared by a valley and its mountains; and the potential evaporation, a simple formula of sunlight and temperature, is low over the cold north, so much of Earth's boreal forest counts as rainy where a fuller measure would call it humid. Mars has no great tropical lowland continents, and half its land stands more than 4.3 km above the sea, which is why so little of it is hot.</p>
     </section>
 
     <section id="limits">
