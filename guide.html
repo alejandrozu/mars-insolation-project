@@ -306,13 +306,13 @@ svg .l-ref { stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 6 4; }
   <dl class="facts">
     <div><dt>Sky</dt><dd><span class="num">Three suns</span>The Sun, a mirror array at L5 sending 1.10× sunlight, and one at L4 sending up to 0.51× (0.31× on average) to the high latitudes only</dd></div>
     <div><dt>Light</dt><dd><span class="num">1,419 W/m²</span>on average above the air, 104% of what Earth gets. The Sun alone gives Mars 589 W/m², 43%</dd></div>
-    <div><dt>Air</dt><dd><span class="num">1.05 atm</span>at sea level, an Earth-like mix with 700 ppm of CO₂. Under Mars gravity that is 2.77× as much air above each m² as on Earth</dd></div>
+    <div><dt>Air</dt><dd><span class="num">1.05 atm</span>at sea level, an Earth-like mix with 1,000 ppm of CO₂. Under Mars gravity that is 2.77× as much air above each m² as on Earth</dd></div>
     <div><dt>Sea level</dt><dd><span class="num">−3.12 km</span>below the MOLA datum, with 26% of the surface lying below it</dd></div>
     <div><dt>Surface</dt><dd><span class="num">54.6% land</span>ocean 23.8%, lakes and closed seas 21.6%</dd></div>
     <div><dt>Water needed</dt><dd><span class="num">476 m</span>as a global layer: 69 million km³, about 5% of Earth's oceans</dd></div>
-    <div><dt>Populated band, 45°S–45°N</dt><dd><span class="num">≈7 sols a year</span>with a daily mean outside 0–30 °C on land: 4 frosty, on high ground, and 3 hot</dd></div>
-    <div><dt>Northern ocean</dt><dd><span class="num">23–26 °C</span>all year, north of the equator</dd></div>
-    <div><dt>Rain</dt><dd><span class="num">650 mm a year</span>over land on average; 13% of the land gets less than 300 mm</dd></div>
+    <div><dt>Populated band, 45°S–45°N</dt><dd><span class="num">≈8 sols a year</span>with a daily mean outside 0–30 °C on land: 2 frosty, on high ground, and 6.5 hot</dd></div>
+    <div><dt>Northern ocean</dt><dd><span class="num">24–27 °C</span>all year, north of the equator</dd></div>
+    <div><dt>Rain</dt><dd><span class="num">680 mm a year</span>over land on average; 11% of the land gets less than 300 mm</dd></div>
   </dl>
 </div>
 
@@ -414,8 +414,8 @@ svg .l-ref { stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 6 4; }
       <h2><span class="sn">02</span>Why add light</h2>
       <div class="decide">
         <div><span class="k">Chosen</span><span>Add sunlight with mirrors until Mars gets 1,419 W/m² on average above the air, 104% of what Earth gets.</span></div>
-        <div><span class="k">Because</span><span>With Earth-like air and the Sun alone, the model puts the land between 45°S and 45°N at about −40 °C on average at sea level, even with the default 700 ppm of CO₂, and the ocean would freeze over.</span></div>
-        <div><span class="k">Instead of</span><span>A much stronger greenhouse. The air's 700 ppm of CO₂ adds about 9 W/m² over Earth's greenhouse, against well over 100 W/m² of missing warmth, so most of it has to arrive as light.</span></div>
+        <div><span class="k">Because</span><span>With Earth-like air and the Sun alone, the model puts the land between 45°S and 45°N at about −39 °C on average at sea level, even with the default 1,000 ppm of CO₂, and the ocean would freeze over.</span></div>
+        <div><span class="k">Instead of</span><span>A much stronger greenhouse. The air's 1,000 ppm of CO₂ adds about 11 W/m² over Earth's greenhouse, against well over 100 W/m² of missing warmth, so most of it has to arrive as light.</span></div>
       </div>
       <p>Mars is 1.52 times farther from the Sun than Earth, so it gets 43% of Earth's sunlight: 589 W/m² above the air on average, against 1,361 W/m². Its orbit is also more elongated, with an eccentricity of 0.093 against Earth's 0.017, so its sunlight swings by 45% over the year, from 490 W/m² at aphelion to 713 W/m² at perihelion.</p>
       <p>The three suns raise the yearly average to 1,419 W/m². The chart shows where that light lands. The Sun alone gives the familiar pattern, strongest at the equator and weakest at the poles. L5 adds most of its light away from the latitudes the Sun already heats, so that between 45°S and 45°N the Sun and L5 together give a nearly even 300–325 W/m². Beyond about 50° L4 adds a ring of extra light, peaking near 590 W/m² around 60°N and 450 W/m² around 60°S.</p>
@@ -456,7 +456,7 @@ svg .l-ref { stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 6 4; }
       </div>
       <p>The beam is dimmest along one line across the planet and brighter toward the north and south. The profile is</p>
       <span class="formula">light ∝ 1 − k · cos 2(a − p),   k = 0.85</span>
-      <p>divided by its own average so the total stays 1.10×. Here <i>a</i> is the latitude as seen from the array, <i>p</i> the latitude of the dimmest line and <i>k</i> the depth of the dip. With k = 0.85 the dimmest line gets 0.26 times the average and the far north and south edges 3.2 times. <a href="#shaping">Section 16</a> gives the details. The array sent 1.17 times the Sun's light while the model had Earth's greenhouse; 6% less offsets the default 700 ppm of CO₂ (section 07).</p>
+      <p>divided by its own average so the total stays 1.10×. Here <i>a</i> is the latitude as seen from the array, <i>p</i> the latitude of the dimmest line and <i>k</i> the depth of the dip. With k = 0.85 the dimmest line gets 0.26 times the average and the far north and south edges 3.2 times. <a href="#shaping">Section 16</a> gives the details. The array sent 1.17 times the Sun's light while the model had Earth's greenhouse; with the default 1,000 ppm of CO₂, 1.10 times leaves the planet a little warmer and wetter than before (section 07).</p>
       <p>The dimmest line moves with the seasons:</p>
       <span class="formula">p = 7° + 27.5° · sin(L<sub>s</sub> − 8°) + 12° · sin 2(L<sub>s</sub> − 54°)</span>
       <p>It reaches 46°N in northern summer and 13°S at its southernmost, in northern autumn. It follows the latitude where the Sun stands overhead, and in northern summer runs well north of it, so the dimmest part of the beam falls where the Sun is already high and the days are long. The mirror light goes where the Sun is weak: the winter hemisphere and the far summer latitudes. The twice-a-year term lets the two halves of the year differ, because Mars's eccentric orbit makes the southern summer short and hot and the northern summer long and mild.</p>
@@ -510,8 +510,8 @@ svg .l-ref { stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 6 4; }
     <section id="air">
       <h2><span class="sn">07</span>Air</h2>
       <div class="decide">
-        <div><span class="k">Chosen</span><span>1.05 atm at sea level, an Earth-like mix of nitrogen and oxygen with 700 ppm of carbon dioxide.</span></div>
-        <div><span class="k">Because</span><span>People breathe it comfortably at sea level, and under Mars's weak gravity pressure falls slowly with height, so the southern highlands, on average 3.7 km above the sea, still have about 0.89 atm. 700 ppm is safe to breathe and leaves only a tenth of Mars's own carbon dioxide in the air.</span></div>
+        <div><span class="k">Chosen</span><span>1.05 atm at sea level, an Earth-like mix of nitrogen and oxygen with 1,000 ppm of carbon dioxide.</span></div>
+        <div><span class="k">Because</span><span>People breathe it comfortably at sea level, and under Mars's weak gravity pressure falls slowly with height, so the southern highlands, on average 3.7 km above the sea, still have about 0.89 atm. 1,000 ppm is still comfortable to breathe, about what a well-aired room on Earth holds, and it means removing seven-eighths of Mars's own carbon dioxide rather than almost all of it.</span></div>
         <div><span class="k">Instead of</span><span>The same mass of air as Earth's, which under Mars gravity would give only 0.38 atm; or Earth's CO₂ level, which would mean removing even more of Mars's own.</span></div>
       </div>
       <p>Pressure is the weight of the air overhead. Mars's gravity is 0.38 of Earth's, so 1 atm on Mars takes 2.64 times as much air above each square metre, and 1.05 atm takes 2.77 times. In total that is about 70% of the mass of Earth's atmosphere, spread over a planet with 28% of Earth's surface.</p>
@@ -523,23 +523,24 @@ svg .l-ref { stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 6 4; }
         <li><b>More CO₂ overhead.</b> The greenhouse depends on how much carbon dioxide lies above each square metre, so the same share of it warms more under Mars's deep air column (below).</li>
       </ul>
       <h3>Carbon dioxide</h3>
-      <p>Mars's own carbon dioxide does not disappear when the new air arrives. Today's thin atmosphere holds about 2.5 × 10<sup>16</sup> kg of it, and the polar ice, the residual cap and the deposits buried beneath it, about four-fifths as much again. Mixed into the new air, today's atmosphere alone would make about 4,300 ppm, or 7,700 ppm with the polar ice. Rock weathering and a new ocean would take up only part of that within decades, and 7,700 ppm is above the 5,000 ppm set as the limit for an 8-hour working day (indoor air also runs 1,000–2,000 ppm above outdoor air), so most of it has to be removed. The default assumes it is brought down to 700 ppm.</p>
-      <p>Under Mars's air column 700 ppm holds as much CO₂ above each square metre as about 1,940 ppm would on Earth. The model's energy balance was fitted to Earth's satellite record of 1985–89, when Earth had about 350 ppm, so the same greenhouse on this Mars corresponds to only 126 ppm. Every bit beyond that adds 5.35 ln(m · c / 350) W/m², with c the CO₂ in ppm and m the air column relative to Earth's (section 18): +6.2 W/m² at 400 ppm, +9.2 at 700 and +11.1 at 1,000.</p>
-      <p>The mirrors were retuned for it. CO₂ warms everywhere, by day and night, so the cleanest offset is to dim L5, the array that lights the whole planet: 1.17× with Earth's greenhouse, 1.13× at 400 ppm, 1.10× at 700 and 1.08× at 1,000 keep the sea-level average near 22.8 °C. The table compares those skies, each with its lakes rebalanced:</p>
+      <p>Mars's own carbon dioxide does not disappear when the new air arrives. Today's thin atmosphere holds about 2.5 × 10<sup>16</sup> kg of it, and the polar ice, the residual cap and the deposits buried beneath it, about four-fifths as much again. Mixed into the new air, today's atmosphere alone would make about 4,300 ppm, or 7,700 ppm with the polar ice. Rock weathering and a new ocean would take up only part of that within decades, and 7,700 ppm is above the 5,000 ppm set as the limit for an 8-hour working day (indoor air also runs 1,000–2,000 ppm above outdoor air), so most of it has to be removed. The default assumes it is brought down to 1,000 ppm.</p>
+      <p>Under Mars's air column 1,000 ppm holds as much CO₂ above each square metre as about 2,770 ppm would on Earth. The model's energy balance was fitted to Earth's satellite record of 1985–89, when Earth had about 350 ppm, so the same greenhouse on this Mars corresponds to only 126 ppm. Every bit beyond that adds 5.35 ln(m · c / 350) W/m², with c the CO₂ in ppm and m the air column relative to Earth's (section 18): +6.2 W/m² at 400 ppm, +9.2 at 700 and +11.1 at 1,000.</p>
+      <p>The mirrors were retuned for it. With Earth's greenhouse L5 sent 1.17 times the Sun's light; with 1,000 ppm it sends 1.10 times. The table shows L5 at 1.10× with other CO₂ levels, each with its lakes rebalanced:</p>
       <div class="tablewrap">
         <table>
-          <thead><tr><th>CO₂, L5 strength</th><th>126 ppm, 1.17×</th><th>400 ppm, 1.13×</th><th>700 ppm, 1.10× (default)</th><th>1,000 ppm, 1.08×</th></tr></thead>
+          <thead><tr><th>CO₂, with L5 at 1.10×</th><th>400 ppm</th><th>700 ppm</th><th>1,000 ppm (default)</th><th>1,500 ppm</th></tr></thead>
           <tbody>
-            <tr><th>Land 45°S–45°N, sols a year below 0 °C / above 30 °C</th><td class="n">8 / 2</td><td class="n">4 / 4</td><td class="n">4 / 3</td><td class="n">4 / 2</td></tr>
-            <tr><th>Land north of 45°N, sols a year above 30 °C</th><td class="n">25</td><td class="n">33</td><td class="n">33</td><td class="n">34</td></tr>
-            <tr><th>Land south of 45°S, sols a year outside −20 to 30 °C</th><td class="n">1</td><td class="n">0.5</td><td class="n">0.3</td><td class="n">0.2</td></tr>
-            <tr><th>Rain over land</th><td class="n">630 mm</td><td class="n">655 mm</td><td class="n">650 mm</td><td class="n">660 mm</td></tr>
-            <tr><th>Land under 300 mm a year</th><td class="n">16%</td><td class="n">13%</td><td class="n">13%</td><td class="n">8%</td></tr>
-            <tr><th>Köppen arid (B)</th><td class="n">26%</td><td class="n">26%</td><td class="n">26%</td><td class="n">22.5%</td></tr>
+            <tr><th>Sea-level average</th><td class="n">21.4 °C</td><td class="n">22.8 °C</td><td class="n">23.7 °C</td><td class="n">24.7 °C</td></tr>
+            <tr><th>Land 45°S–45°N, sols a year below 0 °C / above 30 °C</th><td class="n">9 / 0.6</td><td class="n">4 / 3</td><td class="n">2 / 6.5</td><td class="n">0.7 / 13</td></tr>
+            <tr><th>Land north of 45°N, sols a year above 30 °C</th><td class="n">24</td><td class="n">34</td><td class="n">43</td><td class="n">55</td></tr>
+            <tr><th>Land south of 45°S, sols a year outside −20 to 30 °C</th><td class="n">0.5</td><td class="n">0.3</td><td class="n">0.4</td><td class="n">1.2</td></tr>
+            <tr><th>Land averaging under 10 °C / over 20 °C</th><td class="n">38% / 7%</td><td class="n">22% / 14%</td><td class="n">16% / 19%</td><td class="n">12% / 24%</td></tr>
+            <tr><th>Rain over land</th><td class="n">600 mm</td><td class="n">650 mm</td><td class="n">680 mm</td><td class="n">710 mm</td></tr>
+            <tr><th>Land under 300 mm a year</th><td class="n">16%</td><td class="n">13%</td><td class="n">11%</td><td class="n">10%</td></tr>
           </tbody>
         </table>
       </div>
-      <p>So climate is no reason to strip the CO₂ down to Earth's level: with L5 dimmed to match, more CO₂ even makes the planet a little wetter, because the greenhouse keeps the northern ocean warm through the night and the winter, and the ocean feeds the rain. Breathing is the reason. Dimming L4 instead, the array behind the high latitudes, is the wrong offset: it cools the northern ocean and the far south, the planet dries out, and the more CO₂ there is to offset, the drier it gets (at 1,000 ppm, a quarter of the land under 300 mm).</p>
+      <p>1,000 ppm keeps both frost and heat rare in the populated band, about 8 sols a year outside 0–30 °C, with a warmer sea and more rain than lower levels; above it the heat grows faster than the frost shrinks. A brighter L5 and more CO₂ trade almost one for one: 1.15× at 400 ppm gives nearly the same planet as 1.10× at 1,000 (23.8 against 23.7 °C at sea level, with the same rain), so the CO₂ level can be chosen for breathing and L5 set to match. More CO₂ with L5 dimmed to match even makes the planet a little wetter, because the greenhouse keeps the northern ocean warm through the night and the winter, and the ocean feeds the rain. Dimming L4 instead, the array behind the high latitudes, is the wrong offset: it cools the northern ocean and the far south, and the planet dries out, more so the more CO₂ there is to offset (at 1,000 ppm, a quarter of the land under 300 mm).</p>
       <p class="note"><span class="tag">Getting there</span>Mars has little nitrogen, so most of this air would have to come from elsewhere; the project takes the air as given. Removing the CO₂ is easiest while the air is still nearly pure CO₂, before the nitrogen and oxygen arrive, or by splitting it into oxygen and carbon (about 9 MJ per kg, returning 0.73 kg of oxygen). Driving it off into space by heating the upper air would remove the wrong gases: near the top of the atmosphere gases separate by weight, and the lighter nitrogen and oxygen escape first.</p>
       <p class="note"><span class="tag">In the simulator</span>On the map, with <b>Show: Insolation-based temperature</b>, rain or climate zones, the <b>Sea-level pressure</b> and <b>CO₂</b> controls; <b>Heights: Earth-equivalent km</b> for heights.</p>
     </section>
@@ -559,7 +560,7 @@ svg .l-ref { stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 6 4; }
       </figure>
       <p>With three suns the result is a wet planet:</p>
       <ul>
-        <li><b>Hellas fills to its brim and spills.</b> It becomes a sea 9.3 km deep whose surface stands 1.27 km above the datum, 4.4 km above the ocean. Once full it evaporates about 0.51 m a year and gets about 0.51 m of rain, so it sustains itself, as Earth's oceans do at the same latitudes.</li>
+        <li><b>Hellas fills to its brim and spills.</b> It becomes a sea 9.3 km deep whose surface stands 1.27 km above the datum, 4.4 km above the ocean. Once full it evaporates about 0.54 m a year and gets about 0.54 m of rain, so it sustains itself, as Earth's oceans do at the same latitudes.</li>
         <li><b>Argyre fills and spills too</b>, 5.1 km deep, its surface 0.14 km above the datum.</li>
         <li><b>The crater lakes</b> are 85–96% full on average, depending on the region, and about 86% of them spill.</li>
         <li><b>Water covers 45% of the planet</b>: ocean 23.8%, lakes and closed seas 21.6% (Hellas and Argyre 7.2% of it).</li>
@@ -577,36 +578,36 @@ svg .l-ref { stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 6 4; }
         <div><span class="k">Instead of</span><span>The often-quoted 6.5 K/km, the standard atmosphere's average for the free air up to 11 km rather than for the ground; or 5 K/km, which left high ground about 1 °C warmer per Earth-equivalent km.</span></div>
       </div>
       <p>Measured rates for daily means are about 4.5 K/km in the Pyrenees, 5.5 on Mount Washington, from 4.4 in winter to 8.2 in summer in the Alps, and 6.9 in the Ecuadorian Andes. Air at 85% humidity cooling along the moist adiabat gives 5.5–5.7 K/km over a year.</p>
-      <p>The rate is given per Earth-equivalent km because rising air cools with the drop in pressure, and under Mars gravity pressure drops 0.38 times as fast per km. Each patch of land is cooled from its sea-level temperature by its own height, and so is each lake: Hellas's surface, 4.4 km above the ocean, is about 10 K cooler than the ocean at the same latitude. With 6 rather than 5 K/km the band has about 4 more frosty sols a year, all of them on high ground.</p>
+      <p>The rate is given per Earth-equivalent km because rising air cools with the drop in pressure, and under Mars gravity pressure drops 0.38 times as fast per km. Each patch of land is cooled from its sea-level temperature by its own height, and so is each lake: Hellas's surface, 4.4 km above the ocean, is about 10 K cooler than the ocean at the same latitude. With 6 rather than 5 K/km the band has about 2 more frosty sols a year, all of them on high ground.</p>
       <p class="note"><span class="tag">In the simulator</span>The <b>Lapse rate</b> slider under the temperature layer's settings.</p>
     </section>
 
     <section id="results">
       <h2><span class="sn">10</span>Targets and results</h2>
-      <p>How the default sky does against the targets of section 01, next to the two-sun alternative, at the default air (700 ppm of CO₂), sea level and lapse rate:</p>
+      <p>How the default sky does against the targets of section 01, next to the two-sun alternative, at the default air (1,000 ppm of CO₂), sea level and lapse rate:</p>
       <div class="tablewrap">
         <table class="keycol">
           <thead><tr><th>Measure</th><th>Three suns (default)</th><th>Two suns</th><th>Target</th></tr></thead>
           <tbody>
-            <tr><th>Land 45°S–45°N, sols a year below 0 °C</th><td class="n">4</td><td class="n">9</td><td>as few as possible</td></tr>
-            <tr><th>Land 45°S–45°N, sols a year above 30 °C</th><td class="n">3</td><td class="n">35</td><td>as few as possible</td></tr>
-            <tr><th>Ocean north of the equator</th><td class="n">23–26 °C</td><td class="n">9–22 °C</td><td>20–30 °C</td></tr>
-            <tr><th>Land north of 45°N, sols a year above 30 °C</th><td class="n">33</td><td class="n">0</td><td>within −20 to 30 °C</td></tr>
-            <tr><th>Land south of 45°S, sols a year outside −20 to 30 °C</th><td class="n">0.3</td><td class="n">189</td><td>within −20 to 30 °C</td></tr>
-            <tr><th>Rain over land</th><td class="n">650 mm</td><td class="n">330 mm</td><td>more</td></tr>
-            <tr><th>Land under 300 mm a year</th><td class="n">13%</td><td class="n">65%</td><td>less</td></tr>
-            <tr><th>Land share of the surface</th><td class="n">54.6%</td><td class="n">68.3%</td><td></td></tr>
-            <tr><th>Water needed (global layer)</th><td class="n">476 m</td><td class="n">259 m</td><td></td></tr>
+            <tr><th>Land 45°S–45°N, sols a year below 0 °C</th><td class="n">2</td><td class="n">6.5</td><td>as few as possible</td></tr>
+            <tr><th>Land 45°S–45°N, sols a year above 30 °C</th><td class="n">6.5</td><td class="n">46</td><td>as few as possible</td></tr>
+            <tr><th>Ocean north of the equator</th><td class="n">24–27 °C</td><td class="n">10–23 °C</td><td>20–30 °C</td></tr>
+            <tr><th>Land north of 45°N, sols a year above 30 °C</th><td class="n">43</td><td class="n">0</td><td>within −20 to 30 °C</td></tr>
+            <tr><th>Land south of 45°S, sols a year outside −20 to 30 °C</th><td class="n">0.4</td><td class="n">198</td><td>within −20 to 30 °C</td></tr>
+            <tr><th>Rain over land</th><td class="n">680 mm</td><td class="n">330 mm</td><td>more</td></tr>
+            <tr><th>Land under 300 mm a year</th><td class="n">11%</td><td class="n">66%</td><td>less</td></tr>
+            <tr><th>Land share of the surface</th><td class="n">54.6%</td><td class="n">68.7%</td><td></td></tr>
+            <tr><th>Water needed (global layer)</th><td class="n">476 m</td><td class="n">257 m</td><td></td></tr>
           </tbody>
         </table>
       </div>
-      <p>The frosty sols in the populated band fall almost all on high ground, Tharsis, Elysium and the southern uplands, where the air is cooler. The far north is the warm spot: land beyond 45°N passes 30 °C on about 33 sols a year, the price of keeping the northern ocean warm and the populated band cool.</p>
+      <p>The frosty sols in the populated band fall almost all on high ground, Tharsis, Elysium and the southern uplands, where the air is cooler. The far north is the warm spot: land beyond 45°N passes 30 °C on about 43 sols a year, the price of keeping the northern ocean warm and the populated band cool.</p>
       <figure>
         <img src="img/guide-temp.webp" width="1446" height="724" alt="Map of yearly average temperature on the three-sun Mars, with isotherms every 10 degrees" loading="lazy">
         <figcaption>Yearly-average temperature with three suns, isotherms every 10 °C. Warm lowlands around the northern ocean, cooler southern uplands and cold peaks on the Tharsis and Elysium volcanoes. Colours: light azure below 0 °C, dark capri just above it, green 10 °C, yellow 20, orange 30, red 35.</figcaption>
       </figure>
       <h3>The two-sun alternative</h3>
-      <p>The simulator also offers a two-sun sky: one array at L5 sending 1.33 times the Sun's light, which brings Mars's average to about Earth's. Its lens is deeper (k = 1, swinging by ±0.2 over the year), with the dimmest line swinging ±27.5° around 11.5°N. With one beam doing all the shaping, warming the high latitudes enough would overheat the middle, so the compromise leaves the populated band hot (above 30 °C on about 35 sols a year) while the northern ocean averages about 15 °C, 330 mm of rain over land with 65% of the land under 300 mm, the far south outside −20 to 30 °C for more than a quarter of the year, and Hellas shrunk to a lake 1.6 km deep on its floor. That is why the three-sun sky is the default.</p>
+      <p>The simulator also offers a two-sun sky: one array at L5 sending 1.33 times the Sun's light, which brings Mars's average to about Earth's. Its lens is deeper (k = 1, swinging by ±0.2 over the year), with the dimmest line swinging ±27.5° around 11.5°N. With one beam doing all the shaping, warming the high latitudes enough would overheat the middle, so the compromise leaves the populated band hot (above 30 °C on about 46 sols a year) while the northern ocean averages about 16 °C, 330 mm of rain over land with 66% of the land under 300 mm, the far south outside −20 to 30 °C for more than a quarter of the year, and Hellas shrunk to a lake 1.6 km deep on its floor. That is why the three-sun sky is the default.</p>
       <p class="note"><span class="tag">In the simulator</span>The <b>Temperature</b> panel (temperature by latitude) counts these sols; hover the map for any place's values.</p>
     </section>
 
@@ -627,11 +628,11 @@ svg .l-ref { stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 6 4; }
         <table>
           <thead><tr><th>Season</th><th>L<sub>s</sub></th><th>Sols</th><th>What happens</th></tr></thead>
           <tbody>
-            <tr><th>Autumn</th><td class="n">0–65°</td><td class="n">138</td><td>Mild and steady in the band (20–22 °C). The north's wet season while the south dries; autumn in the far south.</td></tr>
-            <tr><th>Winter</th><td class="n">65–129°</td><td class="n">138</td><td>Opens with aphelion (Aphelose 14): cool and quiet. Deep winter in the far south (about 11 °C, down to 5); the southern half of the band at its driest.</td></tr>
-            <tr><th>Spring</th><td class="n">129–206°</td><td class="n">138</td><td>The band's coldest weeks (about 17 °C around L<sub>s</sub> 168°, the north down to 15 °C), then the north warms fast. More light than winter, up to a fifth more in its last two months; spring in the far south.</td></tr>
-            <tr><th>Summer</th><td class="n">206–287°</td><td class="n">127</td><td>Holds perihelion. The band at its warmest (about 30 °C in the north, 24 °C in the south), with monsoon rain over the southern half while the north dries.</td></tr>
-            <tr><th>Estia</th><td class="n">287–360°</td><td class="n">127</td><td>The late, dry summer: the band cools from its peak, the north at its driest, while the far south reaches its hottest, about 34 °C. The south stays wet.</td></tr>
+            <tr><th>Autumn</th><td class="n">0–65°</td><td class="n">138</td><td>Mild and steady in the band (21–22 °C). The north's wet season while the south dries; autumn in the far south.</td></tr>
+            <tr><th>Winter</th><td class="n">65–129°</td><td class="n">138</td><td>Opens with aphelion (Aphelose 14): cool and quiet. Deep winter in the far south (about 12 °C, down to 6); the southern half of the band at its driest.</td></tr>
+            <tr><th>Spring</th><td class="n">129–206°</td><td class="n">138</td><td>The band's coldest weeks (about 18 °C around L<sub>s</sub> 168°, the north down to 16 °C), then the north warms fast. More light than winter, up to a fifth more in its last two months; spring in the far south.</td></tr>
+            <tr><th>Summer</th><td class="n">206–287°</td><td class="n">127</td><td>Holds perihelion. The band at its warmest (about 31 °C in the north, 25 °C in the south), with monsoon rain over the southern half while the north dries.</td></tr>
+            <tr><th>Estia</th><td class="n">287–360°</td><td class="n">127</td><td>The late, dry summer: the band cools from its peak, the north at its driest, while the far south reaches its hottest, about 35 °C. The south stays wet.</td></tr>
           </tbody>
         </table>
       </div>
@@ -670,25 +671,25 @@ svg .l-ref { stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 6 4; }
           <thead><tr><th>Month</th><th>Sols</th><th>Days</th><th>From L<sub>s</sub></th><th>Name from</th><th>Weather in the band</th></tr></thead>
           <tbody>
             <tr class="s0"><th>Novary<span class="cs">Autumn</span></th><td class="n">1–36</td><td class="n">36</td><td class="n">0°</td><td><i>novus</i>, new</td><td>Mild (22 °C); the far south still hot. The north's rains build.</td></tr>
-            <tr><th>Pluviary<span class="cs">Autumn</span></th><td class="n">37–72</td><td class="n">36</td><td class="n">18°</td><td><i>pluvia</i>, rain</td><td>The north's rains near their peak; mild (20 °C).</td></tr>
-            <tr><th>Nimbary<span class="cs">Autumn</span></th><td class="n">73–108</td><td class="n">36</td><td class="n">35°</td><td><i>nimbus</i>, rain cloud</td><td>Wet and cloudy in the north (18 °C), drier in the south (22 °C).</td></tr>
+            <tr><th>Pluviary<span class="cs">Autumn</span></th><td class="n">37–72</td><td class="n">36</td><td class="n">18°</td><td><i>pluvia</i>, rain</td><td>The north's rains near their peak; mild (21 °C).</td></tr>
+            <tr><th>Nimbary<span class="cs">Autumn</span></th><td class="n">73–108</td><td class="n">36</td><td class="n">35°</td><td><i>nimbus</i>, rain cloud</td><td>Wet and cloudy in the north (19 °C), drier in the south (23 °C).</td></tr>
             <tr><th>Lenary<span class="cs">Autumn</span></th><td class="n">109–138</td><td class="n">30</td><td class="n">52°</td><td><i>lenis</i>, mild</td><td>Mild and steady; autumn in the far south.</td></tr>
-            <tr class="s0"><th>Aphelose<span class="cs">Winter</span></th><td class="n">139–174</td><td class="n">36</td><td class="n">65°</td><td><i>aphelion</i></td><td>Aphelion on the 14th. Mild (21 °C); the far south cooling fast.</td></tr>
-            <tr><th>Umbrose<span class="cs">Winter</span></th><td class="n">175–210</td><td class="n">36</td><td class="n">81°</td><td><i>umbra</i>, shade</td><td>Quiet; the northern summer solstice on the 20th. Far south 13 °C.</td></tr>
-            <tr><th>Frigose<span class="cs">Winter</span></th><td class="n">211–246</td><td class="n">36</td><td class="n">98°</td><td><i>frigus</i>, cold</td><td>The far south's winter (9 °C); the southern band dry.</td></tr>
-            <tr><th>Brumose<span class="cs">Winter</span></th><td class="n">247–276</td><td class="n">30</td><td class="n">114°</td><td><i>bruma</i>, midwinter</td><td>The far south at its coldest (6 °C); the band 20 °C.</td></tr>
-            <tr class="s0"><th>Vertal<span class="cs">Spring</span></th><td class="n">277–312</td><td class="n">36</td><td class="n">129°</td><td><i>vertere</i>, to turn</td><td>The band turns cool (19 °C), the north first (17 °C).</td></tr>
-            <tr><th>Pruinal<span class="cs">Spring</span></th><td class="n">313–348</td><td class="n">36</td><td class="n">147°</td><td><i>pruina</i>, hoarfrost</td><td>The band's coldest month (17–18 °C, the north 15 °C).</td></tr>
-            <tr><th>Equinal<span class="cs">Spring</span></th><td class="n">349–384</td><td class="n">36</td><td class="n">167°</td><td><i>the equinox</i></td><td>The equinox on the 24th. Still cool (18 °C); the north's rain picks up again.</td></tr>
-            <tr><th>Vernal<span class="cs">Spring</span></th><td class="n">385–414</td><td class="n">30</td><td class="n">187°</td><td><i>ver</i>, spring</td><td>The north warms fast (22 °C); the southern rains begin.</td></tr>
-            <tr class="s0"><th>Lucidor<span class="cs">Summer</span></th><td class="n">415–450</td><td class="n">36</td><td class="n">206°</td><td><i>lux</i>, light</td><td>Bright and warming (24 °C, the north 27 °C); wet everywhere.</td></tr>
-            <tr><th>Calidor<span class="cs">Summer</span></th><td class="n">451–481</td><td class="n">30 + 1</td><td class="n">228°</td><td><i>calidus</i>, warm</td><td>Warm (27 °C); monsoon in the south, the north drying. Perihelia on the 31st.</td></tr>
-            <tr><th>Heliodor<span class="cs">Summer</span></th><td class="n">482–511</td><td class="n">30</td><td class="n">248°</td><td><i>helios</i>, the Sun</td><td>Perihelion on the 5th. The north's hottest month (31 °C); the south's rainiest.</td></tr>
-            <tr><th>Fervidor<span class="cs">Summer</span></th><td class="n">512–541</td><td class="n">30</td><td class="n">268°</td><td><i>fervidus</i>, glowing</td><td>The band's warmest (29 °C); the winter solstice on the 4th.</td></tr>
-            <tr class="s0"><th>Torrival<span class="cs">Estia</span></th><td class="n">542–577</td><td class="n">36</td><td class="n">287°</td><td><i>torrere</i>, to parch</td><td>Hot and dry in the north (29 °C); the far south near 34 °C.</td></tr>
-            <tr><th>Ardival<span class="cs">Estia</span></th><td class="n">578–607</td><td class="n">30</td><td class="n">310°</td><td><i>ardere</i>, to burn</td><td>Still hot (27 °C); the far south at its hottest.</td></tr>
-            <tr><th>Mitival<span class="cs">Estia</span></th><td class="n">608–637</td><td class="n">30</td><td class="n">327°</td><td><i>mitis</i>, softening</td><td>Cooling (25 °C); the north's rains start to return.</td></tr>
-            <tr><th>Finival<span class="cs">Estia</span></th><td class="n">638–668/669</td><td class="n">30 + 1–2</td><td class="n">344°</td><td><i>finis</i>, end</td><td>Mild again (23 °C). Finalia on the 31st (and Finalia II in leap years).</td></tr>
+            <tr class="s0"><th>Aphelose<span class="cs">Winter</span></th><td class="n">139–174</td><td class="n">36</td><td class="n">65°</td><td><i>aphelion</i></td><td>Aphelion on the 14th. Mild (22 °C); the far south cooling fast.</td></tr>
+            <tr><th>Umbrose<span class="cs">Winter</span></th><td class="n">175–210</td><td class="n">36</td><td class="n">81°</td><td><i>umbra</i>, shade</td><td>Quiet; the northern summer solstice on the 20th. Far south 14 °C.</td></tr>
+            <tr><th>Frigose<span class="cs">Winter</span></th><td class="n">211–246</td><td class="n">36</td><td class="n">98°</td><td><i>frigus</i>, cold</td><td>The far south's winter (10 °C); the southern band dry.</td></tr>
+            <tr><th>Brumose<span class="cs">Winter</span></th><td class="n">247–276</td><td class="n">30</td><td class="n">114°</td><td><i>bruma</i>, midwinter</td><td>The far south at its coldest (7 °C); the band 21 °C.</td></tr>
+            <tr class="s0"><th>Vertal<span class="cs">Spring</span></th><td class="n">277–312</td><td class="n">36</td><td class="n">129°</td><td><i>vertere</i>, to turn</td><td>The band turns cool (20 °C), the north first (18 °C).</td></tr>
+            <tr><th>Pruinal<span class="cs">Spring</span></th><td class="n">313–348</td><td class="n">36</td><td class="n">147°</td><td><i>pruina</i>, hoarfrost</td><td>The band's coldest month (18 °C, the north 16 °C).</td></tr>
+            <tr><th>Equinal<span class="cs">Spring</span></th><td class="n">349–384</td><td class="n">36</td><td class="n">167°</td><td><i>the equinox</i></td><td>The equinox on the 24th. Still cool (18–19 °C); the north's rain picks up again.</td></tr>
+            <tr><th>Vernal<span class="cs">Spring</span></th><td class="n">385–414</td><td class="n">30</td><td class="n">187°</td><td><i>ver</i>, spring</td><td>The north warms fast (23 °C); the southern rains begin.</td></tr>
+            <tr class="s0"><th>Lucidor<span class="cs">Summer</span></th><td class="n">415–450</td><td class="n">36</td><td class="n">206°</td><td><i>lux</i>, light</td><td>Bright and warming (25 °C, the north 28 °C); wet everywhere.</td></tr>
+            <tr><th>Calidor<span class="cs">Summer</span></th><td class="n">451–481</td><td class="n">30 + 1</td><td class="n">228°</td><td><i>calidus</i>, warm</td><td>Warm (28 °C); monsoon in the south, the north drying. Perihelia on the 31st.</td></tr>
+            <tr><th>Heliodor<span class="cs">Summer</span></th><td class="n">482–511</td><td class="n">30</td><td class="n">248°</td><td><i>helios</i>, the Sun</td><td>Perihelion on the 5th. The north's hottest month (32 °C); the south's rainiest.</td></tr>
+            <tr><th>Fervidor<span class="cs">Summer</span></th><td class="n">512–541</td><td class="n">30</td><td class="n">268°</td><td><i>fervidus</i>, glowing</td><td>The band's warmest (30 °C); the winter solstice on the 4th.</td></tr>
+            <tr class="s0"><th>Torrival<span class="cs">Estia</span></th><td class="n">542–577</td><td class="n">36</td><td class="n">287°</td><td><i>torrere</i>, to parch</td><td>Hot and dry in the north (30 °C); the far south near 35 °C.</td></tr>
+            <tr><th>Ardival<span class="cs">Estia</span></th><td class="n">578–607</td><td class="n">30</td><td class="n">310°</td><td><i>ardere</i>, to burn</td><td>Still hot (28 °C); the far south at its hottest.</td></tr>
+            <tr><th>Mitival<span class="cs">Estia</span></th><td class="n">608–637</td><td class="n">30</td><td class="n">327°</td><td><i>mitis</i>, softening</td><td>Cooling (26 °C); the north's rains start to return.</td></tr>
+            <tr><th>Finival<span class="cs">Estia</span></th><td class="n">638–668/669</td><td class="n">30 + 1–2</td><td class="n">344°</td><td><i>finis</i>, end</td><td>Mild again (24 °C). Finalia on the 31st (and Finalia II in leap years).</td></tr>
           </tbody>
         </table>
       </div>
@@ -787,7 +788,7 @@ svg .l-ref { stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 6 4; }
       <ul>
         <li><b>Land heat capacity</b> is soil (3.0 × 10<sup>6</sup> J/m²/K on Earth, × 1.37 for the deeper layer that Mars's longer seasons reach) plus the air that takes part in the seasons (7.0 × 10<sup>6</sup> for Earth's air, scaled with the air above, so less over high ground). The ocean box gains the extra air too.</li>
         <li><b>Heat transport</b> (diffusion, land–sea exchange and winds) scales with pressure × (Earth's spin rate / Mars's)², as in Williams &amp; Kasting (1997), which comes to about Earth's at 1 atm.</li>
-        <li><b>The greenhouse</b> gains the CO₂ beyond Earth's: A is lowered by 5.35 ln(m · c / 350) W/m² (Myhre et al. 1998), with c the CO₂ in ppm and m the air column relative to Earth's, 2.77 at 1.05 atm. That is zero at 126 ppm and 9.2 W/m² at the default 700 ppm (section 07). Water vapour and clouds keep Earth's greenhouse.</li>
+        <li><b>The greenhouse</b> gains the CO₂ beyond Earth's: A is lowered by 5.35 ln(m · c / 350) W/m² (Myhre et al. 1998), with c the CO₂ in ppm and m the air column relative to Earth's, 2.77 at 1.05 atm. That is zero at 126 ppm and 11.1 W/m² at the default 1,000 ppm (section 07). Water vapour and clouds keep Earth's greenhouse.</li>
       </ul>
       <p>On Earth the formulas give back the calibrated model exactly. The year is periodic, so it is solved harmonic by harmonic (the yearly mean plus five harmonics), exact to well under 0.1 K. The <b>continental</b>, <b>mixed</b> and <b>maritime</b> settings make land 85%, 50% or 15% of every band; the default <b>dynamic</b> setting uses the map's own land and water instead (next section).</p>
     </section>
@@ -927,7 +928,7 @@ svg .l-ref { stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 6 4; }
         <li><b>Temperature</b> is pinned to fixed temperatures from −60 to 60 °C and spends most of its colour on 0–35 °C, where people live: dark capri just above 0 °C, bright green at 10 °C, yellow at 20, orange at 30 and pure red at 35, then darker, ashier reds to 60. At 0 °C the colour flips to a light azure, which turns bluer and darker as it gets colder, so freezing stands out at a glance. The legend gives 0–35 °C two-thirds of its width.</li>
         <li><b>Rain</b> doubles with each colour: 300 mm a year yellow, 600 mm green, 1.2 m cyan, 2.4 m purple, 4.8 m magenta.</li>
         <li><b>Insolation</b> uses a fixed scale by default, or stretches between the lowest and highest values on land.</li>
-        <li><b>Climate zones</b> use the Köppen–Geiger colours of Beck et al. (2018), or for the Martian zones a hue for each warmth class, paler where drier, shifted for seasonal climates, slate teal for the subpolar ones (section 28). Zones picked in the legend keep their colours and the rest turn grey.</li>
+        <li><b>Climate zones</b> use the Köppen–Geiger colours of Beck et al. (2018), or for the Martian zones a hue for each warmth class, from magenta (hot) through red, yellow, green and cyan to blue (frigid) and grey-white (polar), paler where drier, turned one way for uneven rain and the other for seasonal climates (section 28). Zones picked in the legend keep their colours and the rest turn grey.</li>
       </ul>
       <h3>Lines</h3>
       <ul>
@@ -957,28 +958,26 @@ svg .l-ref { stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 6 4; }
         <img src="img/guide-koppen.webp" width="1446" height="724" alt="Köppen–Geiger climate map of the three-sun Mars" loading="lazy">
         <figcaption>Köppen–Geiger classes with three suns. Yellow Csa around the northern ocean, green Cfb over the southern highlands, the steppes and deserts of Arabia, Chryse and Elysium in orange and red, magenta Dsa over the far south, grey ET on the volcano tops.</figcaption>
       </figure>
-      <p>More than half the land is <b>temperate</b> (C, 55%): oceanic Cfb over the southern highlands (24%) and Mediterranean Csa around the northern ocean (16%). A quarter is <b>arid</b> (B, 26%), the steppes and deserts of Arabia, Chryse, Xanthe and Elysium. Most of the far south is <b>cold</b> (D, 15%), with warm summers and winters below freezing, mostly dry-summer Dsa and Dsb, and the volcano tops are <b>polar</b> (E, 3%). There are very few tropical climates (1.4%): most land stands high (half of it more than 4.3 km above the sea), and even at sea level the band's coolest weeks fall below the 18 °C the A classes need.</p>
+      <p>More than half the land is <b>temperate</b> (C, 56%): oceanic Cfb over the southern highlands (24%) and Mediterranean Csa around the northern ocean (18%). A quarter is <b>arid</b> (B, 26%), the steppes and deserts of Arabia, Chryse, Xanthe and Elysium. Most of the far south is <b>cold</b> (D, 14%), with warm summers and winters below freezing, mostly dry-summer Dsa, and the volcano tops are <b>polar</b> (E, 3%). There are very few tropical climates (2%): most land stands high (half of it more than 4.3 km above the sea), and even at sea level the band's coolest weeks fall below the 18 °C the A classes need.</p>
       <h3>Martian zones</h3>
-      <p>Köppen's thresholds come from Earth, where warmth follows latitude and the seasons follow the hemispheres. Here warmth depends mostly on height, the strongest seasons come from the orbit and from the thin air over Tharsis, and wetness is best measured against the rain model's own potential evaporation rather than Köppen's rule of thumb. The Martian zones are built on those facts:</p>
+      <p>Köppen's thresholds come from Earth, where warmth follows latitude and the seasons follow the hemispheres. Here warmth depends mostly on height, the strongest seasons come from the orbit and from the thin air over Tharsis, and wetness is best measured against the rain model's own potential evaporation rather than Köppen's rule of thumb. The Martian zones are built on those facts: a warmth class from the year's mean temperature at each place, then its wetness, then when its rain comes and how strong its seasons are.</p>
       <div class="tablewrap">
         <table>
           <thead><tr><th>Part</th><th>Meaning</th><th>Rule</th></tr></thead>
           <tbody>
-            <tr><th>W · M · C</th><td>Warm · mild · cold</td><td>Mean temperature 15 °C or more · 7–15 °C · under 7 °C</td></tr>
+            <tr><th>H · W · M · K · C · F · P</th><td>Hot · warm · mild · cool · cold · frigid · polar</td><td>The year's mean temperature: over 25 °C · 20–25 · 15–20 · 10–15 · 5–10 · 0–5 · below 0 °C</td></tr>
             <tr><th>r · h · d · x</th><td>Rainy · humid · dry · desert</td><td>The year's rain over its potential evaporation: 1 or more · 0.5–1 · 0.25–0.5 · under 0.25</td></tr>
-            <tr><th>e · u</th><td>Even · uneven rain</td><td>Uneven when 60% or more of the year's rain falls in one half of the year, warm or cool</td></tr>
-            <tr><th>s (in front)</th><td>Seasonal</td><td>Warmest and coldest months 20 K or more apart. Only the mild ones (the far south) keep e or u; the few seasonal warm and cold places do without</td></tr>
-            <tr><th>p (in front)</th><td>Subpolar</td><td>Cold places whose warmest month is only 5–10 °C, on the upper flanks of Tharsis: pCr, pCh, pCd (dry here includes desert)</td></tr>
-            <tr><th>Pb · Pf</th><td>Polar barren · frost</td><td>Warmest month 0–5 °C · below 0 °C. Only the Tharsis tops</td></tr>
+            <tr><th>e · u</th><td>Even · uneven rain</td><td>Uneven when 60% or more of the year's rain falls in one half of the year. Only for rainy and humid places of the four warmest classes</td></tr>
+            <tr><th>s (in front)</th><td>Seasonal</td><td>Warmest and coldest months 20 K or more apart. Not for frigid and polar places</td></tr>
           </tbody>
         </table>
       </div>
-      <p>So <b>Mhu</b> is mild, humid, with uneven rain, <b>sMdu</b> the same warmth but dry and seasonal, and <b>pCr</b> a rainy subpolar slope. The legend sets them out the same way: a block for each warmth class and a row for each wetness, with columns for even and uneven rain, then seasonal (split into even and uneven for the mild far south) and, for the cold block, subpolar. Clicking a zone, a row label or a block title highlights it on the map and greys out the rest.</p>
+      <p>So <b>Khu</b> is cool and humid with uneven rain, <b>sKd</b> cool, dry and seasonal, and <b>Wd</b> warm and dry. The legend sets them out the same way: a block for each warmth class and a row for each wetness, in three columns, even, uneven and seasonal. Dry and desert places, and all cold ones, are not split by when their rain falls, so their chip fills the first two columns; frigid and polar share one block with a column each. Clicking a zone, a row label or a block title highlights it on the map and greys out the rest.</p>
       <figure>
         <img src="img/guide-zones.webp" width="1446" height="724" alt="Martian climate zones of the three-sun Mars" loading="lazy">
-        <figcaption>Martian zones with three suns: orange warm, green mild, blue cold, slate teal subpolar, grey and white polar, paler where drier. Seasonal climates shift in hue: warm toward red, mild toward olive (the far south), cold toward violet (the flanks of Tharsis).</figcaption>
+        <figcaption>Martian zones with three suns. A hue for each warmth class, 60° apart: magenta hot, red warm, yellow mild, green cool, cyan cold, blue frigid, grey-white polar; darker where wetter, paler where drier. Uneven rain turns the hue toward the next class, seasonal climates turn it the other way.</figcaption>
       </figure>
-      <p>With three suns, 54% of the land is <b>mild</b>: the humid highlands of the populated band (Mhu 13%, Mhe 10%) and the dry, seasonal far south (sMdu 7%, sMde 4%). 37% is <b>warm</b>, from the dry belt of Arabia and Chryse (Wde 11%) to the humid and rainy lowlands around the northern ocean (Whe 9%). 9% is <b>cold</b>: a ring round the Tharsis heights (6%) and, above it, the subpolar slopes (pCr 2.0%, pCh 0.8%, pCd 0.1%). Only 0.6% is <b>polar</b>, the tops themselves (Pb 0.3%, Pf 0.3%). Almost a fifth of the land (18%) is seasonal: nearly all of the far south, where the orbit drives big swings, and the flanks of Tharsis, where the thinner air overhead lets the temperature swing more. 42% of the land gets uneven rain. By wetness, 21% of the land is rainy, 41% humid, 33% dry and 5% desert.</p>
+      <p>With three suns, 44% of the land is <b>cool</b>: the humid highlands of the populated band (Khu 10%, Khe 9%) and most of the far south, dry and seasonal (sKd 8%). <b>Mild</b> (22%) and <b>warm</b> (18%) climates fill the lowlands round the northern ocean, from the dry warm belt of Arabia and Chryse (Wd 8%) to humid mild coasts (Mhe 6%). <b>Hot</b> ones are rare (0.7%), the low ground beyond 45°N, where L4's light lands. 11% is <b>cold</b>, mostly the flanks of Tharsis and the highest uplands, and Tharsis itself rises through <b>frigid</b> (3.6%) to <b>polar</b> (1.1%) on its summits. 17% of the land is seasonal, mostly the far south and the flanks of Tharsis, and 24% gets uneven rain. By wetness, 22% of the land is rainy, 42% humid, 31% dry and 4.5% desert.</p>
       <p class="note"><span class="tag">In the simulator</span>Map → <b>Insolation</b> → <b>Show: Climate zones</b>, then <b>Köppen–Geiger</b> or <b>Martian zones</b>. Click zones in the legend (or a row or block title) to highlight them on the map, with their total share of the land; <b>Clear</b> shows them all again. The legend lists the zones on the map with their share of the land; hovering gives a place's zone, its months' range of temperature, its rain and how much of it falls in the warmer half.</p>
     </section>
 
@@ -1050,7 +1049,7 @@ svg .l-ref { stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 6 4; }
         <h4>Weather and climate</h4>
         <div class="quirks">
           <article class="quirk"><p class="fig">1.4× wider</p><h3>Wider tropics</h3><p>The tropical circulation cells reach about 1.4 times as far from the equator as Earth's, by the scaling for how far they can extend, which depends on the planet's size, spin and temperature contrasts.</p></article>
-          <article class="quirk"><p class="fig">27 °C beyond 60°N</p><h3>Warmest in the far north</h3><p>With three suns the land averages about 22 °C over the year (at sea level) from 60°S to 45°N, and the warmest land is the far north, around 27 °C beyond 60°N, where L4's light lands. The tropics are not the warmest latitudes, so they get their rain from circulation cells crossing the equator rather than from an Earth-like tropical rain belt.</p></article>
+          <article class="quirk"><p class="fig">28 °C beyond 60°N</p><h3>Warmest in the far north</h3><p>With three suns the land averages about 23 °C over the year (at sea level) from 60°S to 45°N, and the warmest land is the far north, around 28 °C beyond 60°N, where L4's light lands. The tropics are not the warmest latitudes, so they get their rain from circulation cells crossing the equator rather than from an Earth-like tropical rain belt.</p></article>
           <article class="quirk"><p class="fig">No ice caps</p><h3>Temperate poles</h3><p>With L4 lighting the caps, land north of 45°N never has a sol averaging below −20 °C and land south of 45°S almost never. Winter snow could still fall in places, but away from the highest volcano summits nowhere is cold enough for an ice cap. The model itself has no ice.</p></article>
           <article class="quirk"><p class="fig">Cold spring</p><h3>The light comes first</h3><p>The climate lags the light by about a season. The populated band gets the least light in Autumn but stays mild on stored heat, and is coldest in Spring, when the light is already rising.</p></article>
         </div>
@@ -1065,7 +1064,7 @@ svg .l-ref { stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 6 4; }
     </div>
     <section class="usesec">
       <ul>
-        <li><b>Sky bar.</b> Natural, Two suns or Three suns (the default); the UV-free switch; each array's strength and shaping, with the Fine-tune and Seasons boxes.</li>
+        <li><b>Sky bar.</b> Natural, Two suns or Three suns (the default); the UV-free switch; each array's strength (the L5 slider covers 1–1.25× for fine control; its 0–2× button opens the full range) and shaping, with the Fine-tune and Seasons boxes.</li>
         <li><b>Date dials.</b> Drag round the year, from New Year at the top: the outer ring holds the twenty months (dots mark the festival sols), the inner ring the five seasons, squares the solstices and equinoxes and dots perihelion and aphelion. The buttons under each dial choose how the centre gives the date: <b>Month &amp; day</b>, <b>Sol</b> of the year, <b>L<sub>s</sub></b>, or any mix. The play button runs the year in anything from 1 to 300 seconds, set with <b>Year in</b>; the map's lines keep up while it plays.</li>
         <li><b>Mars view.</b> The orbit to scale, or a ground view of the sky dome at any latitude with every sun's path; drag Mars round its orbit to change the date.</li>
         <li><b>Daylight, Insolation and Ratio.</b> Day length, sunlight (daily mean or noon peak) and the seasonal swing across the year, for any set of latitudes or a spectrum of them.</li>
@@ -1096,7 +1095,7 @@ svg .l-ref { stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 6 4; }
         <div><dt>Budyko curve</dt><dd>The relation between rain, evaporative demand and how much of the rain the land evaporates over a year.</dd></div>
         <div><dt>Köppen–Geiger</dt><dd>The standard classification of Earth's climates by monthly temperature and rain, in about 30 classes such as Cfb (oceanic) or BSk (cold steppe).</dd></div>
         <div><dt>Potential evaporation</dt><dd>How much water the ground would evaporate in a year if it were always wet; rain over it measures how wet a climate is.</dd></div>
-        <div><dt>ppm</dt><dd>Parts per million of the air by volume: 700 ppm of CO₂ is 0.07% of the air.</dd></div>
+        <div><dt>ppm</dt><dd>Parts per million of the air by volume: 1,000 ppm of CO₂ is 0.1% of the air.</dd></div>
         <div><dt>Festival sol</dt><dd>A calendar day outside the weeks: Perihelia, Finalia and, in leap years, Finalia II.</dd></div>
       </dl>
     </section>
